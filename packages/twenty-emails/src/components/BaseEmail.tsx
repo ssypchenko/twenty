@@ -12,9 +12,15 @@ type BaseEmailProps = {
   children: JSX.Element | JSX.Element[] | string;
   width?: number;
   locale: keyof typeof APP_LOCALES;
+  logoBaseUrl?: string;
 };
 
-export const BaseEmail = ({ children, width, locale }: BaseEmailProps) => {
+export const BaseEmail = ({
+  children,
+  width,
+  locale,
+  logoBaseUrl,
+}: BaseEmailProps) => {
   const i18nInstance = createI18nInstance(locale);
 
   return (
@@ -22,7 +28,7 @@ export const BaseEmail = ({ children, width, locale }: BaseEmailProps) => {
       <Html lang={locale}>
         <BaseHead />
         <Container width={width || 290}>
-          <Logo />
+          {logoBaseUrl ? <Logo baseUrl={logoBaseUrl} /> : null}
           {children}
           <Footer i18n={i18nInstance} />
         </Container>
