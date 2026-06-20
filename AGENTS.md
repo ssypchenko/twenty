@@ -37,12 +37,15 @@ Keep clean base branches aligned with upstream and do not add Permavent-only fil
 - Build directly with the final `ghcr.io/ssypchenko/twenty:<tag>` tag. Avoid extra local aliases unless they are required temporarily for diagnosis.
 - Verify the target, platform, `APP_VERSION`, entrypoint, frontend asset and email render output before pushing.
 - Record the published OCI digest before changing Test or Live.
+- The project owner always runs `docker push` manually in their own Terminal. The agent must provide the exact command but must not execute or background a `docker push` command.
+- After the project owner reports that the push has finished, the agent verifies the GHCR tag, platform and registry digest before deployment.
 
 The canonical workflow is documented in `../docs/twenty-migration/05-custom-image-build-publish-and-cleanup.md` relative to the workspace root.
 
 ## Long-Running Commands
 
 - Treat Docker builds, large image pushes or pulls, dependency installation, full repository builds and long test suites as long-running commands.
+- `docker push` is a special case: the project owner runs it manually; the agent only supplies the command and verifies the result afterwards.
 - Start only one long-running command at a time. Do not start parallel status commands while it is running.
 - Do not keep an agent turn open by repeatedly polling a long-running command.
 - Start the command as a durable detached job with a dedicated log and exit-status file. If reliable detachment is unavailable, provide the exact command for the project owner to run manually instead.
