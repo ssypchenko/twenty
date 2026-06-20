@@ -3,7 +3,6 @@ import { BaseEmail } from 'src/components/BaseEmail';
 import { CallToAction } from 'src/components/CallToAction';
 import { MainText } from 'src/components/MainText';
 import { Title } from 'src/components/Title';
-import { BILLING_SETTINGS_URL } from 'src/constants/billing-settings-url.constant';
 import { createI18nInstance } from 'src/utils/i18n.utils';
 import { type APP_LOCALES } from 'twenty-shared/translations';
 
@@ -12,6 +11,7 @@ type WarnSuspendedWorkspaceEmailProps = {
   inactiveDaysBeforeDelete: number;
   userName: string;
   workspaceDisplayName: string | undefined;
+  serverUrl: string;
   locale: keyof typeof APP_LOCALES;
 };
 
@@ -20,6 +20,7 @@ export const WarnSuspendedWorkspaceEmail = ({
   inactiveDaysBeforeDelete,
   userName,
   workspaceDisplayName,
+  serverUrl,
   locale,
 }: WarnSuspendedWorkspaceEmailProps) => {
   const i18n = createI18nInstance(locale);
@@ -28,7 +29,7 @@ export const WarnSuspendedWorkspaceEmail = ({
   const remainingDays = daysLeft > 0 ? daysLeft : 0;
 
   return (
-    <BaseEmail width={333} locale={locale}>
+    <BaseEmail width={333} locale={locale} logoBaseUrl={serverUrl}>
       <Title value={i18n._('Your workspace is paused')} />
       <MainText>
         {userName?.length > 1 ? (
@@ -55,7 +56,7 @@ export const WarnSuspendedWorkspaceEmail = ({
       </MainText>
       <br />
       <CallToAction
-        href={BILLING_SETTINGS_URL}
+        href={new URL('/settings/billing', serverUrl).toString()}
         value={i18n._('Reactivate workspace')}
       />
       <br />
@@ -69,6 +70,7 @@ WarnSuspendedWorkspaceEmail.PreviewProps = {
   inactiveDaysBeforeDelete: 14,
   userName: 'John Doe',
   workspaceDisplayName: 'Acme Inc.',
+  serverUrl: 'https://crm.example.com',
   locale: 'en',
 };
 
