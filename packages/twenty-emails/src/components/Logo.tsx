@@ -4,13 +4,22 @@ const logoStyle = {
   marginBottom: '40px',
 };
 
-export const Logo = () => {
+type LogoProps = {
+  baseUrl: string;
+};
+
+export const Logo = ({ baseUrl }: LogoProps) => {
+  const logoUrl = new URL(
+    '/images/branding/permavent-logo.png',
+    baseUrl,
+  ).toString();
+
   return (
     <Img
-      src="https://app.twenty.com/images/icons/windows11/Square150x150Logo.scale-100.png"
-      alt="Twenty logo"
-      width="40"
-      height="40"
+      src={logoUrl}
+      alt="Permavent logo"
+      width="200"
+      height="39"
       style={logoStyle}
     />
   );
