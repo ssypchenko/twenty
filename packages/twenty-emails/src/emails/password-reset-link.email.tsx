@@ -22,24 +22,42 @@ export const PasswordResetLinkEmail = ({
 }: PasswordResetLinkEmailProps) => {
   const i18n = createI18nInstance(locale);
   const headline = hasPassword
-    ? i18n._('Reset your password 🗝')
-    : i18n._('Set your password 🗝');
-  const ctaLabel = hasPassword ? i18n._('Reset') : i18n._('Set');
+    ? i18n._('Reset your password')
+    : i18n._('Set your password');
+  const ctaLabel = hasPassword
+    ? i18n._('Reset password')
+    : i18n._('Set password');
 
   return (
-    <BaseEmail locale={locale}>
+    <BaseEmail locale={locale} logoBaseUrl={link}>
       <Title value={headline} />
       <MainText>
-        <Trans
-          id="This link is only valid for the next {duration}. If the link does not work, you can use the login verification link directly:"
-          values={{ duration }}
-        />
+        {hasPassword ? (
+          <Trans id="We received a request to reset the password for your account. Use the button below to choose a new password." />
+        ) : (
+          <Trans id="Your account is ready. Use the button below to create your password." />
+        )}
+      </MainText>
+      <CallToAction href={link} value={ctaLabel} />
+      <br />
+      <MainText>
+        {hasPassword ? (
+          <Trans
+            id="This link will expire in {duration}. If you did not request a password reset, you can safely ignore this email."
+            values={{ duration }}
+          />
+        ) : (
+          <Trans
+            id="This link will expire in {duration}. If you were not expecting this email, you can safely ignore it."
+            values={{ duration }}
+          />
+        )}
+        <br />
+        <br />
+        <Trans id="If the button does not work, copy and paste the following link into your browser:" />
         <br />
         <Link href={link} value={link} />
       </MainText>
-      <br />
-      <CallToAction href={link} value={ctaLabel} />
-      <br />
       <br />
     </BaseEmail>
   );
@@ -48,7 +66,7 @@ export const PasswordResetLinkEmail = ({
 PasswordResetLinkEmail.PreviewProps = {
   duration: '24 hours',
   hasPassword: true,
-  link: 'https://app.twenty.com/reset-password/123',
+  link: 'https://crm.example.com/reset-password/123',
   locale: 'en',
 } as PasswordResetLinkEmailProps;
 
