@@ -1,24 +1,61 @@
 import { Test, type TestingModule } from '@nestjs/testing';
 
 import { encodeCursorData } from 'src/engine/api/graphql/graphql-query-runner/utils/cursors.util';
+import { type ObjectRecordFilter } from 'src/engine/api/graphql/workspace-query-builder/interfaces/object-record.interface';
 import {
   mockFlatFieldMetadataMaps,
   mockFlatObjectMetadatas,
 } from 'src/engine/core-modules/__mocks__/mockFlatObjectMetadatas';
+import { type WorkspaceAuthContext } from 'src/engine/core-modules/auth/types/workspace-auth-context.type';
 import { FileUrlService } from 'src/engine/core-modules/file/file-url/file-url.service';
+import { PermaventSecurityService } from 'src/engine/core-modules/permavent-security/permavent-security.service';
 import { SearchService } from 'src/engine/core-modules/search/services/search.service';
 import { TwentyConfigService } from 'src/engine/core-modules/twenty-config/twenty-config.service';
 import { GlobalWorkspaceOrmManager } from 'src/engine/twenty-orm/global-workspace-datasource/global-workspace-orm.manager';
+import {
+  type ORMWorkspaceContext,
+  withWorkspaceContext,
+} from 'src/engine/twenty-orm/storage/orm-workspace-context.storage';
 
 describe('SearchService', () => {
   let service: SearchService;
+  const authContext = {
+    type: 'system',
+    workspace: { id: 'workspace-id' },
+  } as WorkspaceAuthContext;
+  const getRepository = jest.fn();
+  const applyToObjectRecordFilter = jest.fn();
+  const executeInWorkspaceContext = jest.fn(
+    async (callback: () => Promise<unknown>) =>
+      withWorkspaceContext(
+        {
+          authContext,
+          userWorkspaceRoleMap: {},
+          apiKeyRoleMap: {},
+        } as ORMWorkspaceContext,
+        callback,
+      ),
+  );
 
   beforeEach(async () => {
+    jest.clearAllMocks();
+    getRepository.mockResolvedValue({});
+    applyToObjectRecordFilter.mockImplementation(
+      async ({ filter }: { filter: ObjectRecordFilter }) => filter,
+    );
+
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         SearchService,
-        { provide: GlobalWorkspaceOrmManager, useValue: {} },
+        {
+          provide: GlobalWorkspaceOrmManager,
+          useValue: { executeInWorkspaceContext, getRepository },
+        },
         { provide: FileUrlService, useValue: {} },
+        {
+          provide: PermaventSecurityService,
+          useValue: { applyToObjectRecordFilter },
+        },
         {
           provide: TwentyConfigService,
           useValue: {
@@ -34,6 +71,36 @@ describe('SearchService', () => {
 
   it('should be defined', () => {
     expect(service).toBeDefined();
+  });
+
+  it('should apply the Permavent filter before building a search query', async () => {
+    const securityFilter = {
+      erpsalesrepcode: { in: ['DM'] },
+    };
+
+    applyToObjectRecordFilter.mockResolvedValue(securityFilter);
+    jest
+      .spyOn(service, 'buildSearchQueryAndGetRecordsWithFallback')
+      .mockResolvedValue([]);
+
+    await service.getAllRecordsWithObjectMetadataItems({
+      flatObjectMetadatas: [mockFlatObjectMetadatas[1]],
+      flatFieldMetadataMaps: mockFlatFieldMetadataMaps,
+      includedObjectNameSingulars: ['company'],
+      excludedObjectNameSingulars: [],
+      searchInput: 'example',
+      limit: 10,
+      workspaceId: 'workspace-id',
+    });
+
+    expect(applyToObjectRecordFilter).toHaveBeenCalledWith({
+      filter: {},
+      authContext,
+      flatObjectMetadata: mockFlatObjectMetadatas[1],
+    });
+    expect(
+      service.buildSearchQueryAndGetRecordsWithFallback,
+    ).toHaveBeenCalledWith(expect.objectContaining({ filter: securityFilter }));
   });
 
   describe('filterObjectMetadataItems', () => {

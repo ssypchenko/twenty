@@ -22,6 +22,7 @@ import {
 import { isQueryCanceledError } from 'src/engine/api/graphql/workspace-query-runner/utils/is-query-canceled-error.util';
 import { FileUrlService } from 'src/engine/core-modules/file/file-url/file-url.service';
 import { extractFileIdFromUrl } from 'src/engine/core-modules/file/files-field/utils/extract-file-id-from-url.util';
+import { PermaventSecurityService } from 'src/engine/core-modules/permavent-security/permavent-security.service';
 import { STANDARD_OBJECTS_BY_PRIORITY_RANK } from 'src/engine/core-modules/search/constants/standard-objects-by-priority-rank';
 import { type ObjectRecordFilterInput } from 'src/engine/core-modules/search/dtos/object-record-filter-input';
 import { type SearchArgs } from 'src/engine/core-modules/search/dtos/search-args';
@@ -63,6 +64,7 @@ export class SearchService {
     private readonly globalWorkspaceOrmManager: GlobalWorkspaceOrmManager,
     private readonly fileUrlService: FileUrlService,
     private readonly twentyConfigService: TwentyConfigService,
+    private readonly permaventSecurityService: PermaventSecurityService,
   ) {}
 
   async getAllRecordsWithObjectMetadataItems({
@@ -113,6 +115,12 @@ export class SearchService {
                   flatObjectMetadata.nameSingular,
                   rolePermissionConfig,
                 );
+              const permaventFilter =
+                await this.permaventSecurityService.applyToObjectRecordFilter({
+                  filter: filter ?? {},
+                  authContext: context.authContext,
+                  flatObjectMetadata,
+                });
 
               return {
                 objectMetadataItem: flatObjectMetadata,
@@ -124,7 +132,7 @@ export class SearchService {
                   searchTerms: formatSearchTerms(searchInput, 'and'),
                   searchTermsOr: formatSearchTerms(searchInput, 'or'),
                   limit: limit as number,
-                  filter: filter ?? ({} as ObjectRecordFilter),
+                  filter: permaventFilter ?? ({} as ObjectRecordFilter),
                   after,
                 }),
               };
