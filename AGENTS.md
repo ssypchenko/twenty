@@ -60,6 +60,14 @@ The canonical workflow is documented in `../docs/twenty-migration/05-custom-imag
 - If the process is still running, report that state and return control without waiting.
 - Never restart a long-running command until the previous process and its output have been checked.
 
+## Live-to-Test Data Refresh
+
+- Refresh Test from Live only with `/usr/local/sbin/twenty-refresh-test-from-live` on the UK CRM server. Do not reproduce the database or storage transfer with ad hoc commands during a normal refresh.
+- The project owner normally runs the refresh script from their own Terminal.
+- The assistant must not run a Live-to-Test refresh on the owner's behalf unless the owner explicitly insists that the assistant execute it in the current conversation.
+- Before any assistant-executed refresh, restate that the operation replaces the complete Test database and local file storage, and confirm that the script will create rollback backups.
+- The canonical procedure and verification requirements are documented in `../docs/twenty-migration/06-refresh-test-from-live.md` relative to the workspace root.
+
 ## Docker Storage
 
 - Inspect Docker storage after every completed image build.
