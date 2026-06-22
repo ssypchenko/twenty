@@ -41,6 +41,7 @@ import { WorkspaceAuthContext } from 'src/engine/core-modules/auth/types/workspa
 import { FeatureFlagService } from 'src/engine/core-modules/feature-flag/services/feature-flag.service';
 import { MetricsService } from 'src/engine/core-modules/metrics/metrics.service';
 import { MetricsKeys } from 'src/engine/core-modules/metrics/types/metrics-keys.type';
+import { PermaventSecurityService } from 'src/engine/core-modules/permavent-security/permavent-security.service';
 import { ThrottlerException } from 'src/engine/core-modules/throttler/throttler.exception';
 import { ThrottlerService } from 'src/engine/core-modules/throttler/throttler.service';
 import { TwentyConfigService } from 'src/engine/core-modules/twenty-config/twenty-config.service';
@@ -95,6 +96,8 @@ export abstract class CommonBaseQueryRunnerService<
   protected readonly metricsService: MetricsService;
   @Inject()
   protected readonly featureFlagService: FeatureFlagService;
+  @Inject()
+  protected readonly permaventSecurityService: PermaventSecurityService;
 
   protected abstract readonly operationName: CommonQueryNames;
 
@@ -202,7 +205,18 @@ export abstract class CommonBaseQueryRunnerService<
   ): Promise<CommonInput<Args>> {
     const { authContext, flatObjectMetadata } = queryRunnerContext;
 
-    const computedArgs = await this.computeArgs(args, queryRunnerContext);
+    const permaventSecurityArgs =
+      await this.permaventSecurityService.applyToCommonQueryArgs({
+        args,
+        operationName,
+        authContext,
+        flatObjectMetadata,
+      });
+
+    const computedArgs = await this.computeArgs(
+      permaventSecurityArgs,
+      queryRunnerContext,
+    );
 
     const hookedArgs =
       (await this.workspaceQueryHookService.executePreQueryHooks(
