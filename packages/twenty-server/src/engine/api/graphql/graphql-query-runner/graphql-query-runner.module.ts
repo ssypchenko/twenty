@@ -7,6 +7,7 @@ import { ProcessAggregateHelper } from 'src/engine/api/graphql/graphql-query-run
 import { WorkspaceQueryHookModule } from 'src/engine/api/graphql/workspace-query-runner/workspace-query-hook/workspace-query-hook.module';
 import { WorkspaceQueryRunnerModule } from 'src/engine/api/graphql/workspace-query-runner/workspace-query-runner.module';
 import { ApiKeyModule } from 'src/engine/core-modules/api-key/api-key.module';
+import { PermaventSecurityModule } from 'src/engine/core-modules/permavent-security/permavent-security.module';
 import { PermissionsModule } from 'src/engine/metadata-modules/permissions/permissions.module';
 import { RoleTargetEntity } from 'src/engine/metadata-modules/role-target/role-target.entity';
 import { UserRoleModule } from 'src/engine/metadata-modules/user-role/user-role.module';
@@ -22,6 +23,7 @@ import { ViewModule } from 'src/engine/metadata-modules/view/view.module';
     TypeOrmModule.forFeature([RoleTargetEntity]),
     UserRoleModule,
     ApiKeyModule,
+    PermaventSecurityModule,
     ViewModule,
     ViewFilterModule,
     ViewFilterGroupModule,
