@@ -2,11 +2,13 @@ import { Injectable } from '@nestjs/common';
 
 import { type ObjectRecordFilter } from 'src/engine/api/graphql/workspace-query-builder/interfaces/object-record.interface';
 import { CommonQueryNames } from 'src/engine/api/common/types/common-query-args.type';
+import { type WorkspaceAuthContext } from 'src/engine/core-modules/auth/types/workspace-auth-context.type';
 import { PermaventSecurityContextFactory } from 'src/engine/core-modules/permavent-security/context/permavent-security-context.factory';
 import { PermaventAccessFilterBuilder } from 'src/engine/core-modules/permavent-security/filters/permavent-access-filter.builder';
 import { type PermaventCommonQueryHookInput } from 'src/engine/core-modules/permavent-security/types/permavent-common-query-hook-input.type';
 import { mergePermaventSecurityFilter } from 'src/engine/core-modules/permavent-security/utils/merge-permavent-security-filter.util';
 import { TwentyConfigService } from 'src/engine/core-modules/twenty-config/twenty-config.service';
+import { type FlatObjectMetadata } from 'src/engine/metadata-modules/flat-object-metadata/types/flat-object-metadata.type';
 
 const PERMAVENT_DIRECT_SALES_OBJECTS = new Set(['company', 'branch']);
 const PERMAVENT_FILTERED_READ_OPERATIONS = new Set<CommonQueryNames>([
@@ -33,15 +35,41 @@ export class PermaventSecurityService {
     authContext,
     flatObjectMetadata,
   }: PermaventCommonQueryHookInput<TArgs>): Promise<TArgs> {
-    if (!this.twentyConfigService.get('PERMAVENT_SECURITY_RLS_ENABLED')) {
+    if (!PERMAVENT_FILTERED_READ_OPERATIONS.has(operationName)) {
       return args;
     }
 
-    if (
-      !PERMAVENT_DIRECT_SALES_OBJECTS.has(flatObjectMetadata.nameSingular) ||
-      !PERMAVENT_FILTERED_READ_OPERATIONS.has(operationName)
-    ) {
+    const queryArgs = args as TArgs & QueryArgsWithFilter;
+    const filter = await this.applyToObjectRecordFilter({
+      filter: queryArgs.filter,
+      authContext,
+      flatObjectMetadata,
+    });
+
+    if (filter === queryArgs.filter) {
       return args;
+    }
+
+    return {
+      ...queryArgs,
+      filter,
+    };
+  }
+
+  public async applyToObjectRecordFilter({
+    filter,
+    authContext,
+    flatObjectMetadata,
+  }: {
+    filter?: ObjectRecordFilter;
+    authContext: WorkspaceAuthContext;
+    flatObjectMetadata: FlatObjectMetadata;
+  }): Promise<ObjectRecordFilter | undefined> {
+    if (
+      !this.twentyConfigService.get('PERMAVENT_SECURITY_RLS_ENABLED') ||
+      !PERMAVENT_DIRECT_SALES_OBJECTS.has(flatObjectMetadata.nameSingular)
+    ) {
+      return filter;
     }
 
     const securityContext =
@@ -52,19 +80,13 @@ export class PermaventSecurityService {
       securityContext.bypassSecurity ||
       !securityContext.isRestrictedSalesRep
     ) {
-      return args;
+      return filter;
     }
 
-    const queryArgs = args as TArgs & QueryArgsWithFilter;
-    const securityFilter =
-      this.accessFilterBuilder.buildCompanyOrBranchFilter(securityContext);
-
-    return {
-      ...queryArgs,
-      filter: mergePermaventSecurityFilter({
-        callerFilter: queryArgs.filter,
-        securityFilter,
-      }),
-    };
+    return mergePermaventSecurityFilter({
+      callerFilter: filter,
+      securityFilter:
+        this.accessFilterBuilder.buildCompanyOrBranchFilter(securityContext),
+    });
   }
 }

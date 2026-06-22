@@ -17,10 +17,12 @@ import {
   GraphqlQueryRunnerExceptionCode,
 } from 'src/engine/api/graphql/graphql-query-runner/errors/graphql-query-runner.exception';
 import { ProcessAggregateHelper } from 'src/engine/api/graphql/graphql-query-runner/helpers/process-aggregate.helper';
+import { GraphqlQueryParser } from 'src/engine/api/graphql/graphql-query-runner/graphql-query-parsers/graphql-query.parser';
 import { buildColumnsToSelect } from 'src/engine/api/graphql/graphql-query-runner/utils/build-columns-to-select';
 import { getTargetObjectMetadataOrThrow } from 'src/engine/api/graphql/graphql-query-runner/utils/get-target-object-metadata.util';
 import { type AggregationField } from 'src/engine/api/graphql/workspace-schema-builder/utils/get-available-aggregations-from-object-fields.util';
 import { type WorkspaceAuthContext } from 'src/engine/core-modules/auth/types/workspace-auth-context.type';
+import { PermaventSecurityService } from 'src/engine/core-modules/permavent-security/permavent-security.service';
 import { FlatEntityMaps } from 'src/engine/metadata-modules/flat-entity/types/flat-entity-maps.type';
 import { findFlatEntityByIdInFlatEntityMaps } from 'src/engine/metadata-modules/flat-entity/utils/find-flat-entity-by-id-in-flat-entity-maps.util';
 import { FlatFieldMetadata } from 'src/engine/metadata-modules/flat-field-metadata/types/flat-field-metadata.type';
@@ -58,7 +60,9 @@ type ProcessNestedRelationsArgs<T extends ObjectRecord = ObjectRecord> = {
 
 @Injectable()
 export class ProcessNestedRelationsV2Helper {
-  constructor() {}
+  constructor(
+    private readonly permaventSecurityService: PermaventSecurityService,
+  ) {}
 
   public async processNestedRelations<T extends ObjectRecord = ObjectRecord>(
     args: ProcessNestedRelationsArgs<T>,
@@ -220,6 +224,14 @@ export class ProcessNestedRelationsV2Helper {
       select: columnsToSelect,
     });
 
+    await this.applyPermaventSecurityFilter({
+      referenceQueryBuilder: targetObjectQueryBuilder,
+      authContext,
+      targetObjectMetadata,
+      flatObjectMetadataMaps,
+      flatFieldMetadataMaps,
+    });
+
     const joinColumnName = computeMorphOrRelationFieldJoinColumnName({
       name: sourceFieldName,
     });
@@ -363,6 +375,46 @@ export class ProcessNestedRelationsV2Helper {
     return { targetRelationName, targetObjectMetadata, targetRelation };
   }
 
+  private async applyPermaventSecurityFilter({
+    referenceQueryBuilder,
+    authContext,
+    targetObjectMetadata,
+    flatObjectMetadataMaps,
+    flatFieldMetadataMaps,
+  }: {
+    referenceQueryBuilder: WorkspaceSelectQueryBuilder<ObjectLiteral>;
+    authContext: WorkspaceAuthContext;
+    targetObjectMetadata: FlatObjectMetadata;
+    flatObjectMetadataMaps: FlatEntityMaps<FlatObjectMetadata>;
+    flatFieldMetadataMaps: FlatEntityMaps<FlatFieldMetadata>;
+  }): Promise<void> {
+    const permaventFilter =
+      await this.permaventSecurityService.applyToObjectRecordFilter({
+        filter: {},
+        authContext,
+        flatObjectMetadata: targetObjectMetadata,
+      });
+
+    if (
+      !isDefined(permaventFilter) ||
+      Object.keys(permaventFilter).length === 0
+    ) {
+      return;
+    }
+
+    const queryParser = new GraphqlQueryParser(
+      targetObjectMetadata,
+      flatObjectMetadataMaps,
+      flatFieldMetadataMaps,
+    );
+
+    queryParser.applyFilterToBuilder(
+      referenceQueryBuilder,
+      targetObjectMetadata.nameSingular,
+      permaventFilter,
+    );
+  }
+
   private getUniqueIds({
     records,
     idField,
@@ -420,7 +472,7 @@ export class ProcessNestedRelationsV2Helper {
 
       const aggregatedFieldsValues = await aggregateQueryBuilder
         .addSelect(column)
-        .where(`${column} IN (:...ids)`, {
+        .andWhere(`${column} IN (:...ids)`, {
           ids,
         })
         .groupBy(column)
@@ -451,7 +503,7 @@ export class ProcessNestedRelationsV2Helper {
     if (relationType !== RelationType.ONE_TO_MANY) {
       const result = await referenceQueryBuilder
         .setFindOptions(findOptionsWithJoinColumn)
-        .where(`${column} IN (:...ids)`, { ids })
+        .andWhere(`${column} IN (:...ids)`, { ids })
         .take(perParentLimit * parentRecordsCount)
         .getMany();
 
@@ -474,7 +526,7 @@ export class ProcessNestedRelationsV2Helper {
 
     const result = await referenceQueryBuilder
       .setFindOptions(findOptionsWithJoinColumn)
-      .where(`id IN (:...recordIdsToHydrate)`, {
+      .andWhere(`id IN (:...recordIdsToHydrate)`, {
         recordIdsToHydrate,
       })
       .getMany();
