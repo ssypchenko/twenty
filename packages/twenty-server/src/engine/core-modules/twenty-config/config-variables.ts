@@ -111,6 +111,16 @@ export class ConfigVariables {
   WORKSPACE_SCHEMA_DDL_LOCKED = false;
 
   @ConfigVariablesMetadata({
+    group: ConfigVariablesGroup.ADVANCED_SETTINGS,
+    description: 'Enable Permavent application-level record security hooks',
+    isEnvOnly: true,
+    isHiddenInAdminPanel: true,
+    type: ConfigVariableType.BOOLEAN,
+  })
+  @IsOptional()
+  PERMAVENT_SECURITY_RLS_ENABLED = false;
+
+  @ConfigVariablesMetadata({
     group: ConfigVariablesGroup.TOKENS_DURATION,
     description: 'Duration for which the email verification token is valid',
     type: ConfigVariableType.STRING,
