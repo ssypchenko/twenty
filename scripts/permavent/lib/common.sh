@@ -25,6 +25,33 @@ permavent_require_command() {
     permavent_fail "Required command '${command_name}' was not found in PATH."
 }
 
+permavent_prepare_node_runtime() {
+  local nvmrc_path="${PERMAVENT_REPOSITORY_ROOT}/.nvmrc"
+  local expected_node_version
+  local current_node_version=""
+  local nvm_node_bin
+
+  [[ -f "$nvmrc_path" ]] ||
+    permavent_fail "Repository .nvmrc was not found at ${nvmrc_path}."
+
+  expected_node_version="$(tr -d '[:space:]' < "$nvmrc_path")"
+  expected_node_version="${expected_node_version#v}"
+
+  if command -v node >/dev/null 2>&1; then
+    current_node_version="$(node --version 2>/dev/null || true)"
+  fi
+
+  if [[ "$current_node_version" == "v${expected_node_version}" ]]; then
+    return 0
+  fi
+
+  nvm_node_bin="${NVM_DIR:-${HOME}/.nvm}/versions/node/v${expected_node_version}/bin"
+
+  if [[ -x "${nvm_node_bin}/node" ]]; then
+    export PATH="${nvm_node_bin}:${PATH}"
+  fi
+}
+
 permavent_assert_repository_layout() {
   [[ -f "${PERMAVENT_REPOSITORY_ROOT}/package.json" ]] ||
     permavent_fail "Repository package.json was not found at ${PERMAVENT_REPOSITORY_ROOT}."
