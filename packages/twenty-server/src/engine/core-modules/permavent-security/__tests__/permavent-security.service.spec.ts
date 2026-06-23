@@ -9,6 +9,7 @@ import { ConfigVariables } from 'src/engine/core-modules/twenty-config/config-va
 import { TwentyConfigService } from 'src/engine/core-modules/twenty-config/twenty-config.service';
 import { isEnvOnlyConfigVar } from 'src/engine/core-modules/twenty-config/utils/is-env-only-config-var.util';
 import { type FlatObjectMetadata } from 'src/engine/metadata-modules/flat-object-metadata/types/flat-object-metadata.type';
+import { PermissionsExceptionCode } from 'src/engine/metadata-modules/permissions/permissions.exception';
 
 describe('PermaventSecurityService', () => {
   const getConfigVariable = jest.fn();
@@ -55,6 +56,20 @@ describe('PermaventSecurityService', () => {
     allowedSalesRepCodes: ['DM', 'RT'],
     isSupportedUserContext: true,
   };
+  const deniedSalesRepOperations = [
+    CommonQueryNames.CREATE_ONE,
+    CommonQueryNames.CREATE_MANY,
+    CommonQueryNames.UPDATE_ONE,
+    CommonQueryNames.UPDATE_MANY,
+    CommonQueryNames.DELETE_ONE,
+    CommonQueryNames.DELETE_MANY,
+    CommonQueryNames.DESTROY_ONE,
+    CommonQueryNames.DESTROY_MANY,
+    CommonQueryNames.RESTORE_ONE,
+    CommonQueryNames.RESTORE_MANY,
+    CommonQueryNames.MERGE_MANY,
+    CommonQueryNames.FIND_DUPLICATES,
+  ];
 
   beforeEach(() => {
     jest.clearAllMocks();
@@ -169,12 +184,76 @@ describe('PermaventSecurityService', () => {
     expect(createSecurityContext).not.toHaveBeenCalled();
   });
 
-  it('should not build a context for a mutation', async () => {
+  it.each(deniedSalesRepOperations)(
+    'should deny Sales Rep operation %s for a Company',
+    async (operationName) => {
+      getConfigVariable.mockReturnValue(true);
+
+      await expect(
+        service.applyToCommonQueryArgs({
+          ...input,
+          operationName,
+        }),
+      ).rejects.toMatchObject({
+        code: PermissionsExceptionCode.PERMISSION_DENIED,
+      });
+    },
+  );
+
+  it('should leave a Sales Rep mutation unchanged when disabled', async () => {
+    getConfigVariable.mockReturnValue(false);
+
+    const result = await service.applyToCommonQueryArgs({
+      ...input,
+      operationName: CommonQueryNames.UPDATE_ONE,
+    });
+
+    expect(result).toBe(args);
+    expect(createSecurityContext).not.toHaveBeenCalled();
+  });
+
+  it('should allow a bypass role mutation', async () => {
+    getConfigVariable.mockReturnValue(true);
+    createSecurityContext.mockResolvedValue({
+      ...restrictedSalesRepContext,
+      bypassSecurity: true,
+      isRestrictedSalesRep: false,
+      allowedSalesRepCodes: [],
+    });
+
+    const result = await service.applyToCommonQueryArgs({
+      ...input,
+      operationName: CommonQueryNames.UPDATE_ONE,
+    });
+
+    expect(result).toBe(args);
+  });
+
+  it('should allow an unmanaged role mutation', async () => {
+    getConfigVariable.mockReturnValue(true);
+    createSecurityContext.mockResolvedValue({
+      ...restrictedSalesRepContext,
+      isRestrictedSalesRep: false,
+      allowedSalesRepCodes: [],
+    });
+
+    const result = await service.applyToCommonQueryArgs({
+      ...input,
+      operationName: CommonQueryNames.UPDATE_ONE,
+    });
+
+    expect(result).toBe(args);
+  });
+
+  it('should not build a context for an out-of-scope mutation', async () => {
     getConfigVariable.mockReturnValue(true);
 
     const result = await service.applyToCommonQueryArgs({
       ...input,
       operationName: CommonQueryNames.UPDATE_ONE,
+      flatObjectMetadata: {
+        nameSingular: 'person',
+      } as FlatObjectMetadata,
     });
 
     expect(result).toBe(args);
