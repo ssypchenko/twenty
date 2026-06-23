@@ -170,13 +170,65 @@ describe('PermaventSecurityService', () => {
     expect(result).toBe(args);
   });
 
-  it('should not build a context for an out-of-scope object', async () => {
+  it('should merge a relation ownership filter into a Person read', async () => {
     getConfigVariable.mockReturnValue(true);
 
     const result = await service.applyToCommonQueryArgs({
       ...input,
       flatObjectMetadata: {
         nameSingular: 'person',
+      } as FlatObjectMetadata,
+    });
+
+    expect(result).toEqual({
+      first: 20,
+      filter: {
+        and: [
+          args.filter,
+          {
+            or: [
+              {
+                company: {
+                  or: [
+                    {
+                      salesrepemail: {
+                        primaryEmail: {
+                          ilike: 'sales.rep@example.test',
+                        },
+                      },
+                    },
+                    { erpsalesrepcode: { in: ['DM', 'RT'] } },
+                  ],
+                },
+              },
+              {
+                branch: {
+                  or: [
+                    {
+                      salesrepemail: {
+                        primaryEmail: {
+                          ilike: 'sales.rep@example.test',
+                        },
+                      },
+                    },
+                    { erpsalesrepcode: { in: ['DM', 'RT'] } },
+                  ],
+                },
+              },
+            ],
+          },
+        ],
+      },
+    });
+  });
+
+  it('should not build a context for an out-of-scope read object', async () => {
+    getConfigVariable.mockReturnValue(true);
+
+    const result = await service.applyToCommonQueryArgs({
+      ...input,
+      flatObjectMetadata: {
+        nameSingular: 'opportunity',
       } as FlatObjectMetadata,
     });
 
