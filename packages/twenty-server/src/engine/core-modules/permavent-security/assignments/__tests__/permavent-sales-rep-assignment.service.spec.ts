@@ -1,5 +1,6 @@
 import { PermaventSalesRepAssignmentEntity } from 'src/engine/core-modules/permavent-security/assignments/permavent-sales-rep-assignment.entity';
 import { PermaventSalesRepAssignmentService } from 'src/engine/core-modules/permavent-security/assignments/permavent-sales-rep-assignment.service';
+import { normalisePermaventSalesRepCode } from 'src/engine/core-modules/permavent-security/assignments/normalise-permavent-sales-rep-code.util';
 import { type WorkspaceScopedRepository } from 'src/engine/twenty-orm/workspace-scoped-repository/workspace-scoped-repository';
 
 describe('PermaventSalesRepAssignmentService', () => {
@@ -30,6 +31,7 @@ describe('PermaventSalesRepAssignmentService', () => {
       { erpSalesRepCode: 'RT' },
       { erpSalesRepCode: 'dm' },
       { erpSalesRepCode: 'DM' },
+      { erpSalesRepCode: 'scotland' },
     ]);
 
     const result = await service.findAllowedSalesRepCodes({
@@ -38,7 +40,7 @@ describe('PermaventSalesRepAssignmentService', () => {
       at,
     });
 
-    expect(result).toEqual(['DM', 'RT']);
+    expect(result).toEqual(['DM', 'RT', 'SCOTLAND']);
     expect(queryBuilder.where).toHaveBeenCalledWith(
       'assignment.workspaceId = :workspaceId',
       { workspaceId: 'workspace-id' },
@@ -92,10 +94,31 @@ describe('PermaventSalesRepAssignmentService', () => {
         erpSalesRepCode: 'REP1',
       }),
     ).rejects.toThrow(
-      'A Sales Rep code must contain two or three uppercase letters.',
+      'A Sales Rep code must contain between two and 32 uppercase letters.',
     );
     expect(assignmentRepository.upsert).not.toHaveBeenCalled();
   });
+
+  it.each([
+    ['dm', 'DM'],
+    [' NSR ', 'NSR'],
+    ['scotland', 'SCOTLAND'],
+    ['A'.repeat(32), 'A'.repeat(32)],
+  ])(
+    'should canonicalise supported territory identifier %s',
+    (input, expected) => {
+      expect(normalisePermaventSalesRepCode(input)).toBe(expected);
+    },
+  );
+
+  it.each(['A', 'A'.repeat(33), 'NORTH-WEST', 'NORTH WEST', 'REP1'])(
+    'should reject unsupported territory identifier %s',
+    (input) => {
+      expect(() => normalisePermaventSalesRepCode(input)).toThrow(
+        'A Sales Rep code must contain between two and 32 uppercase letters.',
+      );
+    },
+  );
 
   it('should reject an invalid validity window', async () => {
     await expect(
