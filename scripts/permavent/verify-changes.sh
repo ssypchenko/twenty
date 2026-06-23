@@ -70,6 +70,7 @@ case "$scope" in
 esac
 
 permavent_assert_repository_layout
+permavent_prepare_node_runtime
 
 boundary_arguments=()
 if [[ -n "$base_ref" ]]; then
@@ -84,17 +85,21 @@ fi
 run_project_checks() {
   local project_name="$1"
 
-  permavent_run corepack yarn nx run-many \
-    --targets=lint,typecheck \
-    --projects="$project_name" \
-    --nxBail
+  permavent_run corepack yarn nx lint "$project_name" \
+    --excludeTaskDependencies
+
+  permavent_run corepack yarn nx typecheck "$project_name" \
+    --excludeTaskDependencies
 
   if [[ "$with_tests" == "true" ]]; then
-    permavent_run corepack yarn nx test "$project_name" --configuration=ci
+    permavent_run corepack yarn nx test "$project_name" \
+      --configuration=ci \
+      --excludeTaskDependencies
   fi
 
   if [[ "$skip_build" == "false" ]]; then
-    permavent_run corepack yarn nx build "$project_name"
+    permavent_run corepack yarn nx build "$project_name" \
+      --excludeTaskDependencies
   fi
 }
 

@@ -48,6 +48,7 @@ while [[ $# -gt 0 ]]; do
 done
 
 permavent_assert_repository_layout
+permavent_prepare_node_runtime
 permavent_require_command git
 
 failures=0
@@ -92,6 +93,7 @@ if [[ "$branch_name" == permavent/custom-v* ]]; then
 fi
 
 expected_node_version="$(tr -d '[:space:]' < "${PERMAVENT_REPOSITORY_ROOT}/.nvmrc")"
+expected_node_version="${expected_node_version#v}"
 if ! command -v node >/dev/null 2>&1; then
   permavent_error "Node.js ${expected_node_version} is required but Node.js was not found."
   failures=$((failures + 1))
