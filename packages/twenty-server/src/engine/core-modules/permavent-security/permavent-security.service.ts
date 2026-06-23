@@ -9,12 +9,30 @@ import { type PermaventCommonQueryHookInput } from 'src/engine/core-modules/perm
 import { mergePermaventSecurityFilter } from 'src/engine/core-modules/permavent-security/utils/merge-permavent-security-filter.util';
 import { TwentyConfigService } from 'src/engine/core-modules/twenty-config/twenty-config.service';
 import { type FlatObjectMetadata } from 'src/engine/metadata-modules/flat-object-metadata/types/flat-object-metadata.type';
+import {
+  PermissionsException,
+  PermissionsExceptionCode,
+} from 'src/engine/metadata-modules/permissions/permissions.exception';
 
 const PERMAVENT_DIRECT_SALES_OBJECTS = new Set(['company', 'branch']);
 const PERMAVENT_FILTERED_READ_OPERATIONS = new Set<CommonQueryNames>([
   CommonQueryNames.FIND_ONE,
   CommonQueryNames.FIND_MANY,
   CommonQueryNames.GROUP_BY,
+]);
+const PERMAVENT_DENIED_SALES_REP_OPERATIONS = new Set<CommonQueryNames>([
+  CommonQueryNames.CREATE_ONE,
+  CommonQueryNames.CREATE_MANY,
+  CommonQueryNames.UPDATE_ONE,
+  CommonQueryNames.UPDATE_MANY,
+  CommonQueryNames.DELETE_ONE,
+  CommonQueryNames.DELETE_MANY,
+  CommonQueryNames.DESTROY_ONE,
+  CommonQueryNames.DESTROY_MANY,
+  CommonQueryNames.RESTORE_ONE,
+  CommonQueryNames.RESTORE_MANY,
+  CommonQueryNames.MERGE_MANY,
+  CommonQueryNames.FIND_DUPLICATES,
 ]);
 
 type QueryArgsWithFilter = {
@@ -35,6 +53,16 @@ export class PermaventSecurityService {
     authContext,
     flatObjectMetadata,
   }: PermaventCommonQueryHookInput<TArgs>): Promise<TArgs> {
+    if (PERMAVENT_DENIED_SALES_REP_OPERATIONS.has(operationName)) {
+      await this.assertOperationAllowed({
+        operationName,
+        authContext,
+        flatObjectMetadata,
+      });
+
+      return args;
+    }
+
     if (!PERMAVENT_FILTERED_READ_OPERATIONS.has(operationName)) {
       return args;
     }
@@ -88,5 +116,34 @@ export class PermaventSecurityService {
       securityFilter:
         this.accessFilterBuilder.buildCompanyOrBranchFilter(securityContext),
     });
+  }
+
+  private async assertOperationAllowed({
+    operationName,
+    authContext,
+    flatObjectMetadata,
+  }: {
+    operationName: CommonQueryNames;
+    authContext: WorkspaceAuthContext;
+    flatObjectMetadata: FlatObjectMetadata;
+  }): Promise<void> {
+    if (
+      !this.twentyConfigService.get('PERMAVENT_SECURITY_RLS_ENABLED') ||
+      !PERMAVENT_DIRECT_SALES_OBJECTS.has(flatObjectMetadata.nameSingular)
+    ) {
+      return;
+    }
+
+    const securityContext =
+      await this.securityContextFactory.create(authContext);
+
+    if (!securityContext.isRestrictedSalesRep) {
+      return;
+    }
+
+    throw new PermissionsException(
+      `Permavent Sales Rep operation '${operationName}' is not permitted on '${flatObjectMetadata.nameSingular}' records`,
+      PermissionsExceptionCode.PERMISSION_DENIED,
+    );
   }
 }
