@@ -95,6 +95,7 @@ import { MigrateAiModelPreferencesSlowInstanceCommand } from 'src/database/comma
 import { AddFolderImportToMessageFolderPendingSyncActionFastInstanceCommand } from './2-15/2-15-instance-command-fast-1781714499016-add-folder-import-to-message-folder-pending-sync-action';
 import { AddViewKanbanColumnWidthFastInstanceCommand } from './2-15/2-15-instance-command-fast-1781900000000-add-view-kanban-column-width';
 import { CreatePermaventSalesRepAssignmentFastInstanceCommand } from 'src/database/commands/upgrade-version-command/2-15/2-15-instance-command-fast-1782135751194-create-permavent-sales-rep-assignment';
+import { ExpandPermaventSalesRepCodeFastInstanceCommand } from 'src/database/commands/upgrade-version-command/2-15/2-15-instance-command-fast-1782209253761-expand-permavent-sales-rep-code';
 import { AddWorkspaceDiscoverabilityToWorkspaceFastInstanceCommand } from './2-19/2-19-instance-command-fast-1783004140000-add-workspace-discoverability-to-workspace';
 import { AddLogoToApplicationRegistrationFastInstanceCommand } from './2-19/2-19-instance-command-fast-1783069672191-add-logo-to-application-registration';
 import { AddDisplayFieldsToApplicationRegistrationFastInstanceCommand } from './2-19/2-19-instance-command-fast-1783073776590-add-display-fields-to-application-registration';
@@ -205,6 +206,7 @@ export const INSTANCE_COMMANDS = [
   AddChannelWebhookSubscriptionFieldsFastInstanceCommand,
   AddServerTriggerSettingsToLogicFunctionFastInstanceCommand,
   AddUniversalIdentifierAndApplicationIdToSearchFieldMetadataFastInstanceCommand,
+  ExpandPermaventSalesRepCodeFastInstanceCommand,
   AddPrimaryPublicDomainToApplicationFastInstanceCommand,
   MakePublicDomainApplicationIdNotNullSlowInstanceCommand,
   CreateDpaAgreementCoreTableFastInstanceCommand,
