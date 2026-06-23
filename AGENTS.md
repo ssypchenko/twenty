@@ -68,6 +68,16 @@ The canonical workflow is documented in `../docs/twenty-migration/05-custom-imag
 - Before any assistant-executed refresh, restate that the operation replaces the complete Test database and local file storage, and confirm that the script will create rollback backups.
 - The canonical procedure and verification requirements are documented in `../docs/twenty-migration/06-refresh-test-from-live.md` relative to the workspace root.
 
+## Test Image Deployment
+
+- Deploy published Permavent images to Test only with `/usr/local/sbin/twenty-deploy-test-image` on the UK CRM server.
+- After verifying the published GHCR tag and OCI digest, the assistant must provide the project owner with the exact command: `sudo twenty-deploy-test-image <tag> <expected-oci-digest>`.
+- The project owner normally runs the deployment command from their own Terminal. The assistant must not run it on the owner's behalf unless the owner explicitly asks the assistant to execute that deployment in the current conversation.
+- The command must receive the verified tag and OCI index digest as separate arguments. Do not omit digest verification or deploy `latest`.
+- The command targets `/opt/twenty-test` and recreates only the Test `server` and `worker` services. It must not change Live, PostgreSQL, Redis or persistent volumes.
+- After the project owner reports completion, verify the command status, published RepoDigest, service images, health checks, restart counts, logs and unchanged Test PostgreSQL and Redis containers.
+- The canonical procedure is documented in `../docs/twenty-migration/07-test-image-deployment.md` relative to the workspace root.
+
 ## Docker Storage
 
 - Inspect local Docker images, containers and build cache before every production image build and after every completed build.
