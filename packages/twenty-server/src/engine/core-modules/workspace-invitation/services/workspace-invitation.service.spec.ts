@@ -185,48 +185,51 @@ describe('WorkspaceInvitationService', () => {
   });
 
   describe('sendInvitations', () => {
-    it('should send invitations successfully', async () => {
-      const emails = ['test1@example.com', 'test2@example.com'];
-      const workspace = {
-        id: 'workspace-id',
-        inviteHash: 'invite-hash',
-        displayName: 'Test Workspace',
-      } as WorkspaceEntity;
-      const sender = {
-        userEmail: 'sender@example.com',
-        name: { firstName: 'Sender' },
-        locale: 'en',
-      };
+    it.each(['Test Workspace', undefined])(
+      'should send invitations with workspace display name %s',
+      async (displayName) => {
+        const emails = ['test1@example.com', 'test2@example.com'];
+        const workspace = {
+          id: 'workspace-id',
+          inviteHash: 'invite-hash',
+          displayName,
+        } as WorkspaceEntity;
+        const sender = {
+          userEmail: 'sender@example.com',
+          name: { firstName: 'Sender' },
+          locale: 'en',
+        };
 
-      jest.spyOn(service, 'createWorkspaceInvitation').mockResolvedValue({
-        context: { email: 'test@example.com' },
-        value: 'token-value',
-        type: AppTokenType.InvitationToken,
-      } as AppTokenEntity);
-      jest
-        .spyOn(twentyConfigService, 'get')
-        .mockReturnValue('http://localhost:3000');
-      jest.spyOn(emailService, 'send').mockResolvedValue({} as any);
-      jest
-        .spyOn(onboardingService, 'setOnboardingInviteTeamPending')
-        .mockResolvedValue({} as any);
+        jest.spyOn(service, 'createWorkspaceInvitation').mockResolvedValue({
+          context: { email: 'test@example.com' },
+          value: 'token-value',
+          type: AppTokenType.InvitationToken,
+        } as AppTokenEntity);
+        jest
+          .spyOn(twentyConfigService, 'get')
+          .mockReturnValue('http://localhost:3000');
+        jest.spyOn(emailService, 'send').mockResolvedValue({} as any);
+        jest
+          .spyOn(onboardingService, 'setOnboardingInviteTeamPending')
+          .mockResolvedValue({} as any);
 
-      const result = await service.sendInvitations(
-        emails,
-        workspace,
-        sender as WorkspaceMemberWorkspaceEntity,
-      );
+        const result = await service.sendInvitations(
+          emails,
+          workspace,
+          sender as WorkspaceMemberWorkspaceEntity,
+        );
 
-      expect(result.success).toBe(true);
-      expect(result.result.length).toBe(2);
-      expect(emailService.send).toHaveBeenCalledTimes(2);
-      expect(
-        onboardingService.setOnboardingInviteTeamPending,
-      ).toHaveBeenCalledWith({
-        workspaceId: workspace.id,
-        value: false,
-      });
-    });
+        expect(result.success).toBe(true);
+        expect(result.result.length).toBe(2);
+        expect(emailService.send).toHaveBeenCalledTimes(2);
+        expect(
+          onboardingService.setOnboardingInviteTeamPending,
+        ).toHaveBeenCalledWith({
+          workspaceId: workspace.id,
+          value: false,
+        });
+      },
+    );
 
     it('should mint reward-eligible tokens when the invite-team step is pending', async () => {
       const workspace = {
