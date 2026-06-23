@@ -32,7 +32,7 @@ import { WorkspaceRelatedEntity } from 'src/engine/workspace-manager/types/works
 ])
 @Check(
   'CHK_PERMAVENT_SALES_REP_ASSIGNMENT_CODE',
-  `"erpSalesRepCode" ~ '^[A-Z]{2,3}$'`,
+  `"erpSalesRepCode" ~ '^[A-Z]{2,32}$'`,
 )
 @Check(
   'CHK_PERMAVENT_SALES_REP_ASSIGNMENT_EMAIL',
@@ -62,7 +62,7 @@ export class PermaventSalesRepAssignmentEntity extends WorkspaceRelatedEntity {
   @Column({ type: 'varchar', length: 320 })
   userEmail: string;
 
-  @Column({ type: 'varchar', length: 3 })
+  @Column({ type: 'varchar', length: 32 })
   erpSalesRepCode: string;
 
   @Column({ type: 'boolean', default: true })
