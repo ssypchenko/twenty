@@ -15,7 +15,7 @@ export class PermaventAccessFilterBuilder {
     return this.buildDirectOwnershipFilter(context);
   }
 
-  public buildPersonFilter(
+  public buildRelatedCompanyOrBranchFilter(
     context: PermaventSecurityContext,
   ): ObjectRecordFilter {
     if (!this.hasActiveOwnershipContext(context)) {
