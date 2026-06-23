@@ -170,57 +170,60 @@ describe('PermaventSecurityService', () => {
     expect(result).toBe(args);
   });
 
-  it('should merge a relation ownership filter into a Person read', async () => {
-    getConfigVariable.mockReturnValue(true);
+  it.each(['person', 'opportunity'])(
+    'should merge a relation ownership filter into a %s read',
+    async (nameSingular) => {
+      getConfigVariable.mockReturnValue(true);
 
-    const result = await service.applyToCommonQueryArgs({
-      ...input,
-      flatObjectMetadata: {
-        nameSingular: 'person',
-      } as FlatObjectMetadata,
-    });
+      const result = await service.applyToCommonQueryArgs({
+        ...input,
+        flatObjectMetadata: {
+          nameSingular,
+        } as FlatObjectMetadata,
+      });
 
-    expect(result).toEqual({
-      first: 20,
-      filter: {
-        and: [
-          args.filter,
-          {
-            or: [
-              {
-                company: {
-                  or: [
-                    {
-                      salesrepemail: {
-                        primaryEmail: {
-                          ilike: 'sales.rep@example.test',
+      expect(result).toEqual({
+        first: 20,
+        filter: {
+          and: [
+            args.filter,
+            {
+              or: [
+                {
+                  company: {
+                    or: [
+                      {
+                        salesrepemail: {
+                          primaryEmail: {
+                            ilike: 'sales.rep@example.test',
+                          },
                         },
                       },
-                    },
-                    { erpsalesrepcode: { in: ['DM', 'RT'] } },
-                  ],
+                      { erpsalesrepcode: { in: ['DM', 'RT'] } },
+                    ],
+                  },
                 },
-              },
-              {
-                branch: {
-                  or: [
-                    {
-                      salesrepemail: {
-                        primaryEmail: {
-                          ilike: 'sales.rep@example.test',
+                {
+                  branch: {
+                    or: [
+                      {
+                        salesrepemail: {
+                          primaryEmail: {
+                            ilike: 'sales.rep@example.test',
+                          },
                         },
                       },
-                    },
-                    { erpsalesrepcode: { in: ['DM', 'RT'] } },
-                  ],
+                      { erpsalesrepcode: { in: ['DM', 'RT'] } },
+                    ],
+                  },
                 },
-              },
-            ],
-          },
-        ],
-      },
-    });
-  });
+              ],
+            },
+          ],
+        },
+      });
+    },
+  );
 
   it('should not build a context for an out-of-scope read object', async () => {
     getConfigVariable.mockReturnValue(true);
@@ -228,7 +231,7 @@ describe('PermaventSecurityService', () => {
     const result = await service.applyToCommonQueryArgs({
       ...input,
       flatObjectMetadata: {
-        nameSingular: 'opportunity',
+        nameSingular: 'project',
       } as FlatObjectMetadata,
     });
 
@@ -297,20 +300,23 @@ describe('PermaventSecurityService', () => {
     expect(result).toBe(args);
   });
 
-  it('should not build a context for an out-of-scope mutation', async () => {
-    getConfigVariable.mockReturnValue(true);
+  it.each(['person', 'opportunity'])(
+    'should leave the read-only scoped %s mutation unchanged',
+    async (nameSingular) => {
+      getConfigVariable.mockReturnValue(true);
 
-    const result = await service.applyToCommonQueryArgs({
-      ...input,
-      operationName: CommonQueryNames.UPDATE_ONE,
-      flatObjectMetadata: {
-        nameSingular: 'person',
-      } as FlatObjectMetadata,
-    });
+      const result = await service.applyToCommonQueryArgs({
+        ...input,
+        operationName: CommonQueryNames.UPDATE_ONE,
+        flatObjectMetadata: {
+          nameSingular,
+        } as FlatObjectMetadata,
+      });
 
-    expect(result).toBe(args);
-    expect(createSecurityContext).not.toHaveBeenCalled();
-  });
+      expect(result).toBe(args);
+      expect(createSecurityContext).not.toHaveBeenCalled();
+    },
+  );
 
   it('should define the feature flag as environment-only and disabled by default', () => {
     expect(new ConfigVariables().PERMAVENT_SECURITY_RLS_ENABLED).toBe(false);
