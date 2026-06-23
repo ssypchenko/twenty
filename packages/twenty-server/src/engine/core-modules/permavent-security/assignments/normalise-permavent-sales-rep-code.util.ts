@@ -1,4 +1,4 @@
-const PERMAVENT_SALES_REP_CODE_PATTERN = /^[A-Z]{2,3}$/;
+const PERMAVENT_SALES_REP_CODE_PATTERN = /^[A-Z]{2,32}$/;
 
 export const normalisePermaventSalesRepCode = (
   salesRepCode: string,
@@ -7,7 +7,7 @@ export const normalisePermaventSalesRepCode = (
 
   if (!PERMAVENT_SALES_REP_CODE_PATTERN.test(normalisedSalesRepCode)) {
     throw new Error(
-      'A Sales Rep code must contain two or three uppercase letters.',
+      'A Sales Rep code must contain between two and 32 uppercase letters.',
     );
   }
 
