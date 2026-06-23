@@ -70,15 +70,15 @@ The canonical workflow is documented in `../docs/twenty-migration/05-custom-imag
 
 ## Docker Storage
 
-- Inspect Docker storage after every completed image build.
-- Keep at most the current production image and one previous rollback image locally until Test verification completes.
-- After the image is pushed and its registry digest is recorded, remove temporary verification images and redundant local aliases.
-- After Test verification succeeds, remove the previous local production image unless it is still required for an imminent Live rollback. Registry copies are the durable rollback source.
+- Inspect local Docker images, containers and build cache before every production image build and after every completed build.
+- Before starting a new Permavent image build, remove every older local `ghcr.io/ssypchenko/twenty:vX.Y.Z-permavent.N` tag after confirming that no running local container uses it. Do not keep a local rollback image; rebuild or pull a published version if it is needed later.
+- If an older image is used by a running local container, do not stop or remove the container automatically. Report the blocker and obtain the project owner's decision.
+- After publication, keep only the newest local Permavent production image and remove temporary verification images and redundant local aliases.
 - Keep the local BuildKit cache at or below 8 GB after a successful build and publication cycle.
 - Prefer exact `docker image rm <tag>` commands and scoped `docker buildx prune` commands.
 - Never run `docker system prune -a` for this project.
 - Never prune Docker volumes as part of image cleanup.
-- Before removing an image on a server, confirm that no running container uses it and that the required rollback image exists in GHCR.
+- Local cleanup does not authorise image or container changes on Test or Live servers. Server cleanup requires an explicit request.
 
 ## Verification
 
