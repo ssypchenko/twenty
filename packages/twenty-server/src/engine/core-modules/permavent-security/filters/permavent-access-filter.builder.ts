@@ -5,16 +5,42 @@ import { type PermaventSecurityContext } from 'src/engine/core-modules/permavent
 
 @Injectable()
 export class PermaventAccessFilterBuilder {
-  public buildCompanyOrBranchFilter({
+  public buildCompanyOrBranchFilter(
+    context: PermaventSecurityContext,
+  ): ObjectRecordFilter {
+    if (!this.hasActiveOwnershipContext(context)) {
+      return this.buildMatchNoneFilter();
+    }
+
+    return this.buildDirectOwnershipFilter(context);
+  }
+
+  public buildPersonFilter(
+    context: PermaventSecurityContext,
+  ): ObjectRecordFilter {
+    if (!this.hasActiveOwnershipContext(context)) {
+      return this.buildMatchNoneFilter();
+    }
+
+    return {
+      or: [
+        { company: this.buildDirectOwnershipFilter(context) },
+        { branch: this.buildDirectOwnershipFilter(context) },
+      ],
+    };
+  }
+
+  private hasActiveOwnershipContext({
+    userEmail,
+    allowedSalesRepCodes,
+  }: PermaventSecurityContext): boolean {
+    return userEmail !== null && allowedSalesRepCodes.length > 0;
+  }
+
+  private buildDirectOwnershipFilter({
     userEmail,
     allowedSalesRepCodes,
   }: PermaventSecurityContext): ObjectRecordFilter {
-    if (userEmail === null || allowedSalesRepCodes.length === 0) {
-      return {
-        and: [{ id: { is: 'NULL' } }, { id: { is: 'NOT_NULL' } }],
-      };
-    }
-
     return {
       or: [
         {
@@ -30,6 +56,12 @@ export class PermaventAccessFilterBuilder {
           },
         },
       ],
+    };
+  }
+
+  private buildMatchNoneFilter(): ObjectRecordFilter {
+    return {
+      and: [{ id: { is: 'NULL' } }, { id: { is: 'NOT_NULL' } }],
     };
   }
 }
