@@ -1,4 +1,4 @@
-import { FieldMetadataType } from 'twenty-shared/types';
+import { FieldMetadataType, RelationType } from 'twenty-shared/types';
 
 import { FilterArgProcessorService } from 'src/engine/api/common/common-args-processors/filter-arg-processor/filter-arg-processor.service';
 import { type PermaventSecurityContext } from 'src/engine/core-modules/permavent-security/context/permavent-security-context.type';
@@ -96,5 +96,160 @@ describe('PermaventAccessFilterBuilder', () => {
         flatFieldMetadataMaps,
       }),
     ).toEqual(filter);
+  });
+
+  it('should build a valid Person relation ownership filter', () => {
+    const personObjectId = 'person-object-id';
+    const companyObjectId = 'company-object-id';
+    const branchObjectId = 'branch-object-id';
+    const personUniversalIdentifier = 'person-object-universal-identifier';
+    const companyUniversalIdentifier = 'company-object-universal-identifier';
+    const branchUniversalIdentifier = 'branch-object-universal-identifier';
+    const relationFields = [
+      {
+        id: 'company-relation-field-id',
+        universalIdentifier: 'company-relation-field-universal-identifier',
+        objectMetadataId: personObjectId,
+        name: 'company',
+        type: FieldMetadataType.RELATION,
+        isNullable: true,
+        relationTargetObjectMetadataId: companyObjectId,
+        settings: {
+          relationType: RelationType.MANY_TO_ONE,
+          joinColumnName: 'companyId',
+        },
+      },
+      {
+        id: 'branch-relation-field-id',
+        universalIdentifier: 'branch-relation-field-universal-identifier',
+        objectMetadataId: personObjectId,
+        name: 'branch',
+        type: FieldMetadataType.RELATION,
+        isNullable: true,
+        relationTargetObjectMetadataId: branchObjectId,
+        settings: {
+          relationType: RelationType.MANY_TO_ONE,
+          joinColumnName: 'branchId',
+        },
+      },
+    ] as FlatFieldMetadata[];
+    const ownershipFields = [companyObjectId, branchObjectId].flatMap(
+      (objectMetadataId) => [
+        {
+          id: `${objectMetadataId}-sales-rep-email-field-id`,
+          universalIdentifier: `${objectMetadataId}-sales-rep-email-field-universal-identifier`,
+          objectMetadataId,
+          name: 'salesrepemail',
+          type: FieldMetadataType.EMAILS,
+          isNullable: true,
+        },
+        {
+          id: `${objectMetadataId}-erp-sales-rep-code-field-id`,
+          universalIdentifier: `${objectMetadataId}-erp-sales-rep-code-field-universal-identifier`,
+          objectMetadataId,
+          name: 'erpsalesrepcode',
+          type: FieldMetadataType.TEXT,
+          isNullable: true,
+        },
+      ],
+    ) as FlatFieldMetadata[];
+    const relationFlatFields = [...relationFields, ...ownershipFields];
+    const relationFlatFieldMetadataMaps = {
+      byUniversalIdentifier: Object.fromEntries(
+        relationFlatFields.map((field) => [field.universalIdentifier, field]),
+      ),
+      universalIdentifierById: Object.fromEntries(
+        relationFlatFields.map((field) => [
+          field.id,
+          field.universalIdentifier,
+        ]),
+      ),
+      universalIdentifiersByApplicationId: {},
+    } as FlatEntityMaps<FlatFieldMetadata>;
+    const personObjectMetadata = {
+      id: personObjectId,
+      universalIdentifier: personUniversalIdentifier,
+      nameSingular: 'person',
+      fieldIds: relationFields.map((field) => field.id),
+    } as FlatObjectMetadata;
+    const companyObjectMetadata = {
+      id: companyObjectId,
+      universalIdentifier: companyUniversalIdentifier,
+      nameSingular: 'company',
+      fieldIds: ownershipFields
+        .filter((field) => field.objectMetadataId === companyObjectId)
+        .map((field) => field.id),
+    } as FlatObjectMetadata;
+    const branchObjectMetadata = {
+      id: branchObjectId,
+      universalIdentifier: branchUniversalIdentifier,
+      nameSingular: 'branch',
+      fieldIds: ownershipFields
+        .filter((field) => field.objectMetadataId === branchObjectId)
+        .map((field) => field.id),
+    } as FlatObjectMetadata;
+    const relationFlatObjectMetadataMaps = {
+      byUniversalIdentifier: {
+        [personUniversalIdentifier]: personObjectMetadata,
+        [companyUniversalIdentifier]: companyObjectMetadata,
+        [branchUniversalIdentifier]: branchObjectMetadata,
+      },
+      universalIdentifierById: {
+        [personObjectId]: personUniversalIdentifier,
+        [companyObjectId]: companyUniversalIdentifier,
+        [branchObjectId]: branchUniversalIdentifier,
+      },
+      universalIdentifiersByApplicationId: {},
+    } as FlatEntityMaps<FlatObjectMetadata>;
+
+    const filter = builder.buildPersonFilter(context);
+
+    expect(filter).toEqual({
+      or: [
+        {
+          company: {
+            or: [
+              {
+                salesrepemail: {
+                  primaryEmail: { ilike: 'sales.rep@example.test' },
+                },
+              },
+              { erpsalesrepcode: { in: ['DM', 'RT'] } },
+            ],
+          },
+        },
+        {
+          branch: {
+            or: [
+              {
+                salesrepemail: {
+                  primaryEmail: { ilike: 'sales.rep@example.test' },
+                },
+              },
+              { erpsalesrepcode: { in: ['DM', 'RT'] } },
+            ],
+          },
+        },
+      ],
+    });
+    expect(
+      filterArgProcessor.process({
+        filter,
+        flatObjectMetadata: personObjectMetadata,
+        flatObjectMetadataMaps: relationFlatObjectMetadataMaps,
+        flatFieldMetadataMaps: relationFlatFieldMetadataMaps,
+      }),
+    ).toEqual(filter);
+  });
+
+  it('should fail closed for Person reads without active assignments', () => {
+    expect(
+      builder.buildPersonFilter({
+        ...context,
+        allowedSalesRepCodes: [],
+      }),
+    ).toEqual({
+      and: [{ id: { is: 'NULL' } }, { id: { is: 'NOT_NULL' } }],
+    });
   });
 });
