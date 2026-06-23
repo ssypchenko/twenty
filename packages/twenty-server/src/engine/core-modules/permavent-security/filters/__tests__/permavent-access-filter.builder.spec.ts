@@ -98,18 +98,18 @@ describe('PermaventAccessFilterBuilder', () => {
     ).toEqual(filter);
   });
 
-  it('should build a valid Person relation ownership filter', () => {
-    const personObjectId = 'person-object-id';
+  it('should build a valid Company-or-Branch relation ownership filter', () => {
+    const sourceObjectId = 'source-object-id';
     const companyObjectId = 'company-object-id';
     const branchObjectId = 'branch-object-id';
-    const personUniversalIdentifier = 'person-object-universal-identifier';
+    const sourceUniversalIdentifier = 'source-object-universal-identifier';
     const companyUniversalIdentifier = 'company-object-universal-identifier';
     const branchUniversalIdentifier = 'branch-object-universal-identifier';
     const relationFields = [
       {
         id: 'company-relation-field-id',
         universalIdentifier: 'company-relation-field-universal-identifier',
-        objectMetadataId: personObjectId,
+        objectMetadataId: sourceObjectId,
         name: 'company',
         type: FieldMetadataType.RELATION,
         isNullable: true,
@@ -122,7 +122,7 @@ describe('PermaventAccessFilterBuilder', () => {
       {
         id: 'branch-relation-field-id',
         universalIdentifier: 'branch-relation-field-universal-identifier',
-        objectMetadataId: personObjectId,
+        objectMetadataId: sourceObjectId,
         name: 'branch',
         type: FieldMetadataType.RELATION,
         isNullable: true,
@@ -166,10 +166,10 @@ describe('PermaventAccessFilterBuilder', () => {
       ),
       universalIdentifiersByApplicationId: {},
     } as FlatEntityMaps<FlatFieldMetadata>;
-    const personObjectMetadata = {
-      id: personObjectId,
-      universalIdentifier: personUniversalIdentifier,
-      nameSingular: 'person',
+    const sourceObjectMetadata = {
+      id: sourceObjectId,
+      universalIdentifier: sourceUniversalIdentifier,
+      nameSingular: 'opportunity',
       fieldIds: relationFields.map((field) => field.id),
     } as FlatObjectMetadata;
     const companyObjectMetadata = {
@@ -190,19 +190,19 @@ describe('PermaventAccessFilterBuilder', () => {
     } as FlatObjectMetadata;
     const relationFlatObjectMetadataMaps = {
       byUniversalIdentifier: {
-        [personUniversalIdentifier]: personObjectMetadata,
+        [sourceUniversalIdentifier]: sourceObjectMetadata,
         [companyUniversalIdentifier]: companyObjectMetadata,
         [branchUniversalIdentifier]: branchObjectMetadata,
       },
       universalIdentifierById: {
-        [personObjectId]: personUniversalIdentifier,
+        [sourceObjectId]: sourceUniversalIdentifier,
         [companyObjectId]: companyUniversalIdentifier,
         [branchObjectId]: branchUniversalIdentifier,
       },
       universalIdentifiersByApplicationId: {},
     } as FlatEntityMaps<FlatObjectMetadata>;
 
-    const filter = builder.buildPersonFilter(context);
+    const filter = builder.buildRelatedCompanyOrBranchFilter(context);
 
     expect(filter).toEqual({
       or: [
@@ -235,16 +235,16 @@ describe('PermaventAccessFilterBuilder', () => {
     expect(
       filterArgProcessor.process({
         filter,
-        flatObjectMetadata: personObjectMetadata,
+        flatObjectMetadata: sourceObjectMetadata,
         flatObjectMetadataMaps: relationFlatObjectMetadataMaps,
         flatFieldMetadataMaps: relationFlatFieldMetadataMaps,
       }),
     ).toEqual(filter);
   });
 
-  it('should fail closed for Person reads without active assignments', () => {
+  it('should fail closed for related reads without active assignments', () => {
     expect(
-      builder.buildPersonFilter({
+      builder.buildRelatedCompanyOrBranchFilter({
         ...context,
         allowedSalesRepCodes: [],
       }),

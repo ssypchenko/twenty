@@ -15,9 +15,10 @@ import {
 } from 'src/engine/metadata-modules/permissions/permissions.exception';
 
 const PERMAVENT_DIRECT_SALES_OBJECTS = new Set(['company', 'branch']);
+const PERMAVENT_RELATED_SALES_OBJECTS = new Set(['person', 'opportunity']);
 const PERMAVENT_FILTERED_READ_OBJECTS = new Set([
   ...PERMAVENT_DIRECT_SALES_OBJECTS,
-  'person',
+  ...PERMAVENT_RELATED_SALES_OBJECTS,
 ]);
 const PERMAVENT_FILTERED_READ_OPERATIONS = new Set<CommonQueryNames>([
   CommonQueryNames.FIND_ONE,
@@ -117,12 +118,13 @@ export class PermaventSecurityService {
 
     return mergePermaventSecurityFilter({
       callerFilter: filter,
-      securityFilter:
-        flatObjectMetadata.nameSingular === 'person'
-          ? this.accessFilterBuilder.buildPersonFilter(securityContext)
-          : this.accessFilterBuilder.buildCompanyOrBranchFilter(
-              securityContext,
-            ),
+      securityFilter: PERMAVENT_RELATED_SALES_OBJECTS.has(
+        flatObjectMetadata.nameSingular,
+      )
+        ? this.accessFilterBuilder.buildRelatedCompanyOrBranchFilter(
+            securityContext,
+          )
+        : this.accessFilterBuilder.buildCompanyOrBranchFilter(securityContext),
     });
   }
 
