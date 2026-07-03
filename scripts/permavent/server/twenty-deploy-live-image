@@ -54,6 +54,14 @@ cd "$compose_directory"
 [[ -f .env && -f docker-compose.yml ]] || fail 'The Live Compose layout is incomplete.'
 [[ -r "$upgrade_order_repair_sql" ]] ||
   fail "Missing upgrade-order repair SQL: ${upgrade_order_repair_sql}"
+
+mapfile -t configured_rls_flags < <(grep -E '^PERMAVENT_SECURITY_RLS_ENABLED=' .env)
+[[ "${#configured_rls_flags[@]}" -eq 1 ]] ||
+  fail 'Live .env must contain exactly one PERMAVENT_SECURITY_RLS_ENABLED entry.'
+[[ "${configured_rls_flags[0]}" == 'PERMAVENT_SECURITY_RLS_ENABLED=true' ]] ||
+  fail 'Permavent RLS must be enabled for Live deployment.'
+[[ "$(grep -Ec '^[[:space:]]{6}PERMAVENT_SECURITY_RLS_ENABLED:' docker-compose.yml)" -eq 2 ]] ||
+  fail 'Live Compose must forward PERMAVENT_SECURITY_RLS_ENABLED to server and worker.'
 docker compose config --quiet
 
 umask 077
@@ -210,6 +218,12 @@ readonly expected_image_id="$(docker image inspect "$image" --format '{{.Id}}')"
 [[ "$(docker inspect "$worker_container" --format '{{.State.Status}}')" == 'running' ]]
 [[ "$(docker compose ps -q db)" == "$db_container_before" ]]
 [[ "$(docker compose ps -q redis)" == "$redis_container_before" ]]
+docker inspect "$server_container" --format '{{range .Config.Env}}{{println .}}{{end}}' |
+  grep -Fxq 'PERMAVENT_SECURITY_RLS_ENABLED=true' ||
+  fail 'Permavent RLS is not enabled in the Live server container.'
+docker inspect "$worker_container" --format '{{range .Config.Env}}{{println .}}{{end}}' |
+  grep -Fxq 'PERMAVENT_SECURITY_RLS_ENABLED=true' ||
+  fail 'Permavent RLS is not enabled in the Live worker container.'
 
 curl --fail --silent --show-error \
   --resolve "${live_hostname}:443:127.0.0.1" \
