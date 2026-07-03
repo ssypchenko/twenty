@@ -34,7 +34,7 @@ Keep clean base branches aligned with upstream and do not add Permavent-only fil
 - Run local verification helpers from the repository root. They automatically prefer the `.nvmrc` Node installation under `${NVM_DIR:-$HOME/.nvm}` when the shell exposes a different system Node version. Do not add ad hoc PATH discovery before running them.
 - Preflight: `./scripts/permavent/preflight.sh --skip-docker`.
 - Focused server Jest: `./scripts/permavent/run-server-tests.sh <test-path> [<test-path> ...]`. This helper accepts repository-relative, `packages/twenty-server`-relative or absolute paths and normalises them to Jest's server-package working directory.
-- Full server verification without unrelated dependency builds: `./scripts/permavent/verify-changes.sh server --base permavent/custom-v2.14.3`.
+- Full server verification without unrelated dependency builds: `./scripts/permavent/verify-changes.sh server --base permavent/custom-vX.Y.Z`.
 - Do not pass `packages/twenty-server/...` paths directly to `nx jest twenty-server`; use `run-server-tests.sh`.
 - Do not run package-local `yarn oxlint` or `yarn oxfmt`. Use the Nx lint target through `verify-changes.sh`.
 - Do not run raw `nx typecheck twenty-server` with task dependencies. `verify-changes.sh` uses `--excludeTaskDependencies` for lint, typecheck, tests and builds.
