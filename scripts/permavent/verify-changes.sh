@@ -13,7 +13,7 @@ PERMAVENT_DRY_RUN="false"
 
 usage() {
   cat <<'EOF'
-Usage: verify-changes.sh <server|front|shared|all> [options]
+Usage: verify-changes.sh <server|front|shared|emails|all> [options]
 
 Options:
   --base <git-ref>     Base reference for the boundary check.
@@ -60,7 +60,7 @@ while [[ $# -gt 0 ]]; do
 done
 
 case "$scope" in
-  server | front | shared | all)
+  server | front | shared | emails | all)
     ;;
   *)
     permavent_error "A verification scope is required."
@@ -115,8 +115,12 @@ case "$scope" in
   shared)
     run_project_checks twenty-shared
     ;;
+  emails)
+    run_project_checks twenty-emails
+    ;;
   all)
     run_project_checks twenty-shared
+    run_project_checks twenty-emails
     run_project_checks twenty-server
     run_project_checks twenty-front
     ;;

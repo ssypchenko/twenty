@@ -5,9 +5,11 @@ import { GraphqlQueryParser } from 'src/engine/api/graphql/graphql-query-runner/
 import { ProcessAggregateHelper } from 'src/engine/api/graphql/graphql-query-runner/helpers/process-aggregate.helper';
 import { type WorkspaceAuthContext } from 'src/engine/core-modules/auth/types/workspace-auth-context.type';
 import { type PermaventSecurityService } from 'src/engine/core-modules/permavent-security/permavent-security.service';
+import { RelationType } from 'src/engine/metadata-modules/field-metadata/interfaces/relation-type.interface';
 import { type FlatEntityMaps } from 'src/engine/metadata-modules/flat-entity/types/flat-entity-maps.type';
 import { type FlatFieldMetadata } from 'src/engine/metadata-modules/flat-field-metadata/types/flat-field-metadata.type';
 import { type FlatObjectMetadata } from 'src/engine/metadata-modules/flat-object-metadata/types/flat-object-metadata.type';
+import { type WorkspaceRepository } from 'src/engine/twenty-orm/repository/workspace.repository';
 import { type WorkspaceSelectQueryBuilder } from 'src/engine/twenty-orm/repository/workspace-select-query-builder';
 
 describe('ProcessNestedRelationsV2Helper', () => {
@@ -96,9 +98,12 @@ describe('ProcessNestedRelationsV2Helper', () => {
     const result = await helper['findRelations']({
       referenceQueryBuilder:
         referenceQueryBuilder as unknown as WorkspaceSelectQueryBuilder<ObjectLiteral>,
+      targetObjectRepository: {} as WorkspaceRepository<ObjectLiteral>,
       column: '"companyId"',
       ids: ['company-id'],
-      limit: 10,
+      relationType: RelationType.MANY_TO_ONE,
+      perParentLimit: 10,
+      parentRecordsCount: 1,
       aggregate: { branches: {} },
       sourceFieldName: 'branches',
       targetObjectNameSingular: 'branch',
