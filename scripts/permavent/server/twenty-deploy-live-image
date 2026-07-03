@@ -7,6 +7,7 @@ readonly live_hostname='crm.permavent.co.uk'
 readonly db_container='twenty-db-1'
 readonly redis_container='twenty-redis-1'
 readonly live_storage='twenty_server-local-data'
+readonly upgrade_order_repair_sql='/usr/local/share/twenty/permavent/twenty-repair-v2-18-upgrade-order.sql'
 readonly lock_file='/run/lock/twenty-live-maintenance.lock'
 
 usage() {
@@ -51,6 +52,8 @@ flock -n 9 || fail 'Another Live maintenance operation is already running.'
 
 cd "$compose_directory"
 [[ -f .env && -f docker-compose.yml ]] || fail 'The Live Compose layout is incomplete.'
+[[ -r "$upgrade_order_repair_sql" ]] ||
+  fail "Missing upgrade-order repair SQL: ${upgrade_order_repair_sql}"
 docker compose config --quiet
 
 umask 077
@@ -181,6 +184,13 @@ chmod 600 "$storage_backup"
 docker run --rm -v "${run_directory}:/backup:ro" postgres:16 \
   tar -tzf /backup/storage-before-deployment.tar.gz >/dev/null
 backups_valid=true
+
+if [[ "$upstream_version" == 'v2.18.0' ]]; then
+  printf 'Repairing legacy Permavent v2.15 upgrade ordering before deployment.\n'
+  docker exec -i "$db_container" sh -lc \
+    'psql -v ON_ERROR_STOP=1 -h localhost -U "$POSTGRES_USER" -d "$POSTGRES_DB"' \
+    < "$upgrade_order_repair_sql"
+fi
 
 deployment_started=true
 mv "$env_next" .env
