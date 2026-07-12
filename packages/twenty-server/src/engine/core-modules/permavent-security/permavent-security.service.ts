@@ -16,6 +16,7 @@ import {
 
 const PERMAVENT_DIRECT_SALES_OBJECTS = new Set(['company', 'branch']);
 const PERMAVENT_RELATED_SALES_OBJECTS = new Set(['person', 'opportunity']);
+const PERMAVENT_ASSIGNMENT_OBJECT = 'salesrepassignment';
 const PERMAVENT_FILTERED_READ_OBJECTS = new Set([
   ...PERMAVENT_DIRECT_SALES_OBJECTS,
   ...PERMAVENT_RELATED_SALES_OBJECTS,
@@ -39,6 +40,12 @@ const PERMAVENT_DENIED_SALES_REP_OPERATIONS = new Set<CommonQueryNames>([
   CommonQueryNames.MERGE_MANY,
   CommonQueryNames.FIND_DUPLICATES,
 ]);
+const PERMAVENT_DENIED_SALES_REP_ASSIGNMENT_OPERATIONS = new Set([
+  ...PERMAVENT_DENIED_SALES_REP_OPERATIONS,
+  CommonQueryNames.FIND_ONE,
+  CommonQueryNames.FIND_MANY,
+  CommonQueryNames.GROUP_BY,
+]);
 
 type QueryArgsWithFilter = {
   filter?: ObjectRecordFilter;
@@ -58,6 +65,19 @@ export class PermaventSecurityService {
     authContext,
     flatObjectMetadata,
   }: PermaventCommonQueryHookInput<TArgs>): Promise<TArgs> {
+    if (
+      flatObjectMetadata.nameSingular === PERMAVENT_ASSIGNMENT_OBJECT &&
+      PERMAVENT_DENIED_SALES_REP_ASSIGNMENT_OPERATIONS.has(operationName)
+    ) {
+      await this.assertOperationAllowed({
+        operationName,
+        authContext,
+        flatObjectMetadata,
+      });
+
+      return args;
+    }
+
     if (PERMAVENT_DENIED_SALES_REP_OPERATIONS.has(operationName)) {
       await this.assertOperationAllowed({
         operationName,
@@ -139,7 +159,8 @@ export class PermaventSecurityService {
   }): Promise<void> {
     if (
       !this.twentyConfigService.get('PERMAVENT_SECURITY_RLS_ENABLED') ||
-      !PERMAVENT_DIRECT_SALES_OBJECTS.has(flatObjectMetadata.nameSingular)
+      (!PERMAVENT_DIRECT_SALES_OBJECTS.has(flatObjectMetadata.nameSingular) &&
+        flatObjectMetadata.nameSingular !== PERMAVENT_ASSIGNMENT_OBJECT)
     ) {
       return;
     }
