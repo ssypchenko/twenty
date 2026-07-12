@@ -1,7 +1,8 @@
-import { PermaventSalesRepAssignmentEntity } from 'src/engine/core-modules/permavent-security/assignments/permavent-sales-rep-assignment.entity';
-import { PermaventSalesRepAssignmentService } from 'src/engine/core-modules/permavent-security/assignments/permavent-sales-rep-assignment.service';
+import { Logger } from '@nestjs/common';
+
 import { normalisePermaventSalesRepCode } from 'src/engine/core-modules/permavent-security/assignments/normalise-permavent-sales-rep-code.util';
-import { type WorkspaceScopedRepository } from 'src/engine/twenty-orm/workspace-scoped-repository/workspace-scoped-repository';
+import { PermaventSalesRepAssignmentService } from 'src/engine/core-modules/permavent-security/assignments/permavent-sales-rep-assignment.service';
+import { type GlobalWorkspaceOrmManager } from 'src/engine/twenty-orm/global-workspace-datasource/global-workspace-orm.manager';
 
 describe('PermaventSalesRepAssignmentService', () => {
   const queryBuilder = {
@@ -11,92 +12,89 @@ describe('PermaventSalesRepAssignmentService', () => {
     orderBy: jest.fn().mockReturnThis(),
     getRawMany: jest.fn(),
   };
-  const assignmentRepository = {
+  const getRepository = jest.fn().mockResolvedValue({
     createQueryBuilder: jest.fn().mockReturnValue(queryBuilder),
-    upsert: jest.fn(),
-    update: jest.fn(),
-  };
-  const service = new PermaventSalesRepAssignmentService(
-    assignmentRepository as unknown as WorkspaceScopedRepository<PermaventSalesRepAssignmentEntity>,
-  );
+  });
+  const service = new PermaventSalesRepAssignmentService({
+    getRepository,
+  } as unknown as GlobalWorkspaceOrmManager);
 
   beforeEach(() => {
     jest.clearAllMocks();
   });
 
-  it('should return active Sales Rep codes in canonical order', async () => {
-    const at = new Date('2026-06-22T10:00:00.000Z');
-
+  it('should return effective Sales Rep codes in canonical order', async () => {
     queryBuilder.getRawMany.mockResolvedValue([
       { erpSalesRepCode: 'RT' },
       { erpSalesRepCode: 'dm' },
       { erpSalesRepCode: 'DM' },
       { erpSalesRepCode: 'scotland' },
+      { erpSalesRepCode: null },
     ]);
 
     const result = await service.findAllowedSalesRepCodes({
       workspaceId: 'workspace-id',
-      userEmail: ' Sales.Rep@Example.test ',
-      at,
+      workspaceMemberId: 'workspace-member-id',
+      at: new Date('2026-07-12T23:30:00.000Z'),
     });
 
     expect(result).toEqual(['DM', 'RT', 'SCOTLAND']);
+    expect(getRepository).toHaveBeenCalledWith(
+      'workspace-id',
+      'salesrepassignment',
+      { shouldBypassPermissionChecks: true },
+    );
     expect(queryBuilder.where).toHaveBeenCalledWith(
-      'assignment.workspaceId = :workspaceId',
-      { workspaceId: 'workspace-id' },
+      'assignment.salesRepId = :workspaceMemberId',
+      { workspaceMemberId: 'workspace-member-id' },
     );
     expect(queryBuilder.andWhere).toHaveBeenCalledWith(
-      'assignment.userEmail = :userEmail',
-      { userEmail: 'sales.rep@example.test' },
+      'assignment.deletedAt IS NULL',
     );
     expect(queryBuilder.andWhere).toHaveBeenCalledWith(
-      '(assignment.validFrom IS NULL OR assignment.validFrom <= :at)',
-      { at },
+      'assignment.isActive = true',
     );
     expect(queryBuilder.andWhere).toHaveBeenCalledWith(
-      '(assignment.validTo IS NULL OR assignment.validTo > :at)',
-      { at },
+      '(assignment.validFrom IS NULL OR assignment.validFrom <= :businessDate)',
+      { businessDate: '2026-07-13' },
+    );
+    expect(queryBuilder.andWhere).toHaveBeenCalledWith(
+      '(assignment.validTo IS NULL OR assignment.validTo > :businessDate)',
+      { businessDate: '2026-07-13' },
     );
   });
 
-  it('should normalise an assignment before persisting it', async () => {
-    await service.upsertAssignment({
+  it('should fail closed without a Workspace Member identity', async () => {
+    const result = await service.findAllowedSalesRepCodes({
       workspaceId: 'workspace-id',
-      userWorkspaceId: 'user-workspace-id',
-      workspaceMemberId: 'workspace-member-id',
-      userEmail: ' Sales.Rep@Example.test ',
-      erpSalesRepCode: ' rt ',
+      workspaceMemberId: null,
     });
 
-    expect(assignmentRepository.upsert).toHaveBeenCalledWith(
-      'workspace-id',
-      {
-        userWorkspaceId: 'user-workspace-id',
-        workspaceMemberId: 'workspace-member-id',
-        userEmail: 'sales.rep@example.test',
-        erpSalesRepCode: 'RT',
-        isActive: true,
-        validFrom: null,
-        validTo: null,
-      },
-      {
-        conflictPaths: ['workspaceId', 'userEmail', 'erpSalesRepCode'],
-        skipUpdateIfNoValuesChanged: true,
-      },
-    );
+    expect(result).toEqual([]);
+    expect(getRepository).not.toHaveBeenCalled();
   });
 
-  it('should reject an invalid Sales Rep code', async () => {
-    await expect(
-      service.upsertAssignment({
-        workspaceId: 'workspace-id',
-        userEmail: 'sales.rep@example.test',
-        erpSalesRepCode: 'REP1',
-      }),
-    ).rejects.toThrow(
-      'A Sales Rep code must contain between two and 32 uppercase letters.',
+  it('should ignore an invalid CRM assignment code', async () => {
+    const loggerWarning = jest
+      .spyOn(Logger.prototype, 'warn')
+      .mockImplementation();
+
+    queryBuilder.getRawMany.mockResolvedValue([
+      { erpSalesRepCode: 'DM' },
+      { erpSalesRepCode: 'REP1' },
+    ]);
+
+    const result = await service.findAllowedSalesRepCodes({
+      workspaceId: 'workspace-id',
+      workspaceMemberId: 'workspace-member-id',
+    });
+
+    expect(result).toEqual(['DM']);
+    expect(loggerWarning).toHaveBeenCalledWith(
+      'Ignored an invalid Sales Rep assignment code.',
     );
-    expect(assignmentRepository.upsert).not.toHaveBeenCalled();
+
+    loggerWarning.mockRestore();
   });
 
   it.each([
@@ -119,38 +117,4 @@ describe('PermaventSalesRepAssignmentService', () => {
       );
     },
   );
-
-  it('should reject an invalid validity window', async () => {
-    await expect(
-      service.upsertAssignment({
-        workspaceId: 'workspace-id',
-        userEmail: 'sales.rep@example.test',
-        erpSalesRepCode: 'DM',
-        validFrom: new Date('2026-06-23T00:00:00.000Z'),
-        validTo: new Date('2026-06-22T00:00:00.000Z'),
-      }),
-    ).rejects.toThrow('The assignment end date must be after its start date.');
-    expect(assignmentRepository.upsert).not.toHaveBeenCalled();
-  });
-
-  it('should report whether an assignment was updated', async () => {
-    assignmentRepository.update.mockResolvedValue({ affected: 1 });
-
-    const result = await service.setAssignmentActive({
-      workspaceId: 'workspace-id',
-      userEmail: ' Sales.Rep@Example.test ',
-      erpSalesRepCode: ' dm ',
-      isActive: false,
-    });
-
-    expect(result).toBe(true);
-    expect(assignmentRepository.update).toHaveBeenCalledWith(
-      'workspace-id',
-      {
-        userEmail: 'sales.rep@example.test',
-        erpSalesRepCode: 'DM',
-      },
-      { isActive: false },
-    );
-  });
 });

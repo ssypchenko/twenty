@@ -255,6 +255,44 @@ describe('PermaventSecurityService', () => {
     },
   );
 
+  it.each([
+    CommonQueryNames.FIND_ONE,
+    CommonQueryNames.FIND_MANY,
+    CommonQueryNames.GROUP_BY,
+    ...deniedSalesRepOperations,
+  ])(
+    'should deny Sales Rep operation %s for Sales Rep assignments',
+    async (operationName) => {
+      getConfigVariable.mockReturnValue(true);
+
+      await expect(
+        service.applyToCommonQueryArgs({
+          ...input,
+          operationName,
+          flatObjectMetadata: {
+            nameSingular: 'salesrepassignment',
+          } as FlatObjectMetadata,
+        }),
+      ).rejects.toMatchObject({
+        code: PermissionsExceptionCode.PERMISSION_DENIED,
+      });
+    },
+  );
+
+  it('should leave assignment access unchanged when disabled', async () => {
+    getConfigVariable.mockReturnValue(false);
+
+    const result = await service.applyToCommonQueryArgs({
+      ...input,
+      flatObjectMetadata: {
+        nameSingular: 'salesrepassignment',
+      } as FlatObjectMetadata,
+    });
+
+    expect(result).toBe(args);
+    expect(createSecurityContext).not.toHaveBeenCalled();
+  });
+
   it('should leave a Sales Rep mutation unchanged when disabled', async () => {
     getConfigVariable.mockReturnValue(false);
 
