@@ -86,7 +86,7 @@ export class PermaventSecurityContextFactory {
     const allowedSalesRepCodes = isRestrictedSalesRep
       ? await this.assignmentService.findAllowedSalesRepCodes({
           workspaceId: authContext.workspace.id,
-          userEmail,
+          workspaceMemberId: authContext.workspaceMemberId,
         })
       : [];
 
