@@ -78,7 +78,7 @@ describe('PermaventSecurityContextFactory', () => {
     ]);
     expect(findAllowedSalesRepCodes).toHaveBeenCalledWith({
       workspaceId: 'workspace-id',
-      userEmail: 'sales.rep@example.test',
+      workspaceMemberId: 'workspace-member-id',
     });
   });
 

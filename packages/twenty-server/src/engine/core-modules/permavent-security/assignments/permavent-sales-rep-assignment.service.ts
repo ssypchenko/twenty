@@ -1,133 +1,97 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 
-import { normalisePermaventAssignmentEmail } from 'src/engine/core-modules/permavent-security/assignments/normalise-permavent-assignment-email.util';
+import { type ObjectLiteral } from 'typeorm';
+
 import { normalisePermaventSalesRepCode } from 'src/engine/core-modules/permavent-security/assignments/normalise-permavent-sales-rep-code.util';
-import { PermaventSalesRepAssignmentEntity } from 'src/engine/core-modules/permavent-security/assignments/permavent-sales-rep-assignment.entity';
-import { InjectWorkspaceScopedRepository } from 'src/engine/twenty-orm/workspace-scoped-repository/inject-workspace-scoped-repository.decorator';
-import { WorkspaceScopedRepository } from 'src/engine/twenty-orm/workspace-scoped-repository/workspace-scoped-repository';
+import { GlobalWorkspaceOrmManager } from 'src/engine/twenty-orm/global-workspace-datasource/global-workspace-orm.manager';
+
+const PERMAVENT_ASSIGNMENT_OBJECT_NAME = 'salesrepassignment';
+const PERMAVENT_ASSIGNMENT_TIME_ZONE = 'Europe/London';
 
 type FindAllowedSalesRepCodesInput = {
   workspaceId: string;
-  userEmail: string;
+  workspaceMemberId: string | null;
   at?: Date;
 };
 
-type UpsertSalesRepAssignmentInput = {
-  workspaceId: string;
-  userWorkspaceId?: string | null;
-  workspaceMemberId?: string | null;
-  userEmail: string;
-  erpSalesRepCode: string;
-  isActive?: boolean;
-  validFrom?: Date | null;
-  validTo?: Date | null;
-};
-
-type SetSalesRepAssignmentActiveInput = {
-  workspaceId: string;
-  userEmail: string;
-  erpSalesRepCode: string;
-  isActive: boolean;
+type PermaventSalesRepAssignmentWorkspaceRecord = ObjectLiteral & {
+  erpSalesRepCode: string | null;
 };
 
 @Injectable()
 export class PermaventSalesRepAssignmentService {
+  private readonly logger = new Logger(PermaventSalesRepAssignmentService.name);
+
   constructor(
-    @InjectWorkspaceScopedRepository(PermaventSalesRepAssignmentEntity)
-    private readonly assignmentRepository: WorkspaceScopedRepository<PermaventSalesRepAssignmentEntity>,
+    private readonly globalWorkspaceOrmManager: GlobalWorkspaceOrmManager,
   ) {}
 
   public async findAllowedSalesRepCodes({
     workspaceId,
-    userEmail,
+    workspaceMemberId,
     at = new Date(),
   }: FindAllowedSalesRepCodesInput): Promise<string[]> {
-    const normalisedEmail = normalisePermaventAssignmentEmail(userEmail);
+    if (workspaceMemberId === null) {
+      return [];
+    }
 
-    const assignments = await this.assignmentRepository
+    const assignmentRepository =
+      await this.globalWorkspaceOrmManager.getRepository<PermaventSalesRepAssignmentWorkspaceRecord>(
+        workspaceId,
+        PERMAVENT_ASSIGNMENT_OBJECT_NAME,
+        { shouldBypassPermissionChecks: true },
+      );
+    const businessDate = this.formatBusinessDate(at);
+    const assignments = await assignmentRepository
       .createQueryBuilder('assignment')
       .select('assignment.erpSalesRepCode', 'erpSalesRepCode')
-      .where('assignment.workspaceId = :workspaceId', { workspaceId })
-      .andWhere('assignment.userEmail = :userEmail', {
-        userEmail: normalisedEmail,
+      .where('assignment.salesRepId = :workspaceMemberId', {
+        workspaceMemberId,
       })
+      .andWhere('assignment.deletedAt IS NULL')
       .andWhere('assignment.isActive = true')
       .andWhere(
-        '(assignment.validFrom IS NULL OR assignment.validFrom <= :at)',
-        { at },
+        '(assignment.validFrom IS NULL OR assignment.validFrom <= :businessDate)',
+        { businessDate },
       )
-      .andWhere('(assignment.validTo IS NULL OR assignment.validTo > :at)', {
-        at,
-      })
+      .andWhere(
+        '(assignment.validTo IS NULL OR assignment.validTo > :businessDate)',
+        { businessDate },
+      )
       .orderBy('assignment.erpSalesRepCode', 'ASC')
-      .getRawMany<{ erpSalesRepCode: string }>();
+      .getRawMany<
+        Pick<PermaventSalesRepAssignmentWorkspaceRecord, 'erpSalesRepCode'>
+      >();
 
-    return [
-      ...new Set(
-        assignments.map(({ erpSalesRepCode }) =>
+    const allowedSalesRepCodes = new Set<string>();
+
+    for (const { erpSalesRepCode } of assignments) {
+      if (erpSalesRepCode === null) {
+        continue;
+      }
+
+      try {
+        allowedSalesRepCodes.add(
           normalisePermaventSalesRepCode(erpSalesRepCode),
-        ),
-      ),
-    ].sort();
-  }
-
-  public async upsertAssignment({
-    workspaceId,
-    userWorkspaceId = null,
-    workspaceMemberId = null,
-    userEmail,
-    erpSalesRepCode,
-    isActive = true,
-    validFrom = null,
-    validTo = null,
-  }: UpsertSalesRepAssignmentInput): Promise<void> {
-    this.assertValidValidityWindow({ validFrom, validTo });
-
-    await this.assignmentRepository.upsert(
-      workspaceId,
-      {
-        userWorkspaceId,
-        workspaceMemberId,
-        userEmail: normalisePermaventAssignmentEmail(userEmail),
-        erpSalesRepCode: normalisePermaventSalesRepCode(erpSalesRepCode),
-        isActive,
-        validFrom,
-        validTo,
-      },
-      {
-        conflictPaths: ['workspaceId', 'userEmail', 'erpSalesRepCode'],
-        skipUpdateIfNoValuesChanged: true,
-      },
-    );
-  }
-
-  public async setAssignmentActive({
-    workspaceId,
-    userEmail,
-    erpSalesRepCode,
-    isActive,
-  }: SetSalesRepAssignmentActiveInput): Promise<boolean> {
-    const result = await this.assignmentRepository.update(
-      workspaceId,
-      {
-        userEmail: normalisePermaventAssignmentEmail(userEmail),
-        erpSalesRepCode: normalisePermaventSalesRepCode(erpSalesRepCode),
-      },
-      { isActive },
-    );
-
-    return (result.affected ?? 0) > 0;
-  }
-
-  private assertValidValidityWindow({
-    validFrom,
-    validTo,
-  }: {
-    validFrom: Date | null;
-    validTo: Date | null;
-  }): void {
-    if (validFrom !== null && validTo !== null && validTo <= validFrom) {
-      throw new Error('The assignment end date must be after its start date.');
+        );
+      } catch {
+        this.logger.warn('Ignored an invalid Sales Rep assignment code.');
+      }
     }
+
+    return [...allowedSalesRepCodes].sort();
+  }
+
+  private formatBusinessDate(at: Date): string {
+    const dateParts = new Intl.DateTimeFormat('en-GB', {
+      timeZone: PERMAVENT_ASSIGNMENT_TIME_ZONE,
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+    }).formatToParts(at);
+    const getPart = (type: Intl.DateTimeFormatPartTypes) =>
+      dateParts.find((part) => part.type === type)?.value;
+
+    return `${getPart('year')}-${getPart('month')}-${getPart('day')}`;
   }
 }
