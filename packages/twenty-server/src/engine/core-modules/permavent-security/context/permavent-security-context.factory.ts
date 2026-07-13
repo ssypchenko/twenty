@@ -49,7 +49,7 @@ export class PermaventSecurityContextFactory {
     if (!isUserAuthContext(authContext)) {
       return {
         authContextType: authContext.type,
-        workspaceId: authContext.workspace.id,
+        workspaceId: authContext.workspace?.id ?? null,
         workspaceMemberId: null,
         userWorkspaceId: null,
         userEmail: null,
