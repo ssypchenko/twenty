@@ -185,6 +185,17 @@ describe('PermaventSecurityContextFactory', () => {
     expect(findAllowedSalesRepCodes).not.toHaveBeenCalled();
   });
 
+  it('should represent an internal context without a hydrated workspace', async () => {
+    const result = await factory.create({
+      type: 'system',
+    } as unknown as WorkspaceAuthContext);
+
+    expect(result.workspaceId).toBeNull();
+    expect(result.isSupportedUserContext).toBe(false);
+    expect(getOrRecompute).not.toHaveBeenCalled();
+    expect(findAllowedSalesRepCodes).not.toHaveBeenCalled();
+  });
+
   it('should memoise a context for the same authentication context', async () => {
     getOrRecompute.mockResolvedValue({
       userWorkspaceRoleMap: {

@@ -119,4 +119,38 @@ describe('ProcessNestedRelationsV2Helper', () => {
     );
     expect(result.relationResults).toEqual([{ id: 'branch-id' }]);
   });
+
+  it('should qualify the record identifier when hydrating one-to-many relations', async () => {
+    const referenceQueryBuilder = {
+      getFindOptions: jest.fn().mockReturnValue({ select: { id: true } }),
+      setFindOptions: jest.fn().mockReturnThis(),
+      andWhere: jest.fn().mockReturnThis(),
+      getMany: jest.fn().mockResolvedValue([]),
+    };
+
+    helper['findRelationRecordIdsLimitedPerParent'] = jest
+      .fn()
+      .mockResolvedValue([]);
+
+    await helper['findRelations']({
+      referenceQueryBuilder:
+        referenceQueryBuilder as unknown as WorkspaceSelectQueryBuilder<ObjectLiteral>,
+      targetObjectRepository: {} as WorkspaceRepository<ObjectLiteral>,
+      column: '"companyId"',
+      ids: ['company-id'],
+      relationType: RelationType.ONE_TO_MANY,
+      perParentLimit: 10,
+      parentRecordsCount: 1,
+      aggregate: {},
+      sourceFieldName: 'opportunities',
+      targetObjectNameSingular: 'opportunity',
+    });
+
+    expect(referenceQueryBuilder.andWhere).toHaveBeenCalledWith(
+      '"opportunity"."id" IN (:...recordIdsToHydrate)',
+      {
+        recordIdsToHydrate: ['00000000-0000-0000-0000-000000000000'],
+      },
+    );
+  });
 });

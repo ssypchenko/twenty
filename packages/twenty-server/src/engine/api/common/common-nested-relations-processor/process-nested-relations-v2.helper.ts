@@ -497,9 +497,12 @@ export class ProcessNestedRelationsV2Helper {
 
     const result = await referenceQueryBuilder
       .setFindOptions(findOptionsWithJoinColumn)
-      .andWhere(`id IN (:...recordIdsToHydrate)`, {
-        recordIdsToHydrate,
-      })
+      .andWhere(
+        `"${targetObjectNameSingular}"."id" IN (:...recordIdsToHydrate)`,
+        {
+          recordIdsToHydrate,
+        },
+      )
       .getMany();
 
     return { relationResults: result, relationAggregatedFieldsResult };
