@@ -4,6 +4,7 @@ import { type ObjectLiteral } from 'typeorm';
 
 import { normalisePermaventSalesRepCode } from 'src/engine/core-modules/permavent-security/assignments/normalise-permavent-sales-rep-code.util';
 import { GlobalWorkspaceOrmManager } from 'src/engine/twenty-orm/global-workspace-datasource/global-workspace-orm.manager';
+import { buildSystemAuthContext } from 'src/engine/twenty-orm/utils/build-system-auth-context.util';
 
 const PERMAVENT_ASSIGNMENT_OBJECT_NAME = 'salesrepassignment';
 const PERMAVENT_ASSIGNMENT_TIME_ZONE = 'Europe/London';
@@ -35,33 +36,43 @@ export class PermaventSalesRepAssignmentService {
       return [];
     }
 
-    const assignmentRepository =
-      await this.globalWorkspaceOrmManager.getRepository<PermaventSalesRepAssignmentWorkspaceRecord>(
-        workspaceId,
-        PERMAVENT_ASSIGNMENT_OBJECT_NAME,
-        { shouldBypassPermissionChecks: true },
-      );
     const businessDate = this.formatBusinessDate(at);
-    const assignments = await assignmentRepository
-      .createQueryBuilder('assignment')
-      .select('assignment.erpSalesRepCode', 'erpSalesRepCode')
-      .where('assignment.salesRepId = :workspaceMemberId', {
-        workspaceMemberId,
-      })
-      .andWhere('assignment.deletedAt IS NULL')
-      .andWhere('assignment.isActive = true')
-      .andWhere(
-        '(assignment.validFrom IS NULL OR assignment.validFrom <= :businessDate)',
-        { businessDate },
-      )
-      .andWhere(
-        '(assignment.validTo IS NULL OR assignment.validTo > :businessDate)',
-        { businessDate },
-      )
-      .orderBy('assignment.erpSalesRepCode', 'ASC')
-      .getRawMany<
-        Pick<PermaventSalesRepAssignmentWorkspaceRecord, 'erpSalesRepCode'>
-      >();
+    const assignments =
+      await this.globalWorkspaceOrmManager.executeInWorkspaceContext(
+        async () => {
+          const assignmentRepository =
+            await this.globalWorkspaceOrmManager.getRepository<PermaventSalesRepAssignmentWorkspaceRecord>(
+              workspaceId,
+              PERMAVENT_ASSIGNMENT_OBJECT_NAME,
+              { shouldBypassPermissionChecks: true },
+            );
+
+          return assignmentRepository
+            .createQueryBuilder('assignment')
+            .select('assignment.erpSalesRepCode', 'erpSalesRepCode')
+            .where('assignment.salesRepId = :workspaceMemberId', {
+              workspaceMemberId,
+            })
+            .andWhere('assignment.deletedAt IS NULL')
+            .andWhere('assignment.isActive = true')
+            .andWhere(
+              '(assignment.validFrom IS NULL OR assignment.validFrom <= :businessDate)',
+              { businessDate },
+            )
+            .andWhere(
+              '(assignment.validTo IS NULL OR assignment.validTo > :businessDate)',
+              { businessDate },
+            )
+            .orderBy('assignment.erpSalesRepCode', 'ASC')
+            .getRawMany<
+              Pick<
+                PermaventSalesRepAssignmentWorkspaceRecord,
+                'erpSalesRepCode'
+              >
+            >();
+        },
+        buildSystemAuthContext(workspaceId),
+      );
 
     const allowedSalesRepCodes = new Set<string>();
 
