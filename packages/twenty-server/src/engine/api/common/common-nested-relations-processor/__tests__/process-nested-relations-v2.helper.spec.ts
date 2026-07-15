@@ -14,13 +14,14 @@ import { type WorkspaceSelectQueryBuilder } from 'src/engine/twenty-orm/reposito
 
 describe('ProcessNestedRelationsV2Helper', () => {
   const applyToObjectRecordFilter = jest.fn();
-  const helper = new ProcessNestedRelationsV2Helper({
-    applyToObjectRecordFilter,
-  } as unknown as PermaventSecurityService);
+  let helper: ProcessNestedRelationsV2Helper;
 
   beforeEach(() => {
     jest.clearAllMocks();
     jest.restoreAllMocks();
+    helper = new ProcessNestedRelationsV2Helper({
+      applyToObjectRecordFilter,
+    } as unknown as PermaventSecurityService);
   });
 
   it('should apply a Permavent filter to a nested target query', async () => {
@@ -72,53 +73,65 @@ describe('ProcessNestedRelationsV2Helper', () => {
     );
   });
 
-  it('should preserve security predicates when adding relation constraints', async () => {
-    const aggregateQueryBuilder = {
-      addSelect: jest.fn().mockReturnThis(),
-      andWhere: jest.fn().mockReturnThis(),
-      groupBy: jest.fn().mockReturnThis(),
-      getRawMany: jest.fn().mockResolvedValue([]),
-    };
-    const referenceQueryBuilder = {
-      clone: jest.fn().mockReturnValue(aggregateQueryBuilder),
-      getFindOptions: jest.fn().mockReturnValue({ select: { id: true } }),
-      setFindOptions: jest.fn().mockReturnThis(),
-      andWhere: jest.fn().mockReturnThis(),
-      take: jest.fn().mockReturnThis(),
-      getMany: jest.fn().mockResolvedValue([{ id: 'branch-id' }]),
-    };
+  it.each(['companyId', 'branchId', 'customRelationId'])(
+    'should qualify the %s relation column when preserving security predicates',
+    async (columnName) => {
+      const aggregateQueryBuilder = {
+        addSelect: jest.fn().mockReturnThis(),
+        andWhere: jest.fn().mockReturnThis(),
+        groupBy: jest.fn().mockReturnThis(),
+        getRawMany: jest.fn().mockResolvedValue([]),
+      };
+      const referenceQueryBuilder = {
+        clone: jest.fn().mockReturnValue(aggregateQueryBuilder),
+        getFindOptions: jest.fn().mockReturnValue({ select: { id: true } }),
+        setFindOptions: jest.fn().mockReturnThis(),
+        andWhere: jest.fn().mockReturnThis(),
+        take: jest.fn().mockReturnThis(),
+        getMany: jest.fn().mockResolvedValue([{ id: 'branch-id' }]),
+      };
 
-    jest
-      .spyOn(
-        ProcessAggregateHelper,
-        'addSelectedAggregatedFieldsQueriesToQueryBuilder',
-      )
-      .mockImplementation(() => undefined);
+      jest
+        .spyOn(
+          ProcessAggregateHelper,
+          'addSelectedAggregatedFieldsQueriesToQueryBuilder',
+        )
+        .mockImplementation(() => undefined);
 
-    const result = await helper['findRelations']({
-      referenceQueryBuilder:
-        referenceQueryBuilder as unknown as WorkspaceSelectQueryBuilder<ObjectLiteral>,
-      targetObjectRepository: {} as WorkspaceRepository<ObjectLiteral>,
-      column: '"companyId"',
-      ids: ['company-id'],
-      relationType: RelationType.MANY_TO_ONE,
-      perParentLimit: 10,
-      parentRecordsCount: 1,
-      aggregate: { branches: {} },
-      sourceFieldName: 'branches',
-      targetObjectNameSingular: 'branch',
-    });
+      const result = await helper['findRelations']({
+        referenceQueryBuilder:
+          referenceQueryBuilder as unknown as WorkspaceSelectQueryBuilder<ObjectLiteral>,
+        targetObjectRepository: {} as WorkspaceRepository<ObjectLiteral>,
+        columnName,
+        ids: ['company-id'],
+        relationType: RelationType.MANY_TO_ONE,
+        perParentLimit: 10,
+        parentRecordsCount: 1,
+        aggregate: { branches: {} },
+        sourceFieldName: 'branches',
+        targetObjectNameSingular: 'branch',
+      });
 
-    expect(aggregateQueryBuilder.andWhere).toHaveBeenCalledWith(
-      '"companyId" IN (:...ids)',
-      { ids: ['company-id'] },
-    );
-    expect(referenceQueryBuilder.andWhere).toHaveBeenCalledWith(
-      '"companyId" IN (:...ids)',
-      { ids: ['company-id'] },
-    );
-    expect(result.relationResults).toEqual([{ id: 'branch-id' }]);
-  });
+      const qualifiedColumn = `"branch"."${columnName}"`;
+
+      expect(aggregateQueryBuilder.addSelect).toHaveBeenCalledWith(
+        qualifiedColumn,
+        columnName,
+      );
+      expect(aggregateQueryBuilder.andWhere).toHaveBeenCalledWith(
+        `${qualifiedColumn} IN (:...ids)`,
+        { ids: ['company-id'] },
+      );
+      expect(aggregateQueryBuilder.groupBy).toHaveBeenCalledWith(
+        qualifiedColumn,
+      );
+      expect(referenceQueryBuilder.andWhere).toHaveBeenCalledWith(
+        `${qualifiedColumn} IN (:...ids)`,
+        { ids: ['company-id'] },
+      );
+      expect(result.relationResults).toEqual([{ id: 'branch-id' }]);
+    },
+  );
 
   it('should qualify the record identifier when hydrating one-to-many relations', async () => {
     const referenceQueryBuilder = {
@@ -136,7 +149,7 @@ describe('ProcessNestedRelationsV2Helper', () => {
       referenceQueryBuilder:
         referenceQueryBuilder as unknown as WorkspaceSelectQueryBuilder<ObjectLiteral>,
       targetObjectRepository: {} as WorkspaceRepository<ObjectLiteral>,
-      column: '"companyId"',
+      columnName: 'companyId',
       ids: ['company-id'],
       relationType: RelationType.ONE_TO_MANY,
       perParentLimit: 10,
@@ -152,5 +165,43 @@ describe('ProcessNestedRelationsV2Helper', () => {
         recordIdsToHydrate: ['00000000-0000-0000-0000-000000000000'],
       },
     );
+  });
+
+  it('should qualify identifiers in the per-parent relation query', async () => {
+    const perParentQueryBuilder = {
+      select: jest.fn().mockReturnThis(),
+      where: jest.fn().mockReturnThis(),
+      limit: jest.fn().mockReturnThis(),
+      getQuery: jest.fn().mockReturnValue('SELECT relation ids'),
+    };
+    const limitedRecordsQueryBuilder = {
+      from: jest.fn().mockReturnThis(),
+      select: jest.fn().mockReturnThis(),
+      expressionMap: { aliases: [] },
+      getRawMany: jest.fn().mockResolvedValue([{ id: 'person-id' }]),
+    };
+    const targetObjectRepository = {
+      createQueryBuilder: jest
+        .fn()
+        .mockReturnValueOnce(perParentQueryBuilder)
+        .mockReturnValueOnce(limitedRecordsQueryBuilder),
+    } as unknown as WorkspaceRepository<ObjectLiteral>;
+
+    const result = await helper['findRelationRecordIdsLimitedPerParent']({
+      targetObjectRepository,
+      targetObjectNameSingular: 'person',
+      columnName: 'companyId',
+      ids: ['9d395568-9119-46b4-8d2a-1d58d71c076b'],
+      perParentLimit: 10,
+    });
+
+    expect(perParentQueryBuilder.select).toHaveBeenCalledWith(
+      '"person"."id"',
+      'id',
+    );
+    expect(perParentQueryBuilder.where).toHaveBeenCalledWith(
+      '"person"."companyId" = "lateralParents"."parentId"',
+    );
+    expect(result).toEqual(['person-id']);
   });
 });
