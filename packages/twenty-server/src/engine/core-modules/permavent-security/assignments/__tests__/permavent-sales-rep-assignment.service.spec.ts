@@ -15,8 +15,12 @@ describe('PermaventSalesRepAssignmentService', () => {
   const getRepository = jest.fn().mockResolvedValue({
     createQueryBuilder: jest.fn().mockReturnValue(queryBuilder),
   });
+  const executeInWorkspaceContext = jest
+    .fn()
+    .mockImplementation((callback) => callback());
   const service = new PermaventSalesRepAssignmentService({
     getRepository,
+    executeInWorkspaceContext,
   } as unknown as GlobalWorkspaceOrmManager);
 
   beforeEach(() => {
@@ -39,6 +43,13 @@ describe('PermaventSalesRepAssignmentService', () => {
     });
 
     expect(result).toEqual(['DM', 'RT', 'SCOTLAND']);
+    expect(executeInWorkspaceContext).toHaveBeenCalledWith(
+      expect.any(Function),
+      {
+        type: 'system',
+        workspace: { id: 'workspace-id' },
+      },
+    );
     expect(getRepository).toHaveBeenCalledWith(
       'workspace-id',
       'salesrepassignment',
@@ -71,6 +82,7 @@ describe('PermaventSalesRepAssignmentService', () => {
     });
 
     expect(result).toEqual([]);
+    expect(executeInWorkspaceContext).not.toHaveBeenCalled();
     expect(getRepository).not.toHaveBeenCalled();
   });
 
