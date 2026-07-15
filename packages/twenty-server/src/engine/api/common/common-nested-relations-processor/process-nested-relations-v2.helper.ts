@@ -36,6 +36,7 @@ import { type WorkspaceRepository } from 'src/engine/twenty-orm/repository/works
 import { type WorkspaceSelectQueryBuilder } from 'src/engine/twenty-orm/repository/workspace-select-query-builder';
 import { type RolePermissionConfig } from 'src/engine/twenty-orm/types/role-permission-config';
 import { isFieldMetadataEntityOfType } from 'src/engine/utils/is-field-metadata-of-type.util';
+import { escapeIdentifier } from 'src/engine/workspace-manager/workspace-migration/utils/remove-sql-injection.util';
 
 const EMPTY_RELATION_SENTINEL_RECORD_ID =
   '00000000-0000-0000-0000-000000000000';
@@ -270,9 +271,9 @@ export class ProcessNestedRelationsV2Helper {
         this.findRelations({
           referenceQueryBuilder: targetObjectQueryBuilder,
           targetObjectRepository,
-          column:
+          columnName:
             relationType === RelationType.ONE_TO_MANY
-              ? `"${fieldMetadataTargetRelationColumnName}"`
+              ? fieldMetadataTargetRelationColumnName
               : 'id',
           ids: relationIds,
           relationType,
@@ -429,7 +430,7 @@ export class ProcessNestedRelationsV2Helper {
   private async findRelations({
     referenceQueryBuilder,
     targetObjectRepository,
-    column,
+    columnName,
     ids,
     relationType,
     perParentLimit,
@@ -441,7 +442,7 @@ export class ProcessNestedRelationsV2Helper {
     // oxlint-disable-next-line typescript/no-explicit-any
     referenceQueryBuilder: WorkspaceSelectQueryBuilder<any>;
     targetObjectRepository: WorkspaceRepository<ObjectLiteral>;
-    column: string;
+    columnName: string;
     // oxlint-disable-next-line typescript/no-explicit-any
     ids: any[];
     relationType: RelationType;
@@ -457,6 +458,11 @@ export class ProcessNestedRelationsV2Helper {
       return { relationResults: [], relationAggregatedFieldsResult: {} };
     }
 
+    const qualifiedColumn = this.buildQualifiedColumnReference({
+      tableAlias: targetObjectNameSingular,
+      columnName,
+    });
+
     const aggregateForRelation = aggregate[sourceFieldName];
     // oxlint-disable-next-line typescript/no-explicit-any
     let relationAggregatedFieldsResult: Record<string, any> = {};
@@ -471,18 +477,17 @@ export class ProcessNestedRelationsV2Helper {
       });
 
       const aggregatedFieldsValues = await aggregateQueryBuilder
-        .addSelect(column)
-        .andWhere(`${column} IN (:...ids)`, {
+        .addSelect(qualifiedColumn, columnName)
+        .andWhere(`${qualifiedColumn} IN (:...ids)`, {
           ids,
         })
-        .groupBy(column)
+        .groupBy(qualifiedColumn)
         .getRawMany();
 
       relationAggregatedFieldsResult = aggregatedFieldsValues.reduce(
         (acc, item) => {
-          const columnWithoutQuotes = column.replace(/["']/g, '');
-          const key = item[columnWithoutQuotes];
-          const { [column]: _, ...itemWithoutColumn } = item;
+          const key = item[columnName];
+          const { [columnName]: _, ...itemWithoutColumn } = item;
 
           acc[key] = itemWithoutColumn;
 
@@ -493,17 +498,16 @@ export class ProcessNestedRelationsV2Helper {
     }
 
     const queryBuilderOptions = referenceQueryBuilder.getFindOptions();
-    const columnWithoutQuotes = column.replace(/["']/g, '');
 
     const findOptionsWithJoinColumn = {
       ...queryBuilderOptions,
-      select: { ...queryBuilderOptions.select, [columnWithoutQuotes]: true },
+      select: { ...queryBuilderOptions.select, [columnName]: true },
     };
 
     if (relationType !== RelationType.ONE_TO_MANY) {
       const result = await referenceQueryBuilder
         .setFindOptions(findOptionsWithJoinColumn)
-        .andWhere(`${column} IN (:...ids)`, { ids })
+        .andWhere(`${qualifiedColumn} IN (:...ids)`, { ids })
         .take(perParentLimit * parentRecordsCount)
         .getMany();
 
@@ -514,7 +518,7 @@ export class ProcessNestedRelationsV2Helper {
       await this.findRelationRecordIdsLimitedPerParent({
         targetObjectRepository,
         targetObjectNameSingular,
-        column,
+        columnName,
         ids,
         perParentLimit,
       });
@@ -527,7 +531,10 @@ export class ProcessNestedRelationsV2Helper {
     const result = await referenceQueryBuilder
       .setFindOptions(findOptionsWithJoinColumn)
       .andWhere(
-        `"${targetObjectNameSingular}"."id" IN (:...recordIdsToHydrate)`,
+        `${this.buildQualifiedColumnReference({
+          tableAlias: targetObjectNameSingular,
+          columnName: 'id',
+        })} IN (:...recordIdsToHydrate)`,
         {
           recordIdsToHydrate,
         },
@@ -540,13 +547,13 @@ export class ProcessNestedRelationsV2Helper {
   private async findRelationRecordIdsLimitedPerParent({
     targetObjectRepository,
     targetObjectNameSingular,
-    column,
+    columnName,
     ids,
     perParentLimit,
   }: {
     targetObjectRepository: WorkspaceRepository<ObjectLiteral>;
     targetObjectNameSingular: string;
-    column: string;
+    columnName: string;
     ids: string[];
     perParentLimit: number;
   }): Promise<string[]> {
@@ -556,10 +563,19 @@ export class ProcessNestedRelationsV2Helper {
       return [];
     }
 
+    const qualifiedColumn = this.buildQualifiedColumnReference({
+      tableAlias: targetObjectNameSingular,
+      columnName,
+    });
+    const qualifiedIdColumn = this.buildQualifiedColumnReference({
+      tableAlias: targetObjectNameSingular,
+      columnName: 'id',
+    });
+
     const perParentRecordIdsSql = targetObjectRepository
       .createQueryBuilder(targetObjectNameSingular)
-      .select('id', 'id')
-      .where(`${column} = "lateralParents"."parentId"`)
+      .select(qualifiedIdColumn, 'id')
+      .where(`${qualifiedColumn} = "lateralParents"."parentId"`)
       .limit(perParentLimit)
       .getQuery();
 
@@ -585,6 +601,16 @@ export class ProcessNestedRelationsV2Helper {
     }>();
 
     return limitedRecords.map((limitedRecord) => limitedRecord.id);
+  }
+
+  private buildQualifiedColumnReference({
+    tableAlias,
+    columnName,
+  }: {
+    tableAlias: string;
+    columnName: string;
+  }): string {
+    return `${escapeIdentifier(tableAlias)}.${escapeIdentifier(columnName)}`;
   }
 
   private assignRelationResults({
