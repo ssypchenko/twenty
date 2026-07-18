@@ -31,6 +31,7 @@ import { buildColumnsToSelect } from 'src/engine/api/graphql/graphql-query-runne
 import { assertIsValidUuid } from 'src/engine/api/graphql/workspace-query-runner/utils/assert-is-valid-uuid.util';
 import { getAllSelectableColumnNames } from 'src/engine/api/utils/get-all-selectable-column-names.utils';
 import { WorkspaceAuthContext } from 'src/engine/core-modules/auth/types/workspace-auth-context.type';
+import { PERMAVENT_SYSTEM_FIELD_NAMES } from 'src/engine/core-modules/permavent-security/permavent-security.service';
 import { RecordPositionService } from 'src/engine/core-modules/record-position/services/record-position.service';
 import { type FlatEntityMaps } from 'src/engine/metadata-modules/flat-entity/types/flat-entity-maps.type';
 import { findFlatEntityByIdInFlatEntityMaps } from 'src/engine/metadata-modules/flat-entity/utils/find-flat-entity-by-id-in-flat-entity-maps.util';
@@ -95,6 +96,11 @@ export class CommonCreateManyQueryRunnerService extends CommonBaseQueryRunnerSer
       flatIndexMaps,
       args,
       workspaceId: authContext.workspace.id,
+      ignoredFieldPermissionColumnNames: (
+        args as CommonExtendedInput<CreateManyQueryArgs> & {
+          [PERMAVENT_SYSTEM_FIELD_NAMES]?: string[];
+        }
+      )[PERMAVENT_SYSTEM_FIELD_NAMES],
     });
 
     const upsertedRecords = await this.fetchUpsertedRecords({
@@ -207,6 +213,7 @@ export class CommonCreateManyQueryRunnerService extends CommonBaseQueryRunnerSer
     flatIndexMaps,
     args,
     workspaceId,
+    ignoredFieldPermissionColumnNames,
   }: {
     repository: WorkspaceRepository<ObjectLiteral>;
     flatObjectMetadata: FlatObjectMetadata;
@@ -215,6 +222,7 @@ export class CommonCreateManyQueryRunnerService extends CommonBaseQueryRunnerSer
     flatIndexMaps: FlatEntityMaps<FlatIndexMetadata>;
     args: CommonExtendedInput<CreateManyQueryArgs>;
     workspaceId: string;
+    ignoredFieldPermissionColumnNames?: string[];
   }): Promise<InsertResult> {
     const { selectedFieldsResult } = args;
 
@@ -227,7 +235,12 @@ export class CommonCreateManyQueryRunnerService extends CommonBaseQueryRunnerSer
         flatFieldMetadataMaps,
       });
 
-      return await repository.insert(args.data, undefined, selectedColumns);
+      return await repository.insert(
+        args.data,
+        undefined,
+        selectedColumns,
+        ignoredFieldPermissionColumnNames,
+      );
     }
 
     return this.performUpsertOperation({

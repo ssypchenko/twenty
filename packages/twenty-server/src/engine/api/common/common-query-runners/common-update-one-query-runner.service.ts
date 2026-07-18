@@ -40,10 +40,17 @@ export class CommonUpdateOneQueryRunnerService extends CommonBaseQueryRunnerServ
     args: CommonExtendedInput<UpdateOneQueryArgs>,
     queryRunnerContext: CommonExtendedQueryRunnerContext,
   ): Promise<ObjectRecord> {
+    const filter = await this.permaventSecurityService.applyToMutationFilter({
+      filter: { id: { eq: args.id } },
+      operationName: this.operationName,
+      authContext: queryRunnerContext.authContext,
+      flatObjectMetadata: queryRunnerContext.flatObjectMetadata,
+    });
+
     const result = await this.commonUpdateManyQueryRunnerService.run(
       {
         ...args,
-        filter: { id: { eq: args.id } },
+        filter: filter ?? {},
       },
       queryRunnerContext,
     );

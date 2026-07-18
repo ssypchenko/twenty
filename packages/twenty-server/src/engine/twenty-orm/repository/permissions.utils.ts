@@ -265,6 +265,7 @@ type ValidateQueryIsPermittedOrThrowArgs = {
   flatFieldMetadataMaps: FlatEntityMaps<FlatFieldMetadata>;
   objectIdByNameSingular: Record<string, string>;
   shouldBypassPermissionChecks: boolean;
+  ignoredFieldPermissionColumnNames?: string[];
 };
 
 export const validateQueryIsPermittedOrThrow = ({
@@ -274,6 +275,7 @@ export const validateQueryIsPermittedOrThrow = ({
   flatFieldMetadataMaps,
   objectIdByNameSingular,
   shouldBypassPermissionChecks,
+  ignoredFieldPermissionColumnNames = [],
 }: ValidateQueryIsPermittedOrThrowArgs) => {
   if (shouldBypassPermissionChecks) {
     return;
@@ -352,7 +354,9 @@ export const validateQueryIsPermittedOrThrow = ({
     objectIdByNameSingular,
     selectedColumns,
     allFieldsSelected,
-    updatedColumns,
+    updatedColumns: updatedColumns.filter(
+      (column) => !ignoredFieldPermissionColumnNames.includes(column),
+    ),
   });
 };
 
