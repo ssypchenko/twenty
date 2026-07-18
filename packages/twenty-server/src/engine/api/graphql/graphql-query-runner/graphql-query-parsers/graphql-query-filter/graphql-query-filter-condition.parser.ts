@@ -35,6 +35,7 @@ export class GraphqlQueryFilterConditionParser {
     queryBuilder: WorkspaceSelectQueryBuilder<ObjectLiteral>,
     objectNameSingular: string,
     filter: Partial<ObjectRecordFilter>,
+    useDirectTableReference = false,
   ): WorkspaceSelectQueryBuilder<ObjectLiteral> {
     if (!filter || Object.keys(filter).length === 0) {
       return queryBuilder;
@@ -47,6 +48,7 @@ export class GraphqlQueryFilterConditionParser {
           queryBuilder,
           objectNameSingular,
           filter,
+          useDirectTableReference,
         );
       }),
     );
@@ -57,6 +59,7 @@ export class GraphqlQueryFilterConditionParser {
     outerQueryBuilder: WorkspaceSelectQueryBuilder<ObjectLiteral>,
     objectNameSingular: string,
     filter: Partial<ObjectRecordFilter>,
+    useDirectTableReference = false,
   ): void {
     applyFilterEntriesToWhereExpression({
       whereExpression: innerQueryBuilder,
@@ -64,6 +67,7 @@ export class GraphqlQueryFilterConditionParser {
       objectNameSingular,
       filter,
       fieldParser: this.queryFilterFieldParser,
+      useDirectTableReference,
     });
   }
 }

@@ -65,12 +65,14 @@ export class GraphqlQueryParser {
     queryBuilder: WorkspaceSelectQueryBuilder<any>,
     objectNameSingular: string,
     recordFilter: Partial<ObjectRecordFilter>,
+    useDirectTableReference = false,
     // oxlint-disable-next-line typescript/no-explicit-any
   ): WorkspaceSelectQueryBuilder<any> {
     return this.filterConditionParser.parse(
       queryBuilder,
       objectNameSingular,
       recordFilter,
+      useDirectTableReference,
     );
   }
 

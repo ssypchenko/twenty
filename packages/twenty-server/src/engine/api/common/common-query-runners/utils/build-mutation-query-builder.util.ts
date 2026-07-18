@@ -32,7 +32,16 @@ export const buildMutationQueryBuilder = ({
     filteredQueryBuilder.expressionMap.joinAttributes.length > 0;
 
   if (!hasRelationTraversal) {
-    return filteredQueryBuilder;
+    const directMutationQueryBuilder = repository.createQueryBuilder(alias);
+
+    commonQueryParser.applyFilterToBuilder(
+      directMutationQueryBuilder,
+      alias,
+      filter,
+      true,
+    );
+
+    return directMutationQueryBuilder;
   }
 
   // TypeORM auto-injects `deletedAt IS NULL` for SELECT-typed queries but
@@ -47,6 +56,6 @@ export const buildMutationQueryBuilder = ({
 
   return repository
     .createQueryBuilder(alias)
-    .where(`"${alias}"."id" IN (${idSubQueryBuilder.getQuery()})`)
+    .where(`"id" IN (${idSubQueryBuilder.getQuery()})`)
     .setParameters(idSubQueryBuilder.expressionMap.parameters);
 };
