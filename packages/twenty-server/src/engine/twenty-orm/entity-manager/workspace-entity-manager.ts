@@ -72,6 +72,7 @@ import { type WorkspaceEventEmitter } from 'src/engine/workspace-event-emitter/w
 type PermissionOptions = {
   shouldBypassPermissionChecks?: boolean;
   objectRecordsPermissions?: ObjectsPermissions;
+  ignoredFieldPermissionColumnNames?: string[];
 };
 
 export class WorkspaceEntityManager extends EntityManager {
@@ -197,6 +198,7 @@ export class WorkspaceEntityManager extends EntityManager {
     options: {
       shouldBypassPermissionChecks?: boolean;
       objectRecordsPermissions?: ObjectsPermissions;
+      ignoredFieldPermissionColumnNames?: string[];
     } = {
       shouldBypassPermissionChecks: false,
       objectRecordsPermissions: {},
@@ -229,6 +231,7 @@ export class WorkspaceEntityManager extends EntityManager {
       options?.shouldBypassPermissionChecks ?? false,
       this.authContext,
       this.getFeatureFlagMap(),
+      options?.ignoredFieldPermissionColumnNames,
     );
   }
 
