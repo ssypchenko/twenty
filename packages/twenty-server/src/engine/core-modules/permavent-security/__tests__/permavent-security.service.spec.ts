@@ -100,26 +100,33 @@ describe('PermaventSecurityService', () => {
     });
   });
 
-  it('should use Branch ownership before Company ownership for a Person read', async () => {
-    await expect(
-      service.applyToCommonQueryArgs({
-        ...input,
-        flatObjectMetadata: { nameSingular: 'person' } as FlatObjectMetadata,
-      }),
-    ).resolves.toMatchObject({
-      filter: {
-        and: [
-          args.filter,
-          {
-            or: [
-              { and: [{ branchId: { is: 'NULL' } }, expect.any(Object)] },
-              { and: [{ branchId: { is: 'NOT_NULL' } }, expect.any(Object)] },
-            ],
-          },
-        ],
-      },
-    });
-  });
+  it.each(['person', 'opportunity'])(
+    'should use Branch ownership before Company ownership for a %s read',
+    async (nameSingular) => {
+      await expect(
+        service.applyToCommonQueryArgs({
+          ...input,
+          flatObjectMetadata: { nameSingular } as FlatObjectMetadata,
+        }),
+      ).resolves.toMatchObject({
+        filter: {
+          and: [
+            args.filter,
+            {
+              or: [
+                {
+                  and: [{ branchId: { is: 'NULL' } }, expect.any(Object)],
+                },
+                {
+                  and: [{ branchId: { is: 'NOT_NULL' } }, expect.any(Object)],
+                },
+              ],
+            },
+          ],
+        },
+      });
+    },
+  );
 
   it('should default a Sales Rep Company owner without clearing ERP input', async () => {
     await expect(

@@ -1,5 +1,7 @@
 import { Test, type TestingModule } from '@nestjs/testing';
+import { Brackets } from 'typeorm';
 
+import { GraphqlQueryParser } from 'src/engine/api/graphql/graphql-query-runner/graphql-query-parsers/graphql-query.parser';
 import { encodeCursorData } from 'src/engine/api/graphql/graphql-query-runner/utils/cursors.util';
 import { type ObjectRecordFilter } from 'src/engine/api/graphql/workspace-query-builder/interfaces/object-record.interface';
 import {
@@ -69,6 +71,10 @@ describe('SearchService', () => {
     service = module.get<SearchService>(SearchService);
   });
 
+  afterEach(() => {
+    jest.restoreAllMocks();
+  });
+
   it('should be defined', () => {
     expect(service).toBeDefined();
   });
@@ -101,6 +107,188 @@ describe('SearchService', () => {
     expect(
       service.buildSearchQueryAndGetRecordsWithFallback,
     ).toHaveBeenCalledWith(expect.objectContaining({ filter: securityFilter }));
+  });
+
+  describe('joined ownership filters', () => {
+    const opportunityMetadata = {
+      ...mockFlatObjectMetadatas[2],
+      nameSingular: 'opportunity',
+      namePlural: 'opportunities',
+      labelSingular: 'Opportunity',
+      labelPlural: 'Opportunities',
+    };
+    const joinedOwnershipFilter = {
+      or: [
+        { company: { id: { eq: 'company-id' } } },
+        { branch: { id: { eq: 'branch-id' } } },
+      ],
+    };
+
+    const createQueryBuilderMock = () => ({
+      select: jest.fn().mockReturnThis(),
+      addSelect: jest.fn().mockReturnThis(),
+      andWhere: jest.fn().mockReturnThis(),
+      orderBy: jest.fn().mockReturnThis(),
+      addOrderBy: jest.fn().mockReturnThis(),
+      setParameter: jest.fn().mockReturnThis(),
+      take: jest.fn().mockReturnThis(),
+      getRawMany: jest.fn().mockResolvedValue([]),
+    });
+
+    beforeEach(() => {
+      jest
+        .spyOn(GraphqlQueryParser.prototype, 'applyFilterToBuilder')
+        .mockImplementation((queryBuilder) => queryBuilder);
+      jest
+        .spyOn(GraphqlQueryParser.prototype, 'applyDeletedAtToBuilder')
+        .mockImplementation((queryBuilder) => queryBuilder);
+    });
+
+    it.each([
+      {
+        objectAlias: 'person',
+        flatObjectMetadata: mockFlatObjectMetadatas[0],
+        expectedFields: ['id', 'nameFirstName', 'nameLastName', 'avatarFile'],
+      },
+      {
+        objectAlias: 'opportunity',
+        flatObjectMetadata: opportunityMetadata,
+        expectedFields: ['id', 'name', 'imageIdentifierFieldName'],
+      },
+    ])(
+      'should qualify $objectAlias tsvector search columns when ownership adds joins',
+      async ({ objectAlias, flatObjectMetadata, expectedFields }) => {
+        const queryBuilder = createQueryBuilderMock();
+        const entityManager = {
+          createQueryBuilder: jest.fn().mockReturnValue(queryBuilder),
+          internalContext: { flatObjectMetadataMaps: {} },
+        };
+
+        await service.buildSearchQueryAndGetRecords({
+          entityManager: entityManager as never,
+          flatObjectMetadata,
+          flatFieldMetadataMaps: mockFlatFieldMetadataMaps,
+          searchTerms: '',
+          searchTermsOr: '',
+          limit: 10,
+          filter: joinedOwnershipFilter,
+        });
+
+        expect(queryBuilder.select).toHaveBeenCalledWith(
+          expectedFields.map((field) => `"${objectAlias}"."${field}"`),
+        );
+        expect(queryBuilder.addSelect).toHaveBeenCalledWith(
+          expect.stringContaining(`"${objectAlias}"."searchVector"`),
+          'tsRankCD',
+        );
+        expect(queryBuilder.addSelect).toHaveBeenCalledWith(
+          expect.stringContaining(`"${objectAlias}"."searchVector"`),
+          'tsRank',
+        );
+        expect(queryBuilder.addOrderBy).toHaveBeenCalledWith(
+          `"${objectAlias}"."id"`,
+          'ASC',
+          'NULLS FIRST',
+        );
+
+        const searchVectorBrackets = queryBuilder.andWhere.mock
+          .calls[0][0] as Brackets;
+        const whereBuilder = {
+          where: jest.fn().mockReturnThis(),
+        };
+
+        searchVectorBrackets.whereFactory(whereBuilder as never);
+
+        expect(whereBuilder.where).toHaveBeenCalledWith(
+          `"${objectAlias}"."searchVector" IS NOT NULL`,
+        );
+      },
+    );
+
+    it.each([
+      {
+        objectAlias: 'person',
+        flatObjectMetadata: mockFlatObjectMetadatas[0],
+      },
+      {
+        objectAlias: 'opportunity',
+        flatObjectMetadata: opportunityMetadata,
+      },
+    ])(
+      'should qualify $objectAlias ILIKE fallback columns when ownership adds joins',
+      async ({ objectAlias, flatObjectMetadata }) => {
+        const tsvectorQueryBuilder = createQueryBuilderMock();
+        const fallbackQueryBuilder = createQueryBuilderMock();
+        const queryRunner = { query: jest.fn().mockResolvedValue([]) };
+        const entityManager = {
+          createQueryBuilder: jest
+            .fn()
+            .mockReturnValueOnce(tsvectorQueryBuilder)
+            .mockReturnValueOnce(fallbackQueryBuilder),
+          internalContext: {
+            flatObjectMetadataMaps: {},
+            workspaceId: 'workspace-id',
+          },
+          manager: {
+            transaction: jest.fn(
+              async (callback: (manager: unknown) => Promise<unknown>) =>
+                callback({ queryRunner }),
+            ),
+          },
+        };
+
+        await service.buildSearchQueryAndGetRecordsWithFallback({
+          entityManager: entityManager as never,
+          flatObjectMetadata,
+          flatFieldMetadataMaps: mockFlatFieldMetadataMaps,
+          searchInput: 'example',
+          searchTerms: 'example',
+          searchTermsOr: 'example',
+          limit: 10,
+          filter: joinedOwnershipFilter,
+        });
+
+        expect(fallbackQueryBuilder.andWhere).toHaveBeenCalledWith(
+          `public.unaccent_immutable("${objectAlias}"."searchVector"::text) ILIKE public.unaccent_immutable(:ilikeFallback0)`,
+          { ilikeFallback0: '%example%' },
+        );
+        expect(fallbackQueryBuilder.orderBy).toHaveBeenCalledWith(
+          `"${objectAlias}"."id"`,
+          'ASC',
+        );
+      },
+    );
+
+    it('should qualify the Opportunity id in cursor tie-breaking', () => {
+      const cursorCondition = service.computeCursorWhereCondition({
+        after: encodeCursorData({
+          lastRanks: { tsRankCD: 1, tsRank: 1 },
+          lastRecordIdsPerObject: { opportunity: 'opportunity-id' },
+        }),
+        objectMetadataNameSingular: 'opportunity',
+        tsRankExpr: 'ts-rank-expression',
+        tsRankCDExpr: 'ts-rank-cd-expression',
+      });
+      const outerBuilder = {
+        where: jest.fn().mockReturnThis(),
+        orWhere: jest.fn().mockReturnThis(),
+      };
+
+      cursorCondition?.whereFactory(outerBuilder as never);
+
+      const idTieBreakerBrackets = outerBuilder.orWhere.mock
+        .calls[1][0] as Brackets;
+      const innerBuilder = {
+        andWhere: jest.fn().mockReturnThis(),
+      };
+
+      idTieBreakerBrackets.whereFactory(innerBuilder as never);
+
+      expect(innerBuilder.andWhere).toHaveBeenCalledWith(
+        '"opportunity"."id" > :lastRecordId',
+        { lastRecordId: 'opportunity-id' },
+      );
+    });
   });
 
   describe('filterObjectMetadataItems', () => {

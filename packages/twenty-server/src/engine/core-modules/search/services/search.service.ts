@@ -279,6 +279,11 @@ export class SearchService {
     const queryBuilder = entityManager.createQueryBuilder();
 
     const { flatObjectMetadataMaps } = entityManager.internalContext;
+    const rootObjectAlias = flatObjectMetadata.nameSingular;
+    const rootSearchVectorColumn = this.getQualifiedColumnName(
+      rootObjectAlias,
+      SEARCH_VECTOR_FIELD.name,
+    );
 
     const queryParser = new GraphqlQueryParser(
       flatObjectMetadata,
@@ -286,11 +291,7 @@ export class SearchService {
       flatFieldMetadataMaps,
     );
 
-    queryParser.applyFilterToBuilder(
-      queryBuilder,
-      flatObjectMetadata.nameSingular,
-      filter,
-    );
+    queryParser.applyFilterToBuilder(queryBuilder, rootObjectAlias, filter);
 
     queryParser.applyDeletedAtToBuilder(queryBuilder, filter);
 
@@ -306,15 +307,15 @@ export class SearchService {
         flatFieldMetadataMaps,
       ),
       ...imageIdentifierColumns,
-    ].map((field) => `"${field}"`);
+    ].map((field) => this.getQualifiedColumnName(rootObjectAlias, field));
 
-    const tsRankCDExpr = `ts_rank_cd("${SEARCH_VECTOR_FIELD.name}", to_tsquery('simple', public.unaccent_immutable(:searchTerms)))`;
+    const tsRankCDExpr = `ts_rank_cd(${rootSearchVectorColumn}, to_tsquery('simple', public.unaccent_immutable(:searchTerms)))`;
 
-    const tsRankExpr = `ts_rank("${SEARCH_VECTOR_FIELD.name}", to_tsquery('simple', public.unaccent_immutable(:searchTermsOr)))`;
+    const tsRankExpr = `ts_rank(${rootSearchVectorColumn}, to_tsquery('simple', public.unaccent_immutable(:searchTermsOr)))`;
 
     const cursorWhereCondition = this.computeCursorWhereCondition({
       after,
-      objectMetadataNameSingular: flatObjectMetadata.nameSingular,
+      objectMetadataNameSingular: rootObjectAlias,
       tsRankExpr,
       tsRankCDExpr,
     });
@@ -328,10 +329,10 @@ export class SearchService {
       queryBuilder.andWhere(
         new Brackets((qb) => {
           qb.where(
-            `"${SEARCH_VECTOR_FIELD.name}" @@ to_tsquery('simple', public.unaccent_immutable(:searchTerms))`,
+            `${rootSearchVectorColumn} @@ to_tsquery('simple', public.unaccent_immutable(:searchTerms))`,
             { searchTerms },
           ).orWhere(
-            `"${SEARCH_VECTOR_FIELD.name}" @@ to_tsquery('simple', public.unaccent_immutable(:searchTermsOr))`,
+            `${rootSearchVectorColumn} @@ to_tsquery('simple', public.unaccent_immutable(:searchTermsOr))`,
             { searchTermsOr },
           );
         }),
@@ -339,7 +340,7 @@ export class SearchService {
     } else {
       queryBuilder.andWhere(
         new Brackets((qb) => {
-          qb.where(`"${SEARCH_VECTOR_FIELD.name}" IS NOT NULL`);
+          qb.where(`${rootSearchVectorColumn} IS NOT NULL`);
         }),
       );
     }
@@ -351,7 +352,11 @@ export class SearchService {
     return await queryBuilder
       .orderBy(tsRankCDExpr, 'DESC')
       .addOrderBy(tsRankExpr, 'DESC')
-      .addOrderBy('id', 'ASC', 'NULLS FIRST')
+      .addOrderBy(
+        this.getQualifiedColumnName(rootObjectAlias, 'id'),
+        'ASC',
+        'NULLS FIRST',
+      )
       .setParameter('searchTerms', searchTerms)
       .setParameter('searchTermsOr', searchTermsOr)
       .take(limit + 1) // We take one more to check if hasNextPage is true
@@ -401,6 +406,11 @@ export class SearchService {
           );
 
           const { flatObjectMetadataMaps } = entityManager.internalContext;
+          const rootObjectAlias = flatObjectMetadata.nameSingular;
+          const rootSearchVectorColumn = this.getQualifiedColumnName(
+            rootObjectAlias,
+            SEARCH_VECTOR_FIELD.name,
+          );
 
           const queryParser = new GraphqlQueryParser(
             flatObjectMetadata,
@@ -410,7 +420,7 @@ export class SearchService {
 
           queryParser.applyFilterToBuilder(
             queryBuilder,
-            flatObjectMetadata.nameSingular,
+            rootObjectAlias,
             filter,
           );
 
@@ -428,7 +438,7 @@ export class SearchService {
               flatFieldMetadataMaps,
             ),
             ...imageIdentifierColumns,
-          ].map((field) => `"${field}"`);
+          ].map((field) => this.getQualifiedColumnName(rootObjectAlias, field));
 
           queryBuilder.select(fieldsToSelect);
 
@@ -441,13 +451,13 @@ export class SearchService {
             const paramName = `ilikeFallback${index}`;
 
             queryBuilder.andWhere(
-              `public.unaccent_immutable("${SEARCH_VECTOR_FIELD.name}"::text) ILIKE public.unaccent_immutable(:${paramName})`,
+              `public.unaccent_immutable(${rootSearchVectorColumn}::text) ILIKE public.unaccent_immutable(:${paramName})`,
               { [paramName]: `%${escapeForIlike(word)}%` },
             );
           });
 
           const rawResults = await queryBuilder
-            .orderBy('"id"', 'ASC')
+            .orderBy(this.getQualifiedColumnName(rootObjectAlias, 'id'), 'ASC')
             .take(limit)
             .getRawMany();
 
@@ -516,12 +526,22 @@ export class SearchService {
                 tsRankEq: lastRanks.tsRank,
               });
               if (lastRecordId !== undefined) {
-                inner.andWhere('id > :lastRecordId', { lastRecordId });
+                inner.andWhere(
+                  `${this.getQualifiedColumnName(objectMetadataNameSingular, 'id')} > :lastRecordId`,
+                  { lastRecordId },
+                );
               }
             }),
           );
       });
     }
+  }
+
+  private getQualifiedColumnName(
+    objectNameSingular: string,
+    fieldName: string,
+  ): string {
+    return `"${objectNameSingular}"."${fieldName}"`;
   }
 
   getLabelIdentifierColumns(
