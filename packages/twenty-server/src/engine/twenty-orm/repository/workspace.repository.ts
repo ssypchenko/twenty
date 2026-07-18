@@ -561,12 +561,14 @@ export class WorkspaceRepository<
       | QueryDeepPartialEntityWithNestedRelationFields<T>[],
     entityManager?: WorkspaceEntityManager,
     selectedColumns?: string[],
+    ignoredFieldPermissionColumnNames?: string[],
   ): Promise<InsertResult> {
     const manager = entityManager || this.manager;
 
     const permissionOptions = {
       shouldBypassPermissionChecks: this.shouldBypassPermissionChecks,
       objectRecordsPermissions: this.objectRecordsPermissions,
+      ignoredFieldPermissionColumnNames,
     };
 
     return manager.insert(

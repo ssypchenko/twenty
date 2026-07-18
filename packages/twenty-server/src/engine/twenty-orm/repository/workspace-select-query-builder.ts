@@ -36,6 +36,7 @@ export class WorkspaceSelectQueryBuilder<
   internalContext: WorkspaceInternalContext;
   authContext: WorkspaceAuthContext;
   featureFlagMap: FeatureFlagMap;
+  ignoredFieldPermissionColumnNames: string[];
   constructor(
     queryBuilder: SelectQueryBuilder<T>,
     objectRecordsPermissions: ObjectsPermissions,
@@ -43,6 +44,7 @@ export class WorkspaceSelectQueryBuilder<
     shouldBypassPermissionChecks: boolean,
     authContext: WorkspaceAuthContext,
     featureFlagMap: FeatureFlagMap,
+    ignoredFieldPermissionColumnNames: string[] = [],
   ) {
     super(queryBuilder);
     this.objectRecordsPermissions = objectRecordsPermissions;
@@ -50,6 +52,7 @@ export class WorkspaceSelectQueryBuilder<
     this.shouldBypassPermissionChecks = shouldBypassPermissionChecks;
     this.authContext = authContext;
     this.featureFlagMap = featureFlagMap;
+    this.ignoredFieldPermissionColumnNames = ignoredFieldPermissionColumnNames;
   }
 
   getFindOptions() {
@@ -66,6 +69,7 @@ export class WorkspaceSelectQueryBuilder<
       this.shouldBypassPermissionChecks,
       this.authContext,
       this.featureFlagMap,
+      this.ignoredFieldPermissionColumnNames,
     ) as this;
 
     return workspaceSelectQueryBuilder;
@@ -267,6 +271,7 @@ export class WorkspaceSelectQueryBuilder<
       this.shouldBypassPermissionChecks,
       this.authContext,
       this.featureFlagMap,
+      this.ignoredFieldPermissionColumnNames,
     );
   }
 

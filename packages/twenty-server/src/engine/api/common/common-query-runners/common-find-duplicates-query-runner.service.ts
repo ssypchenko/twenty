@@ -7,7 +7,7 @@ import {
 } from 'twenty-shared/constants';
 import { ObjectRecord, OrderByDirection } from 'twenty-shared/types';
 import { isDefined } from 'twenty-shared/utils';
-import { FindOptionsRelations, In, ObjectLiteral } from 'typeorm';
+import { FindOptionsRelations, ObjectLiteral } from 'typeorm';
 
 import { WorkspaceAuthContext } from 'src/engine/core-modules/auth/types/workspace-auth-context.type';
 import { CommonBaseQueryRunnerService } from 'src/engine/api/common/common-query-runners/common-base-query-runner.service';
@@ -70,8 +70,20 @@ export class CommonFindDuplicatesQueryRunnerService extends CommonBaseQueryRunne
     });
 
     if (isDefined(args.ids) && args.ids.length > 0) {
+      const idsFilter =
+        await this.permaventSecurityService.applyToObjectRecordFilter({
+          filter: { id: { in: args.ids } },
+          authContext,
+          flatObjectMetadata,
+        });
+
+      commonQueryParser.applyFilterToBuilder(
+        existingRecordsQueryBuilder,
+        flatObjectMetadata.nameSingular,
+        idsFilter ?? {},
+      );
+
       const fetchedRecords = (await existingRecordsQueryBuilder
-        .where({ id: In(args.ids) })
         .setFindOptions({
           select: columnsToSelect,
         })
@@ -114,10 +126,17 @@ export class CommonFindDuplicatesQueryRunnerService extends CommonBaseQueryRunne
             flatObjectMetadata.nameSingular,
           );
 
+          const filteredDuplicateConditions =
+            await this.permaventSecurityService.applyToObjectRecordFilter({
+              filter: duplicateConditions,
+              authContext,
+              flatObjectMetadata,
+            });
+
           commonQueryParser.applyFilterToBuilder(
             duplicateRecordsQueryBuilder,
             flatObjectMetadata.nameSingular,
-            duplicateConditions,
+            filteredDuplicateConditions ?? {},
           );
 
           const duplicates = (await duplicateRecordsQueryBuilder

@@ -42,10 +42,17 @@ export class CommonDeleteOneQueryRunnerService extends CommonBaseQueryRunnerServ
     args: CommonExtendedInput<DeleteOneQueryArgs>,
     queryRunnerContext: CommonExtendedQueryRunnerContext,
   ): Promise<ObjectRecord> {
+    const filter = await this.permaventSecurityService.applyToMutationFilter({
+      filter: { id: { eq: args.id } },
+      operationName: this.operationName,
+      authContext: queryRunnerContext.authContext,
+      flatObjectMetadata: queryRunnerContext.flatObjectMetadata,
+    });
+
     const result = await this.commonDeleteManyQueryRunnerService.run(
       {
         ...args,
-        filter: { id: { eq: args.id } },
+        filter: filter ?? {},
       },
       queryRunnerContext,
     );
