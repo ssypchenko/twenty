@@ -42,6 +42,7 @@ export class WorkspaceInsertQueryBuilder<
   private internalContext: WorkspaceInternalContext;
   private authContext: WorkspaceAuthContext;
   private featureFlagMap: FeatureFlagMap;
+  private ignoredFieldPermissionColumnNames: string[];
   private relationNestedConfig:
     | [RelationConnectQueryConfig[], RelationDisconnectQueryFieldsByEntityIndex]
     | null;
@@ -66,6 +67,7 @@ export class WorkspaceInsertQueryBuilder<
     shouldBypassPermissionChecks: boolean,
     authContext: WorkspaceAuthContext,
     featureFlagMap: FeatureFlagMap,
+    ignoredFieldPermissionColumnNames: string[] = [],
   ) {
     super(queryBuilder);
     this.objectRecordsPermissions = objectRecordsPermissions;
@@ -73,6 +75,7 @@ export class WorkspaceInsertQueryBuilder<
     this.shouldBypassPermissionChecks = shouldBypassPermissionChecks;
     this.authContext = authContext;
     this.featureFlagMap = featureFlagMap;
+    this.ignoredFieldPermissionColumnNames = ignoredFieldPermissionColumnNames;
   }
 
   override clone(): this {
@@ -85,6 +88,7 @@ export class WorkspaceInsertQueryBuilder<
       this.shouldBypassPermissionChecks,
       this.authContext,
       this.featureFlagMap,
+      this.ignoredFieldPermissionColumnNames,
     ) as this;
   }
 
@@ -124,6 +128,8 @@ export class WorkspaceInsertQueryBuilder<
         flatFieldMetadataMaps: this.internalContext.flatFieldMetadataMaps,
         objectIdByNameSingular: this.internalContext.objectIdByNameSingular,
         shouldBypassPermissionChecks: this.shouldBypassPermissionChecks,
+        ignoredFieldPermissionColumnNames:
+          this.ignoredFieldPermissionColumnNames,
       });
 
       // Fix overwrites for composite fields - valuesSet contains formatted/flattened column names

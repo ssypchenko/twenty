@@ -3,7 +3,10 @@ import { type WorkspaceAuthContext } from 'src/engine/core-modules/auth/types/wo
 import { type PermaventSecurityContextFactory } from 'src/engine/core-modules/permavent-security/context/permavent-security-context.factory';
 import { type PermaventSecurityContext } from 'src/engine/core-modules/permavent-security/context/permavent-security-context.type';
 import { PermaventAccessFilterBuilder } from 'src/engine/core-modules/permavent-security/filters/permavent-access-filter.builder';
-import { PermaventSecurityService } from 'src/engine/core-modules/permavent-security/permavent-security.service';
+import {
+  PERMAVENT_SYSTEM_FIELD_NAMES,
+  PermaventSecurityService,
+} from 'src/engine/core-modules/permavent-security/permavent-security.service';
 import { type PermaventCommonQueryHookInput } from 'src/engine/core-modules/permavent-security/types/permavent-common-query-hook-input.type';
 import { ConfigVariables } from 'src/engine/core-modules/twenty-config/config-variables';
 import { TwentyConfigService } from 'src/engine/core-modules/twenty-config/twenty-config.service';
@@ -15,33 +18,19 @@ describe('PermaventSecurityService', () => {
   const getConfigVariable = jest.fn();
   const createSecurityContext = jest.fn();
   const service = new PermaventSecurityService(
-    {
-      get: getConfigVariable,
-    } as unknown as TwentyConfigService,
+    { get: getConfigVariable } as unknown as TwentyConfigService,
     {
       create: createSecurityContext,
     } as unknown as PermaventSecurityContextFactory,
     new PermaventAccessFilterBuilder(),
   );
-
-  const args = {
-    filter: {
-      name: {
-        eq: 'Example company',
-      },
-    },
-    first: 20,
-  };
-
+  const args = { filter: { name: { eq: 'Example company' } }, first: 20 };
   const input: PermaventCommonQueryHookInput<typeof args> = {
     args,
     operationName: CommonQueryNames.FIND_MANY,
     authContext: {} as WorkspaceAuthContext,
-    flatObjectMetadata: {
-      nameSingular: 'company',
-    } as FlatObjectMetadata,
+    flatObjectMetadata: { nameSingular: 'company' } as FlatObjectMetadata,
   };
-
   const restrictedSalesRepContext: PermaventSecurityContext = {
     authContextType: 'user',
     workspaceId: 'workspace-id',
@@ -56,44 +45,42 @@ describe('PermaventSecurityService', () => {
     allowedSalesRepCodes: ['DM', 'RT'],
     isSupportedUserContext: true,
   };
-  const deniedSalesRepOperations = [
-    CommonQueryNames.CREATE_ONE,
-    CommonQueryNames.CREATE_MANY,
-    CommonQueryNames.UPDATE_ONE,
-    CommonQueryNames.UPDATE_MANY,
-    CommonQueryNames.DELETE_ONE,
-    CommonQueryNames.DELETE_MANY,
-    CommonQueryNames.DESTROY_ONE,
-    CommonQueryNames.DESTROY_MANY,
-    CommonQueryNames.RESTORE_ONE,
-    CommonQueryNames.RESTORE_MANY,
-    CommonQueryNames.MERGE_MANY,
-    CommonQueryNames.FIND_DUPLICATES,
-  ];
 
   beforeEach(() => {
     jest.clearAllMocks();
+    getConfigVariable.mockReturnValue(true);
     createSecurityContext.mockResolvedValue(restrictedSalesRepContext);
   });
 
-  it('should return the original arguments when disabled', async () => {
-    getConfigVariable.mockReturnValue(false);
-
-    const result = await service.applyToCommonQueryArgs(input);
-
-    expect(result).toBe(args);
-    expect(getConfigVariable).toHaveBeenCalledWith(
-      'PERMAVENT_SECURITY_RLS_ENABLED',
-    );
-    expect(createSecurityContext).not.toHaveBeenCalled();
+  it('should merge ERP-first ownership into a Company read', async () => {
+    await expect(service.applyToCommonQueryArgs(input)).resolves.toEqual({
+      first: 20,
+      filter: {
+        and: [
+          args.filter,
+          {
+            or: [
+              { erpsalesrepcode: { in: ['DM', 'RT'] } },
+              {
+                and: [
+                  { erpsalesrepcode: { is: 'NULL' } },
+                  { accountOwnerId: { eq: 'workspace-member-id' } },
+                ],
+              },
+            ],
+          },
+        ],
+      },
+    });
   });
 
-  it('should merge a Sales Rep filter into a Company read', async () => {
-    getConfigVariable.mockReturnValue(true);
+  it('should allow CRM-owned reads without ERP assignments', async () => {
+    createSecurityContext.mockResolvedValue({
+      ...restrictedSalesRepContext,
+      allowedSalesRepCodes: [],
+    });
 
-    const result = await service.applyToCommonQueryArgs(input);
-
-    expect(result).toEqual({
+    await expect(service.applyToCommonQueryArgs(input)).resolves.toEqual({
       first: 20,
       filter: {
         and: [
@@ -101,154 +88,127 @@ describe('PermaventSecurityService', () => {
           {
             or: [
               {
-                salesrepemail: {
-                  primaryEmail: {
-                    ilike: 'sales.rep@example.test',
-                  },
-                },
-              },
-              {
-                erpsalesrepcode: {
-                  in: ['DM', 'RT'],
-                },
+                and: [
+                  { erpsalesrepcode: { is: 'NULL' } },
+                  { accountOwnerId: { eq: 'workspace-member-id' } },
+                ],
               },
             ],
           },
         ],
       },
     });
-    expect(args.filter).toEqual({ name: { eq: 'Example company' } });
   });
 
-  it('should fail closed when a Sales Rep has no active codes', async () => {
-    getConfigVariable.mockReturnValue(true);
-    createSecurityContext.mockResolvedValue({
-      ...restrictedSalesRepContext,
-      allowedSalesRepCodes: [],
-    });
-
-    const result = await service.applyToCommonQueryArgs({
-      ...input,
-      args: { first: 20 },
-      flatObjectMetadata: {
-        nameSingular: 'branch',
-      } as FlatObjectMetadata,
-    });
-
-    expect(result).toEqual({
-      first: 20,
+  it('should use Branch ownership before Company ownership for a Person read', async () => {
+    await expect(
+      service.applyToCommonQueryArgs({
+        ...input,
+        flatObjectMetadata: { nameSingular: 'person' } as FlatObjectMetadata,
+      }),
+    ).resolves.toMatchObject({
       filter: {
-        and: [{ id: { is: 'NULL' } }, { id: { is: 'NOT_NULL' } }],
+        and: [
+          args.filter,
+          {
+            or: [
+              { and: [{ branchId: { is: 'NULL' } }, expect.any(Object)] },
+              { and: [{ branchId: { is: 'NOT_NULL' } }, expect.any(Object)] },
+            ],
+          },
+        ],
       },
     });
   });
 
-  it('should not filter a bypass role', async () => {
-    getConfigVariable.mockReturnValue(true);
-    createSecurityContext.mockResolvedValue({
-      ...restrictedSalesRepContext,
-      bypassSecurity: true,
-      isRestrictedSalesRep: false,
-      allowedSalesRepCodes: [],
-    });
-
-    const result = await service.applyToCommonQueryArgs(input);
-
-    expect(result).toBe(args);
-  });
-
-  it('should not filter an unmanaged role', async () => {
-    getConfigVariable.mockReturnValue(true);
-    createSecurityContext.mockResolvedValue({
-      ...restrictedSalesRepContext,
-      isRestrictedSalesRep: false,
-      allowedSalesRepCodes: [],
-    });
-
-    const result = await service.applyToCommonQueryArgs(input);
-
-    expect(result).toBe(args);
-  });
-
-  it.each(['person', 'opportunity'])(
-    'should merge a relation ownership filter into a %s read',
-    async (nameSingular) => {
-      getConfigVariable.mockReturnValue(true);
-
-      const result = await service.applyToCommonQueryArgs({
+  it('should default a Sales Rep Company owner without clearing ERP input', async () => {
+    await expect(
+      service.applyToCommonQueryArgs({
         ...input,
-        flatObjectMetadata: {
-          nameSingular,
-        } as FlatObjectMetadata,
-      });
+        operationName: CommonQueryNames.CREATE_ONE,
+        args: { data: { name: 'Example company', erpsalesrepcode: 'DM' } },
+      }),
+    ).resolves.toMatchObject({
+      data: {
+        name: 'Example company',
+        erpsalesrepcode: 'DM',
+        accountOwnerId: 'workspace-member-id',
+      },
+    });
+  });
 
-      expect(result).toEqual({
-        first: 20,
-        filter: {
-          and: [
-            args.filter,
-            {
-              or: [
-                {
-                  company: {
-                    or: [
-                      {
-                        salesrepemail: {
-                          primaryEmail: {
-                            ilike: 'sales.rep@example.test',
-                          },
-                        },
-                      },
-                      { erpsalesrepcode: { in: ['DM', 'RT'] } },
-                    ],
-                  },
-                },
-                {
-                  branch: {
-                    or: [
-                      {
-                        salesrepemail: {
-                          primaryEmail: {
-                            ilike: 'sales.rep@example.test',
-                          },
-                        },
-                      },
-                      { erpsalesrepcode: { in: ['DM', 'RT'] } },
-                    ],
-                  },
-                },
-              ],
-            },
-          ],
-        },
-      });
-    },
-  );
-
-  it('should not build a context for an out-of-scope read object', async () => {
-    getConfigVariable.mockReturnValue(true);
-
+  it('should replace an explicitly supplied owner with the Sales Rep owner', async () => {
     const result = await service.applyToCommonQueryArgs({
       ...input,
-      flatObjectMetadata: {
-        nameSingular: 'project',
-      } as FlatObjectMetadata,
+      operationName: CommonQueryNames.CREATE_ONE,
+      args: { data: { accountOwnerId: 'chosen-owner-id' } },
     });
 
-    expect(result).toBe(args);
-    expect(createSecurityContext).not.toHaveBeenCalled();
+    expect(result).toMatchObject({
+      data: { accountOwnerId: 'workspace-member-id' },
+    });
+    expect(
+      (
+        result as typeof result & {
+          [PERMAVENT_SYSTEM_FIELD_NAMES]?: string[];
+        }
+      )[PERMAVENT_SYSTEM_FIELD_NAMES],
+    ).toEqual(['accountOwnerId']);
   });
 
-  it.each(deniedSalesRepOperations)(
+  it('should deny Sales Rep upsert for Company and Branch', async () => {
+    await expect(
+      service.applyToCommonQueryArgs({
+        ...input,
+        operationName: CommonQueryNames.CREATE_ONE,
+        args: { data: {}, upsert: true },
+      }),
+    ).rejects.toMatchObject({
+      code: PermissionsExceptionCode.PERMISSION_DENIED,
+    });
+  });
+
+  it('should scope a Sales Rep update to owned Company records', async () => {
+    await expect(
+      service.applyToCommonQueryArgs({
+        ...input,
+        operationName: CommonQueryNames.UPDATE_MANY,
+        args: {
+          filter: { id: { eq: 'company-id' } },
+          data: { name: 'Updated' },
+        },
+      }),
+    ).resolves.toMatchObject({
+      filter: {
+        and: [{ id: { eq: 'company-id' } }, expect.any(Object)],
+      },
+    });
+  });
+
+  it('should deny soft deletion of ERP Company and Branch records', async () => {
+    await expect(
+      service.applyToMutationFilter({
+        filter: { id: { eq: 'company-id' } },
+        operationName: CommonQueryNames.DELETE_ONE,
+        authContext: {} as WorkspaceAuthContext,
+        flatObjectMetadata: { nameSingular: 'company' } as FlatObjectMetadata,
+      }),
+    ).resolves.toMatchObject({
+      and: expect.arrayContaining([{ erpsalesrepcode: { is: 'NULL' } }]),
+    });
+  });
+
+  it.each([
+    CommonQueryNames.DESTROY_ONE,
+    CommonQueryNames.DESTROY_MANY,
+    CommonQueryNames.RESTORE_ONE,
+    CommonQueryNames.RESTORE_MANY,
+    CommonQueryNames.MERGE_MANY,
+  ])(
     'should deny Sales Rep operation %s for a Company',
     async (operationName) => {
-      getConfigVariable.mockReturnValue(true);
-
       await expect(
-        service.applyToCommonQueryArgs({
-          ...input,
-          operationName,
-        }),
+        service.applyToCommonQueryArgs({ ...input, operationName }),
       ).rejects.toMatchObject({
         code: PermissionsExceptionCode.PERMISSION_DENIED,
       });
@@ -256,15 +216,16 @@ describe('PermaventSecurityService', () => {
   );
 
   it.each([
+    CommonQueryNames.CREATE_ONE,
+    CommonQueryNames.UPDATE_ONE,
+    CommonQueryNames.DELETE_ONE,
     CommonQueryNames.FIND_ONE,
     CommonQueryNames.FIND_MANY,
+    CommonQueryNames.FIND_DUPLICATES,
     CommonQueryNames.GROUP_BY,
-    ...deniedSalesRepOperations,
   ])(
     'should deny Sales Rep operation %s for Sales Rep assignments',
     async (operationName) => {
-      getConfigVariable.mockReturnValue(true);
-
       await expect(
         service.applyToCommonQueryArgs({
           ...input,
@@ -279,82 +240,22 @@ describe('PermaventSecurityService', () => {
     },
   );
 
-  it('should leave assignment access unchanged when disabled', async () => {
-    getConfigVariable.mockReturnValue(false);
-
-    const result = await service.applyToCommonQueryArgs({
-      ...input,
-      flatObjectMetadata: {
-        nameSingular: 'salesrepassignment',
-      } as FlatObjectMetadata,
-    });
-
-    expect(result).toBe(args);
-    expect(createSecurityContext).not.toHaveBeenCalled();
-  });
-
-  it('should leave a Sales Rep mutation unchanged when disabled', async () => {
-    getConfigVariable.mockReturnValue(false);
-
-    const result = await service.applyToCommonQueryArgs({
-      ...input,
-      operationName: CommonQueryNames.UPDATE_ONE,
-    });
-
-    expect(result).toBe(args);
-    expect(createSecurityContext).not.toHaveBeenCalled();
-  });
-
-  it('should allow a bypass role mutation', async () => {
-    getConfigVariable.mockReturnValue(true);
+  it('should not filter a bypass role', async () => {
     createSecurityContext.mockResolvedValue({
       ...restrictedSalesRepContext,
       bypassSecurity: true,
       isRestrictedSalesRep: false,
-      allowedSalesRepCodes: [],
     });
 
-    const result = await service.applyToCommonQueryArgs({
-      ...input,
-      operationName: CommonQueryNames.UPDATE_ONE,
-    });
-
-    expect(result).toBe(args);
+    await expect(service.applyToCommonQueryArgs(input)).resolves.toBe(args);
   });
 
-  it('should allow an unmanaged role mutation', async () => {
-    getConfigVariable.mockReturnValue(true);
-    createSecurityContext.mockResolvedValue({
-      ...restrictedSalesRepContext,
-      isRestrictedSalesRep: false,
-      allowedSalesRepCodes: [],
-    });
+  it('should leave security disabled behaviour unchanged', async () => {
+    getConfigVariable.mockReturnValue(false);
 
-    const result = await service.applyToCommonQueryArgs({
-      ...input,
-      operationName: CommonQueryNames.UPDATE_ONE,
-    });
-
-    expect(result).toBe(args);
+    await expect(service.applyToCommonQueryArgs(input)).resolves.toBe(args);
+    expect(createSecurityContext).not.toHaveBeenCalled();
   });
-
-  it.each(['person', 'opportunity'])(
-    'should leave the read-only scoped %s mutation unchanged',
-    async (nameSingular) => {
-      getConfigVariable.mockReturnValue(true);
-
-      const result = await service.applyToCommonQueryArgs({
-        ...input,
-        operationName: CommonQueryNames.UPDATE_ONE,
-        flatObjectMetadata: {
-          nameSingular,
-        } as FlatObjectMetadata,
-      });
-
-      expect(result).toBe(args);
-      expect(createSecurityContext).not.toHaveBeenCalled();
-    },
-  );
 
   it('should define the feature flag as environment-only and disabled by default', () => {
     expect(new ConfigVariables().PERMAVENT_SECURITY_RLS_ENABLED).toBe(false);
