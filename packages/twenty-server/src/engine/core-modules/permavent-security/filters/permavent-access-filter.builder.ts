@@ -8,54 +8,57 @@ export class PermaventAccessFilterBuilder {
   public buildCompanyOrBranchFilter(
     context: PermaventSecurityContext,
   ): ObjectRecordFilter {
-    if (!this.hasActiveOwnershipContext(context)) {
-      return this.buildMatchNoneFilter();
-    }
-
     return this.buildDirectOwnershipFilter(context);
   }
 
   public buildRelatedCompanyOrBranchFilter(
     context: PermaventSecurityContext,
   ): ObjectRecordFilter {
-    if (!this.hasActiveOwnershipContext(context)) {
-      return this.buildMatchNoneFilter();
-    }
-
     return {
       or: [
-        { company: this.buildDirectOwnershipFilter(context) },
-        { branch: this.buildDirectOwnershipFilter(context) },
+        {
+          and: [
+            { branchId: { is: 'NULL' } },
+            { company: this.buildDirectOwnershipFilter(context) },
+          ],
+        },
+        {
+          and: [
+            { branchId: { is: 'NOT_NULL' } },
+            { branch: this.buildDirectOwnershipFilter(context) },
+          ],
+        },
       ],
     };
   }
 
-  private hasActiveOwnershipContext({
-    userEmail,
-    allowedSalesRepCodes,
-  }: PermaventSecurityContext): boolean {
-    return userEmail !== null && allowedSalesRepCodes.length > 0;
-  }
-
   private buildDirectOwnershipFilter({
-    userEmail,
+    workspaceMemberId,
     allowedSalesRepCodes,
   }: PermaventSecurityContext): ObjectRecordFilter {
+    const ownershipConditions: ObjectRecordFilter[] = [];
+
+    if (allowedSalesRepCodes.length > 0) {
+      ownershipConditions.push({
+        erpsalesrepcode: { in: allowedSalesRepCodes },
+      });
+    }
+
+    if (workspaceMemberId !== null) {
+      ownershipConditions.push({
+        and: [
+          { erpsalesrepcode: { is: 'NULL' } },
+          { accountOwnerId: { eq: workspaceMemberId } },
+        ],
+      });
+    }
+
+    if (ownershipConditions.length === 0) {
+      return this.buildMatchNoneFilter();
+    }
+
     return {
-      or: [
-        {
-          salesrepemail: {
-            primaryEmail: {
-              ilike: userEmail,
-            },
-          },
-        },
-        {
-          erpsalesrepcode: {
-            in: allowedSalesRepCodes,
-          },
-        },
-      ],
+      or: ownershipConditions,
     };
   }
 
