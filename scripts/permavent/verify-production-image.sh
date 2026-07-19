@@ -52,6 +52,12 @@ operating_system="$(docker image inspect "$image_tag" --format '{{.Os}}')"
 image_user="$(docker image inspect "$image_tag" --format '{{.Config.User}}')"
 entrypoint="$(docker image inspect "$image_tag" --format '{{json .Config.Entrypoint}}')"
 environment="$(docker image inspect "$image_tag" --format '{{range .Config.Env}}{{println .}}{{end}}')"
+source_label="$(docker image inspect "$image_tag" --format '{{index .Config.Labels "org.opencontainers.image.source"}}')"
+revision_label="$(docker image inspect "$image_tag" --format '{{index .Config.Labels "org.opencontainers.image.revision"}}')"
+version_label="$(docker image inspect "$image_tag" --format '{{index .Config.Labels "org.opencontainers.image.version"}}')"
+created_label="$(docker image inspect "$image_tag" --format '{{index .Config.Labels "org.opencontainers.image.created"}}')"
+expected_source="$(git -C "$PERMAVENT_REPOSITORY_ROOT" config --get remote.origin.url)"
+expected_revision="$(git -C "$PERMAVENT_REPOSITORY_ROOT" rev-parse HEAD)"
 
 failures=0
 
@@ -72,6 +78,16 @@ check_value "Architecture" "$architecture" "amd64"
 check_value "Operating system" "$operating_system" "linux"
 check_value "User" "$image_user" "1000"
 check_value "Entrypoint" "$entrypoint" '["/app/entrypoint.sh"]'
+check_value "OCI source label" "$source_label" "$expected_source"
+check_value "OCI revision label" "$revision_label" "$expected_revision"
+check_value "OCI version label" "$version_label" "$upstream_version"
+
+if [[ ! "$created_label" =~ ^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}Z$ ]]; then
+  permavent_error "OCI created label is missing or invalid: '${created_label}'."
+  failures=$((failures + 1))
+else
+  printf 'OCI created label: %s\n' "$created_label"
+fi
 
 if ! grep -Fxq "APP_VERSION=${upstream_version}" <<< "$environment"; then
   permavent_error "APP_VERSION=${upstream_version} is missing from the image environment."
