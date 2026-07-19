@@ -76,11 +76,18 @@ if [[ "$PERMAVENT_DRY_RUN" == "false" ]]; then
 fi
 
 image_tag="$(permavent_image_tag "$upstream_version" "$release_number")"
+source_url="$(git -C "$PERMAVENT_REPOSITORY_ROOT" config --get remote.origin.url)"
+source_revision="$(git -C "$PERMAVENT_REPOSITORY_ROOT" rev-parse HEAD)"
+created_at="$(date -u +%Y-%m-%dT%H:%M:%SZ)"
 build_command=(
   docker buildx build
   --platform linux/amd64
   --target twenty
   --build-arg "APP_VERSION=${upstream_version}"
+  --label "org.opencontainers.image.source=${source_url}"
+  --label "org.opencontainers.image.revision=${source_revision}"
+  --label "org.opencontainers.image.version=${upstream_version}"
+  --label "org.opencontainers.image.created=${created_at}"
   --file packages/twenty-docker/twenty/Dockerfile
   --tag "$image_tag"
   --load
@@ -94,7 +101,7 @@ build_command+=(.)
 
 printf 'Production image: %s\n' "$image_tag"
 printf 'Source branch: %s\n' "$branch_name"
-printf 'Source commit: %s\n' "$(git -C "$PERMAVENT_REPOSITORY_ROOT" rev-parse HEAD)"
+printf 'Source commit: %s\n' "$source_revision"
 printf 'Build command:\n'
 
 cd "$PERMAVENT_REPOSITORY_ROOT"
