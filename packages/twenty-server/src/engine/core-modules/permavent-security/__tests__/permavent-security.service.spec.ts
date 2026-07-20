@@ -267,5 +267,13 @@ describe('PermaventSecurityService', () => {
   it('should define the feature flag as environment-only and disabled by default', () => {
     expect(new ConfigVariables().PERMAVENT_SECURITY_RLS_ENABLED).toBe(false);
     expect(isEnvOnlyConfigVar('PERMAVENT_SECURITY_RLS_ENABLED')).toBe(true);
+    expect(new ConfigVariables().PERMAVENT_DELEGATED_API_CONTEXT_ENABLED).toBe(
+      false,
+    );
+    expect(new ConfigVariables().PERMAVENT_DELEGATED_API_KEY_IDS).toBe('');
+    expect(isEnvOnlyConfigVar('PERMAVENT_DELEGATED_API_CONTEXT_ENABLED')).toBe(
+      true,
+    );
+    expect(isEnvOnlyConfigVar('PERMAVENT_DELEGATED_API_KEY_IDS')).toBe(true);
   });
 });
