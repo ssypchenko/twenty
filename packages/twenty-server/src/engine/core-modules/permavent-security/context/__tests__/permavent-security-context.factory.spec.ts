@@ -185,6 +185,52 @@ describe('PermaventSecurityContextFactory', () => {
     expect(findAllowedSalesRepCodes).not.toHaveBeenCalled();
   });
 
+  it('should resolve the actor in a delegated API key context', async () => {
+    getOrRecompute.mockResolvedValue({
+      userWorkspaceRoleMap: {},
+      flatRoleMaps: {
+        universalIdentifierById: {
+          'sales-rep-role-id': PERMAVENT_ROLE_UNIVERSAL_IDENTIFIERS.salesRep,
+        },
+        byUniversalIdentifier: {
+          [PERMAVENT_ROLE_UNIVERSAL_IDENTIFIERS.salesRep]: {
+            id: 'sales-rep-role-id',
+            label: 'SalesRep',
+          },
+        },
+      },
+    });
+
+    const result = await factory.create({
+      type: 'apiKey',
+      workspace: { id: 'workspace-id' },
+      apiKey: { id: 'api-key-id' },
+      delegatedActor: {
+        user: { id: 'user-id', email: 'sales.rep@example.test' },
+        userWorkspaceId: 'user-workspace-id',
+        workspaceMemberId: 'workspace-member-id',
+        workspaceMember: { id: 'workspace-member-id' },
+        roleId: 'sales-rep-role-id',
+        roleUniversalIdentifier: PERMAVENT_ROLE_UNIVERSAL_IDENTIFIERS.salesRep,
+        correlationId: 'correlation-id',
+      },
+    } as unknown as WorkspaceAuthContext);
+
+    expect(result).toMatchObject({
+      authContextType: 'apiKey',
+      workspaceMemberId: 'workspace-member-id',
+      userWorkspaceId: 'user-workspace-id',
+      roleId: 'sales-rep-role-id',
+      isRestrictedSalesRep: true,
+      isSupportedUserContext: true,
+      allowedSalesRepCodes: ['DM', 'RT'],
+    });
+    expect(findAllowedSalesRepCodes).toHaveBeenCalledWith({
+      workspaceId: 'workspace-id',
+      workspaceMemberId: 'workspace-member-id',
+    });
+  });
+
   it('should represent an internal context without a hydrated workspace', async () => {
     const result = await factory.create({
       type: 'system',

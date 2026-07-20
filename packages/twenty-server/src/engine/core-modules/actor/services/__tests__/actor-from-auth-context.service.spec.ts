@@ -147,6 +147,47 @@ describe('ActorFromAuthContextService', () => {
       ]);
     });
 
+    it('should build metadata from the delegated actor when API key context is delegated', async () => {
+      const workspaceMemberName = {
+        firstName: 'Delegated',
+        lastName: 'Actor',
+      };
+      const authContext = {
+        type: 'apiKey',
+        apiKey: { id: 'api-key-id', name: 'API Key Name' },
+        delegatedActor: {
+          user: { id: 'user-id', email: 'actor@example.test' },
+          userWorkspaceId: 'user-workspace-id',
+          workspaceMemberId: 'workspace-member-id',
+          workspaceMember: {
+            id: 'workspace-member-id',
+            name: workspaceMemberName,
+          },
+          roleId: 'role-id',
+          roleUniversalIdentifier: 'role-universal-identifier',
+          correlationId: 'correlation-id',
+        },
+        workspace: { id: 'workspace-id' },
+      } as unknown as WorkspaceAuthContext;
+
+      const result = await service.injectCreatedBy({
+        records: [{}],
+        objectMetadataNameSingular: 'person',
+        authContext,
+      });
+
+      expect(result).toEqual<ExpectedResult>([
+        {
+          createdBy: {
+            context: {},
+            name: fromFullNameMetadataToName(workspaceMemberName),
+            workspaceMemberId: 'workspace-member-id',
+            source: FieldActorSource.MANUAL,
+          },
+        },
+      ]);
+    });
+
     it('should throw error when no valid actor information is found', async () => {
       const authContext = {
         type: 'system',

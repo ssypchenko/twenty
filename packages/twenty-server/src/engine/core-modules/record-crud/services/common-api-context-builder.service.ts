@@ -9,6 +9,7 @@ import { type CommonSelectedFields } from 'src/engine/api/common/types/common-se
 import { ApiKeyRoleService } from 'src/engine/core-modules/api-key/services/api-key-role.service';
 import { isApiKeyAuthContext } from 'src/engine/core-modules/auth/guards/is-api-key-auth-context.guard';
 import { isApplicationAuthContext } from 'src/engine/core-modules/auth/guards/is-application-auth-context.guard';
+import { isDelegatedApiKeyAuthContext } from 'src/engine/core-modules/auth/guards/is-delegated-api-key-auth-context.guard';
 import { isUserAuthContext } from 'src/engine/core-modules/auth/guards/is-user-auth-context.guard';
 import { type WorkspaceAuthContext } from 'src/engine/core-modules/auth/types/workspace-auth-context.type';
 import {
@@ -24,6 +25,7 @@ import { buildObjectIdByNameMaps } from 'src/engine/metadata-modules/flat-object
 import { UserRoleService } from 'src/engine/metadata-modules/user-role/user-role.service';
 import { type RolePermissionConfig } from 'src/engine/twenty-orm/types/role-permission-config';
 import { getObjectsPermissionsFromRolePermissionConfig } from 'src/engine/twenty-orm/utils/get-objects-permissions-from-role-permission-config.util';
+import { resolveObjectsPermissionsFromAuthContext } from 'src/engine/twenty-orm/utils/resolve-objects-permissions-from-auth-context.util';
 import { WorkspaceCacheService } from 'src/engine/workspace-cache/services/workspace-cache.service';
 
 export type CommonApiContext = {
@@ -139,9 +141,11 @@ export class CommonApiContextBuilderService {
   }): Promise<ObjectsPermissions> {
     const workspaceId = authContext.workspace.id;
 
-    const { rolesPermissions } =
+    const { apiKeyRoleMap, rolesPermissions, userWorkspaceRoleMap } =
       await this.workspaceCacheService.getOrRecompute(workspaceId, [
+        'apiKeyRoleMap',
         'rolesPermissions',
+        'userWorkspaceRoleMap',
       ]);
 
     if (isDefined(rolePermissionConfig)) {
@@ -149,6 +153,24 @@ export class CommonApiContextBuilderService {
         rolesPermissions,
         rolePermissionConfig,
       });
+    }
+
+    if (isDelegatedApiKeyAuthContext(authContext)) {
+      const objectsPermissions = resolveObjectsPermissionsFromAuthContext({
+        authContext,
+        apiKeyRoleMap,
+        rolesPermissions,
+        userWorkspaceRoleMap,
+      });
+
+      if (!objectsPermissions) {
+        throw new RecordCrudException(
+          'Invalid auth context - no authentication mechanism found',
+          RecordCrudExceptionCode.INVALID_REQUEST,
+        );
+      }
+
+      return objectsPermissions;
     }
 
     let roleId: string;

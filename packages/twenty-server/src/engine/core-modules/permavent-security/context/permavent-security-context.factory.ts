@@ -3,6 +3,7 @@ import { Injectable } from '@nestjs/common';
 import { isDefined } from 'twenty-shared/utils';
 
 import { isUserAuthContext } from 'src/engine/core-modules/auth/guards/is-user-auth-context.guard';
+import { isDelegatedApiKeyAuthContext } from 'src/engine/core-modules/auth/guards/is-delegated-api-key-auth-context.guard';
 import { type WorkspaceAuthContext } from 'src/engine/core-modules/auth/types/workspace-auth-context.type';
 import { normalisePermaventAssignmentEmail } from 'src/engine/core-modules/permavent-security/assignments/normalise-permavent-assignment-email.util';
 import { PermaventSalesRepAssignmentService } from 'src/engine/core-modules/permavent-security/assignments/permavent-sales-rep-assignment.service';
@@ -46,7 +47,14 @@ export class PermaventSecurityContextFactory {
   private async createContext(
     authContext: WorkspaceAuthContext,
   ): Promise<PermaventSecurityContext> {
-    if (!isUserAuthContext(authContext)) {
+    const delegatedActor = isDelegatedApiKeyAuthContext(authContext)
+      ? authContext.delegatedActor
+      : undefined;
+    const userContext = isUserAuthContext(authContext)
+      ? authContext
+      : delegatedActor;
+
+    if (!userContext) {
       return {
         authContextType: authContext.type,
         workspaceId: authContext.workspace?.id ?? null,
@@ -69,14 +77,16 @@ export class PermaventSecurityContextFactory {
         ['flatRoleMaps', 'userWorkspaceRoleMap'],
       );
 
-    const roleId = userWorkspaceRoleMap[authContext.userWorkspaceId];
+    const roleId = delegatedActor
+      ? delegatedActor.roleId
+      : userWorkspaceRoleMap[userContext.userWorkspaceId];
     const roleUniversalIdentifier = isDefined(roleId)
       ? flatRoleMaps.universalIdentifierById[roleId]
       : undefined;
     const role = isDefined(roleUniversalIdentifier)
       ? flatRoleMaps.byUniversalIdentifier[roleUniversalIdentifier]
       : undefined;
-    const userEmail = normalisePermaventAssignmentEmail(authContext.user.email);
+    const userEmail = normalisePermaventAssignmentEmail(userContext.user.email);
     const bypassSecurity =
       roleUniversalIdentifier === STANDARD_ROLE.admin.universalIdentifier ||
       roleUniversalIdentifier ===
@@ -86,15 +96,15 @@ export class PermaventSecurityContextFactory {
     const allowedSalesRepCodes = isRestrictedSalesRep
       ? await this.assignmentService.findAllowedSalesRepCodes({
           workspaceId: authContext.workspace.id,
-          workspaceMemberId: authContext.workspaceMemberId,
+          workspaceMemberId: userContext.workspaceMemberId,
         })
       : [];
 
     return {
       authContextType: authContext.type,
       workspaceId: authContext.workspace.id,
-      workspaceMemberId: authContext.workspaceMemberId,
-      userWorkspaceId: authContext.userWorkspaceId,
+      workspaceMemberId: userContext.workspaceMemberId,
+      userWorkspaceId: userContext.userWorkspaceId,
       userEmail,
       roleId: roleId ?? null,
       roleUniversalIdentifier: roleUniversalIdentifier ?? null,
