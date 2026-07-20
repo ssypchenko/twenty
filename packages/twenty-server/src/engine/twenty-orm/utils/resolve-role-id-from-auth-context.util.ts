@@ -2,6 +2,7 @@ import { isDefined } from 'twenty-shared/utils';
 
 import { isApiKeyAuthContext } from 'src/engine/core-modules/auth/guards/is-api-key-auth-context.guard';
 import { isApplicationAuthContext } from 'src/engine/core-modules/auth/guards/is-application-auth-context.guard';
+import { isDelegatedApiKeyAuthContext } from 'src/engine/core-modules/auth/guards/is-delegated-api-key-auth-context.guard';
 import { isUserAuthContext } from 'src/engine/core-modules/auth/guards/is-user-auth-context.guard';
 import { type WorkspaceAuthContext } from 'src/engine/core-modules/auth/types/workspace-auth-context.type';
 import { type UserWorkspaceRoleMap } from 'src/engine/metadata-modules/role-target/types/user-workspace-role-map';
@@ -17,6 +18,10 @@ export const resolveRoleIdFromAuthContext = ({
 }): string | undefined => {
   if (isUserAuthContext(authContext)) {
     return userWorkspaceRoleMap[authContext.userWorkspaceId];
+  }
+
+  if (isDelegatedApiKeyAuthContext(authContext)) {
+    return authContext.delegatedActor.roleId;
   }
 
   if (isApiKeyAuthContext(authContext)) {

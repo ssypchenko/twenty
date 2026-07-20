@@ -35,12 +35,12 @@ import { GraphqlQueryParser } from 'src/engine/api/graphql/graphql-query-runner/
 import { WorkspacePreQueryHookPayload } from 'src/engine/api/graphql/workspace-query-runner/workspace-query-hook/types/workspace-query-hook.type';
 import { WorkspaceQueryHookService } from 'src/engine/api/graphql/workspace-query-runner/workspace-query-hook/workspace-query-hook.service';
 import { isApiKeyAuthContext } from 'src/engine/core-modules/auth/guards/is-api-key-auth-context.guard';
-import { isUserAuthContext } from 'src/engine/core-modules/auth/guards/is-user-auth-context.guard';
 import { WorkspaceAuthContext } from 'src/engine/core-modules/auth/types/workspace-auth-context.type';
 import { FeatureFlagService } from 'src/engine/core-modules/feature-flag/services/feature-flag.service';
 import { MetricsService } from 'src/engine/core-modules/metrics/metrics.service';
 import { MetricsKeys } from 'src/engine/core-modules/metrics/types/metrics-keys.type';
 import { PermaventSecurityService } from 'src/engine/core-modules/permavent-security/permavent-security.service';
+import { PermaventDelegatedAuditService } from 'src/engine/core-modules/permavent-security/audit/permavent-delegated-audit.service';
 import { ThrottlerService } from 'src/engine/core-modules/throttler/throttler.service';
 import { TwentyConfigService } from 'src/engine/core-modules/twenty-config/twenty-config.service';
 import { FlatEntityMaps } from 'src/engine/metadata-modules/flat-entity/types/flat-entity-maps.type';
@@ -96,6 +96,8 @@ export abstract class CommonBaseQueryRunnerService<
   protected readonly featureFlagService: FeatureFlagService;
   @Inject()
   protected readonly permaventSecurityService: PermaventSecurityService;
+  @Inject()
+  protected readonly permaventDelegatedAuditService: PermaventDelegatedAuditService;
 
   protected abstract readonly operationName: CommonQueryNames;
 
@@ -112,53 +114,76 @@ export abstract class CommonBaseQueryRunnerService<
       flatFieldMetadataMaps,
     } = queryRunnerContext;
 
-    await this.throttleQueryExecution(authContext);
+    try {
+      await this.throttleQueryExecution(authContext);
 
-    await this.validate(args, queryRunnerContext);
+      await this.validate(args, queryRunnerContext);
 
-    if (flatObjectMetadata.isSystem === true) {
-      await this.validateSettingsPermissionsOnObjectOrThrow(
-        authContext,
+      if (flatObjectMetadata.isSystem === true) {
+        await this.validateSettingsPermissionsOnObjectOrThrow(
+          authContext,
+          queryRunnerContext,
+        );
+      }
+
+      const commonQueryParser = new GraphqlQueryParser(
+        flatObjectMetadata,
+        flatObjectMetadataMaps,
+        flatFieldMetadataMaps,
+      );
+
+      const selectedFieldsResult = commonQueryParser.parseSelectedFields(
+        args.selectedFields,
+      );
+
+      const processedArgs = {
+        ...(await this.processArgs(
+          args,
+          queryRunnerContext,
+          this.operationName,
+        )),
+        selectedFieldsResult,
+      } as CommonExtendedInput<Args>;
+
+      this.validateQueryComplexity(
+        selectedFieldsResult,
+        processedArgs,
         queryRunnerContext,
       );
-    }
 
-    const commonQueryParser = new GraphqlQueryParser(
-      flatObjectMetadata,
-      flatObjectMetadataMaps,
-      flatFieldMetadataMaps,
-    );
+      const results =
+        await this.globalWorkspaceOrmManager.executeInWorkspaceContext(
+          async () =>
+            this.executeQueryAndEnrichResults(
+              processedArgs,
+              queryRunnerContext,
+              commonQueryParser,
+            ),
+          authContext,
+        );
 
-    const selectedFieldsResult = commonQueryParser.parseSelectedFields(
-      args.selectedFields,
-    );
-
-    const processedArgs = {
-      ...(await this.processArgs(args, queryRunnerContext, this.operationName)),
-      selectedFieldsResult,
-    } as CommonExtendedInput<Args>;
-
-    this.validateQueryComplexity(
-      selectedFieldsResult,
-      processedArgs,
-      queryRunnerContext,
-    );
-
-    const results =
-      await this.globalWorkspaceOrmManager.executeInWorkspaceContext(
-        async () =>
-          this.executeQueryAndEnrichResults(
-            processedArgs,
-            queryRunnerContext,
-            commonQueryParser,
-          ),
+      this.permaventDelegatedAuditService.recordOperation({
         authContext,
-      );
+        operation: this.operationName,
+        objectName: flatObjectMetadata.nameSingular,
+        result: 'allowed',
+      });
 
-    return {
-      results,
-      args: processedArgs,
-    };
+      return {
+        results,
+        args: processedArgs,
+      };
+    } catch (error) {
+      this.permaventDelegatedAuditService.recordOperation({
+        authContext,
+        operation: this.operationName,
+        objectName: flatObjectMetadata.nameSingular,
+        result: 'denied',
+        denialCategory: this.getDenialCategory(error),
+      });
+
+      throw error;
+    }
   }
 
   protected abstract run(
@@ -225,6 +250,12 @@ export abstract class CommonBaseQueryRunnerService<
       )) as CommonInput<Args>;
 
     return hookedArgs;
+  }
+
+  private getDenialCategory(error: unknown): string {
+    const code = (error as { code?: string })?.code;
+
+    return code ?? 'request_rejected';
   }
 
   private async executeQueryAndEnrichResults(
@@ -303,17 +334,23 @@ export abstract class CommonBaseQueryRunnerService<
           flatObjectMetadata.nameSingular as keyof typeof OBJECTS_WITH_SETTINGS_PERMISSIONS_REQUIREMENTS
         ];
 
-      const userHasPermission =
-        await this.permissionsService.userHasWorkspaceSettingPermission({
-          userWorkspaceId: isUserAuthContext(authContext)
-            ? authContext.userWorkspaceId
-            : undefined,
-          setting: permissionRequired,
-          workspaceId: workspace.id,
-          apiKeyId: isApiKeyAuthContext(authContext)
-            ? authContext.apiKey.id
-            : undefined,
-        });
+      const { apiKeyRoleMap, userWorkspaceRoleMap } =
+        await this.workspaceCacheService.getOrRecompute(workspace.id, [
+          'apiKeyRoleMap',
+          'userWorkspaceRoleMap',
+        ]);
+      const rolePermissionConfig = resolveRolePermissionConfig({
+        authContext,
+        apiKeyRoleMap,
+        userWorkspaceRoleMap,
+      });
+      const userHasPermission = rolePermissionConfig
+        ? await this.permissionsService.checkRolesPermissions(
+            rolePermissionConfig,
+            workspace.id,
+            permissionRequired,
+          )
+        : false;
 
       if (!userHasPermission) {
         throw new PermissionsException(
