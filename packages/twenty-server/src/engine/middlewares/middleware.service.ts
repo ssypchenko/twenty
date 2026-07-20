@@ -12,6 +12,7 @@ import { getAuthExceptionRestStatus } from 'src/engine/core-modules/auth/utils/g
 import { ExceptionHandlerService } from 'src/engine/core-modules/exception-handler/exception-handler.service';
 import { ErrorCode } from 'src/engine/core-modules/graphql/utils/graphql-errors.util';
 import { JwtWrapperService } from 'src/engine/core-modules/jwt/services/jwt-wrapper.service';
+import { PermaventDelegatedContextService } from 'src/engine/core-modules/permavent-security/delegated-context/services/permavent-delegated-context.service';
 import { type FlatWorkspace } from 'src/engine/core-modules/workspace/types/flat-workspace.type';
 import { WorkspaceManyOrAllFlatEntityMapsCacheService } from 'src/engine/metadata-modules/flat-entity/services/workspace-many-or-all-flat-entity-maps-cache.service';
 import { INTERNAL_SERVER_ERROR } from 'src/engine/middlewares/constants/default-error-message.constant';
@@ -31,6 +32,7 @@ export class MiddlewareService {
     private readonly flatEntityMapsCacheService: WorkspaceManyOrAllFlatEntityMapsCacheService,
     private readonly exceptionHandlerService: ExceptionHandlerService,
     private readonly jwtWrapperService: JwtWrapperService,
+    private readonly permaventDelegatedContextService: PermaventDelegatedContextService,
   ) {}
 
   public isTokenPresent(request: Request): boolean {
@@ -99,7 +101,11 @@ export class MiddlewareService {
   }
 
   public async hydrateRestRequest(request: Request) {
-    const data = await this.accessTokenService.validateTokenByRequest(request);
+    const data = await this.permaventDelegatedContextService.resolveForRequest({
+      authContext:
+        await this.accessTokenService.validateTokenByRequest(request),
+      headers: request.headers,
+    });
     const metadataVersion = data.workspace
       ? await this.getOrSeedMetadataVersion(data.workspace)
       : undefined;
@@ -121,10 +127,19 @@ export class MiddlewareService {
         (request.headers['x-locale'] as keyof typeof APP_LOCALES) ??
         SOURCE_LOCALE;
 
+      await this.permaventDelegatedContextService.resolveForRequest({
+        authContext: {},
+        headers: request.headers,
+      });
+
       return;
     }
 
-    const data = await this.accessTokenService.validateTokenByRequest(request);
+    const data = await this.permaventDelegatedContextService.resolveForRequest({
+      authContext:
+        await this.accessTokenService.validateTokenByRequest(request),
+      headers: request.headers,
+    });
     const metadataVersion = data.workspace
       ? await this.getOrSeedMetadataVersion(data.workspace)
       : undefined;
