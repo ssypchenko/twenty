@@ -58,6 +58,14 @@ export const PUBLIC_FEATURE_FLAGS: PublicFeatureFlag[] = [
       icon: 'IconSparkles',
     },
   },
+  {
+    key: FeatureFlagKey.IS_PERMAVENT_COMPANY_WIDE_SIDE_PANEL_ENABLED,
+    metadata: {
+      label: 'Permavent Company Wide Side Panel',
+      description:
+        'Use the available desktop workspace for company records while keeping the company list visible',
+    },
+  },
   ...(process.env.CLOUDFLARE_API_KEY
     ? [
         // {
