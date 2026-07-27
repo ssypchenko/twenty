@@ -11,6 +11,7 @@ import {
 import { type WorkspaceAuthContext } from 'src/engine/core-modules/auth/types/workspace-auth-context.type';
 import { FileUrlService } from 'src/engine/core-modules/file/file-url/file-url.service';
 import { PermaventSecurityService } from 'src/engine/core-modules/permavent-security/permavent-security.service';
+import { type ObjectRecordFilterInput } from 'src/engine/core-modules/search/dtos/object-record-filter-input';
 import { SearchService } from 'src/engine/core-modules/search/services/search.service';
 import { TwentyConfigService } from 'src/engine/core-modules/twenty-config/twenty-config.service';
 import { GlobalWorkspaceOrmManager } from 'src/engine/twenty-orm/global-workspace-datasource/global-workspace-orm.manager';
@@ -122,7 +123,7 @@ describe('SearchService', () => {
         { company: { id: { eq: 'company-id' } } },
         { branch: { id: { eq: 'branch-id' } } },
       ],
-    };
+    } as unknown as ObjectRecordFilterInput;
 
     const createQueryBuilderMock = () => ({
       select: jest.fn().mockReturnThis(),
