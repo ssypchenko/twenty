@@ -248,6 +248,7 @@ describe('WorkspaceEntityManager', () => {
         IS_SETTINGS_DISCOVERY_HERO_ENABLED: false,
         IS_WORKFLOW_VERSION_IN_CORE_ENABLED: false,
         IS_ONBOARDING_AI_CHAT_ENABLED: false,
+        IS_PERMAVENT_COMPANY_WIDE_SIDE_PANEL_ENABLED: false,
       },
       userWorkspaceRoleMap: {},
       apiKeyRoleMap: {},
