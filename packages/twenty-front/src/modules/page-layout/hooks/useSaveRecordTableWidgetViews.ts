@@ -7,6 +7,7 @@ import { recordTableWidgetViewPersistedComponentState } from '@/page-layout/stat
 import { getWidgetConfigurationViewId } from '@/page-layout/utils/getWidgetConfigurationViewId';
 import { widgetUsesRecordTableView } from '@/page-layout/utils/widgetUsesRecordTableView';
 import { buildUpsertViewWidgetViewSettingsInput } from '@/page-layout/widgets/record-table/utils/buildUpsertViewWidgetViewSettingsInput';
+import { canUpdateViewSettingsForWidget } from '@/page-layout/widgets/record-table/utils/canUpdateViewSettingsForWidget';
 import { normalizeRecordTableWidgetViewFields } from '@/page-layout/widgets/record-table/utils/normalizeRecordTableWidgetViewFields';
 import { useMutation } from '@apollo/client/react';
 import { useStore } from 'jotai';
@@ -99,11 +100,12 @@ export const useSaveRecordTableWidgetViews = () => {
           buildUpsertViewWidgetViewSettingsInput(draftView);
 
         const hasViewSettingsChanges =
-          !isDefined(persistedView) ||
-          !isDeeplyEqual(
-            buildUpsertViewWidgetViewSettingsInput(persistedView),
-            draftViewSettings,
-          );
+          canUpdateViewSettingsForWidget(widget) &&
+          (!isDefined(persistedView) ||
+            !isDeeplyEqual(
+              buildUpsertViewWidgetViewSettingsInput(persistedView),
+              draftViewSettings,
+            ));
 
         const { data } = await upsertViewWidgetMutation({
           variables: {
