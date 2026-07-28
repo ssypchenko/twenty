@@ -1,16 +1,15 @@
 import { CustomResolverFetchMoreLoader } from '@/activities/components/CustomResolverFetchMoreLoader';
 import { SkeletonLoader } from '@/activities/components/SkeletonLoader';
 import { useOpenCreateActivityDrawer } from '@/activities/hooks/useOpenCreateActivityDrawer';
+import { CompactNoteList } from '@/activities/notes/components/CompactNoteList';
 import { NoteList } from '@/activities/notes/components/NoteList';
 import { useNotes } from '@/activities/notes/hooks/useNotes';
 import { useObjectMetadataItem } from '@/object-metadata/hooks/useObjectMetadataItem';
-import { CoreObjectNameSingular } from 'twenty-shared/types';
 import { useObjectPermissionsForObject } from '@/object-record/hooks/useObjectPermissionsForObject';
 import { useTargetRecord } from '@/ui/layout/contexts/useTargetRecord';
 import { styled } from '@linaria/react';
 import { t } from '@lingui/core/macro';
-import { IconPlus } from 'twenty-ui/icon';
-import { Button } from 'twenty-ui/input';
+import { CoreObjectNameSingular } from 'twenty-shared/types';
 import {
   AnimatedPlaceholder,
   AnimatedPlaceholderEmptyContainer,
@@ -18,6 +17,9 @@ import {
   AnimatedPlaceholderEmptyTextContainer,
   AnimatedPlaceholderEmptyTitle,
 } from 'twenty-ui/feedback';
+import { IconPlus } from 'twenty-ui/icon';
+import { Button } from 'twenty-ui/input';
+import { themeCssVariables } from 'twenty-ui/theme-constants';
 
 const StyledNotesContainer = styled.div`
   display: flex;
@@ -27,7 +29,20 @@ const StyledNotesContainer = styled.div`
   overflow: auto;
 `;
 
-export const NotesCard = () => {
+const StyledCompactEmptyContainer = styled.div`
+  align-items: center;
+  color: ${themeCssVariables.font.color.tertiary};
+  display: flex;
+  gap: ${themeCssVariables.spacing[4]};
+  justify-content: space-between;
+  padding: ${themeCssVariables.spacing[4]} ${themeCssVariables.spacing[6]};
+`;
+
+type NotesCardProps = {
+  isCompact?: boolean;
+};
+
+export const NotesCard = ({ isCompact = false }: NotesCardProps) => {
   const targetRecord = useTargetRecord();
   const { notes, loading, totalCountNotes, fetchMoreNotes, hasNextPage } =
     useNotes(targetRecord);
@@ -59,6 +74,27 @@ export const NotesCard = () => {
   }
 
   if (isNotesEmpty) {
+    if (isCompact) {
+      return (
+        <StyledCompactEmptyContainer>
+          <span>{t`No notes`}</span>
+          {hasObjectUpdatePermissions && (
+            <Button
+              Icon={IconPlus}
+              size="small"
+              variant="secondary"
+              title={t`Add note`}
+              onClick={() =>
+                openCreateActivity({
+                  targetableObjects: [targetRecord],
+                })
+              }
+            />
+          )}
+        </StyledCompactEmptyContainer>
+      );
+    }
+
     return (
       <AnimatedPlaceholderEmptyContainer>
         <AnimatedPlaceholder type="noNote" />
@@ -88,26 +124,48 @@ export const NotesCard = () => {
 
   return (
     <StyledNotesContainer>
-      <NoteList
-        title={t`All`}
-        notes={notes}
-        totalCount={totalCountNotes}
-        button={
-          hasObjectUpdatePermissions && (
-            <Button
-              Icon={IconPlus}
-              size="small"
-              variant="secondary"
-              title={t`Add note`}
-              onClick={() =>
-                openCreateActivity({
-                  targetableObjects: [targetRecord],
-                })
-              }
-            />
-          )
-        }
-      />
+      {isCompact ? (
+        <CompactNoteList
+          notes={notes}
+          totalCount={totalCountNotes}
+          button={
+            hasObjectUpdatePermissions && (
+              <Button
+                Icon={IconPlus}
+                size="small"
+                variant="secondary"
+                title={t`Add note`}
+                onClick={() =>
+                  openCreateActivity({
+                    targetableObjects: [targetRecord],
+                  })
+                }
+              />
+            )
+          }
+        />
+      ) : (
+        <NoteList
+          title={t`All`}
+          notes={notes}
+          totalCount={totalCountNotes}
+          button={
+            hasObjectUpdatePermissions && (
+              <Button
+                Icon={IconPlus}
+                size="small"
+                variant="secondary"
+                title={t`Add note`}
+                onClick={() =>
+                  openCreateActivity({
+                    targetableObjects: [targetRecord],
+                  })
+                }
+              />
+            )
+          }
+        />
+      )}
       <CustomResolverFetchMoreLoader
         loading={loading}
         onLastRowVisible={handleLastRowVisible}

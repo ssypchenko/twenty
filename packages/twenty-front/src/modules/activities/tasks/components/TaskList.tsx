@@ -10,6 +10,7 @@ type TaskListProps = {
   title: string;
   tasks: Task[];
   button?: ReactElement | false;
+  showTargets?: boolean;
 };
 
 const StyledContainer = styled.div`
@@ -42,7 +43,12 @@ const StyledCount = styled.span`
   margin-left: ${themeCssVariables.spacing[2]};
 `;
 
-export const TaskList = ({ title, tasks, button }: TaskListProps) => (
+export const TaskList = ({
+  title,
+  tasks,
+  button,
+  showTargets = true,
+}: TaskListProps) => (
   <>
     {tasks.length > 0 && (
       <StyledContainer>
@@ -56,7 +62,7 @@ export const TaskList = ({ title, tasks, button }: TaskListProps) => (
         </StyledTitleBar>
         <ActivityList>
           {tasks.map((task) => (
-            <TaskRow key={task.id} task={task} />
+            <TaskRow key={task.id} task={task} showTargets={showTargets} />
           ))}
         </ActivityList>
       </StyledContainer>
