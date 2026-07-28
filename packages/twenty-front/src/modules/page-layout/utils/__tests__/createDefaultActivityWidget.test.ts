@@ -7,11 +7,21 @@ import {
 
 describe('createDefaultActivityWidget', () => {
   it.each([
-    { title: 'Notes', type: WidgetType.NOTES },
-    { title: 'Tasks', type: WidgetType.TASKS },
+    {
+      title: 'Notes',
+      type: WidgetType.NOTES,
+      configurationType: WidgetConfigurationType.NOTES,
+      configurationTypename: 'NotesConfiguration',
+    },
+    {
+      title: 'Tasks',
+      type: WidgetType.TASKS,
+      configurationType: WidgetConfigurationType.TASKS,
+      configurationTypename: 'TasksConfiguration',
+    },
   ] as const)(
-    'should create a vertical-list $title widget',
-    ({ title, type }) => {
+    'should create a server-valid vertical-list $title widget',
+    ({ title, type, configurationType, configurationTypename }) => {
       const widget = createDefaultActivityWidget({
         id: `${title.toLowerCase()}-widget-id`,
         pageLayoutTabId: 'tab-id',
@@ -26,8 +36,8 @@ describe('createDefaultActivityWidget', () => {
         type,
         objectMetadataId: null,
         configuration: {
-          configurationType: WidgetConfigurationType.FIELDS,
-          viewId: null,
+          __typename: configurationTypename,
+          configurationType,
         },
         position: {
           layoutMode: PageLayoutTabLayoutMode.VERTICAL_LIST,
