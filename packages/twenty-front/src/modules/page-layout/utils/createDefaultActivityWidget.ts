@@ -2,10 +2,21 @@ import { type PageLayoutWidget } from '@/page-layout/types/PageLayoutWidget';
 import {
   PageLayoutTabLayoutMode,
   WidgetConfigurationType,
-  type WidgetType,
+  WidgetType,
 } from '~/generated-metadata/graphql';
 
 type ActivityWidgetType = WidgetType.NOTES | WidgetType.TASKS;
+
+const getActivityWidgetConfiguration = (type: ActivityWidgetType) =>
+  type === WidgetType.NOTES
+    ? {
+        __typename: 'NotesConfiguration' as const,
+        configurationType: WidgetConfigurationType.NOTES,
+      }
+    : {
+        __typename: 'TasksConfiguration' as const,
+        configurationType: WidgetConfigurationType.TASKS,
+      };
 
 export const createDefaultActivityWidget = ({
   id,
@@ -27,11 +38,7 @@ export const createDefaultActivityWidget = ({
   title,
   isActive: true,
   type,
-  configuration: {
-    __typename: 'FieldsConfiguration',
-    configurationType: WidgetConfigurationType.FIELDS,
-    viewId: null,
-  },
+  configuration: getActivityWidgetConfiguration(type),
   gridPosition: {
     __typename: 'GridPosition',
     row: 0,
