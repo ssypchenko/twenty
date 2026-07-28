@@ -1,0 +1,51 @@
+import { type PageLayoutWidget } from '@/page-layout/types/PageLayoutWidget';
+import {
+  PageLayoutTabLayoutMode,
+  WidgetConfigurationType,
+  type WidgetType,
+} from '~/generated-metadata/graphql';
+
+type ActivityWidgetType = WidgetType.NOTES | WidgetType.TASKS;
+
+export const createDefaultActivityWidget = ({
+  id,
+  pageLayoutTabId,
+  title,
+  type,
+  positionIndex,
+}: {
+  id: string;
+  pageLayoutTabId: string;
+  title: string;
+  type: ActivityWidgetType;
+  positionIndex: number;
+}): PageLayoutWidget => ({
+  __typename: 'PageLayoutWidget',
+  id,
+  applicationId: '',
+  pageLayoutTabId,
+  title,
+  isActive: true,
+  type,
+  configuration: {
+    __typename: 'FieldsConfiguration',
+    configurationType: WidgetConfigurationType.FIELDS,
+    viewId: null,
+  },
+  gridPosition: {
+    __typename: 'GridPosition',
+    row: 0,
+    column: 0,
+    rowSpan: 1,
+    columnSpan: 12,
+  },
+  position: {
+    __typename: 'PageLayoutWidgetVerticalListPosition',
+    layoutMode: PageLayoutTabLayoutMode.VERTICAL_LIST,
+    index: positionIndex,
+  },
+  objectMetadataId: null,
+  createdAt: new Date().toISOString(),
+  updatedAt: new Date().toISOString(),
+  deletedAt: null,
+});

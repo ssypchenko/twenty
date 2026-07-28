@@ -1,4 +1,5 @@
 import { styled } from '@linaria/react';
+import { type ReactElement } from 'react';
 
 import { ActivityList } from '@/activities/components/ActivityList';
 import { type Task } from '@/activities/types/Task';
@@ -8,6 +9,8 @@ import { TaskRow } from './TaskRow';
 type TaskListProps = {
   title: string;
   tasks: Task[];
+  button?: ReactElement | false;
+  showTargets?: boolean;
 };
 
 const StyledContainer = styled.div`
@@ -40,7 +43,12 @@ const StyledCount = styled.span`
   margin-left: ${themeCssVariables.spacing[2]};
 `;
 
-export const TaskList = ({ title, tasks }: TaskListProps) => (
+export const TaskList = ({
+  title,
+  tasks,
+  button,
+  showTargets = true,
+}: TaskListProps) => (
   <>
     {tasks.length > 0 && (
       <StyledContainer>
@@ -50,10 +58,11 @@ export const TaskList = ({ title, tasks }: TaskListProps) => (
               {title} <StyledCount>{tasks.length}</StyledCount>
             </StyledTitle>
           )}
+          {button}
         </StyledTitleBar>
         <ActivityList>
           {tasks.map((task) => (
-            <TaskRow key={task.id} task={task} />
+            <TaskRow key={task.id} task={task} showTargets={showTargets} />
           ))}
         </ActivityList>
       </StyledContainer>
