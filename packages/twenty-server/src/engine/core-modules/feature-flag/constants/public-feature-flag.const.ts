@@ -66,6 +66,14 @@ export const PUBLIC_FEATURE_FLAGS: PublicFeatureFlag[] = [
         'Use the available desktop workspace for company records while keeping the company list visible',
     },
   },
+  {
+    key: FeatureFlagKey.IS_PERMAVENT_COMPANY_OVERVIEW_WIDGETS_ENABLED,
+    metadata: {
+      label: 'Permavent Company Overview Widgets',
+      description:
+        'Allow compact Notes and Tasks widgets to be added to Company record page layouts',
+    },
+  },
   ...(process.env.CLOUDFLARE_API_KEY
     ? [
         // {
