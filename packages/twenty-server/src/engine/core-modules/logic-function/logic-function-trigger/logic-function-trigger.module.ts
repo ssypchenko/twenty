@@ -13,6 +13,7 @@ import { RouteTriggerService } from 'src/engine/core-modules/logic-function/logi
 import { WorkspaceEntity } from 'src/engine/core-modules/workspace/workspace.entity';
 import { LogicFunctionEntity } from 'src/engine/metadata-modules/logic-function/logic-function.entity';
 import { WorkspaceCacheModule } from 'src/engine/workspace-cache/workspace-cache.module';
+import { PermaventSecurityModule } from 'src/engine/core-modules/permavent-security/permavent-security.module';
 
 @Module({
   imports: [
@@ -21,6 +22,7 @@ import { WorkspaceCacheModule } from 'src/engine/workspace-cache/workspace-cache
     WorkspaceDomainsModule,
     WorkspaceCacheModule,
     CronModule,
+    PermaventSecurityModule,
   ],
   providers: [
     LogicFunctionTriggerJob,

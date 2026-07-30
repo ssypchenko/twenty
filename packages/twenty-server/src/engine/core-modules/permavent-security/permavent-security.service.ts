@@ -1,6 +1,9 @@
 import { Injectable } from '@nestjs/common';
 
-import { type ObjectRecord } from 'twenty-shared/types';
+import {
+  type ObjectRecord,
+  type PermaventSalesScope,
+} from 'twenty-shared/types';
 
 import { type ObjectRecordFilter } from 'src/engine/api/graphql/workspace-query-builder/interfaces/object-record.interface';
 import {
@@ -76,6 +79,37 @@ export class PermaventSecurityService {
     private readonly securityContextFactory: PermaventSecurityContextFactory,
     private readonly accessFilterBuilder: PermaventAccessFilterBuilder,
   ) {}
+
+  public async resolveErpSalesScope(
+    authContext: WorkspaceAuthContext,
+  ): Promise<PermaventSalesScope> {
+    if (!this.twentyConfigService.get('PERMAVENT_ERP_SALES_SCOPE_ENABLED')) {
+      return { mode: 'NONE', salesRepCodes: [] };
+    }
+
+    const securityContext =
+      await this.securityContextFactory.create(authContext);
+
+    if (!securityContext.isSupportedUserContext) {
+      return { mode: 'NONE', salesRepCodes: [] };
+    }
+
+    if (securityContext.bypassSecurity) {
+      return { mode: 'ALL', salesRepCodes: [] };
+    }
+
+    if (
+      !securityContext.isRestrictedSalesRep ||
+      securityContext.allowedSalesRepCodes.length === 0
+    ) {
+      return { mode: 'NONE', salesRepCodes: [] };
+    }
+
+    return {
+      mode: 'ASSIGNED',
+      salesRepCodes: [...securityContext.allowedSalesRepCodes].sort(),
+    };
+  }
 
   public async applyToCommonQueryArgs<TArgs>({
     args,
@@ -296,10 +330,13 @@ export class PermaventSecurityService {
     authContext: WorkspaceAuthContext;
     flatObjectMetadata: FlatObjectMetadata;
   }): Promise<void> {
+    const isAssignmentObject =
+      flatObjectMetadata.nameSingular === PERMAVENT_ASSIGNMENT_OBJECT;
+
     if (
-      !this.twentyConfigService.get('PERMAVENT_SECURITY_RLS_ENABLED') ||
-      (!PERMAVENT_DIRECT_SALES_OBJECTS.has(flatObjectMetadata.nameSingular) &&
-        flatObjectMetadata.nameSingular !== PERMAVENT_ASSIGNMENT_OBJECT)
+      !isAssignmentObject &&
+      (!this.twentyConfigService.get('PERMAVENT_SECURITY_RLS_ENABLED') ||
+        !PERMAVENT_DIRECT_SALES_OBJECTS.has(flatObjectMetadata.nameSingular))
     ) {
       return;
     }

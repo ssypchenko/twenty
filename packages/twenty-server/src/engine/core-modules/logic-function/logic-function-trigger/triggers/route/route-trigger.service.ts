@@ -13,9 +13,8 @@ import { WorkspaceActivationStatus } from 'twenty-shared/workspace';
 import { AuthException } from 'src/engine/core-modules/auth/auth.exception';
 import { AccessTokenService } from 'src/engine/core-modules/auth/token/services/access-token.service';
 import { type AuthContext } from 'src/engine/core-modules/auth/types/auth-context.type';
+import { buildUserAuthContext } from 'src/engine/core-modules/auth/utils/build-user-auth-context.util';
 import { WorkspaceDomainsService } from 'src/engine/core-modules/domain/workspace-domains/services/workspace-domains.service';
-import { type WorkspaceEntity } from 'src/engine/core-modules/workspace/workspace.entity';
-import { TwentyConfigService } from 'src/engine/core-modules/twenty-config/twenty-config.service';
 import {
   RouteTriggerException,
   RouteTriggerExceptionCode,
@@ -32,6 +31,9 @@ import {
   LogicFunctionExecutionException,
   LogicFunctionExecutionExceptionCode,
 } from 'src/engine/core-modules/logic-function/logic-function-executor/logic-function-executor.service';
+import { PermaventSecurityService } from 'src/engine/core-modules/permavent-security/permavent-security.service';
+import { TwentyConfigService } from 'src/engine/core-modules/twenty-config/twenty-config.service';
+import { type WorkspaceEntity } from 'src/engine/core-modules/workspace/workspace.entity';
 import { CustomException } from 'src/utils/custom-exception';
 
 type RouteTriggerWorkspace = Pick<
@@ -55,6 +57,7 @@ export class RouteTriggerService {
     private readonly logicFunctionTriggerService: LogicFunctionTriggerService,
     private readonly workspaceDomainsService: WorkspaceDomainsService,
     private readonly twentyConfigService: TwentyConfigService,
+    private readonly permaventSecurityService: PermaventSecurityService,
     @InjectRepository(LogicFunctionEntity)
     private readonly logicFunctionRepository: Repository<LogicFunctionEntity>,
   ) {}
@@ -287,6 +290,7 @@ export class RouteTriggerService {
 
     let userWorkspaceId: string | null = null;
     let userId: string | null = null;
+    let permaventSalesScope = null;
 
     if (httpRouteSettings?.isAuthRequired) {
       const routeAuthenticationContext =
@@ -309,6 +313,25 @@ export class RouteTriggerService {
 
       userWorkspaceId = routeAuthenticationContext.userWorkspaceId ?? null;
       userId = routeAuthenticationContext.user?.id ?? null;
+
+      if (
+        isDefined(routeAuthenticationContext.userWorkspaceId) &&
+        isDefined(routeAuthenticationContext.user) &&
+        isDefined(routeAuthenticationContext.workspaceMemberId) &&
+        isDefined(routeAuthenticationContext.workspaceMember)
+      ) {
+        permaventSalesScope =
+          await this.permaventSecurityService.resolveErpSalesScope(
+            buildUserAuthContext({
+              workspace: routeAuthenticationContext.workspace,
+              userWorkspaceId: routeAuthenticationContext.userWorkspaceId,
+              user: routeAuthenticationContext.user,
+              workspaceMemberId:
+                routeAuthenticationContext.workspaceMemberId,
+              workspaceMember: routeAuthenticationContext.workspaceMember,
+            }),
+          );
+      }
     }
 
     let outcome;
@@ -323,6 +346,7 @@ export class RouteTriggerService {
         forwardAllHeaders: isIsolatedOrigin,
         userId,
         userWorkspaceId,
+        permaventSalesScope,
       });
     } catch (error) {
       if (error instanceof RouteTriggerException) {
