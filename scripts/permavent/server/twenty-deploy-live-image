@@ -58,10 +58,18 @@ cd "$compose_directory"
 mapfile -t configured_rls_flags < <(grep -E '^PERMAVENT_SECURITY_RLS_ENABLED=' .env)
 [[ "${#configured_rls_flags[@]}" -eq 1 ]] ||
   fail 'Live .env must contain exactly one PERMAVENT_SECURITY_RLS_ENABLED entry.'
-[[ "${configured_rls_flags[0]}" == 'PERMAVENT_SECURITY_RLS_ENABLED=true' ]] ||
-  fail 'Permavent RLS must be enabled for Live deployment.'
+readonly configured_rls_value="${configured_rls_flags[0]#*=}"
+[[ "$configured_rls_value" == 'true' || "$configured_rls_value" == 'false' ]] ||
+  fail 'PERMAVENT_SECURITY_RLS_ENABLED must be true or false.'
 [[ "$(grep -Ec '^[[:space:]]{6}PERMAVENT_SECURITY_RLS_ENABLED:' docker-compose.yml)" -eq 2 ]] ||
   fail 'Live Compose must forward PERMAVENT_SECURITY_RLS_ENABLED to server and worker.'
+mapfile -t configured_erp_scope_flags < <(grep -E '^PERMAVENT_ERP_SALES_SCOPE_ENABLED=' .env)
+[[ "${#configured_erp_scope_flags[@]}" -eq 1 ]] ||
+  fail 'Live .env must contain exactly one PERMAVENT_ERP_SALES_SCOPE_ENABLED entry.'
+[[ "${configured_erp_scope_flags[0]}" == 'PERMAVENT_ERP_SALES_SCOPE_ENABLED=true' ]] ||
+  fail 'Permavent ERP sales scope must be enabled for Live deployment.'
+[[ "$(grep -Ec '^[[:space:]]{6}PERMAVENT_ERP_SALES_SCOPE_ENABLED:' docker-compose.yml)" -eq 2 ]] ||
+  fail 'Live Compose must forward PERMAVENT_ERP_SALES_SCOPE_ENABLED to server and worker.'
 docker compose config --quiet
 
 umask 077
@@ -219,11 +227,17 @@ readonly expected_image_id="$(docker image inspect "$image" --format '{{.Id}}')"
 [[ "$(docker compose ps -q db)" == "$db_container_before" ]]
 [[ "$(docker compose ps -q redis)" == "$redis_container_before" ]]
 docker inspect "$server_container" --format '{{range .Config.Env}}{{println .}}{{end}}' |
-  grep -Fxq 'PERMAVENT_SECURITY_RLS_ENABLED=true' ||
-  fail 'Permavent RLS is not enabled in the Live server container.'
+  grep -Fxq "PERMAVENT_SECURITY_RLS_ENABLED=${configured_rls_value}" ||
+  fail 'Permavent RLS configuration is incorrect in the Live server container.'
 docker inspect "$worker_container" --format '{{range .Config.Env}}{{println .}}{{end}}' |
-  grep -Fxq 'PERMAVENT_SECURITY_RLS_ENABLED=true' ||
-  fail 'Permavent RLS is not enabled in the Live worker container.'
+  grep -Fxq "PERMAVENT_SECURITY_RLS_ENABLED=${configured_rls_value}" ||
+  fail 'Permavent RLS configuration is incorrect in the Live worker container.'
+docker inspect "$server_container" --format '{{range .Config.Env}}{{println .}}{{end}}' |
+  grep -Fxq 'PERMAVENT_ERP_SALES_SCOPE_ENABLED=true' ||
+  fail 'Permavent ERP sales scope is not enabled in the Live server container.'
+docker inspect "$worker_container" --format '{{range .Config.Env}}{{println .}}{{end}}' |
+  grep -Fxq 'PERMAVENT_ERP_SALES_SCOPE_ENABLED=true' ||
+  fail 'Permavent ERP sales scope is not enabled in the Live worker container.'
 
 curl --fail --silent --show-error \
   --resolve "${live_hostname}:443:127.0.0.1" \

@@ -29,6 +29,8 @@ import {
   LogicFunctionExecutionExceptionCode,
 } from 'src/engine/core-modules/logic-function/logic-function-executor/logic-function-executor.service';
 import { CustomException } from 'src/utils/custom-exception';
+import { buildUserAuthContext } from 'src/engine/core-modules/auth/utils/build-user-auth-context.util';
+import { PermaventSecurityService } from 'src/engine/core-modules/permavent-security/permavent-security.service';
 
 @Injectable()
 export class RouteTriggerService {
@@ -39,6 +41,7 @@ export class RouteTriggerService {
     private readonly logicFunctionTriggerService: LogicFunctionTriggerService,
     private readonly workspaceDomainsService: WorkspaceDomainsService,
     private readonly twentyConfigService: TwentyConfigService,
+    private readonly permaventSecurityService: PermaventSecurityService,
     @InjectRepository(LogicFunctionEntity)
     private readonly logicFunctionRepository: Repository<LogicFunctionEntity>,
   ) {}
@@ -237,6 +240,7 @@ export class RouteTriggerService {
 
     let userWorkspaceId: string | null = null;
     let userId: string | null = null;
+    let permaventSalesScope = null;
 
     if (httpRouteSettings?.isAuthRequired) {
       const authContext = await this.validateWorkspaceFromRequest({
@@ -246,6 +250,25 @@ export class RouteTriggerService {
 
       userWorkspaceId = authContext.userWorkspaceId ?? null;
       userId = authContext.user?.id ?? null;
+
+      if (
+        isDefined(authContext.workspace) &&
+        isDefined(authContext.userWorkspaceId) &&
+        isDefined(authContext.user) &&
+        isDefined(authContext.workspaceMemberId) &&
+        isDefined(authContext.workspaceMember)
+      ) {
+        permaventSalesScope =
+          await this.permaventSecurityService.resolveErpSalesScope(
+            buildUserAuthContext({
+              workspace: authContext.workspace,
+              userWorkspaceId: authContext.userWorkspaceId,
+              user: authContext.user,
+              workspaceMemberId: authContext.workspaceMemberId,
+              workspaceMember: authContext.workspaceMember,
+            }),
+          );
+      }
     }
 
     let outcome;
@@ -260,6 +283,7 @@ export class RouteTriggerService {
         forwardAllHeaders: isIsolatedOrigin,
         userId,
         userWorkspaceId,
+        permaventSalesScope,
       });
     } catch (error) {
       if (error instanceof RouteTriggerException) {
