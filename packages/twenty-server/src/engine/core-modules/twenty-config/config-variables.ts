@@ -124,6 +124,17 @@ export class ConfigVariables {
 
   @ConfigVariablesMetadata({
     group: ConfigVariablesGroup.ADVANCED_SETTINGS,
+    description:
+      'Resolve Permavent ERP sales scope for authenticated Logic Functions',
+    isEnvOnly: true,
+    isHiddenInAdminPanel: true,
+    type: ConfigVariableType.BOOLEAN,
+  })
+  @IsOptional()
+  PERMAVENT_ERP_SALES_SCOPE_ENABLED = false;
+
+  @ConfigVariablesMetadata({
+    group: ConfigVariablesGroup.ADVANCED_SETTINGS,
     description: 'Enable trusted delegated user context for approved API keys',
     isEnvOnly: true,
     isHiddenInAdminPanel: true,

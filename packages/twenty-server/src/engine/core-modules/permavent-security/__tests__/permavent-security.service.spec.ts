@@ -257,6 +257,59 @@ describe('PermaventSecurityService', () => {
     await expect(service.applyToCommonQueryArgs(input)).resolves.toBe(args);
   });
 
+  it('should resolve unrestricted ERP sales scope for a bypass role', async () => {
+    createSecurityContext.mockResolvedValue({
+      ...restrictedSalesRepContext,
+      bypassSecurity: true,
+      isRestrictedSalesRep: false,
+      allowedSalesRepCodes: [],
+    });
+
+    await expect(
+      service.resolveErpSalesScope({} as WorkspaceAuthContext),
+    ).resolves.toEqual({
+      mode: 'ALL',
+      salesRepCodes: [],
+    });
+  });
+
+  it('should resolve assigned ERP sales scope for a Sales Rep', async () => {
+    await expect(
+      service.resolveErpSalesScope({} as WorkspaceAuthContext),
+    ).resolves.toEqual({
+      mode: 'ASSIGNED',
+      salesRepCodes: ['DM', 'RT'],
+    });
+  });
+
+  it('should fail closed when a Sales Rep has no ERP assignments', async () => {
+    createSecurityContext.mockResolvedValue({
+      ...restrictedSalesRepContext,
+      allowedSalesRepCodes: [],
+    });
+
+    await expect(
+      service.resolveErpSalesScope({} as WorkspaceAuthContext),
+    ).resolves.toEqual({
+      mode: 'NONE',
+      salesRepCodes: [],
+    });
+  });
+
+  it('should fail closed when ERP sales scope is disabled', async () => {
+    getConfigVariable.mockImplementation(
+      (key) => key !== 'PERMAVENT_ERP_SALES_SCOPE_ENABLED',
+    );
+
+    await expect(
+      service.resolveErpSalesScope({} as WorkspaceAuthContext),
+    ).resolves.toEqual({
+      mode: 'NONE',
+      salesRepCodes: [],
+    });
+    expect(createSecurityContext).not.toHaveBeenCalled();
+  });
+
   it('should leave security disabled behaviour unchanged', async () => {
     getConfigVariable.mockReturnValue(false);
 
@@ -264,9 +317,27 @@ describe('PermaventSecurityService', () => {
     expect(createSecurityContext).not.toHaveBeenCalled();
   });
 
+  it('should protect Sales Rep assignments when CRM territory RLS is disabled', async () => {
+    getConfigVariable.mockReturnValue(false);
+
+    await expect(
+      service.applyToCommonQueryArgs({
+        ...input,
+        operationName: CommonQueryNames.FIND_MANY,
+        flatObjectMetadata: {
+          nameSingular: 'salesrepassignment',
+        } as FlatObjectMetadata,
+      }),
+    ).rejects.toMatchObject({
+      code: PermissionsExceptionCode.PERMISSION_DENIED,
+    });
+  });
+
   it('should define the feature flag as environment-only and disabled by default', () => {
     expect(new ConfigVariables().PERMAVENT_SECURITY_RLS_ENABLED).toBe(false);
     expect(isEnvOnlyConfigVar('PERMAVENT_SECURITY_RLS_ENABLED')).toBe(true);
+    expect(new ConfigVariables().PERMAVENT_ERP_SALES_SCOPE_ENABLED).toBe(false);
+    expect(isEnvOnlyConfigVar('PERMAVENT_ERP_SALES_SCOPE_ENABLED')).toBe(true);
     expect(new ConfigVariables().PERMAVENT_DELEGATED_API_CONTEXT_ENABLED).toBe(
       false,
     );

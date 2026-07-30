@@ -203,6 +203,10 @@ printf 'Starting complete Test-to-Live promotion at %s.\n' \
 for directory in "$live_directory" "$test_directory"; do
   [[ -f "${directory}/.env" ]] || fail "Missing ${directory}/.env"
   [[ -f "${directory}/docker-compose.yml" ]] || fail "Missing Compose file in ${directory}"
+  [[ "$(grep -Ec '^[[:space:]]{6}PERMAVENT_SECURITY_RLS_ENABLED:' "${directory}/docker-compose.yml")" -eq 2 ]] ||
+    fail "${directory}/docker-compose.yml must forward PERMAVENT_SECURITY_RLS_ENABLED to server and worker."
+  [[ "$(grep -Ec '^[[:space:]]{6}PERMAVENT_ERP_SALES_SCOPE_ENABLED:' "${directory}/docker-compose.yml")" -eq 2 ]] ||
+    fail "${directory}/docker-compose.yml must forward PERMAVENT_ERP_SALES_SCOPE_ENABLED to server and worker."
   (cd "$directory" && docker compose config --quiet)
 done
 
@@ -214,6 +218,9 @@ test_tag="$(grep -E '^TAG=' "${test_directory}/.env" | cut -d= -f2-)"
 test_rls="$(grep -E '^PERMAVENT_SECURITY_RLS_ENABLED=' "${test_directory}/.env" | cut -d= -f2- || true)"
 [[ "$test_rls" == 'true' || "$test_rls" == 'false' ]] ||
   fail 'Test must explicitly configure PERMAVENT_SECURITY_RLS_ENABLED.'
+test_erp_scope="$(grep -E '^PERMAVENT_ERP_SALES_SCOPE_ENABLED=' "${test_directory}/.env" | cut -d= -f2- || true)"
+[[ "$test_erp_scope" == 'true' ]] ||
+  fail 'Test must explicitly enable PERMAVENT_ERP_SALES_SCOPE_ENABLED.'
 
 cp --preserve=mode,ownership,timestamps "${live_directory}/.env" "$live_env_backup"
 live_env_next="${run_directory}/live.env.next"
@@ -222,6 +229,11 @@ if grep -q '^PERMAVENT_SECURITY_RLS_ENABLED=' "$live_env_next"; then
   sed -i "s/^PERMAVENT_SECURITY_RLS_ENABLED=.*/PERMAVENT_SECURITY_RLS_ENABLED=${test_rls}/" "$live_env_next"
 else
   printf '\nPERMAVENT_SECURITY_RLS_ENABLED=%s\n' "$test_rls" >> "$live_env_next"
+fi
+if grep -q '^PERMAVENT_ERP_SALES_SCOPE_ENABLED=' "$live_env_next"; then
+  sed -i "s/^PERMAVENT_ERP_SALES_SCOPE_ENABLED=.*/PERMAVENT_ERP_SALES_SCOPE_ENABLED=${test_erp_scope}/" "$live_env_next"
+else
+  printf '\nPERMAVENT_ERP_SALES_SCOPE_ENABLED=%s\n' "$test_erp_scope" >> "$live_env_next"
 fi
 (cd "$live_directory" && docker compose --env-file "$live_env_next" config --quiet)
 

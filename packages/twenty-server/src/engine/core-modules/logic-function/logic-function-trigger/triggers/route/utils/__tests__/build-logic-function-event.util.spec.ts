@@ -356,6 +356,10 @@ describe('buildLogicFunctionEvent', () => {
       pathParameters: { id: '123' },
       forwardedRequestHeaders: ['content-type', 'authorization'],
       userWorkspaceId: 'uws-1',
+      permaventSalesScope: {
+        mode: 'ASSIGNED',
+        salesRepCodes: ['DM', 'RT'],
+      },
     });
 
     expect(result).toEqual({
@@ -374,7 +378,22 @@ describe('buildLogicFunctionEvent', () => {
         },
       },
       userWorkspaceId: 'uws-1',
+      permaventSalesScope: {
+        mode: 'ASSIGNED',
+        salesRepCodes: ['DM', 'RT'],
+      },
     });
+  });
+
+  it('should default the Permavent sales scope to null', () => {
+    const result = buildLogicFunctionEvent({
+      request: createMockRequest(),
+      pathParameters: {},
+      forwardedRequestHeaders: [],
+      userWorkspaceId: 'uws-1',
+    });
+
+    expect(result.permaventSalesScope).toBeNull();
   });
 
   it('should preserve the request path as-is', () => {
