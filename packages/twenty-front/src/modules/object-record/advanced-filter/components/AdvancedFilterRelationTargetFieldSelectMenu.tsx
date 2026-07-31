@@ -1,6 +1,7 @@
 import { type FieldMetadataItem } from '@/object-metadata/types/FieldMetadataItem';
 import { isManyToOneRelationField } from '@/object-metadata/utils/isManyToOneRelationField';
 import { useAdvancedFilterFieldSelectDropdown } from '@/object-record/advanced-filter/hooks/useAdvancedFilterFieldSelectDropdown';
+import { useApplyAdvancedFilterSourceField } from '@/object-record/advanced-filter/hooks/useApplyAdvancedFilterSourceField';
 import { useApplyAdvancedFilterRelationTargetField } from '@/object-record/advanced-filter/hooks/useApplyAdvancedFilterRelationTargetField';
 import { usePushFocusForLeafFieldValuePicker } from '@/object-record/advanced-filter/hooks/usePushFocusForLeafFieldValuePicker';
 import { fieldMetadataItemUsedInDropdownComponentSelector } from '@/object-record/object-filter-dropdown/states/fieldMetadataItemUsedInDropdownComponentSelector';
@@ -44,6 +45,9 @@ export const AdvancedFilterRelationTargetFieldSelectMenu = ({
 
   const { applyAdvancedFilterRelationTargetField } =
     useApplyAdvancedFilterRelationTargetField();
+
+  const { applyAdvancedFilterSourceField } =
+    useApplyAdvancedFilterSourceField();
 
   const { pushFocusForLeafFieldValuePicker } =
     usePushFocusForLeafFieldValuePicker();
@@ -91,7 +95,22 @@ export const AdvancedFilterRelationTargetFieldSelectMenu = ({
     closeAdvancedFilterFieldSelectDropdown();
   };
 
-  const selectableItemIdArray = relationTargetFields.map((field) => field.id);
+  const handleSelectRelation = () => {
+    applyAdvancedFilterSourceField({
+      sourceFieldMetadataItem,
+      recordFilterId,
+    });
+
+    pushFocusForLeafFieldValuePicker(sourceFieldMetadataItem);
+
+    setObjectFilterDropdownIsSelectingRelationTargetField(false);
+    closeAdvancedFilterFieldSelectDropdown();
+  };
+
+  const selectableItemIdArray = [
+    sourceFieldMetadataItem.id,
+    ...relationTargetFields.map((field) => field.id),
+  ];
 
   return (
     <DropdownContent widthInPixels={GenericDropdownContentWidth.ExtraLarge}>
@@ -111,6 +130,18 @@ export const AdvancedFilterRelationTargetFieldSelectMenu = ({
           selectableItemIdArray={selectableItemIdArray}
           selectableListInstanceId={advancedFilterFieldSelectDropdownId}
         >
+          <SelectableListItem
+            itemId={sourceFieldMetadataItem.id}
+            onEnter={handleSelectRelation}
+          >
+            <MenuItem
+              testId="select-filter-relation-source"
+              focused={selectedItemId === sourceFieldMetadataItem.id}
+              onClick={handleSelectRelation}
+              text={sourceFieldMetadataItem.label}
+              LeftIcon={getIcon(sourceFieldMetadataItem.icon)}
+            />
+          </SelectableListItem>
           {relationTargetFields.map((targetField, index) => (
             <SelectableListItem
               itemId={targetField.id}
