@@ -14,6 +14,7 @@ import {
 import { type WorkspaceAuthContext } from 'src/engine/core-modules/auth/types/workspace-auth-context.type';
 import { PermaventSecurityContextFactory } from 'src/engine/core-modules/permavent-security/context/permavent-security-context.factory';
 import { PermaventAccessFilterBuilder } from 'src/engine/core-modules/permavent-security/filters/permavent-access-filter.builder';
+import { PermaventCompanyFocusFilterService } from 'src/engine/core-modules/permavent-security/focus/permavent-company-focus-filter.service';
 import { type PermaventCommonQueryHookInput } from 'src/engine/core-modules/permavent-security/types/permavent-common-query-hook-input.type';
 import { mergePermaventSecurityFilter } from 'src/engine/core-modules/permavent-security/utils/merge-permavent-security-filter.util';
 import { TwentyConfigService } from 'src/engine/core-modules/twenty-config/twenty-config.service';
@@ -78,6 +79,7 @@ export class PermaventSecurityService {
     private readonly twentyConfigService: TwentyConfigService,
     private readonly securityContextFactory: PermaventSecurityContextFactory,
     private readonly accessFilterBuilder: PermaventAccessFilterBuilder,
+    private readonly companyFocusFilterService: PermaventCompanyFocusFilterService,
   ) {}
 
   public async resolveErpSalesScope(
@@ -160,8 +162,15 @@ export class PermaventSecurityService {
     }
 
     const queryArgs = args as TArgs & QueryArgsWithFilter;
+    const focusFilter = PERMAVENT_FILTERED_READ_OPERATIONS.has(operationName)
+      ? await this.companyFocusFilterService.applyToFilter({
+          filter: queryArgs.filter,
+          authContext,
+          flatObjectMetadata,
+        })
+      : queryArgs.filter;
     const filter = await this.applyToMutationFilter({
-      filter: queryArgs.filter,
+      filter: focusFilter,
       operationName,
       authContext,
       flatObjectMetadata,

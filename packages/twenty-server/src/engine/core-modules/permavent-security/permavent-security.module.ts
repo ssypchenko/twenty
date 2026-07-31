@@ -3,6 +3,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { PermaventSalesRepAssignmentService } from 'src/engine/core-modules/permavent-security/assignments/permavent-sales-rep-assignment.service';
 import { PermaventSecurityContextFactory } from 'src/engine/core-modules/permavent-security/context/permavent-security-context.factory';
+import { PermaventCompanyFocusFilterService } from 'src/engine/core-modules/permavent-security/focus/permavent-company-focus-filter.service';
 import { PermaventAccessFilterBuilder } from 'src/engine/core-modules/permavent-security/filters/permavent-access-filter.builder';
 import { PermaventSecurityService } from 'src/engine/core-modules/permavent-security/permavent-security.service';
 import { PermaventDelegatedContextService } from 'src/engine/core-modules/permavent-security/delegated-context/services/permavent-delegated-context.service';
@@ -21,6 +22,7 @@ import { WorkspaceCacheModule } from 'src/engine/workspace-cache/workspace-cache
     PermaventSalesRepAssignmentService,
     PermaventAccessFilterBuilder,
     PermaventSecurityContextFactory,
+    PermaventCompanyFocusFilterService,
     PermaventSecurityService,
     PermaventDelegatedAuditService,
     PermaventDelegatedContextService,

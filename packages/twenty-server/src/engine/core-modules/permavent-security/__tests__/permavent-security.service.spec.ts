@@ -4,6 +4,10 @@ import { type PermaventSecurityContextFactory } from 'src/engine/core-modules/pe
 import { type PermaventSecurityContext } from 'src/engine/core-modules/permavent-security/context/permavent-security-context.type';
 import { PermaventAccessFilterBuilder } from 'src/engine/core-modules/permavent-security/filters/permavent-access-filter.builder';
 import {
+  PERMAVENT_ACTIVE_SALES_REP_CODES_MARKER,
+  PermaventCompanyFocusFilterService,
+} from 'src/engine/core-modules/permavent-security/focus/permavent-company-focus-filter.service';
+import {
   PERMAVENT_SYSTEM_FIELD_NAMES,
   PermaventSecurityService,
 } from 'src/engine/core-modules/permavent-security/permavent-security.service';
@@ -23,6 +27,12 @@ describe('PermaventSecurityService', () => {
       create: createSecurityContext,
     } as unknown as PermaventSecurityContextFactory,
     new PermaventAccessFilterBuilder(),
+    new PermaventCompanyFocusFilterService(
+      { get: getConfigVariable } as unknown as TwentyConfigService,
+      {
+        create: createSecurityContext,
+      } as unknown as PermaventSecurityContextFactory,
+    ),
   );
   const args = { filter: { name: { eq: 'Example company' } }, first: 20 };
   const input: PermaventCommonQueryHookInput<typeof args> = {
@@ -98,6 +108,116 @@ describe('PermaventSecurityService', () => {
         ],
       },
     });
+  });
+
+  it('should expand the My Companies marker while CRM territory RLS is disabled', async () => {
+    getConfigVariable.mockImplementation(
+      (key) => key === 'PERMAVENT_MY_COMPANIES_FOCUS_ENABLED',
+    );
+    const focusArgs = {
+      filter: {
+        or: [
+          { accountOwnerId: { eq: 'workspace-member-id' } },
+          {
+            createdBy: {
+              workspaceMemberId: { eq: 'workspace-member-id' },
+            },
+          },
+          {
+            erpsalesrepcode: {
+              ilike: `%${PERMAVENT_ACTIVE_SALES_REP_CODES_MARKER}%`,
+            },
+          },
+        ],
+      },
+    };
+
+    await expect(
+      service.applyToCommonQueryArgs({ ...input, args: focusArgs }),
+    ).resolves.toEqual({
+      filter: {
+        or: [
+          { accountOwnerId: { eq: 'workspace-member-id' } },
+          {
+            createdBy: {
+              workspaceMemberId: { eq: 'workspace-member-id' },
+            },
+          },
+          { erpsalesrepcode: { in: ['DM', 'RT'] } },
+        ],
+      },
+    });
+  });
+
+  it('should preserve the owner branch when a Sales Rep has no assignments', async () => {
+    getConfigVariable.mockImplementation(
+      (key) => key === 'PERMAVENT_MY_COMPANIES_FOCUS_ENABLED',
+    );
+    createSecurityContext.mockResolvedValue({
+      ...restrictedSalesRepContext,
+      allowedSalesRepCodes: [],
+    });
+    const focusArgs = {
+      filter: {
+        or: [
+          { accountOwnerId: { eq: 'workspace-member-id' } },
+          {
+            erpsalesrepcode: {
+              ilike: `%${PERMAVENT_ACTIVE_SALES_REP_CODES_MARKER}%`,
+            },
+          },
+        ],
+      },
+    };
+
+    await expect(
+      service.applyToCommonQueryArgs({ ...input, args: focusArgs }),
+    ).resolves.toEqual({
+      filter: {
+        or: [
+          { accountOwnerId: { eq: 'workspace-member-id' } },
+          {
+            and: [{ id: { is: 'NULL' } }, { id: { is: 'NOT_NULL' } }],
+          },
+        ],
+      },
+    });
+  });
+
+  it('should leave the marker unchanged when the focus feature is disabled', async () => {
+    getConfigVariable.mockReturnValue(false);
+    const focusArgs = {
+      filter: {
+        erpsalesrepcode: {
+          ilike: `%${PERMAVENT_ACTIVE_SALES_REP_CODES_MARKER}%`,
+        },
+      },
+    };
+
+    await expect(
+      service.applyToCommonQueryArgs({ ...input, args: focusArgs }),
+    ).resolves.toBe(focusArgs);
+  });
+
+  it('should not expand the marker for another object type', async () => {
+    getConfigVariable.mockImplementation(
+      (key) => key === 'PERMAVENT_MY_COMPANIES_FOCUS_ENABLED',
+    );
+    const focusArgs = {
+      filter: {
+        erpsalesrepcode: {
+          ilike: `%${PERMAVENT_ACTIVE_SALES_REP_CODES_MARKER}%`,
+        },
+      },
+    };
+
+    await expect(
+      service.applyToCommonQueryArgs({
+        ...input,
+        args: focusArgs,
+        flatObjectMetadata: { nameSingular: 'branch' } as FlatObjectMetadata,
+      }),
+    ).resolves.toBe(focusArgs);
   });
 
   it.each(['person', 'opportunity'])(
@@ -338,6 +458,12 @@ describe('PermaventSecurityService', () => {
     expect(isEnvOnlyConfigVar('PERMAVENT_SECURITY_RLS_ENABLED')).toBe(true);
     expect(new ConfigVariables().PERMAVENT_ERP_SALES_SCOPE_ENABLED).toBe(false);
     expect(isEnvOnlyConfigVar('PERMAVENT_ERP_SALES_SCOPE_ENABLED')).toBe(true);
+    expect(new ConfigVariables().PERMAVENT_MY_COMPANIES_FOCUS_ENABLED).toBe(
+      false,
+    );
+    expect(isEnvOnlyConfigVar('PERMAVENT_MY_COMPANIES_FOCUS_ENABLED')).toBe(
+      true,
+    );
     expect(new ConfigVariables().PERMAVENT_DELEGATED_API_CONTEXT_ENABLED).toBe(
       false,
     );
