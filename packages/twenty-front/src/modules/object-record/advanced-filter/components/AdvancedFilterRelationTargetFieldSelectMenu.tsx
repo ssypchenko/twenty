@@ -1,9 +1,8 @@
-import { useObjectMetadataItem } from '@/object-metadata/hooks/useObjectMetadataItem';
 import { type FieldMetadataItem } from '@/object-metadata/types/FieldMetadataItem';
 import { isManyToOneRelationField } from '@/object-metadata/utils/isManyToOneRelationField';
 import { useAdvancedFilterFieldSelectDropdown } from '@/object-record/advanced-filter/hooks/useAdvancedFilterFieldSelectDropdown';
-import { useApplyAdvancedFilterRelationTargetField } from '@/object-record/advanced-filter/hooks/useApplyAdvancedFilterRelationTargetField';
 import { useApplyAdvancedFilterSourceField } from '@/object-record/advanced-filter/hooks/useApplyAdvancedFilterSourceField';
+import { useApplyAdvancedFilterRelationTargetField } from '@/object-record/advanced-filter/hooks/useApplyAdvancedFilterRelationTargetField';
 import { usePushFocusForLeafFieldValuePicker } from '@/object-record/advanced-filter/hooks/usePushFocusForLeafFieldValuePicker';
 import { fieldMetadataItemUsedInDropdownComponentSelector } from '@/object-record/object-filter-dropdown/states/fieldMetadataItemUsedInDropdownComponentSelector';
 import { objectFilterDropdownIsSelectingRelationTargetFieldComponentState } from '@/object-record/object-filter-dropdown/states/objectFilterDropdownIsSelectingRelationTargetFieldComponentState';
@@ -12,7 +11,6 @@ import { DropdownContent } from '@/ui/layout/dropdown/components/DropdownContent
 import { DropdownMenuHeader } from '@/ui/layout/dropdown/components/DropdownMenuHeader/DropdownMenuHeader';
 import { DropdownMenuHeaderLeftComponent } from '@/ui/layout/dropdown/components/DropdownMenuHeader/internal/DropdownMenuHeaderLeftComponent';
 import { DropdownMenuItemsContainer } from '@/ui/layout/dropdown/components/DropdownMenuItemsContainer';
-import { DropdownMenuSeparator } from '@/ui/layout/dropdown/components/DropdownMenuSeparator';
 import { GenericDropdownContentWidth } from '@/ui/layout/dropdown/constants/GenericDropdownContentWidth';
 import { SelectableList } from '@/ui/layout/selectable-list/components/SelectableList';
 import { SelectableListItem } from '@/ui/layout/selectable-list/components/SelectableListItem';
@@ -20,12 +18,9 @@ import { selectedItemIdComponentState } from '@/ui/layout/selectable-list/states
 import { useAtomComponentSelectorValue } from '@/ui/utilities/state/jotai/hooks/useAtomComponentSelectorValue';
 import { useAtomComponentStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomComponentStateValue';
 import { useSetAtomComponentState } from '@/ui/utilities/state/jotai/hooks/useSetAtomComponentState';
-import { CoreObjectNameSingular } from 'twenty-shared/types';
 import { isDefined } from 'twenty-shared/utils';
-import { IconChevronLeft, IconUserCircle, useIcons } from 'twenty-ui/icon';
+import { IconChevronLeft, useIcons } from 'twenty-ui/icon';
 import { MenuItem } from 'twenty-ui/navigation';
-
-const RELATION_RECORD_SELECTABLE_ITEM_ID = 'relation-record-select';
 
 type AdvancedFilterRelationTargetFieldSelectMenuProps = {
   recordFilterId: string;
@@ -65,11 +60,6 @@ export const AdvancedFilterRelationTargetFieldSelectMenu = ({
     advancedFilterFieldSelectDropdownId,
   );
 
-  const { objectMetadataItem: workspaceMemberObjectMetadataItem } =
-    useObjectMetadataItem({
-      objectNameSingular: CoreObjectNameSingular.WorkspaceMember,
-    });
-
   const targetObjectMetadataId =
     isDefined(sourceFieldMetadataItem) &&
     isManyToOneRelationField(sourceFieldMetadataItem)
@@ -85,10 +75,6 @@ export const AdvancedFilterRelationTargetFieldSelectMenu = ({
   ) {
     return null;
   }
-
-  const isWorkspaceMemberTarget =
-    sourceFieldMetadataItem.relation.targetObjectMetadata.nameSingular ===
-    CoreObjectNameSingular.WorkspaceMember;
 
   const handleSubMenuBack = () => {
     setObjectFilterDropdownIsSelectingRelationTargetField(false);
@@ -109,18 +95,20 @@ export const AdvancedFilterRelationTargetFieldSelectMenu = ({
     closeAdvancedFilterFieldSelectDropdown();
   };
 
-  const handleSelectRelationRecord = () => {
+  const handleSelectRelation = () => {
     applyAdvancedFilterSourceField({
       sourceFieldMetadataItem,
       recordFilterId,
     });
+
+    pushFocusForLeafFieldValuePicker(sourceFieldMetadataItem);
 
     setObjectFilterDropdownIsSelectingRelationTargetField(false);
     closeAdvancedFilterFieldSelectDropdown();
   };
 
   const selectableItemIdArray = [
-    ...(isWorkspaceMemberTarget ? [RELATION_RECORD_SELECTABLE_ITEM_ID] : []),
+    sourceFieldMetadataItem.id,
     ...relationTargetFields.map((field) => field.id),
   ];
 
@@ -142,25 +130,18 @@ export const AdvancedFilterRelationTargetFieldSelectMenu = ({
           selectableItemIdArray={selectableItemIdArray}
           selectableListInstanceId={advancedFilterFieldSelectDropdownId}
         >
-          {isWorkspaceMemberTarget && (
-            <>
-              <SelectableListItem
-                itemId={RELATION_RECORD_SELECTABLE_ITEM_ID}
-                onEnter={handleSelectRelationRecord}
-              >
-                <MenuItem
-                  focused={
-                    selectedItemId === RELATION_RECORD_SELECTABLE_ITEM_ID
-                  }
-                  testId="select-filter-relation-record"
-                  onClick={handleSelectRelationRecord}
-                  text={workspaceMemberObjectMetadataItem.labelSingular}
-                  LeftIcon={IconUserCircle}
-                />
-              </SelectableListItem>
-              <DropdownMenuSeparator />
-            </>
-          )}
+          <SelectableListItem
+            itemId={sourceFieldMetadataItem.id}
+            onEnter={handleSelectRelation}
+          >
+            <MenuItem
+              testId="select-filter-relation-source"
+              focused={selectedItemId === sourceFieldMetadataItem.id}
+              onClick={handleSelectRelation}
+              text={sourceFieldMetadataItem.label}
+              LeftIcon={getIcon(sourceFieldMetadataItem.icon)}
+            />
+          </SelectableListItem>
           {relationTargetFields.map((targetField, index) => (
             <SelectableListItem
               itemId={targetField.id}

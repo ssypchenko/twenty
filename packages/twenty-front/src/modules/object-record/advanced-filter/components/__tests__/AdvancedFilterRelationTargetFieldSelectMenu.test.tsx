@@ -1,5 +1,5 @@
 import { fireEvent, render, waitFor } from '@testing-library/react';
-import { useEffect, useState } from 'react';
+import { type ReactNode, useEffect, useState } from 'react';
 
 import { isManyToOneRelationField } from '@/object-metadata/utils/isManyToOneRelationField';
 import { AdvancedFilterRelationTargetFieldSelectMenu } from '@/object-record/advanced-filter/components/AdvancedFilterRelationTargetFieldSelectMenu';
@@ -9,8 +9,8 @@ import { RecordFiltersComponentInstanceContext } from '@/object-record/record-fi
 import { currentRecordFiltersComponentState } from '@/object-record/record-filter/states/currentRecordFiltersComponentState';
 import { useAtomComponentStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomComponentStateValue';
 import { useSetAtomComponentState } from '@/ui/utilities/state/jotai/hooks/useSetAtomComponentState';
-import { getMockObjectMetadataItemOrThrow } from '~/testing/utils/getMockObjectMetadataItemOrThrow';
 import { getJestMetadataAndApolloMocksWrapper } from '~/testing/jest/getJestMetadataAndApolloMocksWrapper';
+import { getMockObjectMetadataItemOrThrow } from '~/testing/utils/getMockObjectMetadataItemOrThrow';
 
 const INSTANCE_ID = 'advanced-filter-relation-target-test';
 const FILTER_ID = 'relation-target-filter';
@@ -52,7 +52,7 @@ const Seed = ({
   children,
 }: {
   sourceFieldMetadataId: string;
-  children: React.ReactNode;
+  children: ReactNode;
 }) => {
   const setFieldMetadataItemIdUsedInDropdown = useSetAtomComponentState(
     fieldMetadataItemIdUsedInDropdownComponentState,
@@ -90,34 +90,25 @@ const renderSubMenu = (sourceFieldMetadataId: string) => {
 };
 
 describe('AdvancedFilterRelationTargetFieldSelectMenu', () => {
-  it('shows a "filter by record" entry when the relation target is workspaceMember', async () => {
-    const { getByTestId } = renderSubMenu(workspaceMemberRelationField.id);
+  it.each([
+    ['workspace member', workspaceMemberRelationField.id],
+    ['non-workspace member', nonWorkspaceMemberRelationField.id],
+  ])('shows a direct relation entry for a %s relation', async (_, fieldId) => {
+    const { getByTestId } = renderSubMenu(fieldId);
 
     await waitFor(() => {
-      expect(getByTestId('select-filter-relation-record')).toBeInTheDocument();
+      expect(getByTestId('select-filter-relation-source')).toBeInTheDocument();
     });
   });
 
-  it('does not show the "filter by record" entry for a non-workspaceMember relation', async () => {
-    const { findByText, queryByTestId } = renderSubMenu(
-      nonWorkspaceMemberRelationField.id,
-    );
-
-    await findByText(nonWorkspaceMemberRelationField.label);
-
-    expect(
-      queryByTestId('select-filter-relation-record'),
-    ).not.toBeInTheDocument();
-  });
-
-  it('creates a direct RELATION filter (relationTargetFieldMetadataId null) when the record entry is selected', async () => {
+  it('creates a direct RELATION filter when the source entry is selected', async () => {
     const { getByTestId } = renderSubMenu(workspaceMemberRelationField.id);
 
-    const recordEntry = await waitFor(() =>
-      getByTestId('select-filter-relation-record'),
+    const sourceEntry = await waitFor(() =>
+      getByTestId('select-filter-relation-source'),
     );
 
-    fireEvent.click(recordEntry);
+    fireEvent.click(sourceEntry);
 
     await waitFor(() => {
       const currentRecordFilters = JSON.parse(
