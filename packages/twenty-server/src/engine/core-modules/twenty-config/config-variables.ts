@@ -155,6 +155,17 @@ export class ConfigVariables {
   @ConfigVariablesMetadata({
     group: ConfigVariablesGroup.ADVANCED_SETTINGS,
     description:
+      'Enable the Permavent scoped source endpoint for weekly Sales Rep reports',
+    isEnvOnly: true,
+    isHiddenInAdminPanel: true,
+    type: ConfigVariableType.BOOLEAN,
+  })
+  @IsOptional()
+  PERMAVENT_WEEKLY_SALES_REPORT_ENABLED = false;
+
+  @ConfigVariablesMetadata({
+    group: ConfigVariablesGroup.ADVANCED_SETTINGS,
+    description:
       'Comma-separated non-secret API key IDs approved for delegated user context',
     isEnvOnly: true,
     isHiddenInAdminPanel: true,
