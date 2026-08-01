@@ -291,6 +291,7 @@ export class RouteTriggerService {
     let userWorkspaceId: string | null = null;
     let userId: string | null = null;
     let permaventSalesScope = null;
+    let permaventActorContext = null;
 
     if (httpRouteSettings?.isAuthRequired) {
       const routeAuthenticationContext =
@@ -320,17 +321,20 @@ export class RouteTriggerService {
         isDefined(routeAuthenticationContext.workspaceMemberId) &&
         isDefined(routeAuthenticationContext.workspaceMember)
       ) {
-        permaventSalesScope =
-          await this.permaventSecurityService.resolveErpSalesScope(
-            buildUserAuthContext({
-              workspace: routeAuthenticationContext.workspace,
-              userWorkspaceId: routeAuthenticationContext.userWorkspaceId,
-              user: routeAuthenticationContext.user,
-              workspaceMemberId:
-                routeAuthenticationContext.workspaceMemberId,
-              workspaceMember: routeAuthenticationContext.workspaceMember,
-            }),
-          );
+        const userAuthContext = buildUserAuthContext({
+          workspace: routeAuthenticationContext.workspace,
+          userWorkspaceId: routeAuthenticationContext.userWorkspaceId,
+          user: routeAuthenticationContext.user,
+          workspaceMemberId: routeAuthenticationContext.workspaceMemberId,
+          workspaceMember: routeAuthenticationContext.workspaceMember,
+        });
+
+        [permaventSalesScope, permaventActorContext] = await Promise.all([
+          this.permaventSecurityService.resolveErpSalesScope(userAuthContext),
+          this.permaventSecurityService.resolveLogicFunctionActorContext(
+            userAuthContext,
+          ),
+        ]);
       }
     }
 
@@ -347,6 +351,7 @@ export class RouteTriggerService {
         userId,
         userWorkspaceId,
         permaventSalesScope,
+        permaventActorContext,
       });
     } catch (error) {
       if (error instanceof RouteTriggerException) {

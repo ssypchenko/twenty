@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 
 import {
   type ObjectRecord,
+  type PermaventLogicFunctionActorContext,
   type PermaventSalesScope,
 } from 'twenty-shared/types';
 
@@ -110,6 +111,34 @@ export class PermaventSecurityService {
     return {
       mode: 'ASSIGNED',
       salesRepCodes: [...securityContext.allowedSalesRepCodes].sort(),
+    };
+  }
+
+  public async resolveLogicFunctionActorContext(
+    authContext: WorkspaceAuthContext,
+  ): Promise<PermaventLogicFunctionActorContext | null> {
+    if (
+      !this.twentyConfigService.get('PERMAVENT_WEEKLY_SALES_REPORT_ENABLED')
+    ) {
+      return null;
+    }
+
+    const securityContext =
+      await this.securityContextFactory.create(authContext);
+
+    if (
+      !securityContext.isSupportedUserContext ||
+      securityContext.workspaceMemberId === null ||
+      securityContext.userEmail === null
+    ) {
+      return null;
+    }
+
+    return {
+      workspaceMemberId: securityContext.workspaceMemberId,
+      userEmail: securityContext.userEmail,
+      roleUniversalIdentifier: securityContext.roleUniversalIdentifier,
+      isRestrictedSalesRep: securityContext.isRestrictedSalesRep,
     };
   }
 

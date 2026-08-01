@@ -430,6 +430,37 @@ describe('PermaventSecurityService', () => {
     expect(createSecurityContext).not.toHaveBeenCalled();
   });
 
+  it('should expose server-derived actor context to Logic Functions', async () => {
+    await expect(
+      service.resolveLogicFunctionActorContext({} as WorkspaceAuthContext),
+    ).resolves.toEqual({
+      workspaceMemberId: 'workspace-member-id',
+      userEmail: 'sales.rep@example.test',
+      roleUniversalIdentifier: 'sales-rep-role-universal-identifier',
+      isRestrictedSalesRep: true,
+    });
+  });
+
+  it('should not expose actor context for an unsupported auth context', async () => {
+    createSecurityContext.mockResolvedValue({
+      ...restrictedSalesRepContext,
+      isSupportedUserContext: false,
+    });
+
+    await expect(
+      service.resolveLogicFunctionActorContext({} as WorkspaceAuthContext),
+    ).resolves.toBeNull();
+  });
+
+  it('should not resolve actor context while Weekly Sales Report is disabled', async () => {
+    getConfigVariable.mockReturnValue(false);
+
+    await expect(
+      service.resolveLogicFunctionActorContext({} as WorkspaceAuthContext),
+    ).resolves.toBeNull();
+    expect(createSecurityContext).not.toHaveBeenCalled();
+  });
+
   it('should leave security disabled behaviour unchanged', async () => {
     getConfigVariable.mockReturnValue(false);
 
@@ -458,6 +489,12 @@ describe('PermaventSecurityService', () => {
     expect(isEnvOnlyConfigVar('PERMAVENT_SECURITY_RLS_ENABLED')).toBe(true);
     expect(new ConfigVariables().PERMAVENT_ERP_SALES_SCOPE_ENABLED).toBe(false);
     expect(isEnvOnlyConfigVar('PERMAVENT_ERP_SALES_SCOPE_ENABLED')).toBe(true);
+    expect(new ConfigVariables().PERMAVENT_WEEKLY_SALES_REPORT_ENABLED).toBe(
+      false,
+    );
+    expect(isEnvOnlyConfigVar('PERMAVENT_WEEKLY_SALES_REPORT_ENABLED')).toBe(
+      true,
+    );
     expect(new ConfigVariables().PERMAVENT_MY_COMPANIES_FOCUS_ENABLED).toBe(
       false,
     );
