@@ -2,7 +2,10 @@ import { Injectable } from '@nestjs/common';
 
 import { Request } from 'express';
 import { isDefined } from 'twenty-shared/utils';
-import { type PermaventSalesScope } from 'twenty-shared/types';
+import {
+  type PermaventLogicFunctionActorContext,
+  type PermaventSalesScope,
+} from 'twenty-shared/types';
 
 import { LogicFunctionExecutorService } from 'src/engine/core-modules/logic-function/logic-function-executor/logic-function-executor.service';
 import { buildLogicFunctionEvent } from 'src/engine/core-modules/logic-function/logic-function-trigger/triggers/route/utils/build-logic-function-event.util';
@@ -31,6 +34,7 @@ export class LogicFunctionTriggerService {
     userId,
     userWorkspaceId,
     permaventSalesScope,
+    permaventActorContext,
   }: {
     logicFunction: LogicFunctionEntity;
     request: Request;
@@ -40,6 +44,7 @@ export class LogicFunctionTriggerService {
     userId?: string | null;
     userWorkspaceId?: string | null;
     permaventSalesScope?: PermaventSalesScope | null;
+    permaventActorContext?: PermaventLogicFunctionActorContext | null;
   }): Promise<LogicFunctionTriggerOutcome> {
     const event = buildLogicFunctionEvent({
       request,
@@ -48,6 +53,7 @@ export class LogicFunctionTriggerService {
       forwardAllHeaders,
       userWorkspaceId: userWorkspaceId ?? null,
       permaventSalesScope: permaventSalesScope ?? null,
+      permaventActorContext: permaventActorContext ?? null,
     });
 
     const result = await this.logicFunctionExecutorService.execute({

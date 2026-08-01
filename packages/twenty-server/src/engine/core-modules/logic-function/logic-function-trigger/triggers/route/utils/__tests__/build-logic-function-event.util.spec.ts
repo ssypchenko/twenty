@@ -360,6 +360,12 @@ describe('buildLogicFunctionEvent', () => {
         mode: 'ASSIGNED',
         salesRepCodes: ['DM', 'RT'],
       },
+      permaventActorContext: {
+        workspaceMemberId: 'workspace-member-id',
+        userEmail: 'sales.rep@example.test',
+        roleUniversalIdentifier: 'sales-rep-role-universal-identifier',
+        isRestrictedSalesRep: true,
+      },
     });
 
     expect(result).toEqual({
@@ -382,6 +388,12 @@ describe('buildLogicFunctionEvent', () => {
         mode: 'ASSIGNED',
         salesRepCodes: ['DM', 'RT'],
       },
+      permaventActorContext: {
+        workspaceMemberId: 'workspace-member-id',
+        userEmail: 'sales.rep@example.test',
+        roleUniversalIdentifier: 'sales-rep-role-universal-identifier',
+        isRestrictedSalesRep: true,
+      },
     });
   });
 
@@ -394,6 +406,7 @@ describe('buildLogicFunctionEvent', () => {
     });
 
     expect(result.permaventSalesScope).toBeNull();
+    expect(result.permaventActorContext).toBeNull();
   });
 
   it('should preserve the request path as-is', () => {

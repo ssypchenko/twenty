@@ -2,6 +2,7 @@ import { type RawBodyRequest } from '@nestjs/common';
 import { type Request } from 'express';
 import {
   type LogicFunctionEvent,
+  type PermaventLogicFunctionActorContext,
   type PermaventSalesScope,
 } from 'twenty-shared/types';
 import { isDefined } from 'twenty-shared/utils';
@@ -143,6 +144,7 @@ export const buildLogicFunctionEvent = ({
   forwardAllHeaders = false,
   userWorkspaceId,
   permaventSalesScope = null,
+  permaventActorContext = null,
 }: {
   request: Request;
   pathParameters: Record<string, string | string[] | undefined>;
@@ -150,6 +152,7 @@ export const buildLogicFunctionEvent = ({
   forwardAllHeaders?: boolean;
   userWorkspaceId: string | null;
   permaventSalesScope?: PermaventSalesScope | null;
+  permaventActorContext?: PermaventLogicFunctionActorContext | null;
 }): LogicFunctionEvent => {
   const rawBody = extractRawBody(request);
 
@@ -172,5 +175,6 @@ export const buildLogicFunctionEvent = ({
     },
     userWorkspaceId,
     permaventSalesScope,
+    permaventActorContext,
   };
 };
