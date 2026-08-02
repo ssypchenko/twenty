@@ -53,7 +53,10 @@ describe('PermaventWeeklySalesReportSourceService', () => {
         peopleCount: '30',
         qualifiedMessageCount: '1',
         multiCompanyMessageCount: '0',
+        multiCompanyNoteCount: '0',
+        noteCount: '1',
         unlinkedMessageCount: '1',
+        unlinkedNoteCount: '1',
         messages: [
           {
             id: 'message-id',
@@ -74,6 +77,24 @@ describe('PermaventWeeklySalesReportSourceService', () => {
             receivedAt: '2026-07-30T09:00:00.000Z',
             participants: [],
             reason: 'NO_PERSON',
+          },
+        ],
+        notes: [
+          {
+            id: 'note-id',
+            title: 'Site visit',
+            body: 'Sanitised note',
+            createdAt: '2026-07-31T10:00:00.000Z',
+            companies: [{ id: 'company-id', name: 'Example Company' }],
+          },
+        ],
+        unlinkedNotes: [
+          {
+            id: 'unlinked-note-id',
+            title: 'Follow-up',
+            body: null,
+            createdAt: '2026-07-31T11:00:00.000Z',
+            reason: 'NO_COMPANY',
           },
         ],
       },
@@ -100,7 +121,10 @@ describe('PermaventWeeklySalesReportSourceService', () => {
       stats: {
         messageCount: 1,
         multiCompanyMessageCount: 0,
+        multiCompanyNoteCount: 0,
+        noteCount: 1,
         unlinkedMessageCount: 1,
+        unlinkedNoteCount: 1,
       },
     });
     expect(query).toHaveBeenCalledWith(
@@ -115,6 +139,21 @@ describe('PermaventWeeklySalesReportSourceService', () => {
       ],
       undefined,
       { shouldBypassPermissionChecks: true },
+    );
+    const sourceQuery = query.mock.calls[0][0];
+    const qualifiedMessageQuery = sourceQuery.slice(
+      sourceQuery.indexOf('qualified_message AS'),
+      sourceQuery.indexOf('message_company AS'),
+    );
+
+    expect(sourceQuery).toContain('week_note AS');
+    expect(sourceQuery).toContain('"noteTarget"');
+    expect(sourceQuery).toContain('actor_message AS');
+    expect(sourceQuery).toContain(
+      "participant.role IN ('FROM', 'TO', 'CC', 'BCC')",
+    );
+    expect(qualifiedMessageQuery).toContain(
+      'JOIN actor_message ON actor_message.id = week_message.id',
     );
   });
 
@@ -152,9 +191,14 @@ describe('PermaventWeeklySalesReportSourceService', () => {
         peopleCount: 30,
         qualifiedMessageCount: 1001,
         multiCompanyMessageCount: 0,
+        multiCompanyNoteCount: 0,
+        noteCount: 1,
         unlinkedMessageCount: 0,
+        unlinkedNoteCount: 0,
         messages: [],
+        notes: [],
         unlinkedMessages: [],
+        unlinkedNotes: [],
       },
     ]);
 

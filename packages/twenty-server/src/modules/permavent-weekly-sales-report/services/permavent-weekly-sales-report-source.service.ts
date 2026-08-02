@@ -13,16 +13,21 @@ import { getWorkspaceSchemaName } from 'src/engine/workspace-datasource/utils/ge
 import { type PermaventWeeklySalesReportSource } from 'src/modules/permavent-weekly-sales-report/types/permavent-weekly-sales-report-source.type';
 import { getPermaventLondonWeekWindow } from 'src/modules/permavent-weekly-sales-report/utils/get-permavent-london-week-window.util';
 
-const MAX_WEEKLY_REPORT_MESSAGES = 1_000;
+const MAX_WEEKLY_REPORT_ACTIVITIES = 1_000;
 
 type SourceQueryRow = {
   companyCount: number | string;
   messages: PermaventWeeklySalesReportSource['messages'];
   multiCompanyMessageCount: number | string;
+  multiCompanyNoteCount: number | string;
+  noteCount: number | string;
+  notes: PermaventWeeklySalesReportSource['notes'];
   peopleCount: number | string;
   qualifiedMessageCount: number | string;
   unlinkedMessageCount: number | string;
   unlinkedMessages: PermaventWeeklySalesReportSource['unlinkedMessages'];
+  unlinkedNoteCount: number | string;
+  unlinkedNotes: PermaventWeeklySalesReportSource['unlinkedNotes'];
 };
 
 @Injectable()
@@ -77,7 +82,7 @@ export class PermaventWeeklySalesReportSourceService {
             window.start,
             window.generatedAt,
             includeBody,
-            MAX_WEEKLY_REPORT_MESSAGES + 1,
+            MAX_WEEKLY_REPORT_ACTIVITIES + 1,
           ],
           undefined,
           { shouldBypassPermissionChecks: true },
@@ -92,14 +97,16 @@ export class PermaventWeeklySalesReportSourceService {
     }
 
     const qualifiedMessageCount = Number(row.qualifiedMessageCount);
+    const noteCount = Number(row.noteCount);
     const unlinkedMessageCount = Number(row.unlinkedMessageCount);
+    const unlinkedNoteCount = Number(row.unlinkedNoteCount);
 
     if (
-      qualifiedMessageCount > MAX_WEEKLY_REPORT_MESSAGES ||
-      unlinkedMessageCount > MAX_WEEKLY_REPORT_MESSAGES
+      qualifiedMessageCount + noteCount > MAX_WEEKLY_REPORT_ACTIVITIES ||
+      unlinkedMessageCount + unlinkedNoteCount > MAX_WEEKLY_REPORT_ACTIVITIES
     ) {
       throw new PayloadTooLargeException(
-        'Weekly Sales Report contains too many messages to process safely.',
+        'Weekly Sales Report contains too many activities to process safely.',
       );
     }
 
@@ -118,10 +125,15 @@ export class PermaventWeeklySalesReportSourceService {
       stats: {
         messageCount: qualifiedMessageCount,
         multiCompanyMessageCount: Number(row.multiCompanyMessageCount),
+        multiCompanyNoteCount: Number(row.multiCompanyNoteCount),
+        noteCount,
         unlinkedMessageCount,
+        unlinkedNoteCount,
       },
       messages: row.messages ?? [],
+      notes: row.notes ?? [],
       unlinkedMessages: row.unlinkedMessages ?? [],
+      unlinkedNotes: row.unlinkedNotes ?? [],
     };
   }
 
@@ -151,9 +163,19 @@ export class PermaventWeeklySalesReportSourceService {
           AND message."receivedAt" >= $3
           AND message."receivedAt" <= $4
       ),
+      actor_message AS (
+        SELECT DISTINCT week_message.id
+        FROM week_message
+        JOIN "${schemaName}"."messageParticipant" AS participant
+          ON participant."messageId" = week_message.id
+         AND participant."deletedAt" IS NULL
+        WHERE participant."workspaceMemberId" = $1
+          AND participant.role IN ('FROM', 'TO', 'CC', 'BCC')
+      ),
       qualified_message AS (
         SELECT DISTINCT week_message.id
         FROM week_message
+        JOIN actor_message ON actor_message.id = week_message.id
         JOIN "${schemaName}"."messageParticipant" AS participant
           ON participant."messageId" = week_message.id
          AND participant."deletedAt" IS NULL
@@ -207,14 +229,6 @@ export class PermaventWeeklySalesReportSourceService {
         ORDER BY week_message."receivedAt", week_message.id
         LIMIT $6
       ),
-      actor_message AS (
-        SELECT DISTINCT week_message.id
-        FROM week_message
-        JOIN "${schemaName}"."messageParticipant" AS participant
-          ON participant."messageId" = week_message.id
-         AND participant."deletedAt" IS NULL
-        WHERE participant."workspaceMemberId" = $1
-      ),
       unlinked_message_payload AS (
         SELECT
           week_message.id,
@@ -265,6 +279,98 @@ export class PermaventWeeklySalesReportSourceService {
         )
         ORDER BY week_message."receivedAt", week_message.id
         LIMIT $6
+      ),
+      week_note AS (
+        SELECT note.*
+        FROM "${schemaName}"."note" AS note
+        WHERE note."deletedAt" IS NULL
+          AND note."createdByWorkspaceMemberId" = $1
+          AND note."createdAt" >= $3
+          AND note."createdAt" <= $4
+      ),
+      note_company_candidate AS (
+        SELECT DISTINCT target."noteId", target."targetCompanyId" AS "companyId"
+        FROM "${schemaName}"."noteTarget" AS target
+        JOIN week_note ON week_note.id = target."noteId"
+        WHERE target."deletedAt" IS NULL
+          AND target."targetCompanyId" IS NOT NULL
+        UNION
+        SELECT DISTINCT target."noteId", person."companyId"
+        FROM "${schemaName}"."noteTarget" AS target
+        JOIN week_note ON week_note.id = target."noteId"
+        JOIN "${schemaName}"."person" AS person
+          ON person.id = target."targetPersonId"
+         AND person."deletedAt" IS NULL
+        WHERE target."deletedAt" IS NULL
+          AND person."companyId" IS NOT NULL
+        UNION
+        SELECT DISTINCT target."noteId", opportunity."companyId"
+        FROM "${schemaName}"."noteTarget" AS target
+        JOIN week_note ON week_note.id = target."noteId"
+        JOIN "${schemaName}"."opportunity" AS opportunity
+          ON opportunity.id = target."targetOpportunityId"
+         AND opportunity."deletedAt" IS NULL
+        WHERE target."deletedAt" IS NULL
+          AND opportunity."companyId" IS NOT NULL
+      ),
+      note_company AS (
+        SELECT DISTINCT
+          candidate."noteId",
+          scoped_company.id,
+          scoped_company.name
+        FROM note_company_candidate AS candidate
+        JOIN scoped_company ON scoped_company.id = candidate."companyId"
+      ),
+      qualified_note AS (
+        SELECT DISTINCT week_note.id
+        FROM week_note
+        JOIN note_company ON note_company."noteId" = week_note.id
+      ),
+      note_payload AS (
+        SELECT
+          week_note.id,
+          jsonb_build_object(
+            'id', week_note.id,
+            'title', coalesce(week_note.title, ''),
+            'body', CASE WHEN $5::boolean THEN week_note."bodyV2Markdown" ELSE NULL END,
+            'createdAt', week_note."createdAt",
+            'companies', coalesce((
+              SELECT jsonb_agg(
+                jsonb_build_object('id', link.id, 'name', link.name)
+                ORDER BY link.name, link.id
+              )
+              FROM note_company AS link
+              WHERE link."noteId" = week_note.id
+            ), '[]'::jsonb)
+          ) AS payload
+        FROM week_note
+        JOIN qualified_note ON qualified_note.id = week_note.id
+        ORDER BY week_note."createdAt", week_note.id
+        LIMIT $6
+      ),
+      unlinked_note_payload AS (
+        SELECT
+          week_note.id,
+          jsonb_build_object(
+            'id', week_note.id,
+            'title', coalesce(week_note.title, ''),
+            'body', CASE WHEN $5::boolean THEN week_note."bodyV2Markdown" ELSE NULL END,
+            'createdAt', week_note."createdAt",
+            'reason', CASE
+              WHEN EXISTS (
+                SELECT 1
+                FROM note_company_candidate AS candidate
+                WHERE candidate."noteId" = week_note.id
+              ) THEN 'OUTSIDE_SCOPE_COMPANY'
+              ELSE 'NO_COMPANY'
+            END
+          ) AS payload
+        FROM week_note
+        WHERE NOT EXISTS (
+          SELECT 1 FROM qualified_note WHERE qualified_note.id = week_note.id
+        )
+        ORDER BY week_note."createdAt", week_note.id
+        LIMIT $6
       )
       SELECT
         (SELECT count(*) FROM scoped_company) AS "companyCount",
@@ -279,11 +385,26 @@ export class PermaventWeeklySalesReportSourceService {
             HAVING count(*) > 1
           ) AS multi_company_message
         ) AS "multiCompanyMessageCount",
+        (SELECT count(*) FROM qualified_note) AS "noteCount",
+        (
+          SELECT count(*)
+          FROM (
+            SELECT "noteId"
+            FROM note_company
+            GROUP BY "noteId"
+            HAVING count(*) > 1
+          ) AS multi_company_note
+        ) AS "multiCompanyNoteCount",
         (SELECT count(*) FROM actor_message WHERE NOT EXISTS (
           SELECT 1 FROM qualified_message WHERE qualified_message.id = actor_message.id
         )) AS "unlinkedMessageCount",
+        (SELECT count(*) FROM week_note WHERE NOT EXISTS (
+          SELECT 1 FROM qualified_note WHERE qualified_note.id = week_note.id
+        )) AS "unlinkedNoteCount",
         coalesce((SELECT jsonb_agg(payload ORDER BY id) FROM message_payload), '[]'::jsonb) AS messages,
-        coalesce((SELECT jsonb_agg(payload ORDER BY id) FROM unlinked_message_payload), '[]'::jsonb) AS "unlinkedMessages"
+        coalesce((SELECT jsonb_agg(payload ORDER BY id) FROM unlinked_message_payload), '[]'::jsonb) AS "unlinkedMessages",
+        coalesce((SELECT jsonb_agg(payload ORDER BY id) FROM note_payload), '[]'::jsonb) AS notes,
+        coalesce((SELECT jsonb_agg(payload ORDER BY id) FROM unlinked_note_payload), '[]'::jsonb) AS "unlinkedNotes"
     `;
   }
 }

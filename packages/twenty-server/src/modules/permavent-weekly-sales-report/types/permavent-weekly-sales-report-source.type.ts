@@ -21,6 +21,14 @@ export type PermaventWeeklyReportMessage = {
   subject: string;
 };
 
+export type PermaventWeeklyReportNote = {
+  body: string | null;
+  companies: PermaventWeeklyReportCompanyLink[];
+  createdAt: string;
+  id: string;
+  title: string;
+};
+
 export type PermaventWeeklyReportUnlinkedReason =
   | 'NO_PERSON'
   | 'OUTSIDE_SCOPE_COMPANY'
@@ -33,9 +41,17 @@ export type PermaventWeeklyReportUnlinkedMessage = Omit<
   reason: PermaventWeeklyReportUnlinkedReason;
 };
 
+export type PermaventWeeklyReportUnlinkedNote = Omit<
+  PermaventWeeklyReportNote,
+  'companies'
+> & {
+  reason: 'NO_COMPANY' | 'OUTSIDE_SCOPE_COMPANY';
+};
+
 export type PermaventWeeklySalesReportSource = {
   actorWorkspaceMemberId: string;
   messages: PermaventWeeklyReportMessage[];
+  notes: PermaventWeeklyReportNote[];
   period: {
     generatedAt: string;
     start: string;
@@ -49,7 +65,11 @@ export type PermaventWeeklySalesReportSource = {
   stats: {
     messageCount: number;
     multiCompanyMessageCount: number;
+    multiCompanyNoteCount: number;
+    noteCount: number;
     unlinkedMessageCount: number;
+    unlinkedNoteCount: number;
   };
   unlinkedMessages: PermaventWeeklyReportUnlinkedMessage[];
+  unlinkedNotes: PermaventWeeklyReportUnlinkedNote[];
 };
