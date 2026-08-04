@@ -110,79 +110,93 @@ describe('PermaventSecurityService', () => {
     });
   });
 
-  it('should expand the My Companies marker while CRM territory RLS is disabled', async () => {
-    getConfigVariable.mockImplementation(
-      (key) => key === 'PERMAVENT_MY_COMPANIES_FOCUS_ENABLED',
-    );
-    const focusArgs = {
-      filter: {
-        or: [
-          { accountOwnerId: { eq: 'workspace-member-id' } },
-          {
-            createdBy: {
-              workspaceMemberId: { eq: 'workspace-member-id' },
+  it.each(['company', 'branch'])(
+    'should expand the focus marker for a %s while CRM territory RLS is disabled',
+    async (nameSingular) => {
+      getConfigVariable.mockImplementation(
+        (key) => key === 'PERMAVENT_MY_COMPANIES_FOCUS_ENABLED',
+      );
+      const focusArgs = {
+        filter: {
+          or: [
+            { accountOwnerId: { eq: 'workspace-member-id' } },
+            {
+              createdBy: {
+                workspaceMemberId: { eq: 'workspace-member-id' },
+              },
             },
-          },
-          {
-            erpsalesrepcode: {
-              ilike: `%${PERMAVENT_ACTIVE_SALES_REP_CODES_MARKER}%`,
+            {
+              erpsalesrepcode: {
+                ilike: `%${PERMAVENT_ACTIVE_SALES_REP_CODES_MARKER}%`,
+              },
             },
-          },
-        ],
-      },
-    };
+          ],
+        },
+      };
 
-    await expect(
-      service.applyToCommonQueryArgs({ ...input, args: focusArgs }),
-    ).resolves.toEqual({
-      filter: {
-        or: [
-          { accountOwnerId: { eq: 'workspace-member-id' } },
-          {
-            createdBy: {
-              workspaceMemberId: { eq: 'workspace-member-id' },
+      await expect(
+        service.applyToCommonQueryArgs({
+          ...input,
+          args: focusArgs,
+          flatObjectMetadata: { nameSingular } as FlatObjectMetadata,
+        }),
+      ).resolves.toEqual({
+        filter: {
+          or: [
+            { accountOwnerId: { eq: 'workspace-member-id' } },
+            {
+              createdBy: {
+                workspaceMemberId: { eq: 'workspace-member-id' },
+              },
             },
-          },
-          { erpsalesrepcode: { in: ['DM', 'RT'] } },
-        ],
-      },
-    });
-  });
+            { erpsalesrepcode: { in: ['DM', 'RT'] } },
+          ],
+        },
+      });
+    },
+  );
 
-  it('should preserve the owner branch when a Sales Rep has no assignments', async () => {
-    getConfigVariable.mockImplementation(
-      (key) => key === 'PERMAVENT_MY_COMPANIES_FOCUS_ENABLED',
-    );
-    createSecurityContext.mockResolvedValue({
-      ...restrictedSalesRepContext,
-      allowedSalesRepCodes: [],
-    });
-    const focusArgs = {
-      filter: {
-        or: [
-          { accountOwnerId: { eq: 'workspace-member-id' } },
-          {
-            erpsalesrepcode: {
-              ilike: `%${PERMAVENT_ACTIVE_SALES_REP_CODES_MARKER}%`,
+  it.each(['company', 'branch'])(
+    'should preserve the owner branch for a %s when a Sales Rep has no assignments',
+    async (nameSingular) => {
+      getConfigVariable.mockImplementation(
+        (key) => key === 'PERMAVENT_MY_COMPANIES_FOCUS_ENABLED',
+      );
+      createSecurityContext.mockResolvedValue({
+        ...restrictedSalesRepContext,
+        allowedSalesRepCodes: [],
+      });
+      const focusArgs = {
+        filter: {
+          or: [
+            { accountOwnerId: { eq: 'workspace-member-id' } },
+            {
+              erpsalesrepcode: {
+                ilike: `%${PERMAVENT_ACTIVE_SALES_REP_CODES_MARKER}%`,
+              },
             },
-          },
-        ],
-      },
-    };
+          ],
+        },
+      };
 
-    await expect(
-      service.applyToCommonQueryArgs({ ...input, args: focusArgs }),
-    ).resolves.toEqual({
-      filter: {
-        or: [
-          { accountOwnerId: { eq: 'workspace-member-id' } },
-          {
-            and: [{ id: { is: 'NULL' } }, { id: { is: 'NOT_NULL' } }],
-          },
-        ],
-      },
-    });
-  });
+      await expect(
+        service.applyToCommonQueryArgs({
+          ...input,
+          args: focusArgs,
+          flatObjectMetadata: { nameSingular } as FlatObjectMetadata,
+        }),
+      ).resolves.toEqual({
+        filter: {
+          or: [
+            { accountOwnerId: { eq: 'workspace-member-id' } },
+            {
+              and: [{ id: { is: 'NULL' } }, { id: { is: 'NOT_NULL' } }],
+            },
+          ],
+        },
+      });
+    },
+  );
 
   it('should leave the marker unchanged when the focus feature is disabled', async () => {
     getConfigVariable.mockReturnValue(false);
@@ -199,26 +213,29 @@ describe('PermaventSecurityService', () => {
     ).resolves.toBe(focusArgs);
   });
 
-  it('should not expand the marker for another object type', async () => {
-    getConfigVariable.mockImplementation(
-      (key) => key === 'PERMAVENT_MY_COMPANIES_FOCUS_ENABLED',
-    );
-    const focusArgs = {
-      filter: {
-        erpsalesrepcode: {
-          ilike: `%${PERMAVENT_ACTIVE_SALES_REP_CODES_MARKER}%`,
+  it.each(['person', 'opportunity'])(
+    'should not expand the focus marker for a %s',
+    async (nameSingular) => {
+      getConfigVariable.mockImplementation(
+        (key) => key === 'PERMAVENT_MY_COMPANIES_FOCUS_ENABLED',
+      );
+      const focusArgs = {
+        filter: {
+          erpsalesrepcode: {
+            ilike: `%${PERMAVENT_ACTIVE_SALES_REP_CODES_MARKER}%`,
+          },
         },
-      },
-    };
+      };
 
-    await expect(
-      service.applyToCommonQueryArgs({
-        ...input,
-        args: focusArgs,
-        flatObjectMetadata: { nameSingular: 'branch' } as FlatObjectMetadata,
-      }),
-    ).resolves.toBe(focusArgs);
-  });
+      await expect(
+        service.applyToCommonQueryArgs({
+          ...input,
+          args: focusArgs,
+          flatObjectMetadata: { nameSingular } as FlatObjectMetadata,
+        }),
+      ).resolves.toBe(focusArgs);
+    },
+  );
 
   it.each(['person', 'opportunity'])(
     'should use Branch ownership before Company ownership for a %s read',
