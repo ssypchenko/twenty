@@ -3,10 +3,11 @@ import { contextStoreCurrentObjectMetadataItemIdComponentState } from '@/context
 import { useObjectMetadataItems } from '@/object-metadata/hooks/useObjectMetadataItems';
 import { PERMAVENT_COMPANY_WIDE_SIDE_PANEL_FEATURE_FLAG } from '@/side-panel/permavent-company-wide-side-panel/constants/PermaventCompanyWideSidePanelFeatureFlag';
 import { sidePanelPageState } from '@/side-panel/states/sidePanelPageState';
+import { isPermaventWideSidePanelObject } from '@/side-panel/permavent-company-wide-side-panel/utils/isPermaventWideSidePanelObject';
 import { useAtomComponentStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomComponentStateValue';
 import { useAtomStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomStateValue';
 import { useIsFeatureEnabled } from '@/workspace/hooks/useIsFeatureEnabled';
-import { CoreObjectNameSingular, SidePanelPages } from 'twenty-shared/types';
+import { SidePanelPages } from 'twenty-shared/types';
 
 export const useIsPermaventCompanyWideSidePanel = () => {
   const isFeatureEnabled = useIsFeatureEnabled(
@@ -27,6 +28,6 @@ export const useIsPermaventCompanyWideSidePanel = () => {
   return (
     isFeatureEnabled &&
     sidePanelPage === SidePanelPages.ViewRecord &&
-    currentObjectMetadataItem?.nameSingular === CoreObjectNameSingular.Company
+    isPermaventWideSidePanelObject(currentObjectMetadataItem?.nameSingular)
   );
 };
