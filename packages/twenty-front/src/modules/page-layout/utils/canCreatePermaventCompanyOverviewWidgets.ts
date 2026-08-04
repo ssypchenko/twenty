@@ -1,5 +1,10 @@
 import { CoreObjectNameSingular } from 'twenty-shared/types';
 
+const PERMAVENT_OVERVIEW_WIDGET_OBJECTS = new Set([
+  CoreObjectNameSingular.Company,
+  'branch',
+]);
+
 export const canCreatePermaventCompanyOverviewWidgets = ({
   isFeatureEnabled,
   targetObjectNameSingular,
@@ -8,4 +13,4 @@ export const canCreatePermaventCompanyOverviewWidgets = ({
   targetObjectNameSingular: string;
 }): boolean =>
   isFeatureEnabled &&
-  targetObjectNameSingular === CoreObjectNameSingular.Company;
+  PERMAVENT_OVERVIEW_WIDGET_OBJECTS.has(targetObjectNameSingular);
