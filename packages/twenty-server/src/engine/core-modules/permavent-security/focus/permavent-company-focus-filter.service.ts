@@ -9,7 +9,7 @@ import { type FlatObjectMetadata } from 'src/engine/metadata-modules/flat-object
 export const PERMAVENT_ACTIVE_SALES_REP_CODES_MARKER =
   '{{PERMAVENT_ACTIVE_SALES_REP_CODES}}';
 
-const PERMAVENT_COMPANY_OBJECT = 'company';
+const PERMAVENT_FOCUS_OBJECTS = new Set(['company', 'branch']);
 
 @Injectable()
 export class PermaventCompanyFocusFilterService {
@@ -29,7 +29,7 @@ export class PermaventCompanyFocusFilterService {
   }): Promise<ObjectRecordFilter | undefined> {
     if (
       !this.twentyConfigService.get('PERMAVENT_MY_COMPANIES_FOCUS_ENABLED') ||
-      flatObjectMetadata.nameSingular !== PERMAVENT_COMPANY_OBJECT ||
+      !PERMAVENT_FOCUS_OBJECTS.has(flatObjectMetadata.nameSingular) ||
       !this.containsMarker(filter)
     ) {
       return filter;
