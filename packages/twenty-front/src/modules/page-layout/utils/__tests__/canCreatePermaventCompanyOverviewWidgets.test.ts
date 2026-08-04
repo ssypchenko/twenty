@@ -2,23 +2,29 @@ import { canCreatePermaventCompanyOverviewWidgets } from '@/page-layout/utils/ca
 import { CoreObjectNameSingular } from 'twenty-shared/types';
 
 describe('canCreatePermaventCompanyOverviewWidgets', () => {
-  it('should allow Company widgets when the feature is enabled', () => {
-    expect(
-      canCreatePermaventCompanyOverviewWidgets({
-        isFeatureEnabled: true,
-        targetObjectNameSingular: CoreObjectNameSingular.Company,
-      }),
-    ).toBe(true);
-  });
+  it.each([CoreObjectNameSingular.Company, 'branch'])(
+    'should allow %s widgets when the feature is enabled',
+    (objectName) => {
+      expect(
+        canCreatePermaventCompanyOverviewWidgets({
+          isFeatureEnabled: true,
+          targetObjectNameSingular: objectName,
+        }),
+      ).toBe(true);
+    },
+  );
 
-  it('should reject Company widgets when the feature is disabled', () => {
-    expect(
-      canCreatePermaventCompanyOverviewWidgets({
-        isFeatureEnabled: false,
-        targetObjectNameSingular: CoreObjectNameSingular.Company,
-      }),
-    ).toBe(false);
-  });
+  it.each([CoreObjectNameSingular.Company, 'branch'])(
+    'should reject %s widgets when the feature is disabled',
+    (objectName) => {
+      expect(
+        canCreatePermaventCompanyOverviewWidgets({
+          isFeatureEnabled: false,
+          targetObjectNameSingular: objectName,
+        }),
+      ).toBe(false);
+    },
+  );
 
   it('should reject widgets for other objects', () => {
     expect(

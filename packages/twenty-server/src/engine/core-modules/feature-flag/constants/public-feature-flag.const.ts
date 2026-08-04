@@ -69,9 +69,9 @@ export const PUBLIC_FEATURE_FLAGS: PublicFeatureFlag[] = [
   {
     key: FeatureFlagKey.IS_PERMAVENT_COMPANY_OVERVIEW_WIDGETS_ENABLED,
     metadata: {
-      label: 'Permavent Company Overview Widgets',
+      label: 'Permavent Company and Branch Overview Widgets',
       description:
-        'Allow compact Notes and Tasks widgets to be added to Company record page layouts',
+        'Allow compact Notes and Tasks widgets to be added to Company and Branch record page layouts',
     },
   },
   ...(process.env.CLOUDFLARE_API_KEY
