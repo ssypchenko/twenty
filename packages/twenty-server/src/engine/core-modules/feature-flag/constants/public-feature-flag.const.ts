@@ -39,9 +39,9 @@ export const PUBLIC_FEATURE_FLAGS: PublicFeatureFlag[] = [
   {
     key: FeatureFlagKey.IS_PERMAVENT_COMPANY_WIDE_SIDE_PANEL_ENABLED,
     metadata: {
-      label: 'Permavent Company Wide Side Panel',
+      label: 'Permavent Company and Branch Wide Side Panel',
       description:
-        'Use the available desktop workspace for company records while keeping the company list visible',
+        'Use the available desktop workspace for company and branch records while keeping the list visible',
     },
   },
   {
