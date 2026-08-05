@@ -116,10 +116,10 @@ else
 fi
 
 email_render_check='const React = require("react");
-const { render } = require("@react-email/render");
 const {
   PasswordResetLinkEmail,
   SendInviteLinkEmail,
+  renderEmail,
 } = require("twenty-emails");
 
 const passwordProps = {
@@ -140,22 +140,50 @@ const inviteProps = {
 };
 
 (async () => {
-  const messages = [
-    React.createElement(PasswordResetLinkEmail, {
-      ...passwordProps,
-      hasPassword: true,
-    }),
-    React.createElement(PasswordResetLinkEmail, {
-      ...passwordProps,
-      hasPassword: false,
-    }),
-    React.createElement(SendInviteLinkEmail, inviteProps),
+  const checks = [
+    {
+      message: React.createElement(PasswordResetLinkEmail, {
+        ...passwordProps,
+        hasPassword: true,
+      }),
+      expectedValues: [passwordProps.duration, passwordProps.link],
+      forbiddenValues: ["{duration}"],
+    },
+    {
+      message: React.createElement(PasswordResetLinkEmail, {
+        ...passwordProps,
+        hasPassword: false,
+      }),
+      expectedValues: [passwordProps.duration, passwordProps.link],
+      forbiddenValues: ["{duration}"],
+    },
+    {
+      message: React.createElement(SendInviteLinkEmail, inviteProps),
+      expectedValues: [
+        inviteProps.link,
+        inviteProps.workspace.name,
+        inviteProps.sender.email,
+      ],
+      forbiddenValues: ["{workspaceName}", "{senderEmail}", "{senderName}"],
+    },
   ];
 
-  for (const message of messages) {
-    const html = await render(message);
+  for (const { message, expectedValues, forbiddenValues } of checks) {
+    const html = await renderEmail(message);
     if (typeof html !== "string" || html.length === 0) {
       throw new Error("Email rendering returned empty output.");
+    }
+
+    for (const expectedValue of expectedValues) {
+      if (!html.includes(expectedValue)) {
+        throw new Error(`Email rendering omitted expected value: ${expectedValue}`);
+      }
+    }
+
+    for (const forbiddenValue of forbiddenValues) {
+      if (html.includes(forbiddenValue)) {
+        throw new Error(`Email rendering retained placeholder: ${forbiddenValue}`);
+      }
     }
   }
 
