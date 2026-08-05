@@ -15,13 +15,18 @@ msgstr ""
 
 #. js-lingui-explicit-id
 #: src/emails/send-invite-link.email.tsx
-msgid "{senderName} (<0>{senderEmail}</0>) has invited you to join a workspace called <1>{workspaceName}</1>."
-msgstr "{senderName} (<0>{senderEmail}</0>) has invited you to join a workspace called <1>{workspaceName}</1>."
+msgid "{senderName} (<0>{senderEmail}</0>) has invited you to join <1>{workspaceName}</1>."
+msgstr "{senderName} (<0>{senderEmail}</0>) has invited you to join <1>{workspaceName}</1>."
 
 #. js-lingui-explicit-id
 #: src/emails/validate-approved-access-domain.email.tsx
 msgid "{senderName} (<0>{senderEmail}</0>): Please validate this domain to allow users with <1>@{domain}</1> email addresses to join your workspace without requiring an invitation."
 msgstr "{senderName} (<0>{senderEmail}</0>): Please validate this domain to allow users with <1>@{domain}</1> email addresses to join your workspace without requiring an invitation."
+
+#. js-lingui-explicit-id
+#: src/components/Footer.tsx
+msgid "11 Cumberland Drive · Granby Industrial Estate · Weymouth · DT4 9TB"
+msgstr "11 Cumberland Drive · Granby Industrial Estate · Weymouth · DT4 9TB"
 
 #. js-lingui-explicit-id
 #: src/emails/billing-trial-converting.email.tsx
@@ -30,8 +35,8 @@ msgstr "A heads up before your trial ends"
 
 #. js-lingui-explicit-id
 #: src/emails/send-invite-link.email.tsx
-msgid "Accept invite"
-msgstr "Accept invite"
+msgid "Accept invitation"
+msgstr "Accept invitation"
 
 #. js-lingui-explicit-id
 #: src/emails/billing-trial-ending.email.tsx
@@ -60,18 +65,8 @@ msgstr "Confirm your new email address"
 
 #. js-lingui-explicit-id
 #: src/emails/password-update-notify.email.tsx
-msgid "Connect to Twenty"
-msgstr "Connect to Twenty"
-
-#. js-lingui-explicit-id
-#: src/emails/password-update-notify.email.tsx
 msgid "Dear {userName},"
 msgstr "Dear {userName},"
-
-#. js-lingui-explicit-id
-#: src/components/Footer.tsx
-msgid "Developers"
-msgstr "Developers"
 
 #. js-lingui-explicit-id
 #: src/emails/server-admin-access-changed.email.tsx
@@ -82,11 +77,6 @@ msgstr "Disabled"
 #: src/emails/server-admin-access-changed.email.tsx
 msgid "Enabled"
 msgstr "Enabled"
-
-#. js-lingui-explicit-id
-#: src/components/Footer.tsx
-msgid "Github"
-msgstr "Github"
 
 #. js-lingui-explicit-id
 #: src/emails/warn-suspended-workspace.email.tsx
@@ -113,6 +103,11 @@ msgid "Hi {userName},"
 msgstr "Hi {userName},"
 
 #. js-lingui-explicit-id
+#: src/emails/password-reset-link.email.tsx
+msgid "If the button does not work, copy and paste the following link into your browser:"
+msgstr "If the button does not work, copy and paste the following link into your browser:"
+
+#. js-lingui-explicit-id
 #: src/emails/billing-trial-converting.email.tsx
 msgid "If Twenty is working for you, you're all set — there's nothing to do. If it's not the right fit, you can cancel in one click before then and you won't be charged."
 msgstr "If Twenty is working for you, you're all set — there's nothing to do. If it's not the right fit, you can cancel in one click before then and you won't be charged."
@@ -133,19 +128,14 @@ msgid "If you'd ever like to give Twenty another try, you can start a fresh work
 msgstr "If you'd ever like to give Twenty another try, you can start a fresh workspace in minutes — we'd love to have you back."
 
 #. js-lingui-explicit-id
-#: src/components/WhatIsTwenty.tsx
-msgid "It's a CRM, a software to help businesses manage their customer data and relationships efficiently."
-msgstr "It's a CRM, a software to help businesses manage their customer data and relationships efficiently."
-
-#. js-lingui-explicit-id
 #: src/emails/clean-suspended-workspace.email.tsx
 msgid "Its data has been removed and can no longer be recovered."
 msgstr "Its data has been removed and can no longer be recovered."
 
 #. js-lingui-explicit-id
 #: src/emails/send-invite-link.email.tsx
-msgid "Join your team on Twenty"
-msgstr "Join your team on Twenty"
+msgid "Join {workspaceName}"
+msgstr "Join {workspaceName}"
 
 #. js-lingui-explicit-id
 #: src/emails/billing-subscription-renewing.email.tsx
@@ -165,8 +155,18 @@ msgstr "No action is needed if you'd like to continue. If you'd rather not renew
 
 #. js-lingui-explicit-id
 #: src/emails/password-update-notify.email.tsx
+msgid "Open account"
+msgstr "Open account"
+
+#. js-lingui-explicit-id
+#: src/emails/password-update-notify.email.tsx
 msgid "Password updated"
 msgstr "Password updated"
+
+#. js-lingui-explicit-id
+#: src/components/Footer.tsx
+msgid "Permavent Ltd"
+msgstr "Permavent Ltd"
 
 #. js-lingui-explicit-id
 #: src/emails/warn-suspended-workspace.email.tsx
@@ -179,24 +179,14 @@ msgid "Reactivate workspace"
 msgstr "Reactivate workspace"
 
 #. js-lingui-explicit-id
-#: src/components/Footer.tsx
-msgid "Read Twenty's user guide"
-msgstr "Read Twenty's user guide"
+#: src/emails/password-reset-link.email.tsx
+msgid "Reset password"
+msgstr "Reset password"
 
 #. js-lingui-explicit-id
 #: src/emails/password-reset-link.email.tsx
-msgid "Reset"
-msgstr "Reset"
-
-#. js-lingui-explicit-id
-#: src/emails/password-reset-link.email.tsx
-msgid "Reset your password 🗝"
-msgstr "Reset your password 🗝"
-
-#. js-lingui-explicit-id
-#: src/components/Footer.tsx
-msgid "San Francisco / Paris"
-msgstr "San Francisco / Paris"
+msgid "Reset your password"
+msgstr "Reset your password"
 
 #. js-lingui-explicit-id
 #: src/emails/server-admin-access-changed.email.tsx
@@ -225,13 +215,13 @@ msgstr "If you did not expect this change, review your server administrators imm
 
 #. js-lingui-explicit-id
 #: src/emails/password-reset-link.email.tsx
-msgid "Set"
-msgstr "Set"
+msgid "Set password"
+msgstr "Set password"
 
 #. js-lingui-explicit-id
 #: src/emails/password-reset-link.email.tsx
-msgid "Set your password 🗝"
-msgstr "Set your password 🗝"
+msgid "Set your password"
+msgstr "Set your password"
 
 #. js-lingui-explicit-id
 #: src/emails/clean-suspended-workspace.email.tsx
@@ -249,9 +239,19 @@ msgid "This is a confirmation that password for your account ({email}) was succe
 msgstr "This is a confirmation that password for your account ({email}) was successfully changed on {formattedDate}."
 
 #. js-lingui-explicit-id
+#: src/components/Footer.tsx
+msgid "This is an automated email from Permavent."
+msgstr "This is an automated email from Permavent."
+
+#. js-lingui-explicit-id
 #: src/emails/password-reset-link.email.tsx
-msgid "This link is only valid for the next {duration}. If the link does not work, you can use the login verification link directly:"
-msgstr "This link is only valid for the next {duration}. If the link does not work, you can use the login verification link directly:"
+msgid "This link will expire in {duration}. If you did not request a password reset, you can safely ignore this email."
+msgstr "This link will expire in {duration}. If you did not request a password reset, you can safely ignore this email."
+
+#. js-lingui-explicit-id
+#: src/emails/password-reset-link.email.tsx
+msgid "This link will expire in {duration}. If you were not expecting this email, you can safely ignore it."
+msgstr "This link will expire in {duration}. If you were not expecting this email, you can safely ignore it."
 
 #. js-lingui-explicit-id
 #: src/emails/billing-trial-ending.email.tsx
@@ -259,14 +259,9 @@ msgid "To keep your workspace and everything you've built, add a payment method 
 msgstr "To keep your workspace and everything you've built, add a payment method and pick a plan."
 
 #. js-lingui-explicit-id
-#: src/components/Footer.tsx
-msgid "Twenty.com, Public Benefit Corporation"
-msgstr "Twenty.com, Public Benefit Corporation"
-
-#. js-lingui-explicit-id
-#: src/components/Footer.tsx
-msgid "User guide"
-msgstr "User guide"
+#: src/emails/send-invite-link.email.tsx
+msgid "Use the button below to accept the invitation and access the workspace. If you were not expecting this invitation, you can safely ignore this email."
+msgstr "Use the button below to accept the invitation and access the workspace. If you were not expecting this invitation, you can safely ignore this email."
 
 #. js-lingui-explicit-id
 #: src/emails/validate-approved-access-domain.email.tsx
@@ -280,34 +275,19 @@ msgid "Verify Email"
 msgstr "Verify Email"
 
 #. js-lingui-explicit-id
-#: src/components/Footer.tsx
-msgid "Visit Twenty's developer documentation"
-msgstr "Visit Twenty's developer documentation"
-
-#. js-lingui-explicit-id
-#: src/components/Footer.tsx
-msgid "Visit Twenty's GitHub repository"
-msgstr "Visit Twenty's GitHub repository"
-
-#. js-lingui-explicit-id
-#: src/components/Footer.tsx
-msgid "Visit Twenty's website"
-msgstr "Visit Twenty's website"
-
-#. js-lingui-explicit-id
 #: src/emails/billing-trial-converting.email.tsx
 msgid "We don't like surprise charges, so here's a friendly heads up."
 msgstr "We don't like surprise charges, so here's a friendly heads up."
 
 #. js-lingui-explicit-id
-#: src/components/Footer.tsx
-msgid "Website"
-msgstr "Website"
+#: src/emails/password-reset-link.email.tsx
+msgid "We received a request to reset the password for your account. Use the button below to choose a new password."
+msgstr "We received a request to reset the password for your account. Use the button below to choose a new password."
 
 #. js-lingui-explicit-id
-#: src/components/WhatIsTwenty.tsx
-msgid "What is Twenty?"
-msgstr "What is Twenty?"
+#: src/emails/password-reset-link.email.tsx
+msgid "Your account is ready. Use the button below to create your password."
+msgstr "Your account is ready. Use the button below to create your password."
 
 #. js-lingui-explicit-id
 #: src/emails/billing-subscription-renewing.email.tsx
@@ -338,6 +318,11 @@ msgstr "Your plan renews soon"
 #: src/emails/billing-trial-ending.email.tsx
 msgid "Your trial is ending soon"
 msgstr "Your trial is ending soon"
+
+#. js-lingui-explicit-id
+#: src/emails/send-invite-link.email.tsx
+msgid "your workspace"
+msgstr "your workspace"
 
 #. js-lingui-explicit-id
 #: src/emails/clean-suspended-workspace.email.tsx

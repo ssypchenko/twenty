@@ -184,15 +184,15 @@ describe('email templates rendering', () => {
 
   it('should render translated content for a non-english locale', async () => {
     const html = await renderEmail(
-      PasswordResetLinkEmail({
-        duration: '5 minutes',
-        hasPassword: true,
-        link: 'https://app.twenty.com/reset-password',
+      PasswordUpdateNotifyEmail({
+        userName: 'Tim',
+        email: 'tim@twenty.com',
+        link: 'https://app.twenty.com',
         locale: 'fr-FR',
       }),
     );
 
-    expect(html).toContain('mot de passe');
+    expect(html).toContain('Mot de passe');
   });
 });
 
