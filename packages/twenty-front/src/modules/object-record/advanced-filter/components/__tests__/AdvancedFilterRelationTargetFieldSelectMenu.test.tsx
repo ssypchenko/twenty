@@ -12,6 +12,67 @@ import { useSetAtomComponentState } from '@/ui/utilities/state/jotai/hooks/useSe
 import { getJestMetadataAndApolloMocksWrapper } from '~/testing/jest/getJestMetadataAndApolloMocksWrapper';
 import { getMockObjectMetadataItemOrThrow } from '~/testing/utils/getMockObjectMetadataItemOrThrow';
 
+jest.mock('@/ui/layout/dropdown/components/DropdownContent', () => ({
+  DropdownContent: ({ children }: { children: ReactNode }) => (
+    <div>{children}</div>
+  ),
+}));
+
+jest.mock(
+  '@/ui/layout/dropdown/components/DropdownMenuHeader/DropdownMenuHeader',
+  () => ({
+    DropdownMenuHeader: ({ children }: { children: ReactNode }) => (
+      <div>{children}</div>
+    ),
+  }),
+);
+
+jest.mock(
+  '@/ui/layout/dropdown/components/DropdownMenuHeader/internal/DropdownMenuHeaderLeftComponent',
+  () => ({
+    DropdownMenuHeaderLeftComponent: () => null,
+  }),
+);
+
+jest.mock('@/ui/layout/dropdown/components/DropdownMenuItemsContainer', () => ({
+  DropdownMenuItemsContainer: ({ children }: { children: ReactNode }) => (
+    <div>{children}</div>
+  ),
+}));
+
+jest.mock('@/ui/layout/selectable-list/components/SelectableList', () => ({
+  SelectableList: ({ children }: { children: ReactNode }) => (
+    <div>{children}</div>
+  ),
+}));
+
+jest.mock('@/ui/layout/selectable-list/components/SelectableListItem', () => ({
+  SelectableListItem: ({ children }: { children: ReactNode }) => (
+    <div>{children}</div>
+  ),
+}));
+
+jest.mock('twenty-ui/icon', () => ({
+  IconChevronLeft: () => null,
+  useIcons: () => ({ getIcon: () => () => null }),
+}));
+
+jest.mock('twenty-ui/navigation', () => ({
+  MenuItem: ({
+    onClick,
+    testId,
+    text,
+  }: {
+    onClick: () => void;
+    testId?: string;
+    text: string;
+  }) => (
+    <button data-testid={testId} onClick={onClick} type="button">
+      {text}
+    </button>
+  ),
+}));
+
 const INSTANCE_ID = 'advanced-filter-relation-target-test';
 const FILTER_ID = 'relation-target-filter';
 

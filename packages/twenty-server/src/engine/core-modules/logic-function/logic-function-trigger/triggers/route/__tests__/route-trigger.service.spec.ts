@@ -12,6 +12,7 @@ import { type LogicFunctionTriggerService } from 'src/engine/core-modules/logic-
 import { RouteTriggerExceptionCode } from 'src/engine/core-modules/logic-function/logic-function-trigger/triggers/route/exceptions/route-trigger.exception';
 import { RouteTriggerService } from 'src/engine/core-modules/logic-function/logic-function-trigger/triggers/route/route-trigger.service';
 import { buildRouteTriggerResponse } from 'src/engine/core-modules/logic-function/logic-function-trigger/triggers/route/utils/route-trigger-response.util';
+import { type PermaventSecurityService } from 'src/engine/core-modules/permavent-security/permavent-security.service';
 import { type TwentyConfigService } from 'src/engine/core-modules/twenty-config/twenty-config.service';
 import { type LogicFunctionEntity } from 'src/engine/metadata-modules/logic-function/logic-function.entity';
 
@@ -70,6 +71,7 @@ describe('RouteTriggerService', () => {
     {} as unknown as LogicFunctionTriggerService,
     { resolveWorkspaceAndPublicDomain } as unknown as WorkspaceDomainsService,
     { get: jest.fn() } as unknown as TwentyConfigService,
+    {} as unknown as PermaventSecurityService,
     { find } as unknown as Repository<LogicFunctionEntity>,
   );
 
