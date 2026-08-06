@@ -6,6 +6,7 @@ import { CodeInterpreterDriverType } from 'src/engine/core-modules/code-interpre
 import { DisabledDriver } from 'src/engine/core-modules/code-interpreter/drivers/disabled.driver';
 import { E2BDriver } from 'src/engine/core-modules/code-interpreter/drivers/e2b.driver';
 import { LocalDriver } from 'src/engine/core-modules/code-interpreter/drivers/local.driver';
+import { PermaventInternalDriver } from 'src/engine/core-modules/code-interpreter/drivers/permavent-internal.driver';
 import { NodeEnvironment } from 'src/engine/core-modules/twenty-config/interfaces/node-environment.interface';
 import { DriverFactoryBase } from 'src/engine/core-modules/twenty-config/dynamic-factory.base';
 import { ConfigVariablesGroup } from 'src/engine/core-modules/twenty-config/enums/config-variables-group.enum';
@@ -28,6 +29,10 @@ export class CodeInterpreterDriverFactory extends DriverFactoryBase<CodeInterpre
       return `e2b|${this.configGroupHashService.computeHash(ConfigVariablesGroup.CODE_INTERPRETER_CONFIG)}`;
     }
 
+    if (driverType === CodeInterpreterDriverType.PERMAVENT_INTERNAL) {
+      return `permavent-internal|${this.configGroupHashService.computeHash(ConfigVariablesGroup.CODE_INTERPRETER_CONFIG)}`;
+    }
+
     return driverType;
   }
 
@@ -40,7 +45,7 @@ export class CodeInterpreterDriverFactory extends DriverFactoryBase<CodeInterpre
     switch (driverType) {
       case CodeInterpreterDriverType.DISABLED:
         return new DisabledDriver(
-          'Code interpreter is disabled. Set CODE_INTERPRETER_TYPE to LOCAL (development only) or E2B to enable it.',
+          'Code interpreter is disabled. Configure an approved sandbox driver to enable it.',
         );
 
       case CodeInterpreterDriverType.LOCAL: {
@@ -74,6 +79,30 @@ export class CodeInterpreterDriverFactory extends DriverFactoryBase<CodeInterpre
           timeoutMs,
           idleTimeoutMs: this.twentyConfigService.get(
             'CODE_INTERPRETER_IDLE_TIMEOUT_MS',
+          ),
+        });
+      }
+
+      case CodeInterpreterDriverType.PERMAVENT_INTERNAL: {
+        const runnerUrl = this.twentyConfigService.get(
+          'PERMAVENT_CODE_INTERPRETER_RUNNER_URL',
+        );
+        const authToken = this.twentyConfigService.get(
+          'PERMAVENT_CODE_INTERPRETER_RUNNER_TOKEN',
+        );
+
+        if (!runnerUrl || !authToken) {
+          throw new Error(
+            'The internal Permavent code runner URL and authentication token are required',
+          );
+        }
+
+        return new PermaventInternalDriver({
+          runnerUrl,
+          authToken,
+          executionTimeoutMs: timeoutMs,
+          requestTimeoutMs: this.twentyConfigService.get(
+            'PERMAVENT_CODE_INTERPRETER_RUNNER_REQUEST_TIMEOUT_MS',
           ),
         });
       }
