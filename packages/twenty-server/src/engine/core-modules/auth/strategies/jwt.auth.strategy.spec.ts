@@ -8,6 +8,7 @@ import {
 } from 'src/engine/core-modules/auth/auth.exception';
 import { type JwtPayload } from 'src/engine/core-modules/auth/types/jwt-payload.type';
 import { JwtTokenTypeEnum } from 'src/engine/core-modules/auth/types/jwt-token-type.enum';
+import { McpToolAccess } from 'src/engine/core-modules/auth/types/mcp-tool-access.type';
 import { ImpersonationAuthorizationService } from 'src/engine/core-modules/impersonation/services/impersonation-authorization.service';
 import { NodeEnvironment } from 'src/engine/core-modules/twenty-config/interfaces/node-environment.interface';
 import { WorkspaceEntity } from 'src/engine/core-modules/workspace/workspace.entity';
@@ -297,7 +298,7 @@ describe('JwtAuthStrategy', () => {
       }
     });
 
-    it('should not throw if type is ACCESS, no jti, and user and userWorkspace exist', async () => {
+    it('should preserve only a valid read-only MCP scope on an ACCESS token', async () => {
       const validUserId = 'valid-user-id';
       const validUserWorkspaceId = randomUUID();
       const validWorkspaceId = randomUUID();
@@ -307,6 +308,7 @@ describe('JwtAuthStrategy', () => {
         type: JwtTokenTypeEnum.ACCESS,
         userWorkspaceId: validUserWorkspaceId,
         workspaceId: validWorkspaceId,
+        mcpToolAccess: McpToolAccess.READ_ONLY,
       };
 
       workspaceStore[validWorkspaceId] = new WorkspaceEntity();
@@ -343,6 +345,14 @@ describe('JwtAuthStrategy', () => {
 
       expect(user.user?.lastName).toBe('lastNameDefault');
       expect(user.userWorkspaceId).toBe(validUserWorkspaceId);
+      expect(user.mcpToolAccess).toBe(McpToolAccess.READ_ONLY);
+
+      const invalidScopeUser = await strategy.validate({
+        ...payload,
+        mcpToolAccess: 'WRITE',
+      } as JwtPayload);
+
+      expect(invalidScopeUser.mcpToolAccess).toBeUndefined();
     });
 
     it('should reject when the user workspace belongs to a different workspace than the token', async () => {

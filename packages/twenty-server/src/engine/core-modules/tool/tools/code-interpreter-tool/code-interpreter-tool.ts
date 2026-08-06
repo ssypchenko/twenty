@@ -18,7 +18,9 @@ import {
 import { ApplicationService } from 'src/engine/core-modules/application/application.service';
 import { type AccessTokenJwtPayload } from 'src/engine/core-modules/auth/types/access-token-jwt-payload.type';
 import { JwtTokenTypeEnum } from 'src/engine/core-modules/auth/types/jwt-token-type.enum';
+import { McpToolAccess } from 'src/engine/core-modules/auth/types/mcp-tool-access.type';
 import { CodeInterpreterService } from 'src/engine/core-modules/code-interpreter/code-interpreter.service';
+import { CodeInterpreterDriverType } from 'src/engine/core-modules/code-interpreter/code-interpreter.interface';
 import { FileStorageService } from 'src/engine/core-modules/file-storage/services/file-storage.service';
 import { FileUrlService } from 'src/engine/core-modules/file/file-url/file-url.service';
 import { FileService } from 'src/engine/core-modules/file/services/file.service';
@@ -317,6 +319,13 @@ export class CodeInterpreterTool implements Tool {
       userWorkspaceId: userWorkspaceId ?? workspaceId,
       authProvider: AuthProviderEnum.Password,
     };
+
+    if (
+      this.twentyConfigService.get('CODE_INTERPRETER_TYPE') ===
+      CodeInterpreterDriverType.PERMAVENT_INTERNAL
+    ) {
+      payload.mcpToolAccess = McpToolAccess.READ_ONLY;
+    }
 
     return this.jwtWrapperService.signAsyncOrThrow(payload, {
       expiresIn: '5m',

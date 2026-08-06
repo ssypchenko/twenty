@@ -5,6 +5,7 @@ import {
   HttpCode,
   HttpStatus,
   Post,
+  Req,
   Res,
   UseFilters,
   UseGuards,
@@ -12,7 +13,7 @@ import {
   ValidationPipe,
 } from '@nestjs/common';
 
-import { type Response } from 'express';
+import { type Request, type Response } from 'express';
 import { isDefined } from 'twenty-shared/utils';
 
 import { JsonRpc } from 'src/engine/api/mcp/dtos/json-rpc';
@@ -54,12 +55,16 @@ export class McpCoreController {
     userWorkspaceId: string | undefined,
     @Headers('accept') acceptHeader: string | undefined,
     @Res({ passthrough: true }) res: Response,
+    @Req() req?: Request,
   ) {
     const authContext = {
       workspace,
       userId: user?.id,
       userWorkspaceId,
       apiKey,
+      ...(isDefined(req?.mcpToolAccess) && {
+        mcpToolAccess: req.mcpToolAccess,
+      }),
     };
 
     // JSON-RPC notifications (no id) expect no response body regardless of Accept

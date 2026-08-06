@@ -18,6 +18,7 @@ import {
 } from 'src/engine/core-modules/auth/types/auth-context.type';
 import { type JwtPayload } from 'src/engine/core-modules/auth/types/jwt-payload.type';
 import { JwtTokenTypeEnum } from 'src/engine/core-modules/auth/types/jwt-token-type.enum';
+import { McpToolAccess } from 'src/engine/core-modules/auth/types/mcp-tool-access.type';
 import { type PlaygroundTokenJwtPayload } from 'src/engine/core-modules/auth/types/playground-token-jwt-payload.type';
 import { type WorkspaceAgnosticTokenJwtPayload } from 'src/engine/core-modules/auth/types/workspace-agnostic-token-jwt-payload.type';
 import { IMPERSONATION_DENIAL_BY_REASON } from 'src/engine/core-modules/impersonation/constants/impersonation-denial-by-reason.constant';
@@ -401,6 +402,10 @@ export class JwtAuthStrategy extends PassportStrategy(Strategy, 'jwt') {
       tokenType: this.isLegacyApiKeyPayload(payload)
         ? JwtTokenTypeEnum.API_KEY
         : payload.type,
+      ...(payload.type === JwtTokenTypeEnum.ACCESS &&
+        payload.mcpToolAccess === McpToolAccess.READ_ONLY && {
+          mcpToolAccess: McpToolAccess.READ_ONLY,
+        }),
     };
   }
 

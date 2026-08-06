@@ -1,5 +1,6 @@
 import { HttpException, HttpStatus } from '@nestjs/common';
 import { Test, type TestingModule } from '@nestjs/testing';
+import { ToolCategory } from 'twenty-shared/ai';
 import { FieldActorSource } from 'twenty-shared/types';
 
 import { JSON_RPC_ERROR_CODE } from 'src/engine/api/mcp/constants/json-rpc-error-code.const';
@@ -17,11 +18,13 @@ import { LIST_SKILLS_TOOL_NAME } from 'src/engine/api/mcp/tools/list-skills.tool
 import { type McpToolAnnotations } from 'src/engine/api/mcp/types/mcp-tool-annotations.type';
 import { type FlatApiKey } from 'src/engine/core-modules/api-key/types/flat-api-key.type';
 import { ApiKeyRoleService } from 'src/engine/core-modules/api-key/services/api-key-role.service';
+import { McpToolAccess } from 'src/engine/core-modules/auth/types/mcp-tool-access.type';
 import { EXECUTE_TOOL_TOOL_NAME } from 'src/engine/core-modules/tool-provider/tools/execute-tool.tool';
 import { GET_TOOL_CATALOG_TOOL_NAME } from 'src/engine/core-modules/tool-provider/tools/get-tool-catalog.tool';
 import { LEARN_TOOLS_TOOL_NAME } from 'src/engine/core-modules/tool-provider/tools/learn-tools.tool';
 import { LOAD_SKILL_TOOL_NAME } from 'src/engine/core-modules/tool-provider/tools/load-skill.tool';
 import { ToolRegistryService } from 'src/engine/core-modules/tool-provider/services/tool-registry.service';
+import { type ToolIndexEntry } from 'src/engine/core-modules/tool-provider/types/tool-index-entry.type';
 import { type FlatWorkspace } from 'src/engine/core-modules/workspace/types/flat-workspace.type';
 import { WorkspaceManyOrAllFlatEntityMapsCacheService } from 'src/engine/metadata-modules/flat-entity/services/workspace-many-or-all-flat-entity-maps-cache.service';
 import { SkillService } from 'src/engine/metadata-modules/skill/skill.service';
@@ -86,6 +89,7 @@ describe('McpProtocolService', () => {
               search_help_center: mockSearchHelpCenterTool,
             }),
             getToolInfo: jest.fn().mockResolvedValue([]),
+            suggestSimilarToolNames: jest.fn().mockResolvedValue({}),
             resolveAndExecute: jest.fn(),
           },
         },
@@ -323,6 +327,24 @@ describe('McpProtocolService', () => {
       expect(Object.keys(toolSet).sort()).toEqual(
         [...EXPECTED_MCP_TOOL_NAMES].sort(),
       );
+
+      const executeTool = toolSet[EXECUTE_TOOL_TOOL_NAME]
+        .execute as unknown as (parameters: {
+        toolName: string;
+        arguments: Record<string, unknown>;
+      }) => Promise<unknown>;
+
+      await executeTool({
+        toolName: 'update_company',
+        arguments: { id: 'company-1' },
+      });
+
+      expect(_toolRegistryService.resolveAndExecute).toHaveBeenCalledWith(
+        'update_company',
+        { id: 'company-1' },
+        expect.any(Object),
+        expect.any(Object),
+      );
     });
 
     it('should build the meta-tool set by name and pass it to executor for tools/list', async () => {
@@ -366,6 +388,140 @@ describe('McpProtocolService', () => {
 
       expect(Object.keys(toolSet).sort()).toEqual(
         [...EXPECTED_MCP_TOOL_NAMES].sort(),
+      );
+    });
+
+    it('should expose and execute only read-only database tools for a read-only MCP token', async () => {
+      userRoleService.getRoleIdForUserWorkspace.mockResolvedValue(mockRoleId);
+
+      const catalog = [
+        {
+          name: 'find_many_companies',
+          category: ToolCategory.DATABASE_CRUD,
+          operation: 'find_many',
+        },
+        {
+          name: 'group_by_companies',
+          category: ToolCategory.DATABASE_CRUD,
+          operation: 'group_by',
+        },
+        {
+          name: 'update_company',
+          category: ToolCategory.DATABASE_CRUD,
+          operation: 'update',
+        },
+        {
+          name: 'find_many_external_records',
+          category: ToolCategory.ACTION,
+          operation: 'find_many',
+        },
+      ].map(
+        (entry) =>
+          ({
+            ...entry,
+            label: entry.name,
+            description: entry.name,
+            executionRef: {
+              kind: 'database_crud',
+              objectNameSingular: 'company',
+              operation: 'find_many',
+            },
+          }) as ToolIndexEntry,
+      );
+
+      _toolRegistryService.buildToolIndex.mockResolvedValue(catalog);
+      _toolRegistryService.resolveAndExecute.mockResolvedValue({
+        success: true,
+        message: 'Read completed',
+      });
+      mcpToolExecutorService.handleToolsListing.mockReturnValue({
+        id: '123',
+        jsonrpc: '2.0',
+        result: { tools: [] },
+      });
+
+      await service.handleMCPCoreQuery(
+        { jsonrpc: '2.0', method: 'tools/list', id: '123' },
+        {
+          workspace: mockWorkspace,
+          userWorkspaceId: mockUserWorkspaceId,
+          apiKey: undefined,
+          mcpToolAccess: McpToolAccess.READ_ONLY,
+        },
+      );
+
+      const [, toolSet] =
+        mcpToolExecutorService.handleToolsListing.mock.calls[0];
+
+      const executeToolAnnotations = (
+        toolSet[EXECUTE_TOOL_TOOL_NAME] as unknown as {
+          annotations: McpToolAnnotations;
+        }
+      ).annotations;
+
+      expect(executeToolAnnotations).toEqual(
+        MCP_CLOSED_WORLD_READ_ONLY_TOOL_ANNOTATIONS,
+      );
+
+      const executeCatalog = toolSet[GET_TOOL_CATALOG_TOOL_NAME]
+        .execute as unknown as (parameters: {
+        categories?: string[];
+      }) => Promise<{
+        catalog: Record<string, Array<{ name: string }>>;
+      }>;
+      const catalogResult = await executeCatalog({});
+
+      expect(
+        Object.values(catalogResult.catalog)
+          .flat()
+          .map(({ name }) => name)
+          .sort(),
+      ).toEqual(['find_many_companies', 'group_by_companies']);
+
+      const learnTools = toolSet[LEARN_TOOLS_TOOL_NAME]
+        .execute as unknown as (parameters: {
+        toolNames: string[];
+        aspects: Array<'description' | 'schema'>;
+      }) => Promise<unknown>;
+
+      await learnTools({
+        toolNames: ['find_many_companies', 'update_company'],
+        aspects: ['schema'],
+      });
+
+      expect(_toolRegistryService.getToolInfo).toHaveBeenCalledWith(
+        ['find_many_companies'],
+        expect.any(Object),
+        ['schema'],
+      );
+
+      const executeTool = toolSet[EXECUTE_TOOL_TOOL_NAME]
+        .execute as unknown as (parameters: {
+        toolName: string;
+        arguments: Record<string, unknown>;
+      }) => Promise<{ success: boolean }>;
+
+      await expect(
+        executeTool({ toolName: 'update_company', arguments: {} }),
+      ).resolves.toEqual(
+        expect.objectContaining({
+          success: false,
+        }),
+      );
+      expect(_toolRegistryService.resolveAndExecute).not.toHaveBeenCalled();
+
+      await expect(
+        executeTool({ toolName: 'find_many_companies', arguments: {} }),
+      ).resolves.toEqual(
+        expect.objectContaining({
+          success: true,
+        }),
+      );
+      expect(_toolRegistryService.resolveAndExecute).toHaveBeenCalledWith(
+        'find_many_companies',
+        {},
+        expect.any(Object),
+        expect.any(Object),
       );
     });
 
