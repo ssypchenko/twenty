@@ -888,6 +888,45 @@ export class ConfigVariables {
 
   @ConfigVariablesMetadata({
     group: ConfigVariablesGroup.CODE_INTERPRETER_CONFIG,
+    description:
+      'Internal Permavent code interpreter runner URL for company-operated sandbox execution',
+    type: ConfigVariableType.STRING,
+  })
+  @IsUrl({ require_tld: false, require_protocol: true })
+  @ValidateIf(
+    (env) =>
+      env.CODE_INTERPRETER_TYPE ===
+      CodeInterpreterDriverType.PERMAVENT_INTERNAL,
+  )
+  PERMAVENT_CODE_INTERPRETER_RUNNER_URL?: string;
+
+  @ConfigVariablesMetadata({
+    group: ConfigVariablesGroup.CODE_INTERPRETER_CONFIG,
+    description: 'Authentication token for the internal Permavent code runner',
+    type: ConfigVariableType.STRING,
+    isSensitive: true,
+  })
+  @IsString()
+  @IsNotEmpty()
+  @ValidateIf(
+    (env) =>
+      env.CODE_INTERPRETER_TYPE ===
+      CodeInterpreterDriverType.PERMAVENT_INTERNAL,
+  )
+  PERMAVENT_CODE_INTERPRETER_RUNNER_TOKEN?: string;
+
+  @ConfigVariablesMetadata({
+    group: ConfigVariablesGroup.CODE_INTERPRETER_CONFIG,
+    description:
+      'HTTP request timeout in milliseconds for the internal Permavent code runner',
+    type: ConfigVariableType.NUMBER,
+  })
+  @IsOptional()
+  @CastToPositiveNumber()
+  PERMAVENT_CODE_INTERPRETER_RUNNER_REQUEST_TIMEOUT_MS = 130_000;
+
+  @ConfigVariablesMetadata({
+    group: ConfigVariablesGroup.CODE_INTERPRETER_CONFIG,
     description: 'Timeout in milliseconds for code execution (default: 300000)',
     type: ConfigVariableType.NUMBER,
   })
