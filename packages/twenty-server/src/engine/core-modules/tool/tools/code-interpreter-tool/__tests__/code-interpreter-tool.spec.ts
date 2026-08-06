@@ -1,5 +1,5 @@
 import { type ApplicationService } from 'src/engine/core-modules/application/application.service';
-import { McpToolAccess } from 'src/engine/core-modules/auth/types/mcp-tool-access.type';
+import { JwtTokenTypeEnum } from 'src/engine/core-modules/auth/types/jwt-token-type.enum';
 import { type CodeInterpreterService } from 'src/engine/core-modules/code-interpreter/code-interpreter.service';
 import { CodeInterpreterDriverType } from 'src/engine/core-modules/code-interpreter/code-interpreter.interface';
 import { type FileStorageService } from 'src/engine/core-modules/file-storage/services/file-storage.service';
@@ -44,7 +44,7 @@ const createTool = (driverType: CodeInterpreterDriverType) => {
 };
 
 describe('CodeInterpreterTool MCP access', () => {
-  it('should sign a read-only MCP scope for the internal sandbox driver', async () => {
+  it('should sign an MCP-only token for the internal sandbox driver', async () => {
     const { codeInterpreterService, jwtWrapperService, tool } = createTool(
       CodeInterpreterDriverType.PERMAVENT_INTERNAL,
     );
@@ -60,7 +60,7 @@ describe('CodeInterpreterTool MCP access', () => {
 
     expect(jwtWrapperService.signAsyncOrThrow).toHaveBeenCalledWith(
       expect.objectContaining({
-        mcpToolAccess: McpToolAccess.READ_ONLY,
+        type: JwtTokenTypeEnum.MCP_ACCESS,
       }),
       { expiresIn: '5m' },
     );
@@ -77,7 +77,7 @@ describe('CodeInterpreterTool MCP access', () => {
     );
   });
 
-  it('should not add the MCP scope for other sandbox drivers', async () => {
+  it('should keep an ordinary access token for other sandbox drivers', async () => {
     const { jwtWrapperService, tool } = createTool(
       CodeInterpreterDriverType.LOCAL,
     );
@@ -86,7 +86,9 @@ describe('CodeInterpreterTool MCP access', () => {
 
     const [payload] = jwtWrapperService.signAsyncOrThrow.mock.calls[0];
 
-    expect(payload).not.toHaveProperty('mcpToolAccess');
+    expect(payload).toEqual(
+      expect.objectContaining({ type: JwtTokenTypeEnum.ACCESS }),
+    );
   });
 
   it('should keep mutation helpers out of the injected Python API', () => {

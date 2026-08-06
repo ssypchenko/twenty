@@ -8,8 +8,12 @@ import { WorkspaceActivationStatus } from 'twenty-shared/workspace';
 import { Repository } from 'typeorm';
 
 import { AppTokenEntity } from 'src/engine/core-modules/app-token/app-token.entity';
-import { AuthException } from 'src/engine/core-modules/auth/auth.exception';
+import {
+  AuthException,
+  AuthExceptionCode,
+} from 'src/engine/core-modules/auth/auth.exception';
 import { JwtAuthStrategy } from 'src/engine/core-modules/auth/strategies/jwt.auth.strategy';
+import { JwtTokenTypeEnum } from 'src/engine/core-modules/auth/types/jwt-token-type.enum';
 import { EmailService } from 'src/engine/core-modules/email/email.service';
 import { JwtWrapperService } from 'src/engine/core-modules/jwt/services/jwt-wrapper.service';
 import { TwentyConfigService } from 'src/engine/core-modules/twenty-config/twenty-config.service';
@@ -304,6 +308,39 @@ describe('AccessTokenService', () => {
       await expect(service.validateTokenByRequest(mockRequest)).rejects.toThrow(
         AuthException,
       );
+    });
+
+    it('should reject an MCP access token on the default REST and GraphQL validation path', async () => {
+      const mockToken = 'mcp-access-token';
+      const mockRequest = {
+        headers: { authorization: `Bearer ${mockToken}` },
+      } as Request;
+      const mockAuthContext = {
+        user: { id: 'user-id' },
+        workspace: { id: 'workspace-id' },
+        userWorkspaceId: 'user-workspace-id',
+        tokenType: JwtTokenTypeEnum.MCP_ACCESS,
+      };
+
+      jest
+        .spyOn(jwtWrapperService, 'extractJwtFromRequest')
+        .mockReturnValue(() => mockToken);
+      jest
+        .spyOn(service, 'validateToken')
+        .mockResolvedValue(mockAuthContext as any);
+
+      await expect(service.validateTokenByRequest(mockRequest)).rejects.toEqual(
+        expect.objectContaining({
+          code: AuthExceptionCode.FORBIDDEN_EXCEPTION,
+          message: 'MCP access tokens are only accepted by the MCP endpoint',
+        }),
+      );
+
+      await expect(
+        service.validateTokenByRequest(mockRequest, {
+          allowMcpAccessToken: true,
+        }),
+      ).resolves.toEqual(mockAuthContext);
     });
 
     it('should reject session tokens presented as bearer tokens', async () => {
