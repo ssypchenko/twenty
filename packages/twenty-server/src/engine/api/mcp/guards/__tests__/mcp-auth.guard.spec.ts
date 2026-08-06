@@ -21,7 +21,7 @@ describe('McpAuthGuard', () => {
 
   beforeEach(() => {
     jwtAuthGuard = {
-      canActivate: jest.fn(),
+      canActivateMcp: jest.fn(),
     } as unknown as jest.Mocked<JwtAuthGuard>;
 
     guard = new McpAuthGuard(jwtAuthGuard);
@@ -29,16 +29,18 @@ describe('McpAuthGuard', () => {
   });
 
   it('should return true when JwtAuthGuard passes', async () => {
-    jwtAuthGuard.canActivate.mockResolvedValue(true);
+    jwtAuthGuard.canActivateMcp.mockResolvedValue(true);
 
-    const result = await guard.canActivate(buildContext());
+    const context = buildContext();
+    const result = await guard.canActivate(context);
 
     expect(result).toBe(true);
+    expect(jwtAuthGuard.canActivateMcp).toHaveBeenCalledWith(context);
     expect(mockSetHeader).not.toHaveBeenCalled();
   });
 
   it('should set WWW-Authenticate using the request host and throw when auth fails', async () => {
-    jwtAuthGuard.canActivate.mockResolvedValue(false);
+    jwtAuthGuard.canActivateMcp.mockResolvedValue(false);
 
     await expect(
       guard.canActivate(buildContext('acme.twenty.com')),

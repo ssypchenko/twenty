@@ -11,6 +11,7 @@ import { JwtTokenTypeEnum } from 'src/engine/core-modules/auth/types/jwt-token-t
 import { McpToolAccess } from 'src/engine/core-modules/auth/types/mcp-tool-access.type';
 import { ImpersonationAuthorizationService } from 'src/engine/core-modules/impersonation/services/impersonation-authorization.service';
 import { NodeEnvironment } from 'src/engine/core-modules/twenty-config/interfaces/node-environment.interface';
+import { AuthProviderEnum } from 'src/engine/core-modules/workspace/types/workspace.type';
 import { WorkspaceEntity } from 'src/engine/core-modules/workspace/workspace.entity';
 
 import { JwtAuthStrategy } from './jwt.auth.strategy';
@@ -298,17 +299,19 @@ describe('JwtAuthStrategy', () => {
       }
     });
 
-    it('should preserve only a valid read-only MCP scope on an ACCESS token', async () => {
+    it('should derive read-only MCP access only from an MCP_ACCESS token', async () => {
       const validUserId = 'valid-user-id';
       const validUserWorkspaceId = randomUUID();
       const validWorkspaceId = randomUUID();
 
       const payload = {
         sub: validUserId,
+        userId: validUserId,
         type: JwtTokenTypeEnum.ACCESS,
         userWorkspaceId: validUserWorkspaceId,
         workspaceId: validWorkspaceId,
-        mcpToolAccess: McpToolAccess.READ_ONLY,
+        authProvider: AuthProviderEnum.Password,
+        mcpToolAccess: 'WRITE',
       };
 
       workspaceStore[validWorkspaceId] = new WorkspaceEntity();
@@ -341,18 +344,18 @@ describe('JwtAuthStrategy', () => {
 
       strategy = createStrategy();
 
-      const user = await strategy.validate(payload as JwtPayload);
+      const accessTokenUser = await strategy.validate(payload as JwtPayload);
 
-      expect(user.user?.lastName).toBe('lastNameDefault');
-      expect(user.userWorkspaceId).toBe(validUserWorkspaceId);
-      expect(user.mcpToolAccess).toBe(McpToolAccess.READ_ONLY);
+      expect(accessTokenUser.user?.lastName).toBe('lastNameDefault');
+      expect(accessTokenUser.userWorkspaceId).toBe(validUserWorkspaceId);
+      expect(accessTokenUser.mcpToolAccess).toBeUndefined();
 
-      const invalidScopeUser = await strategy.validate({
+      const mcpAccessTokenUser = await strategy.validate({
         ...payload,
-        mcpToolAccess: 'WRITE',
+        type: JwtTokenTypeEnum.MCP_ACCESS,
       } as JwtPayload);
 
-      expect(invalidScopeUser.mcpToolAccess).toBeUndefined();
+      expect(mcpAccessTokenUser.mcpToolAccess).toBe(McpToolAccess.READ_ONLY);
     });
 
     it('should reject when the user workspace belongs to a different workspace than the token', async () => {
