@@ -1,5 +1,6 @@
 import { Test, type TestingModule } from '@nestjs/testing';
 
+import { type Request } from 'express';
 import { DEFAULT_TOOL_INPUT_SCHEMA } from 'twenty-shared/logic-function';
 
 import { MCP_PROTOCOL_VERSION } from 'src/engine/api/mcp/constants/mcp-protocol-version.const';
@@ -9,6 +10,7 @@ import { type JsonRpc } from 'src/engine/api/mcp/dtos/json-rpc';
 import { McpAuthGuard } from 'src/engine/api/mcp/guards/mcp-auth.guard';
 import { McpProtocolService } from 'src/engine/api/mcp/services/mcp-protocol.service';
 import { type FlatApiKey } from 'src/engine/core-modules/api-key/types/flat-api-key.type';
+import { McpToolAccess } from 'src/engine/core-modules/auth/types/mcp-tool-access.type';
 import { type FlatWorkspace } from 'src/engine/core-modules/workspace/types/flat-workspace.type';
 import { AccessTokenService } from 'src/engine/core-modules/auth/token/services/access-token.service';
 import { HttpExceptionHandlerService } from 'src/engine/core-modules/exception-handler/http-exception-handler.service';
@@ -125,6 +127,45 @@ describe('McpCoreController', () => {
         },
       );
       expect(result).toEqual(mockResponse);
+    });
+
+    it('should pass the read-only MCP scope from the authenticated request', async () => {
+      const mockRequest: JsonRpc = {
+        jsonrpc: '2.0',
+        method: 'tools/list',
+        id: '123',
+      };
+      const authenticatedRequest = {
+        mcpToolAccess: McpToolAccess.READ_ONLY,
+      } as Request;
+
+      mcpProtocolService.handleMCPCoreQuery.mockResolvedValue({
+        id: '123',
+        jsonrpc: '2.0',
+        result: { tools: [] },
+      });
+
+      await controller.handleMcpCore(
+        mockRequest,
+        mockWorkspace,
+        mockApiKey,
+        mockUser,
+        mockUserWorkspaceId,
+        undefined,
+        mockRes,
+        authenticatedRequest,
+      );
+
+      expect(mcpProtocolService.handleMCPCoreQuery).toHaveBeenCalledWith(
+        mockRequest,
+        {
+          workspace: mockWorkspace,
+          userId: mockUser.id,
+          userWorkspaceId: mockUserWorkspaceId,
+          apiKey: mockApiKey,
+          mcpToolAccess: McpToolAccess.READ_ONLY,
+        },
+      );
     });
 
     it('should handle initialize method', async () => {
