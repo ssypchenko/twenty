@@ -6,34 +6,44 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 Twenty is an open-source CRM built with modern technologies in a monorepo structure. The codebase is organized as an Nx workspace with multiple packages.
 
+## Permavent execution gate
+
+When working in the Permavent fork, follow `AGENTS.md` as the source of truth
+for repository scope, runtime, verification and release boundaries. Work from
+the nested `twenty/` repository root, not the parent `Twenty CRM` workspace.
+Before any Node-based command, activate and verify Node.js `24.16.0` and Yarn
+`4.13.0` in the same shell. Do not use bare `yarn`, `npx` or a global Nx
+installation before that gate, and do not assume that `preflight.sh` changes
+the parent shell's PATH.
+
 ## Key Commands
 
 ### Development
 ```bash
 # Start development environment (frontend + backend + worker)
-yarn start
+corepack yarn start
 
 # Individual package development
-npx nx start twenty-front     # Start frontend dev server
-npx nx start twenty-server    # Start backend server
-npx nx run twenty-server:worker  # Start background worker
+corepack yarn nx start twenty-front     # Start frontend dev server
+corepack yarn nx start twenty-server    # Start backend server
+corepack yarn nx run twenty-server:worker  # Start background worker
 ```
 
 ### Testing
 ```bash
 # Preferred: run a single test file (fast)
-npx jest path/to/test.test.ts --config=packages/PROJECT/jest.config.mjs
+corepack yarn jest path/to/test.test.ts --config=packages/PROJECT/jest.config.mjs
 
 # Run all tests for a package
-npx nx test twenty-front      # Frontend unit tests
-npx nx test twenty-server     # Backend unit tests
-npx nx run twenty-server:test:integration:with-db-reset  # Integration tests with DB reset
+corepack yarn nx test twenty-front      # Frontend unit tests
+corepack yarn nx test twenty-server     # Backend unit tests
+corepack yarn nx run twenty-server:test:integration:with-db-reset  # Integration tests with DB reset
 # To run an individual test or a pattern of tests, use the following command:
-cd packages/{workspace} && npx jest "pattern or filename"
+cd packages/{workspace} && corepack yarn jest "pattern or filename"
 
 # Storybook
-npx nx storybook:build twenty-front
-npx nx storybook:test twenty-front
+corepack yarn nx storybook:build twenty-front
+corepack yarn nx storybook:test twenty-front
 
 # When testing the UI end to end, click on "Continue with Email" and use the prefilled credentials.
 ```
@@ -41,40 +51,40 @@ npx nx storybook:test twenty-front
 ### Code Quality
 ```bash
 # Linting (diff with main - fastest, always prefer this)
-npx nx lint:diff-with-main twenty-front
-npx nx lint:diff-with-main twenty-server
-npx nx lint:diff-with-main twenty-front --configuration=fix  # Auto-fix
+corepack yarn nx lint:diff-with-main twenty-front
+corepack yarn nx lint:diff-with-main twenty-server
+corepack yarn nx lint:diff-with-main twenty-front --configuration=fix  # Auto-fix
 
 # Linting (full project - slower, use only when needed)
-npx nx lint twenty-front
-npx nx lint twenty-server
+corepack yarn nx lint twenty-front
+corepack yarn nx lint twenty-server
 
 # Type checking
-npx nx typecheck twenty-front
-npx nx typecheck twenty-server
+corepack yarn nx typecheck twenty-front
+corepack yarn nx typecheck twenty-server
 
 # Format code
-npx nx fmt twenty-front
-npx nx fmt twenty-server
+corepack yarn nx fmt twenty-front
+corepack yarn nx fmt twenty-server
 ```
 
 ### Build
 ```bash
 # Build packages (twenty-shared must be built first)
-npx nx build twenty-shared
-npx nx build twenty-front
-npx nx build twenty-server
+corepack yarn nx build twenty-shared
+corepack yarn nx build twenty-front
+corepack yarn nx build twenty-server
 ```
 
 ### Database Operations
 ```bash
 # Database management
-npx nx database:reset twenty-server         # Reset database
-npx nx run twenty-server:database:init:prod # Initialize database
-npx nx run twenty-server:database:migrate:prod # Run instance commands (fast only)
+corepack yarn nx database:reset twenty-server         # Reset database
+corepack yarn nx run twenty-server:database:init:prod # Initialize database
+corepack yarn nx run twenty-server:database:migrate:prod # Run instance commands (fast only)
 
 # Generate an instance command (fast or slow)
-npx nx run twenty-server:database:migrate:generate --name <name> --type <fast|slow>
+corepack yarn nx run twenty-server:database:migrate:generate --name <name> --type <fast|slow>
 ```
 
 ### Database Inspection (Postgres MCP)
@@ -91,8 +101,8 @@ This server is read-only — for write operations (reset, migrations, sync), use
 ### GraphQL
 ```bash
 # Generate GraphQL types (run after schema changes)
-npx nx run twenty-front:graphql:generate
-npx nx run twenty-front:graphql:generate --configuration=metadata
+corepack yarn nx run twenty-front:graphql:generate
+corepack yarn nx run twenty-front:graphql:generate --configuration=metadata
 ```
 
 ## Architecture Overview

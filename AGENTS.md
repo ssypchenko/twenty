@@ -24,19 +24,53 @@ Keep clean base branches aligned with upstream and do not add Permavent-only fil
 - Do not include production data in examples, documentation, tests or logs.
 - Use sanitised sample values in commands and fixtures.
 
-## Canonical Runtime
+## Repository and runtime gate
 
+- The nested `twenty/` checkout is the Git, Nx and Yarn root. The parent
+  `Twenty CRM` workspace is not the core Git or package root.
 - Use Node.js `24.16.0`, as defined in `.nvmrc` and the Twenty Dockerfile.
-- Use the repository Yarn release through Corepack or `.yarn/releases/yarn-4.13.0.cjs`.
+- Use Yarn `4.13.0` through Corepack or the repository release at
+  `.yarn/releases/yarn-4.13.0.cjs`.
+- Before any Node-based command, including `node`, `yarn`, `npx`, `nx`, `tsx`,
+  `tsgo` or a Twenty SDK command, run this gate from the repository root in the
+  same shell as the command that follows it:
+
+  ```bash
+  source scripts/permavent/lib/common.sh
+  permavent_prepare_node_runtime
+  test "$(node --version)" = "v24.16.0"
+  test "$(corepack yarn --version)" = "4.13.0"
+  ```
+
+- Stop when either version check fails. Never fall back to a system Node,
+  Yarn 1, `npx` or an unrelated global CLI.
+- `preflight.sh` validates the runtime inside its own process; it does not
+  activate Node in the calling shell. Run the gate again before any raw
+  command started after preflight.
+- When a Twenty App links `../../../twenty/packages/twenty-sdk` or
+  `twenty-client-sdk`, build the matching linked packages from this checkout
+  under the gate before installing or building the App:
+
+  ```bash
+  corepack yarn nx run twenty-client-sdk:build --excludeTaskDependencies
+  corepack yarn nx run twenty-sdk:build --excludeTaskDependencies
+  ```
+
+  Confirm that `packages/twenty-sdk/dist/cli.cjs` and the required
+  `packages/twenty-client-sdk/dist` outputs exist before diagnosing App source
+  code.
 
 ## Canonical Local Verification Commands
 
-- Run local verification helpers from the repository root. They automatically prefer the `.nvmrc` Node installation under `${NVM_DIR:-$HOME/.nvm}` when the shell exposes a different system Node version. Do not add ad hoc PATH discovery before running them.
+- Run local verification helpers from the repository root after the runtime
+  gate. Their temporary PATH change applies only inside the helper process; it
+  does not change the caller's shell. Do not add ad hoc PATH discovery or run
+  a raw Node-based command before the gate.
 - Preflight: `./scripts/permavent/preflight.sh --skip-docker`.
 - Focused server Jest: `./scripts/permavent/run-server-tests.sh <test-path> [<test-path> ...]`. This helper accepts repository-relative, `packages/twenty-server`-relative or absolute paths and normalises them to Jest's server-package working directory.
 - Full server verification without unrelated dependency builds: `./scripts/permavent/verify-changes.sh server --base permavent/custom-vX.Y.Z`.
 - Do not pass `packages/twenty-server/...` paths directly to `nx jest twenty-server`; use `run-server-tests.sh`.
-- Do not run package-local `yarn oxlint` or `yarn oxfmt`. Use the Nx lint target through `verify-changes.sh`.
+- Do not run package-local Oxlint or Oxfmt. Use the Nx lint target through `verify-changes.sh`.
 - Do not run raw `nx typecheck twenty-server` with task dependencies. `verify-changes.sh` uses `--excludeTaskDependencies` for lint, typecheck, tests and builds.
 
 ## GHCR Production Image
@@ -109,6 +143,32 @@ The canonical workflow is documented in `../docs/twenty-migration/05-custom-imag
 - For email changes, render password reset, password set and invitation templates from the production image.
 - If verification cannot run, state why and provide practical manual checks.
 - Documentation-only changes require link, command and secret-leak checks but not a runtime build.
+- Prefer focused tests with the project-specific Jest configuration before a
+  broad suite. A broad failure in unchanged upstream files is a baseline
+  result, not evidence against the Permavent change; record it and do not edit
+  unrelated upstream code.
+- Never describe focused verification as full verification. Report separately
+  the changed-file checks, full-project checks, image publication, Test
+  deployment and Live deployment.
+
+## Failure classification
+
+- `fatal: not a git repository` or a missing `package.json`: the command ran
+  from the parent workspace or another incorrect directory. Stop and change to
+  the documented repository or App root before retrying.
+- `ERR_REQUIRE_ESM`, `listen EPERM` from Nx or an App SDK failure after Node
+  20: stop and repeat the runtime gate in the same shell.
+- Missing `twenty-ui/dist` or linked SDK `dist` files: treat this as a local
+  dependency artefact problem and rebuild/install the matching package before
+  changing feature code.
+- `TS5042` caused by a path containing spaces: treat it as a local
+  command-line/path limitation and rerun from the repository or Docker
+  workspace path; do not change production TypeScript configuration to mask it.
+- `twenty-front:lingui:extract` worker-init timeout: treat it as Docker
+  BuildKit resource contention and use the existing scoped timeout in the
+  Dockerfile; do not consume a new release number when no image was created.
+- Test startup `UnknownDependenciesException`: inspect server logs and Nest
+  module wiring before PostgreSQL, Redis or healthcheck diagnosis.
 
 ## Git Hygiene
 
