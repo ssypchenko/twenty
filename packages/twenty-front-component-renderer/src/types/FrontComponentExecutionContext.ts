@@ -3,6 +3,7 @@ import { type AppLocale } from 'twenty-shared/translations';
 export type FrontComponentExecutionContext = {
   frontComponentId: string;
   userId: string | null;
+  workspaceMemberId: string | null;
   /**
    * @deprecated Use `selectedRecordIds` instead. Derive single record as `selectedRecordIds.length === 1 ? selectedRecordIds[0] : null`.
    */
