@@ -18,6 +18,7 @@ const meta: Meta<typeof FrontComponentRenderer> = {
     executionContext: {
       frontComponentId: 'storybook-test',
       userId: null,
+      workspaceMemberId: null,
       recordId: null,
       selectedRecordIds: [],
       colorScheme: 'light',
@@ -122,6 +123,7 @@ export const SdkContext: Story = {
     executionContext: {
       frontComponentId: 'sdk-context-test',
       userId: 'test-user-abc-123',
+      workspaceMemberId: 'test-workspace-member-abc-123',
       recordId: null,
       selectedRecordIds: [],
       colorScheme: 'light',

@@ -7,6 +7,7 @@ import { type AppLocale } from 'twenty-shared/translations';
 
 import { MAIN_CONTEXT_STORE_INSTANCE_ID } from '@/context-store/constants/MainContextStoreInstanceId';
 import { contextStoreRecordShowParentViewComponentState } from '@/context-store/states/contextStoreRecordShowParentViewComponentState';
+import { currentWorkspaceMemberState } from '@/auth/states/currentWorkspaceMemberState';
 import { useFrontComponentExecutionContext } from '@/front-components/hooks/useFrontComponentExecutionContext';
 
 jest.mock('@/object-metadata/hooks/useObjectMetadataItems', () => ({
@@ -39,6 +40,9 @@ const mockCopyToClipboard = jest.fn();
 const mockSetRecordPageActiveTabId = jest.fn();
 
 let mockCurrentUser: { id: string } | null = { id: 'user-123' };
+let mockCurrentWorkspaceMember: { id: string } | null = {
+  id: 'workspace-member-123',
+};
 let mockIsMobile = false;
 
 jest.mock('~/hooks/useNavigateApp', () => ({
@@ -123,7 +127,10 @@ jest.mock('twenty-ui/utilities', () => ({
 }));
 
 jest.mock('@/ui/utilities/state/jotai/hooks/useAtomStateValue', () => ({
-  useAtomStateValue: () => mockCurrentUser,
+  useAtomStateValue: (state: unknown) =>
+    state === currentWorkspaceMemberState
+      ? mockCurrentWorkspaceMember
+      : mockCurrentUser,
 }));
 
 jest.mock('@/ui/utilities/state/jotai/hooks/useSetAtomState', () => ({
@@ -179,6 +186,7 @@ describe('useFrontComponentExecutionContext', () => {
   beforeEach(() => {
     jest.clearAllMocks();
     mockCurrentUser = { id: 'user-123' };
+    mockCurrentWorkspaceMember = { id: 'workspace-member-123' };
     mockIsMobile = false;
     getDefaultStore().set(parentViewAtom, undefined);
   });
@@ -193,6 +201,7 @@ describe('useFrontComponentExecutionContext', () => {
       expect(result.current.executionContext).toEqual({
         frontComponentId: FRONT_COMPONENT_ID,
         userId: 'user-123',
+        workspaceMemberId: 'workspace-member-123',
         recordId: 'record-456',
         selectedRecordIds: ['record-456'],
         colorScheme: 'light',
@@ -209,6 +218,7 @@ describe('useFrontComponentExecutionContext', () => {
       expect(result.current.executionContext).toEqual({
         frontComponentId: FRONT_COMPONENT_ID,
         userId: 'user-123',
+        workspaceMemberId: 'workspace-member-123',
         recordId: null,
         selectedRecordIds: ['record-1', 'record-2', 'record-3'],
         colorScheme: 'light',
@@ -224,6 +234,16 @@ describe('useFrontComponentExecutionContext', () => {
       });
 
       expect(result.current.executionContext.userId).toBeNull();
+    });
+
+    it('should return null workspaceMemberId when no current workspace member', () => {
+      mockCurrentWorkspaceMember = null;
+
+      const { result } = renderUseFrontComponentExecutionContext({
+        frontComponentId: FRONT_COMPONENT_ID,
+      });
+
+      expect(result.current.executionContext.workspaceMemberId).toBeNull();
     });
 
     it('should return null recordId and empty selectedRecordIds when no selectedRecordIds provided', () => {
