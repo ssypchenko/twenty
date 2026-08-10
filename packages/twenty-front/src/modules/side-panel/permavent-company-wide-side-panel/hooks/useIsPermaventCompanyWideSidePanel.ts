@@ -1,3 +1,4 @@
+import { MAIN_CONTEXT_STORE_INSTANCE_ID } from '@/context-store/constants/MainContextStoreInstanceId';
 import { contextStoreCurrentObjectMetadataItemIdComponentState } from '@/context-store/states/contextStoreCurrentObjectMetadataItemIdComponentState';
 import { useObjectMetadataItems } from '@/object-metadata/hooks/useObjectMetadataItems';
 import { PERMAVENT_COMPANY_WIDE_SIDE_PANEL_FEATURE_FLAG } from '@/side-panel/permavent-company-wide-side-panel/constants/PermaventCompanyWideSidePanelFeatureFlag';
@@ -15,9 +16,11 @@ export const useIsPermaventCompanyWideSidePanel = () => {
   );
   const sidePanelPage = useAtomStateValue(sidePanelPageState);
   const sidePanelPageInfo = useAtomStateValue(sidePanelPageInfoState);
+  const contextStoreInstanceId =
+    sidePanelPageInfo.instanceId || MAIN_CONTEXT_STORE_INSTANCE_ID;
   const contextStoreCurrentObjectMetadataItemId = useAtomComponentStateValue(
     contextStoreCurrentObjectMetadataItemIdComponentState,
-    sidePanelPageInfo.instanceId,
+    contextStoreInstanceId,
   );
   const { objectMetadataItems } = useObjectMetadataItems();
 
