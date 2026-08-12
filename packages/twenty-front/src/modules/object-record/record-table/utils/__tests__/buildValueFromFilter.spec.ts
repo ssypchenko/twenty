@@ -320,7 +320,7 @@ describe('buildValueFromFilter', () => {
           selectedRecordIds: ['record-1'],
         }),
         relationType: RelationType.MANY_TO_ONE,
-        label: 'Assignee',
+        label: 'Account Owner',
         expected: 'current-workspace-member-id',
       },
       {

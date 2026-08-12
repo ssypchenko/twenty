@@ -254,7 +254,6 @@ const computeValueFromFilterRelation = (
   value: string,
   relationType?: RelationType,
   currentWorkspaceMember?: CurrentWorkspaceMember,
-  label?: string,
   currentRecordId?: string,
 ) => {
   switch (operand) {
@@ -268,13 +267,9 @@ const computeValueFromFilterRelation = (
         if (parsedValue?.isCurrentRecordSelected) {
           return currentRecordId;
         }
-        if (label === 'Assignee') {
-          return parsedValue?.isCurrentWorkspaceMemberSelected
-            ? currentWorkspaceMember?.id
-            : undefined;
-        } else {
-          return parsedValue?.selectedRecordIds?.[0];
-        }
+        return parsedValue?.isCurrentWorkspaceMemberSelected
+          ? currentWorkspaceMember?.id
+          : parsedValue?.selectedRecordIds?.[0];
       }
       return undefined; // todo
     }
@@ -375,14 +370,12 @@ const VALUE_HANDLER_REGISTRY: Partial<Record<FieldMetadataType, ValueHandler>> =
       relationType,
       currentWorkspaceMember,
       currentRecordId,
-      label,
     }) =>
       computeValueFromFilterRelation(
         operand as RecordFilterToRecordInputOperand<'RELATION'>,
         value,
         relationType,
         currentWorkspaceMember,
-        label,
         currentRecordId,
       ),
     [FieldMetadataType.TS_VECTOR]: ({ operand, value }) =>
