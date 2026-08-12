@@ -427,6 +427,19 @@ const computeValueFromSubFieldType = ({
   currentWorkspaceMember?: CurrentWorkspaceMember;
   label?: string;
 }) => {
+  if (
+    fieldType === FieldMetadataType.UUID &&
+    filter.type === FieldMetadataType.ACTOR &&
+    filter.subFieldName === 'workspaceMemberId'
+  ) {
+    return computeValueFromFilterRelation(
+      filter.operand as RecordFilterToRecordInputOperand<'RELATION'>,
+      filter.value,
+      RelationType.MANY_TO_ONE,
+      currentWorkspaceMember,
+    );
+  }
+
   const handler = VALUE_HANDLER_REGISTRY[fieldType];
   if (!handler) {
     return;

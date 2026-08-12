@@ -369,6 +369,25 @@ describe('buildValueFromFilter', () => {
         ).toEqual(expected);
       },
     );
+
+    it('resolves the current workspace member for an actor workspaceMemberId filter', () => {
+      const filter = createTestFilter(
+        ViewFilterOperand.IS,
+        JSON.stringify({
+          isCurrentWorkspaceMemberSelected: true,
+          selectedRecordIds: [],
+        }),
+        'ACTOR',
+      );
+      filter.subFieldName = 'workspaceMemberId';
+
+      expect(
+        buildValueFromFilter({
+          filter,
+          currentWorkspaceMember: mockCurrentWorkspaceMember,
+        }),
+      ).toEqual({ workspaceMemberId: 'current-workspace-member-id' });
+    });
   });
 
   describe('Composite field types', () => {
