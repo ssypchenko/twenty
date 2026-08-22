@@ -83,7 +83,11 @@ Keep clean base branches aligned with upstream and do not add Permavent-only fil
 - Record the published OCI digest before changing Test or Live.
 - The project owner runs the complete local build, verification and push workflow from their own Terminal with `'/Users/sergeysypchenko/Documents/Codex/Twenty CRM/release-permavent.sh' <release-number>`.
 - After confirming the release number and cleaning older local Permavent images, the assistant must provide that exact command with the required numeric release argument. The assistant must not execute or background the release script unless the project owner explicitly asks for assistant execution in the current conversation.
-- The release script performs preflight, production build, local image verification, `docker push` and registry inspection. Do not provide a separate push command when this script completes successfully.
+- The release script performs the read-only Twenty Apps compatibility gate,
+  core preflight, production build, local image verification, `docker push` and
+  registry inspection. An incompatible `engines.twenty` declaration is a
+  release blocker; never widen it without matching-SDK verification. Do not
+  provide a separate push command when this script completes successfully.
 - After the project owner reports that the release script has finished, the assistant verifies its status and log, the local image, and the GHCR tag, platform and registry digest before deployment.
 
 The canonical workflow is documented in `../docs/twenty-migration/05-custom-image-build-publish-and-cleanup.md` relative to the workspace root.
