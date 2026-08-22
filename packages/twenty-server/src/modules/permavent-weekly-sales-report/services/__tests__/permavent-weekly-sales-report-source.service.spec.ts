@@ -49,11 +49,12 @@ describe('PermaventWeeklySalesReportSourceService', () => {
     getReplica.mockResolvedValue({ query });
     query.mockResolvedValue([
       {
-        companyCount: '12',
-        peopleCount: '30',
+        actorMessageCount: '2',
+        entityCount: '2',
+        internalMessageCount: '1',
         qualifiedMessageCount: '1',
-        multiCompanyMessageCount: '0',
-        multiCompanyNoteCount: '0',
+        multiEntityMessageCount: '0',
+        multiEntityNoteCount: '0',
         noteCount: '1',
         unlinkedMessageCount: '1',
         unlinkedNoteCount: '1',
@@ -64,7 +65,24 @@ describe('PermaventWeeklySalesReportSourceService', () => {
             subject: 'Order follow-up',
             body: 'Sanitised body',
             receivedAt: '2026-07-29T09:00:00.000Z',
-            companies: [{ id: 'company-id', name: 'Example Company' }],
+            entities: [
+              {
+                entityType: 'BRANCH',
+                id: 'branch-id',
+                name: 'Example Branch',
+              },
+            ],
+            participants: [],
+          },
+        ],
+        internalMessages: [
+          {
+            id: 'internal-message-id',
+            messageThreadId: 'internal-thread-id',
+            subject: 'Internal planning',
+            body: 'Sanitised body',
+            receivedAt: '2026-07-30T09:00:00.000Z',
+            entities: [],
             participants: [],
           },
         ],
@@ -76,7 +94,7 @@ describe('PermaventWeeklySalesReportSourceService', () => {
             body: null,
             receivedAt: '2026-07-30T09:00:00.000Z',
             participants: [],
-            reason: 'NO_PERSON',
+            reason: 'PERSON_WITHOUT_ENTITY',
           },
         ],
         notes: [
@@ -85,7 +103,13 @@ describe('PermaventWeeklySalesReportSourceService', () => {
             title: 'Site visit',
             body: 'Sanitised note',
             createdAt: '2026-07-31T10:00:00.000Z',
-            companies: [{ id: 'company-id', name: 'Example Company' }],
+            entities: [
+              {
+                entityType: 'BRANCH',
+                id: 'branch-id',
+                name: 'Example Branch',
+              },
+            ],
           },
         ],
         unlinkedNotes: [
@@ -94,7 +118,7 @@ describe('PermaventWeeklySalesReportSourceService', () => {
             title: 'Follow-up',
             body: null,
             createdAt: '2026-07-31T11:00:00.000Z',
-            reason: 'NO_COMPANY',
+            reason: 'NO_ENTITY',
           },
         ],
       },
@@ -117,18 +141,19 @@ describe('PermaventWeeklySalesReportSourceService', () => {
         generatedAt: '2026-08-01T10:30:00.000Z',
         timeZone: 'Europe/London',
       },
-      scope: { activeTerritoryCount: 2, companyCount: 12, peopleCount: 30 },
+      scope: { activeTerritoryCount: 2, entityCount: 2 },
       stats: {
+        internalMessageCount: 1,
         messageCount: 1,
-        multiCompanyMessageCount: 0,
-        multiCompanyNoteCount: 0,
+        multiEntityMessageCount: 0,
+        multiEntityNoteCount: 0,
         noteCount: 1,
         unlinkedMessageCount: 1,
         unlinkedNoteCount: 1,
       },
     });
     expect(query).toHaveBeenCalledWith(
-      expect.stringContaining('WITH scoped_company AS'),
+      expect.stringContaining('WITH week_message AS'),
       [
         'workspace-member-id',
         ['DM', 'RT'],
@@ -141,20 +166,16 @@ describe('PermaventWeeklySalesReportSourceService', () => {
       { shouldBypassPermissionChecks: true },
     );
     const sourceQuery = query.mock.calls[0][0];
-    const qualifiedMessageQuery = sourceQuery.slice(
-      sourceQuery.indexOf('qualified_message AS'),
-      sourceQuery.indexOf('message_company AS'),
-    );
-
     expect(sourceQuery).toContain('week_note AS');
     expect(sourceQuery).toContain('"noteTarget"');
     expect(sourceQuery).toContain('actor_message AS');
+    expect(sourceQuery).toContain('"targetBranchId"');
+    expect(sourceQuery).toContain('"_branch" AS branch');
+    expect(sourceQuery).toContain('internal_message AS');
     expect(sourceQuery).toContain(
       "participant.role IN ('FROM', 'TO', 'CC', 'BCC')",
     );
-    expect(qualifiedMessageQuery).toContain(
-      'JOIN actor_message ON actor_message.id = week_message.id',
-    );
+    expect(sourceQuery).not.toContain('scoped_company AS');
   });
 
   it('does not query when the feature is disabled', async () => {
@@ -187,15 +208,17 @@ describe('PermaventWeeklySalesReportSourceService', () => {
   it('rejects a source that exceeds the processing limit', async () => {
     query.mockResolvedValue([
       {
-        companyCount: 12,
-        peopleCount: 30,
+        actorMessageCount: 1001,
+        entityCount: 0,
+        internalMessageCount: 0,
         qualifiedMessageCount: 1001,
-        multiCompanyMessageCount: 0,
-        multiCompanyNoteCount: 0,
+        multiEntityMessageCount: 0,
+        multiEntityNoteCount: 0,
         noteCount: 1,
         unlinkedMessageCount: 0,
         unlinkedNoteCount: 0,
         messages: [],
+        internalMessages: [],
         notes: [],
         unlinkedMessages: [],
         unlinkedNotes: [],

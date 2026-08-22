@@ -1,6 +1,7 @@
 import { type MessageParticipantRole } from 'twenty-shared/types';
 
-export type PermaventWeeklyReportCompanyLink = {
+export type PermaventWeeklyReportEntityLink = {
+  entityType: 'BRANCH' | 'COMPANY';
   id: string;
   name: string;
 };
@@ -13,7 +14,7 @@ export type PermaventWeeklyReportParticipant = {
 
 export type PermaventWeeklyReportMessage = {
   body: string | null;
-  companies: PermaventWeeklyReportCompanyLink[];
+  entities: PermaventWeeklyReportEntityLink[];
   id: string;
   messageThreadId: string | null;
   participants: PermaventWeeklyReportParticipant[];
@@ -23,16 +24,13 @@ export type PermaventWeeklyReportMessage = {
 
 export type PermaventWeeklyReportNote = {
   body: string | null;
-  companies: PermaventWeeklyReportCompanyLink[];
+  entities: PermaventWeeklyReportEntityLink[];
   createdAt: string;
   id: string;
   title: string;
 };
 
-export type PermaventWeeklyReportUnlinkedReason =
-  | 'NO_PERSON'
-  | 'OUTSIDE_SCOPE_COMPANY'
-  | 'PERSON_WITHOUT_COMPANY';
+export type PermaventWeeklyReportUnlinkedReason = 'PERSON_WITHOUT_ENTITY';
 
 export type PermaventWeeklyReportUnlinkedMessage = Omit<
   PermaventWeeklyReportMessage,
@@ -43,14 +41,15 @@ export type PermaventWeeklyReportUnlinkedMessage = Omit<
 
 export type PermaventWeeklyReportUnlinkedNote = Omit<
   PermaventWeeklyReportNote,
-  'companies'
+  'entities'
 > & {
-  reason: 'NO_COMPANY' | 'OUTSIDE_SCOPE_COMPANY';
+  reason: 'NO_ENTITY';
 };
 
 export type PermaventWeeklySalesReportSource = {
   actorWorkspaceMemberId: string;
   messages: PermaventWeeklyReportMessage[];
+  internalMessages: PermaventWeeklyReportMessage[];
   notes: PermaventWeeklyReportNote[];
   period: {
     generatedAt: string;
@@ -59,13 +58,13 @@ export type PermaventWeeklySalesReportSource = {
   };
   scope: {
     activeTerritoryCount: number;
-    companyCount: number;
-    peopleCount: number;
+    entityCount: number;
   };
   stats: {
+    internalMessageCount: number;
     messageCount: number;
-    multiCompanyMessageCount: number;
-    multiCompanyNoteCount: number;
+    multiEntityMessageCount: number;
+    multiEntityNoteCount: number;
     noteCount: number;
     unlinkedMessageCount: number;
     unlinkedNoteCount: number;
