@@ -1,6 +1,11 @@
 #!/usr/bin/env bash
 set -Eeuo pipefail
 
+if (( BASH_VERSINFO[0] < 4 )); then
+  printf '%s\n' 'ERROR: Bash 4 or later is required for this server helper.' >&2
+  exit 1
+fi
+
 readonly compose_directory='/opt/twenty-test'
 readonly image_repository='ghcr.io/ssypchenko/twenty'
 readonly test_hostname='crm-test.permavent.co.uk'

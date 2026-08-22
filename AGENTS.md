@@ -35,15 +35,20 @@ Keep clean base branches aligned with upstream and do not add Permavent-only fil
   `tsgo` or a Twenty SDK command, run this gate from the repository root in the
   same shell as the command that follows it:
 
-  ```bash
-  source scripts/permavent/lib/common.sh
-  permavent_prepare_node_runtime
+  ```zsh
+  source "${NVM_DIR:-$HOME/.nvm}/nvm.sh"
+  nvm use --silent
   test "$(node --version)" = "v24.16.0"
   test "$(corepack yarn --version)" = "4.13.0"
   ```
 
 - Stop when either version check fails. Never fall back to a system Node,
   Yarn 1, `npx` or an unrelated global CLI.
+- On macOS, the interactive shell is normally `zsh`. Do not source
+  `scripts/permavent/lib/common.sh` from it: that file is a Bash-only internal
+  library. Run executable helpers directly, for example
+  `./scripts/permavent/preflight.sh --skip-docker`; their Bash shebang selects
+  the correct interpreter.
 - `preflight.sh` validates the runtime inside its own process; it does not
   activate Node in the calling shell. Run the gate again before any raw
   command started after preflight.
@@ -65,7 +70,8 @@ Keep clean base branches aligned with upstream and do not add Permavent-only fil
 - Run local verification helpers from the repository root after the runtime
   gate. Their temporary PATH change applies only inside the helper process; it
   does not change the caller's shell. Do not add ad hoc PATH discovery or run
-  a raw Node-based command before the gate.
+  a raw Node-based command before the gate. Never invoke a Bash helper through
+  `sh`; run its executable path directly.
 - Preflight: `./scripts/permavent/preflight.sh --skip-docker`.
 - Focused server Jest: `./scripts/permavent/run-server-tests.sh <test-path> [<test-path> ...]`. This helper accepts repository-relative, `packages/twenty-server`-relative or absolute paths and normalises them to Jest's server-package working directory.
 - Full server verification without unrelated dependency builds: `./scripts/permavent/verify-changes.sh server --base permavent/custom-vX.Y.Z`.
@@ -114,6 +120,7 @@ The canonical workflow is documented in `../docs/twenty-migration/05-custom-imag
 ## Live-to-Test Data Refresh
 
 - Refresh Test from Live only with `/usr/local/sbin/twenty-refresh-test-from-live` on the UK CRM server. Do not reproduce the database or storage transfer with ad hoc commands during a normal refresh.
+- The canonical source is `scripts/permavent/server/twenty-refresh-test-from-live` and it is installed only through the workspace installer. It requires server Bash 4 or later; do not invoke it through `/bin/sh`.
 - The project owner normally runs the refresh script from their own Terminal.
 - The assistant must not run a Live-to-Test refresh on the owner's behalf unless the owner explicitly insists that the assistant execute it in the current conversation.
 - Before any assistant-executed refresh, restate that the operation replaces the complete Test database and local file storage, and confirm that the script will create rollback backups.

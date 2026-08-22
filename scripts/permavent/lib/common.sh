@@ -1,5 +1,10 @@
 #!/usr/bin/env bash
 
+if [ -z "${BASH_VERSION:-}" ]; then
+  printf '%s\n' 'Error: scripts/permavent/lib/common.sh is a Bash library. Do not source it from zsh; run an executable helper directly or activate NVM in the current shell.' >&2
+  return 1 2>/dev/null || exit 1
+fi
+
 if [[ -n "${PERMAVENT_COMMON_SH_LOADED:-}" ]]; then
   return 0
 fi
