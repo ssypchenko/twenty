@@ -18,7 +18,7 @@ import {
   Max,
   Min,
 } from 'class-validator';
-import { GraphQLJSON } from 'graphql-scalars';
+import GraphQLJSON from 'graphql-type-json';
 import { PermissionFlagType } from 'twenty-shared/constants';
 import { MetadataResolver } from 'src/engine/api/graphql/graphql-config/decorators/metadata-resolver.decorator';
 import { ResolverValidationPipe } from 'src/engine/core-modules/graphql/pipes/resolver-validation.pipe';
