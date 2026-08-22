@@ -43,14 +43,19 @@ export class PermaventUserAuditService {
         before?: Record<string, unknown>;
         diff?: Record<string, { after?: unknown }>;
       };
-      const fields =
-        action === 'UPDATED'
-          ? (properties.updatedFields ?? [])
-          : Object.keys(properties.after ?? {});
-      const newValues = this.sanitiseValues(
-        action === 'UPDATED' ? properties.diff : properties.after,
-        action === 'UPDATED',
-      );
+      const capturesUpdatedValues = action === 'UPDATED';
+      const capturesCreatedValues =
+        action === 'CREATED' || action === 'UPSERTED';
+      const fields = capturesUpdatedValues
+        ? (properties.updatedFields ?? [])
+        : capturesCreatedValues
+          ? Object.keys(properties.after ?? {})
+          : [];
+      const newValues = capturesUpdatedValues
+        ? this.sanitiseValues(properties.diff, true)
+        : capturesCreatedValues
+          ? this.sanitiseValues(properties.after, false)
+          : {};
       const sourceEventId = this.sourceEventId(batch, event, action);
       try {
         await this.repository.insert({
@@ -63,7 +68,9 @@ export class PermaventUserAuditService {
           objectMetadataId: batch.objectMetadata.id,
           objectName: batch.objectMetadata.nameSingular,
           recordId: event.recordId,
-          recordName: this.recordName(properties.after ?? properties.before),
+          recordName:
+            this.recordName(properties.after) ??
+            this.recordName(properties.before),
           changedFields: fields.filter((field: string) =>
             Object.prototype.hasOwnProperty.call(newValues, field),
           ),
@@ -106,7 +113,7 @@ export class PermaventUserAuditService {
         changedFields: [],
         newValues: {},
         denialCategory: input.category,
-        sourceEventId: this.hash(JSON.stringify(input)),
+        sourceEventId: null,
       });
     } catch (error) {
       this.logger.error(
