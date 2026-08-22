@@ -156,7 +156,6 @@ describe('PermaventWeeklySalesReportSourceService', () => {
       expect.stringContaining('WITH week_message AS'),
       [
         'workspace-member-id',
-        ['DM', 'RT'],
         new Date('2026-07-26T23:00:00.000Z'),
         generatedAt,
         true,
@@ -169,6 +168,11 @@ describe('PermaventWeeklySalesReportSourceService', () => {
     expect(sourceQuery).toContain('week_note AS');
     expect(sourceQuery).toContain('"noteTarget"');
     expect(sourceQuery).toContain('actor_message AS');
+    expect(sourceQuery).toContain('message."receivedAt" >= $2');
+    expect(sourceQuery).toContain('message."receivedAt" <= $3');
+    expect(sourceQuery).toContain('CASE WHEN $4::boolean');
+    expect(sourceQuery).toContain('LIMIT $5');
+    expect(sourceQuery).not.toMatch(/\$6\b/u);
     expect(sourceQuery).toContain('"targetBranchId"');
     expect(sourceQuery).toContain('"_branch" AS branch');
     expect(sourceQuery).toContain('internal_message AS');

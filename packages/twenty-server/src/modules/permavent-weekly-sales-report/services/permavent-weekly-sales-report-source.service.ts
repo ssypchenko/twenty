@@ -80,7 +80,6 @@ export class PermaventWeeklySalesReportSourceService {
           this.buildSourceQuery(schemaName),
           [
             securityContext.workspaceMemberId,
-            securityContext.allowedSalesRepCodes,
             window.start,
             window.generatedAt,
             includeBody,
@@ -144,8 +143,8 @@ export class PermaventWeeklySalesReportSourceService {
         FROM "${schemaName}"."message" AS message
         WHERE message."deletedAt" IS NULL
           AND message."isDraft" IS NOT TRUE
-          AND message."receivedAt" >= $3
-          AND message."receivedAt" <= $4
+          AND message."receivedAt" >= $2
+          AND message."receivedAt" <= $3
       ),
       actor_message AS (
         SELECT DISTINCT week_message.id
@@ -234,7 +233,7 @@ export class PermaventWeeklySalesReportSourceService {
             'id', week_message.id,
             'messageThreadId', week_message."messageThreadId",
             'subject', coalesce(week_message.subject, ''),
-            'body', CASE WHEN $5::boolean THEN week_message.text ELSE NULL END,
+            'body', CASE WHEN $4::boolean THEN week_message.text ELSE NULL END,
             'receivedAt', week_message."receivedAt",
             'entities', coalesce((
               SELECT jsonb_agg(
@@ -265,7 +264,7 @@ export class PermaventWeeklySalesReportSourceService {
         FROM week_message
         JOIN qualified_message ON qualified_message.id = week_message.id
         ORDER BY week_message."receivedAt", week_message.id
-        LIMIT $6
+        LIMIT $5
       ),
       internal_message_payload AS (
         SELECT
@@ -274,7 +273,7 @@ export class PermaventWeeklySalesReportSourceService {
             'id', week_message.id,
             'messageThreadId', week_message."messageThreadId",
             'subject', coalesce(week_message.subject, ''),
-            'body', CASE WHEN $5::boolean THEN week_message.text ELSE NULL END,
+            'body', CASE WHEN $4::boolean THEN week_message.text ELSE NULL END,
             'receivedAt', week_message."receivedAt",
             'entities', '[]'::jsonb,
             'participants', coalesce((
@@ -294,7 +293,7 @@ export class PermaventWeeklySalesReportSourceService {
         FROM week_message
         JOIN internal_message ON internal_message.id = week_message.id
         ORDER BY week_message."receivedAt", week_message.id
-        LIMIT $6
+        LIMIT $5
       ),
       unlinked_message_payload AS (
         SELECT
@@ -303,7 +302,7 @@ export class PermaventWeeklySalesReportSourceService {
             'id', week_message.id,
             'messageThreadId', week_message."messageThreadId",
             'subject', coalesce(week_message.subject, ''),
-            'body', CASE WHEN $5::boolean THEN week_message.text ELSE NULL END,
+            'body', CASE WHEN $4::boolean THEN week_message.text ELSE NULL END,
             'receivedAt', week_message."receivedAt",
             'participants', coalesce((
               SELECT jsonb_agg(
@@ -329,15 +328,15 @@ export class PermaventWeeklySalesReportSourceService {
             SELECT 1 FROM internal_message WHERE internal_message.id = actor_message.id
           )
         ORDER BY week_message."receivedAt", week_message.id
-        LIMIT $6
+        LIMIT $5
       ),
       week_note AS (
         SELECT note.*
         FROM "${schemaName}"."note" AS note
         WHERE note."deletedAt" IS NULL
           AND note."createdByWorkspaceMemberId" = $1
-          AND note."createdAt" >= $3
-          AND note."createdAt" <= $4
+          AND note."createdAt" >= $2
+          AND note."createdAt" <= $3
       ),
       note_branch_candidate AS (
         SELECT DISTINCT
@@ -444,7 +443,7 @@ export class PermaventWeeklySalesReportSourceService {
           jsonb_build_object(
             'id', week_note.id,
             'title', coalesce(week_note.title, ''),
-            'body', CASE WHEN $5::boolean THEN week_note."bodyV2Markdown" ELSE NULL END,
+            'body', CASE WHEN $4::boolean THEN week_note."bodyV2Markdown" ELSE NULL END,
             'createdAt', week_note."createdAt",
             'entities', coalesce((
               SELECT jsonb_agg(
@@ -462,7 +461,7 @@ export class PermaventWeeklySalesReportSourceService {
         FROM week_note
         JOIN qualified_note ON qualified_note.id = week_note.id
         ORDER BY week_note."createdAt", week_note.id
-        LIMIT $6
+        LIMIT $5
       ),
       unlinked_note_payload AS (
         SELECT
@@ -470,7 +469,7 @@ export class PermaventWeeklySalesReportSourceService {
           jsonb_build_object(
             'id', week_note.id,
             'title', coalesce(week_note.title, ''),
-            'body', CASE WHEN $5::boolean THEN week_note."bodyV2Markdown" ELSE NULL END,
+            'body', CASE WHEN $4::boolean THEN week_note."bodyV2Markdown" ELSE NULL END,
             'createdAt', week_note."createdAt",
             'reason', 'NO_ENTITY'
           ) AS payload
@@ -479,7 +478,7 @@ export class PermaventWeeklySalesReportSourceService {
           SELECT 1 FROM qualified_note WHERE qualified_note.id = week_note.id
         )
         ORDER BY week_note."createdAt", week_note.id
-        LIMIT $6
+        LIMIT $5
       )
       SELECT
         (SELECT count(*) FROM actor_message) AS "actorMessageCount",
