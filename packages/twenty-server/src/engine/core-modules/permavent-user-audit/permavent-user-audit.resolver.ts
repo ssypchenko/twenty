@@ -68,6 +68,11 @@ class PermaventUserAuditQueryInput {
   @Field(() => String, { nullable: true })
   @IsUUID()
   @IsOptional()
+  objectMetadataId?: string;
+
+  @Field(() => String, { nullable: true })
+  @IsUUID()
+  @IsOptional()
   recordId?: string;
 
   @Field(() => Date, { nullable: true })

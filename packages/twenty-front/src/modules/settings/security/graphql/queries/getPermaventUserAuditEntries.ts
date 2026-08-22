@@ -6,9 +6,11 @@ export const GET_PERMAVENT_USER_AUDIT_ENTRIES = gql`
       entries {
         id
         createdAt
+        userWorkspaceId
         actorDisplayName
         action
         result
+        objectMetadataId
         objectName
         recordId
         recordName

@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
+import { FieldMetadataEntity } from 'src/engine/metadata-modules/field-metadata/field-metadata.entity';
 import { PermissionsModule } from 'src/engine/metadata-modules/permissions/permissions.module';
 
 import { PermaventUserAuditEntryEntity } from './permavent-user-audit-entry.entity';
@@ -12,7 +13,10 @@ import { PermaventUserAuditCleanupCronJob } from './cron/permavent-user-audit-cl
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([PermaventUserAuditEntryEntity]),
+    TypeOrmModule.forFeature([
+      PermaventUserAuditEntryEntity,
+      FieldMetadataEntity,
+    ]),
     PermissionsModule,
   ],
   providers: [
