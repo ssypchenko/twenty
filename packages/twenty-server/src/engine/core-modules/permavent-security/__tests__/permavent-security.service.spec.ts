@@ -265,21 +265,25 @@ describe('PermaventSecurityService', () => {
     },
   );
 
-  it('should default a Sales Rep Company owner without clearing ERP input', async () => {
-    await expect(
-      service.applyToCommonQueryArgs({
-        ...input,
-        operationName: CommonQueryNames.CREATE_ONE,
-        args: { data: { name: 'Example company', erpsalesrepcode: 'DM' } },
-      }),
-    ).resolves.toMatchObject({
-      data: {
-        name: 'Example company',
-        erpsalesrepcode: 'DM',
-        accountOwnerId: 'workspace-member-id',
-      },
-    });
-  });
+  it.each(['company', 'branch'])(
+    'should default a Sales Rep owner for a manually created %s without clearing ERP input',
+    async (nameSingular) => {
+      await expect(
+        service.applyToCommonQueryArgs({
+          ...input,
+          operationName: CommonQueryNames.CREATE_ONE,
+          args: { data: { name: 'Example company', erpsalesrepcode: 'DM' } },
+          flatObjectMetadata: { nameSingular } as FlatObjectMetadata,
+        }),
+      ).resolves.toMatchObject({
+        data: {
+          name: 'Example company',
+          erpsalesrepcode: 'DM',
+          accountOwnerId: 'workspace-member-id',
+        },
+      });
+    },
+  );
 
   it.each([
     {

@@ -12,7 +12,6 @@ import { type DeepPartial, ILike } from 'typeorm';
 
 import { SecureHttpClientService } from 'src/engine/core-modules/secure-http-client/secure-http-client.service';
 import { GlobalWorkspaceOrmManager } from 'src/engine/twenty-orm/global-workspace-datasource/global-workspace-orm.manager';
-import { TwentyConfigService } from 'src/engine/core-modules/twenty-config/twenty-config.service';
 import { type WorkspaceRepository } from 'src/engine/twenty-orm/repository/workspace.repository';
 import { buildSystemAuthContext } from 'src/engine/twenty-orm/utils/build-system-auth-context.util';
 import { CompanyWorkspaceEntity } from 'src/modules/company/standard-objects/company.workspace-entity';
@@ -37,7 +36,6 @@ export class CreateCompanyService {
   constructor(
     private readonly globalWorkspaceOrmManager: GlobalWorkspaceOrmManager,
     private readonly secureHttpClientService: SecureHttpClientService,
-    private readonly twentyConfigService: TwentyConfigService,
   ) {
     this.httpService = this.secureHttpClientService.getHttpClient({
       baseURL: TWENTY_COMPANIES_BASE_URL,
@@ -209,11 +207,6 @@ export class CreateCompanyService {
           provider: company.createdByContext.provider,
         },
       },
-      ...(company.createdBySource === FieldActorSource.EMAIL &&
-      this.twentyConfigService.get('PERMAVENT_MY_COMPANIES_FOCUS_ENABLED') &&
-      company.createdByWorkspaceMember?.id
-        ? { accountOwnerId: company.createdByWorkspaceMember.id }
-        : {}),
       address: {
         addressCity: city,
       },

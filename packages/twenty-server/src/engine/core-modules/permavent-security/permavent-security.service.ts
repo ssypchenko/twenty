@@ -386,8 +386,7 @@ export class PermaventSecurityService {
         }
 
         const values = record as Record<string, unknown>;
-        const salesRepCode =
-          values.erpsalesrepcode ?? values.erpSalesRepCode;
+        const salesRepCode = values.erpsalesrepcode ?? values.erpSalesRepCode;
 
         return (
           typeof salesRepCode === 'string' &&

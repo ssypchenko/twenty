@@ -9,7 +9,6 @@ import { STANDARD_OBJECTS } from 'twenty-shared/metadata';
 
 import { ObjectMetadataEntity } from 'src/engine/metadata-modules/object-metadata/object-metadata.entity';
 import { SecureHttpClientService } from 'src/engine/core-modules/secure-http-client/secure-http-client.service';
-import { TwentyConfigService } from 'src/engine/core-modules/twenty-config/twenty-config.service';
 import { GlobalWorkspaceOrmManager } from 'src/engine/twenty-orm/global-workspace-datasource/global-workspace-orm.manager';
 import {
   type CompanyToCreate,
@@ -20,7 +19,6 @@ describe('CreateCompanyService', () => {
   let service: CreateCompanyService;
   let mockCompanyRepository: any;
   let mockHttpService: any;
-  let getConfigVariable: jest.Mock;
 
   const workspaceId = 'workspace-1';
 
@@ -108,8 +106,6 @@ describe('CreateCompanyService', () => {
     mockHttpService = {
       get: jest.fn(),
     };
-    getConfigVariable = jest.fn().mockReturnValue(false);
-
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         CreateCompanyService,
@@ -127,10 +123,6 @@ describe('CreateCompanyService', () => {
               .fn()
               .mockImplementation((fn: () => any, _authContext?: any) => fn()),
           },
-        },
-        {
-          provide: TwentyConfigService,
-          useValue: { get: getConfigVariable },
         },
         {
           provide: getRepositoryToken(ObjectMetadataEntity),
@@ -186,8 +178,7 @@ describe('CreateCompanyService', () => {
       ]);
     });
 
-    it('should set Account Owner for a new Company created from email', async () => {
-      getConfigVariable.mockReturnValue(true);
+    it('should not set Account Owner for a new Company created from email', async () => {
       mockHttpService.get.mockResolvedValue({
         data: {
           name: 'Example1',
@@ -208,9 +199,15 @@ describe('CreateCompanyService', () => {
         workspaceId,
       );
 
-      expect(mockCompanyRepository.save).toHaveBeenCalledWith([
-        expect.objectContaining({ accountOwnerId: 'workspace-member-1' }),
-      ]);
+      const savedCompany = mockCompanyRepository.save.mock.calls[0][0][0];
+
+      expect(savedCompany).toMatchObject({
+        createdBy: {
+          source: FieldActorSource.EMAIL,
+          workspaceMemberId: 'workspace-member-1',
+        },
+      });
+      expect(savedCompany).not.toHaveProperty('accountOwnerId');
     });
 
     it('should successfully two companies', async () => {
@@ -284,8 +281,6 @@ describe('CreateCompanyService', () => {
     });
 
     it('should not replace Account Owner on an existing Company', async () => {
-      getConfigVariable.mockReturnValue(true);
-
       await service.createOrRestoreCompanies(
         [
           {
