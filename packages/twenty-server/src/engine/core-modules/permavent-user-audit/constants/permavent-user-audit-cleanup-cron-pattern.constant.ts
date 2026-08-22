@@ -1,0 +1,1 @@
+export const PERMAVENT_USER_AUDIT_CLEANUP_CRON_PATTERN = '0 3 * * *';

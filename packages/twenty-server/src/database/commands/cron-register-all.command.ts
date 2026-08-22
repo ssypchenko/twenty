@@ -15,6 +15,7 @@ import { CronTriggerCronCommand } from 'src/engine/core-modules/logic-function/l
 import { CheckPublicDomainsValidRecordsCronCommand } from 'src/engine/core-modules/public-domain/crons/commands/check-public-domains-valid-records.cron.command';
 import { TwentyConfigService } from 'src/engine/core-modules/twenty-config/twenty-config.service';
 import { UserSessionCleanupCronCommand } from 'src/engine/core-modules/user-session/crons/commands/user-session-cleanup.cron.command';
+import { PermaventUserAuditCleanupCronCommand } from 'src/engine/core-modules/permavent-user-audit/cron/permavent-user-audit-cleanup.cron.command';
 import { CheckCustomDomainValidRecordsCronCommand } from 'src/engine/core-modules/workspace/crons/commands/check-custom-domain-valid-records.cron.command';
 import { WebhookSubscriptionRenewalCronCommand } from 'src/modules/connected-account/webhook-subscription-manager/crons/commands/webhook-subscription-renewal.cron.command';
 import { TrashCleanupCronCommand } from 'src/engine/trash-cleanup/commands/trash-cleanup.cron.command';
@@ -75,6 +76,7 @@ export class CronRegisterAllCommand extends CommandRunner {
     private readonly pendingFileCleanupCronCommand: PendingFileCleanupCronCommand,
     private readonly billingReminderCronCommand: BillingReminderCronCommand,
     private readonly userSessionCleanupCronCommand: UserSessionCleanupCronCommand,
+    private readonly permaventUserAuditCleanupCronCommand: PermaventUserAuditCleanupCronCommand,
     private readonly twentyConfigService: TwentyConfigService,
   ) {
     super();
@@ -212,6 +214,10 @@ export class CronRegisterAllCommand extends CommandRunner {
       {
         name: 'UserSessionCleanup',
         command: this.userSessionCleanupCronCommand,
+      },
+      {
+        name: 'PermaventUserAuditCleanup',
+        command: this.permaventUserAuditCleanupCronCommand,
       },
     ];
 

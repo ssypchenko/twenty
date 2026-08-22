@@ -11,12 +11,14 @@ import { PermaventDelegatedAuditService } from 'src/engine/core-modules/permaven
 import { UserWorkspaceEntity } from 'src/engine/core-modules/user-workspace/user-workspace.entity';
 import { CoreEntityCacheModule } from 'src/engine/core-entity-cache/core-entity-cache.module';
 import { WorkspaceCacheModule } from 'src/engine/workspace-cache/workspace-cache.module';
+import { PermaventUserAuditModule } from 'src/engine/core-modules/permavent-user-audit/permavent-user-audit.module';
 
 @Module({
   imports: [
     CoreEntityCacheModule,
     TypeOrmModule.forFeature([UserWorkspaceEntity]),
     WorkspaceCacheModule,
+    PermaventUserAuditModule,
   ],
   providers: [
     PermaventSalesRepAssignmentService,

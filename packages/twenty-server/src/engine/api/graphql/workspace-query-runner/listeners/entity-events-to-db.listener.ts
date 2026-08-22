@@ -23,6 +23,7 @@ import { CallDatabaseEventTriggerJobsJob } from 'src/engine/core-modules/logic-f
 import { WorkspaceEventBatch } from 'src/engine/workspace-event-emitter/types/workspace-event-batch.type';
 import { ObjectRecordEventPublisher } from 'src/engine/subscriptions/object-record-event/object-record-event-publisher';
 import { UpsertTimelineActivityFromInternalEvent } from 'src/modules/timeline/jobs/upsert-timeline-activity-from-internal-event.job';
+import { RecordPermaventUserAuditJob } from 'src/engine/core-modules/permavent-user-audit/permavent-user-audit.job';
 
 @Injectable()
 export class EntityEventsToDbListener {
@@ -121,6 +122,16 @@ export class EntityEventsToDbListener {
         >(
           UpsertTimelineActivityFromInternalEvent.name,
           batchEvent as WorkspaceEventBatch<ObjectRecordNonDestructiveEvent>,
+        ),
+      );
+    }
+
+    if (isAuditLogBatchEvent) {
+      promises.push(
+        this.entityEventsToDbQueueService.add<WorkspaceEventBatch<T>>(
+          RecordPermaventUserAuditJob.name,
+          batchEvent,
+          { retryLimit: 3 },
         ),
       );
     }

@@ -1,4 +1,9 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  Logger,
+  Optional,
+} from '@nestjs/common';
 
 import {
   type ObjectRecord,
@@ -22,6 +27,7 @@ import {
 import { type PermaventCommonQueryHookInput } from 'src/engine/core-modules/permavent-security/types/permavent-common-query-hook-input.type';
 import { mergePermaventSecurityFilter } from 'src/engine/core-modules/permavent-security/utils/merge-permavent-security-filter.util';
 import { TwentyConfigService } from 'src/engine/core-modules/twenty-config/twenty-config.service';
+import { PermaventUserAuditService } from 'src/engine/core-modules/permavent-user-audit/permavent-user-audit.service';
 import { type FlatObjectMetadata } from 'src/engine/metadata-modules/flat-object-metadata/types/flat-object-metadata.type';
 import {
   PermissionsException,
@@ -85,11 +91,13 @@ type CreateQueryArgsWithSystemFields = CreateQueryArgs & {
 
 @Injectable()
 export class PermaventSecurityService {
+  private readonly logger = new Logger(PermaventSecurityService.name);
   constructor(
     private readonly twentyConfigService: TwentyConfigService,
     private readonly securityContextFactory: PermaventSecurityContextFactory,
     private readonly accessFilterBuilder: PermaventAccessFilterBuilder,
     private readonly companyFocusFilterService: PermaventCompanyFocusFilterService,
+    @Optional() private readonly userAuditService?: PermaventUserAuditService,
   ) {}
 
   public async resolveErpSalesScope(
@@ -342,6 +350,11 @@ export class PermaventSecurityService {
     }
 
     if (args.upsert) {
+      void this.recordDenied(
+        authContext,
+        flatObjectMetadata.nameSingular,
+        'UPSERT_DENIED',
+      );
       throw new PermissionsException(
         `Permavent Sales Rep upsert is not permitted on '${flatObjectMetadata.nameSingular}' records`,
         PermissionsExceptionCode.PERMISSION_DENIED,
@@ -349,6 +362,11 @@ export class PermaventSecurityService {
     }
 
     if (securityContext.workspaceMemberId === null) {
+      void this.recordDenied(
+        authContext,
+        flatObjectMetadata.nameSingular,
+        'OWNER_UNRESOLVED',
+      );
       throw new PermissionsException(
         'Permavent Sales Rep ownership could not be resolved',
         PermissionsExceptionCode.PERMISSION_DENIED,
@@ -427,9 +445,38 @@ export class PermaventSecurityService {
       return;
     }
 
+    void this.recordDenied(
+      authContext,
+      flatObjectMetadata.nameSingular,
+      isAssignmentObject
+        ? 'SALES_REP_ASSIGNMENT_DENIED'
+        : 'SALES_REP_OPERATION_DENIED',
+    );
+
     throw new PermissionsException(
       `Permavent Sales Rep operation '${operationName}' is not permitted on '${flatObjectMetadata.nameSingular}' records`,
       PermissionsExceptionCode.PERMISSION_DENIED,
     );
+  }
+
+  private async recordDenied(
+    authContext: WorkspaceAuthContext,
+    objectName: string,
+    category: string,
+  ): Promise<void> {
+    try {
+      if (authContext.type !== 'user') return;
+      await this.userAuditService?.recordRlsDenied({
+        workspaceId: authContext.workspace.id,
+        userWorkspaceId: authContext.userWorkspaceId,
+        workspaceMemberId: authContext.workspaceMemberId,
+        objectName,
+        action: 'RLS_DENIED',
+        category,
+      });
+    } catch (error) {
+      // Audit availability must never change the RLS decision.
+      this.logger.error('Permavent user audit denial recording failed', error);
+    }
   }
 }
