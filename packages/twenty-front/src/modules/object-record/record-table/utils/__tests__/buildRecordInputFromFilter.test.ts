@@ -9,12 +9,19 @@ const FIELD_ID_ADDRESS = 'field-address-id';
 const FIELD_ID_NUMBER = 'field-number-id';
 const FIELD_ID_RELATION = 'field-relation-id';
 const FIELD_ID_UNKNOWN = 'field-unknown-id';
+const FIELD_ID_ERP_SALES_REP_CODE = 'field-erp-sales-rep-code-id';
 
 const mockObjectMetadataItem = {
   fields: [
     {
       id: FIELD_ID_TEXT,
       name: 'companyName',
+      type: 'TEXT',
+      options: null,
+    },
+    {
+      id: FIELD_ID_ERP_SALES_REP_CODE,
+      name: 'erpsalesrepcode',
       type: 'TEXT',
       options: null,
     },
@@ -74,6 +81,23 @@ describe('buildRecordInputFromFilter', () => {
     });
 
     expect(result).toEqual({ companyName: 'Acme' });
+  });
+
+  it('should not prefill the active Sales Rep marker into a record', () => {
+    const result = buildRecordInputFromFilter({
+      currentRecordFilters: [
+        createFilter({
+          fieldMetadataId: FIELD_ID_ERP_SALES_REP_CODE,
+          type: 'TEXT',
+          operand: ViewFilterOperand.CONTAINS,
+          value: '{{PERMAVENT_ACTIVE_SALES_REP_CODES}}',
+        }),
+      ],
+      objectMetadataItem: mockObjectMetadataItem,
+      timeZone: 'UTC',
+    });
+
+    expect(result).toEqual({});
   });
 
   it('should subtract one minute for DATE_TIME with IS_BEFORE operand', () => {

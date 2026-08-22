@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 
 import {
   type ObjectRecord,
@@ -15,7 +15,10 @@ import {
 import { type WorkspaceAuthContext } from 'src/engine/core-modules/auth/types/workspace-auth-context.type';
 import { PermaventSecurityContextFactory } from 'src/engine/core-modules/permavent-security/context/permavent-security-context.factory';
 import { PermaventAccessFilterBuilder } from 'src/engine/core-modules/permavent-security/filters/permavent-access-filter.builder';
-import { PermaventCompanyFocusFilterService } from 'src/engine/core-modules/permavent-security/focus/permavent-company-focus-filter.service';
+import {
+  PERMAVENT_ACTIVE_SALES_REP_CODES_MARKER,
+  PermaventCompanyFocusFilterService,
+} from 'src/engine/core-modules/permavent-security/focus/permavent-company-focus-filter.service';
 import { type PermaventCommonQueryHookInput } from 'src/engine/core-modules/permavent-security/types/permavent-common-query-hook-input.type';
 import { mergePermaventSecurityFilter } from 'src/engine/core-modules/permavent-security/utils/merge-permavent-security-filter.util';
 import { TwentyConfigService } from 'src/engine/core-modules/twenty-config/twenty-config.service';
@@ -61,6 +64,12 @@ const PERMAVENT_DENIED_SALES_REP_ASSIGNMENT_OPERATIONS = new Set([
   CommonQueryNames.FIND_MANY,
   CommonQueryNames.FIND_DUPLICATES,
   CommonQueryNames.GROUP_BY,
+]);
+const PERMAVENT_SALES_REP_CODE_MUTATION_OPERATIONS = new Set([
+  CommonQueryNames.CREATE_ONE,
+  CommonQueryNames.CREATE_MANY,
+  CommonQueryNames.UPDATE_ONE,
+  CommonQueryNames.UPDATE_MANY,
 ]);
 
 export const PERMAVENT_SYSTEM_FIELD_NAMES = Symbol('permaventSystemFieldNames');
@@ -148,6 +157,13 @@ export class PermaventSecurityService {
     authContext,
     flatObjectMetadata,
   }: PermaventCommonQueryHookInput<TArgs>): Promise<TArgs> {
+    if (
+      PERMAVENT_DIRECT_SALES_OBJECTS.has(flatObjectMetadata.nameSingular) &&
+      PERMAVENT_SALES_REP_CODE_MUTATION_OPERATIONS.has(operationName)
+    ) {
+      this.assertNoActiveSalesRepMarker(args);
+    }
+
     if (
       flatObjectMetadata.nameSingular === PERMAVENT_ASSIGNMENT_OBJECT &&
       PERMAVENT_DENIED_SALES_REP_ASSIGNMENT_OPERATIONS.has(operationName)
@@ -357,6 +373,32 @@ export class PermaventSecurityService {
       data: applyDefault(args.data),
       [PERMAVENT_SYSTEM_FIELD_NAMES]: ['accountOwnerId'],
     } as TArgs;
+  }
+
+  private assertNoActiveSalesRepMarker(args: unknown): void {
+    const data = (args as { data?: unknown }).data;
+    const records = Array.isArray(data) ? data : [data];
+
+    if (
+      records.some((record) => {
+        if (!record || typeof record !== 'object') {
+          return false;
+        }
+
+        const values = record as Record<string, unknown>;
+        const salesRepCode =
+          values.erpsalesrepcode ?? values.erpSalesRepCode;
+
+        return (
+          typeof salesRepCode === 'string' &&
+          salesRepCode.includes(PERMAVENT_ACTIVE_SALES_REP_CODES_MARKER)
+        );
+      })
+    ) {
+      throw new BadRequestException(
+        'The active Sales Rep marker cannot be stored in a Company or Branch record.',
+      );
+    }
   }
 
   private async assertOperationAllowed({

@@ -281,6 +281,45 @@ describe('PermaventSecurityService', () => {
     });
   });
 
+  it.each([
+    {
+      operationName: CommonQueryNames.CREATE_ONE,
+      args: {
+        data: {
+          name: 'Example company',
+          erpsalesrepcode: PERMAVENT_ACTIVE_SALES_REP_CODES_MARKER,
+        },
+      },
+      objectNameSingular: 'company',
+    },
+    {
+      operationName: CommonQueryNames.UPDATE_ONE,
+      args: {
+        id: 'company-id',
+        data: {
+          erpsalesrepcode: PERMAVENT_ACTIVE_SALES_REP_CODES_MARKER,
+        },
+      },
+      objectNameSingular: 'branch',
+    },
+  ])(
+    'should reject the active Sales Rep marker for a $objectNameSingular mutation',
+    async ({ operationName, args, objectNameSingular }) => {
+      await expect(
+        service.applyToCommonQueryArgs({
+          ...input,
+          operationName,
+          args,
+          flatObjectMetadata: {
+            nameSingular: objectNameSingular,
+          } as FlatObjectMetadata,
+        }),
+      ).rejects.toThrow(
+        'The active Sales Rep marker cannot be stored in a Company or Branch record.',
+      );
+    },
+  );
+
   it('should replace an explicitly supplied owner with the Sales Rep owner', async () => {
     const result = await service.applyToCommonQueryArgs({
       ...input,

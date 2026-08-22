@@ -6,6 +6,12 @@ import { buildValueFromFilter } from '@/object-record/record-table/utils/buildVa
 import { type ObjectRecord } from 'twenty-shared/types';
 import { deepMerge, isDefined } from 'twenty-shared/utils';
 
+const PERMAVENT_ACTIVE_SALES_REP_CODES_MARKER =
+  '{{PERMAVENT_ACTIVE_SALES_REP_CODES}}';
+
+const isPermaventActiveSalesRepCodesMarker = (value: string): boolean =>
+  value.includes(PERMAVENT_ACTIVE_SALES_REP_CODES_MARKER);
+
 export const buildRecordInputFromFilter = ({
   currentRecordFilters,
   objectMetadataItem,
@@ -22,6 +28,10 @@ export const buildRecordInputFromFilter = ({
   const recordInput: Partial<ObjectRecord> = {};
 
   currentRecordFilters.forEach((filter) => {
+    if (isPermaventActiveSalesRepCodesMarker(filter.value)) {
+      return;
+    }
+
     const fieldMetadataItem = objectMetadataItem.fields.find(
       (field) => field.id === filter.fieldMetadataId,
     );
