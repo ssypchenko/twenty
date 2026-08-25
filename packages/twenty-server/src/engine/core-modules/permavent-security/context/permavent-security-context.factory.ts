@@ -67,6 +67,7 @@ export class PermaventSecurityContextFactory {
         bypassSecurity: false,
         isRestrictedSalesRep: false,
         allowedSalesRepCodes: [],
+        primarySalesRepCode: null,
         isSupportedUserContext: false,
       };
     }
@@ -93,12 +94,18 @@ export class PermaventSecurityContextFactory {
         PERMAVENT_ROLE_UNIVERSAL_IDENTIFIERS.salesManager;
     const isRestrictedSalesRep =
       roleUniversalIdentifier === PERMAVENT_ROLE_UNIVERSAL_IDENTIFIERS.salesRep;
-    const allowedSalesRepCodes = isRestrictedSalesRep
-      ? await this.assignmentService.findAllowedSalesRepCodes({
-          workspaceId: authContext.workspace.id,
-          workspaceMemberId: userContext.workspaceMemberId,
-        })
-      : [];
+    const [allowedSalesRepCodes, primarySalesRepCode] = isRestrictedSalesRep
+      ? await Promise.all([
+          this.assignmentService.findAllowedSalesRepCodes({
+            workspaceId: authContext.workspace.id,
+            workspaceMemberId: userContext.workspaceMemberId,
+          }),
+          this.assignmentService.findPrimarySalesRepCode({
+            workspaceId: authContext.workspace.id,
+            workspaceMemberId: userContext.workspaceMemberId,
+          }),
+        ])
+      : [[], null];
 
     return {
       authContextType: authContext.type,
@@ -112,6 +119,7 @@ export class PermaventSecurityContextFactory {
       bypassSecurity,
       isRestrictedSalesRep,
       allowedSalesRepCodes,
+      primarySalesRepCode,
       isSupportedUserContext: true,
     };
   }

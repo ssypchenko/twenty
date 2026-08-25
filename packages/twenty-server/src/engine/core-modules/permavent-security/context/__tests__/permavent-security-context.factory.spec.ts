@@ -11,6 +11,7 @@ import { STANDARD_ROLE } from 'src/engine/workspace-manager/twenty-standard-appl
 describe('PermaventSecurityContextFactory', () => {
   const getOrRecompute = jest.fn();
   const findAllowedSalesRepCodes = jest.fn();
+  const findPrimarySalesRepCode = jest.fn();
   let factory: PermaventSecurityContextFactory;
 
   const userAuthContext = {
@@ -28,12 +29,14 @@ describe('PermaventSecurityContextFactory', () => {
   beforeEach(() => {
     jest.clearAllMocks();
     findAllowedSalesRepCodes.mockResolvedValue(['DM', 'RT']);
+    findPrimarySalesRepCode.mockResolvedValue('DM');
     factory = new PermaventSecurityContextFactory(
       {
         getOrRecompute,
       } as unknown as WorkspaceCacheService,
       {
         findAllowedSalesRepCodes,
+        findPrimarySalesRepCode,
       } as unknown as PermaventSalesRepAssignmentService,
     );
   });
@@ -70,6 +73,7 @@ describe('PermaventSecurityContextFactory', () => {
       bypassSecurity: false,
       isRestrictedSalesRep: true,
       allowedSalesRepCodes: ['DM', 'RT'],
+      primarySalesRepCode: 'DM',
       isSupportedUserContext: true,
     });
     expect(getOrRecompute).toHaveBeenCalledWith('workspace-id', [
@@ -77,6 +81,10 @@ describe('PermaventSecurityContextFactory', () => {
       'userWorkspaceRoleMap',
     ]);
     expect(findAllowedSalesRepCodes).toHaveBeenCalledWith({
+      workspaceId: 'workspace-id',
+      workspaceMemberId: 'workspace-member-id',
+    });
+    expect(findPrimarySalesRepCode).toHaveBeenCalledWith({
       workspaceId: 'workspace-id',
       workspaceMemberId: 'workspace-member-id',
     });
@@ -106,6 +114,7 @@ describe('PermaventSecurityContextFactory', () => {
     expect(result.isRestrictedSalesRep).toBe(false);
     expect(result.allowedSalesRepCodes).toEqual([]);
     expect(findAllowedSalesRepCodes).not.toHaveBeenCalled();
+    expect(findPrimarySalesRepCode).not.toHaveBeenCalled();
   });
 
   it('should grant the bypass flag to the Permavent SalesManager role', async () => {
@@ -133,6 +142,7 @@ describe('PermaventSecurityContextFactory', () => {
     expect(result.isRestrictedSalesRep).toBe(false);
     expect(result.allowedSalesRepCodes).toEqual([]);
     expect(findAllowedSalesRepCodes).not.toHaveBeenCalled();
+    expect(findPrimarySalesRepCode).not.toHaveBeenCalled();
   });
 
   it('should leave an unmanaged role outside the Permavent policy', async () => {
@@ -159,6 +169,7 @@ describe('PermaventSecurityContextFactory', () => {
     expect(result.isRestrictedSalesRep).toBe(false);
     expect(result.allowedSalesRepCodes).toEqual([]);
     expect(findAllowedSalesRepCodes).not.toHaveBeenCalled();
+    expect(findPrimarySalesRepCode).not.toHaveBeenCalled();
   });
 
   it('should represent unsupported authentication contexts without a bypass', async () => {
@@ -179,10 +190,12 @@ describe('PermaventSecurityContextFactory', () => {
       bypassSecurity: false,
       isRestrictedSalesRep: false,
       allowedSalesRepCodes: [],
+      primarySalesRepCode: null,
       isSupportedUserContext: false,
     });
     expect(getOrRecompute).not.toHaveBeenCalled();
     expect(findAllowedSalesRepCodes).not.toHaveBeenCalled();
+    expect(findPrimarySalesRepCode).not.toHaveBeenCalled();
   });
 
   it('should resolve the actor in a delegated API key context', async () => {
@@ -224,8 +237,13 @@ describe('PermaventSecurityContextFactory', () => {
       isRestrictedSalesRep: true,
       isSupportedUserContext: true,
       allowedSalesRepCodes: ['DM', 'RT'],
+      primarySalesRepCode: 'DM',
     });
     expect(findAllowedSalesRepCodes).toHaveBeenCalledWith({
+      workspaceId: 'workspace-id',
+      workspaceMemberId: 'workspace-member-id',
+    });
+    expect(findPrimarySalesRepCode).toHaveBeenCalledWith({
       workspaceId: 'workspace-id',
       workspaceMemberId: 'workspace-member-id',
     });
@@ -240,6 +258,7 @@ describe('PermaventSecurityContextFactory', () => {
     expect(result.isSupportedUserContext).toBe(false);
     expect(getOrRecompute).not.toHaveBeenCalled();
     expect(findAllowedSalesRepCodes).not.toHaveBeenCalled();
+    expect(findPrimarySalesRepCode).not.toHaveBeenCalled();
   });
 
   it('should memoise a context for the same authentication context', async () => {
@@ -268,5 +287,6 @@ describe('PermaventSecurityContextFactory', () => {
     expect(secondResult).toBe(firstResult);
     expect(getOrRecompute).toHaveBeenCalledTimes(1);
     expect(findAllowedSalesRepCodes).toHaveBeenCalledTimes(1);
+    expect(findPrimarySalesRepCode).toHaveBeenCalledTimes(1);
   });
 });

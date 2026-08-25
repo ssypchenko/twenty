@@ -7,6 +7,7 @@ import { type GlobalWorkspaceOrmManager } from 'src/engine/twenty-orm/global-wor
 describe('PermaventSalesRepAssignmentService', () => {
   const queryBuilder = {
     select: jest.fn().mockReturnThis(),
+    addSelect: jest.fn().mockReturnThis(),
     where: jest.fn().mockReturnThis(),
     andWhere: jest.fn().mockReturnThis(),
     orderBy: jest.fn().mockReturnThis(),
@@ -104,6 +105,65 @@ describe('PermaventSalesRepAssignmentService', () => {
     expect(result).toEqual(['DM']);
     expect(loggerWarning).toHaveBeenCalledWith(
       'Ignored an invalid Sales Rep assignment code.',
+    );
+
+    loggerWarning.mockRestore();
+  });
+
+  it('should return the one effective primary Sales Rep code', async () => {
+    queryBuilder.getRawMany.mockResolvedValue([
+      { erpSalesRepCode: ' dm ', isPrimary: true },
+    ]);
+
+    await expect(
+      service.findPrimarySalesRepCode({
+        workspaceId: 'workspace-id',
+        workspaceMemberId: 'workspace-member-id',
+        at: new Date('2026-07-12T23:30:00.000Z'),
+      }),
+    ).resolves.toBe('DM');
+
+    expect(queryBuilder.andWhere).toHaveBeenCalledWith(
+      'assignment.isPrimary = true',
+    );
+  });
+
+  it('should fail closed when more than one primary assignment is effective', async () => {
+    const loggerWarning = jest
+      .spyOn(Logger.prototype, 'warn')
+      .mockImplementation();
+    queryBuilder.getRawMany.mockResolvedValue([
+      { erpSalesRepCode: 'DM', isPrimary: true },
+      { erpSalesRepCode: 'RT', isPrimary: true },
+    ]);
+
+    await expect(
+      service.findPrimarySalesRepCode({
+        workspaceId: 'workspace-id',
+        workspaceMemberId: 'workspace-member-id',
+      }),
+    ).resolves.toBeNull();
+    expect(loggerWarning).toHaveBeenCalledWith(
+      'Ignored an ambiguous primary Sales Rep assignment.',
+    );
+
+    loggerWarning.mockRestore();
+  });
+
+  it('should fail closed when the primary field is unavailable', async () => {
+    const loggerWarning = jest
+      .spyOn(Logger.prototype, 'warn')
+      .mockImplementation();
+    queryBuilder.getRawMany.mockRejectedValue(new Error('field unavailable'));
+
+    await expect(
+      service.findPrimarySalesRepCode({
+        workspaceId: 'workspace-id',
+        workspaceMemberId: 'workspace-member-id',
+      }),
+    ).resolves.toBeNull();
+    expect(loggerWarning).toHaveBeenCalledWith(
+      'Unable to resolve the primary Sales Rep assignment.',
     );
 
     loggerWarning.mockRestore();

@@ -17,6 +17,7 @@ type FindAllowedSalesRepCodesInput = {
 
 type PermaventSalesRepAssignmentWorkspaceRecord = ObjectLiteral & {
   erpSalesRepCode: string | null;
+  isPrimary: boolean | null;
 };
 
 @Injectable()
@@ -91,6 +92,80 @@ export class PermaventSalesRepAssignmentService {
     }
 
     return [...allowedSalesRepCodes].sort();
+  }
+
+  public async findPrimarySalesRepCode({
+    workspaceId,
+    workspaceMemberId,
+    at = new Date(),
+  }: FindAllowedSalesRepCodesInput): Promise<string | null> {
+    if (workspaceMemberId === null) {
+      return null;
+    }
+
+    const businessDate = this.formatBusinessDate(at);
+
+    try {
+      const assignments =
+        await this.globalWorkspaceOrmManager.executeInWorkspaceContext(
+          async () => {
+            const assignmentRepository =
+              await this.globalWorkspaceOrmManager.getRepository<PermaventSalesRepAssignmentWorkspaceRecord>(
+                workspaceId,
+                PERMAVENT_ASSIGNMENT_OBJECT_NAME,
+                { shouldBypassPermissionChecks: true },
+              );
+
+            return assignmentRepository
+              .createQueryBuilder('assignment')
+              .select('assignment.erpSalesRepCode', 'erpSalesRepCode')
+              .addSelect('assignment.isPrimary', 'isPrimary')
+              .where('assignment.salesRepId = :workspaceMemberId', {
+                workspaceMemberId,
+              })
+              .andWhere('assignment.deletedAt IS NULL')
+              .andWhere('assignment.isActive = true')
+              .andWhere('assignment.isPrimary = true')
+              .andWhere(
+                '(assignment.validFrom IS NULL OR assignment.validFrom <= :businessDate)',
+                { businessDate },
+              )
+              .andWhere(
+                '(assignment.validTo IS NULL OR assignment.validTo > :businessDate)',
+                { businessDate },
+              )
+              .getRawMany<
+                Pick<
+                  PermaventSalesRepAssignmentWorkspaceRecord,
+                  'erpSalesRepCode' | 'isPrimary'
+                >
+              >();
+          },
+          buildSystemAuthContext(workspaceId),
+        );
+
+      if (assignments.length === 0) {
+        return null;
+      }
+
+      if (assignments.length !== 1) {
+        this.logger.warn('Ignored an ambiguous primary Sales Rep assignment.');
+
+        return null;
+      }
+
+      const [assignment] = assignments;
+
+      if (assignment.erpSalesRepCode === null) {
+        return null;
+      }
+
+      return normalisePermaventSalesRepCode(assignment.erpSalesRepCode);
+    } catch {
+      this.logger.warn('Unable to resolve the primary Sales Rep assignment.');
+
+      return null;
+    }
   }
 
   private formatBusinessDate(at: Date): string {

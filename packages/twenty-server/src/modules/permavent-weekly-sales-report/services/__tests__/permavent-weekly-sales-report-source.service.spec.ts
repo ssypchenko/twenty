@@ -29,6 +29,7 @@ describe('PermaventWeeklySalesReportSourceService', () => {
     bypassSecurity: false,
     isRestrictedSalesRep: true,
     allowedSalesRepCodes: ['DM', 'RT'],
+    primarySalesRepCode: 'DM',
     isSupportedUserContext: true,
   };
   const service = new PermaventWeeklySalesReportSourceService(

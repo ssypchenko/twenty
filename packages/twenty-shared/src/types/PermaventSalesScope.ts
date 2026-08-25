@@ -6,6 +6,7 @@ export type PermaventSalesScope =
   | {
       mode: 'ASSIGNED';
       salesRepCodes: string[];
+      primarySalesRepCode: string | null;
     }
   | {
       mode: 'NONE';

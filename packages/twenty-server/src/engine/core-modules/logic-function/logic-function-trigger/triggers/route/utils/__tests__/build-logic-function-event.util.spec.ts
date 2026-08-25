@@ -359,6 +359,7 @@ describe('buildLogicFunctionEvent', () => {
       permaventSalesScope: {
         mode: 'ASSIGNED',
         salesRepCodes: ['DM', 'RT'],
+        primarySalesRepCode: 'DM',
       },
       permaventActorContext: {
         workspaceMemberId: 'workspace-member-id',
@@ -387,6 +388,7 @@ describe('buildLogicFunctionEvent', () => {
       permaventSalesScope: {
         mode: 'ASSIGNED',
         salesRepCodes: ['DM', 'RT'],
+        primarySalesRepCode: 'DM',
       },
       permaventActorContext: {
         workspaceMemberId: 'workspace-member-id',

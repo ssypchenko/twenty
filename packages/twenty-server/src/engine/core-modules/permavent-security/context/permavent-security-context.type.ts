@@ -12,5 +12,6 @@ export type PermaventSecurityContext = {
   bypassSecurity: boolean;
   isRestrictedSalesRep: boolean;
   allowedSalesRepCodes: string[];
+  primarySalesRepCode: string | null;
   isSupportedUserContext: boolean;
 };

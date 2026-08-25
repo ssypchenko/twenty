@@ -128,6 +128,7 @@ export class PermaventSecurityService {
     return {
       mode: 'ASSIGNED',
       salesRepCodes: [...securityContext.allowedSalesRepCodes].sort(),
+      primarySalesRepCode: securityContext.primarySalesRepCode,
     };
   }
 

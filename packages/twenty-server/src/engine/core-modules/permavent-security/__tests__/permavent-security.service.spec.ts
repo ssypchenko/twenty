@@ -53,6 +53,7 @@ describe('PermaventSecurityService', () => {
     bypassSecurity: false,
     isRestrictedSalesRep: true,
     allowedSalesRepCodes: ['DM', 'RT'],
+    primarySalesRepCode: 'DM',
     isSupportedUserContext: true,
   };
 
@@ -459,6 +460,7 @@ describe('PermaventSecurityService', () => {
     ).resolves.toEqual({
       mode: 'ASSIGNED',
       salesRepCodes: ['DM', 'RT'],
+      primarySalesRepCode: 'DM',
     });
   });
 
