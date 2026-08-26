@@ -356,6 +356,17 @@ describe('buildLogicFunctionEvent', () => {
       pathParameters: { id: '123' },
       forwardedRequestHeaders: ['content-type', 'authorization'],
       userWorkspaceId: 'uws-1',
+      permaventSalesScope: {
+        mode: 'ASSIGNED',
+        salesRepCodes: ['DM', 'RT'],
+        primarySalesRepCode: 'DM',
+      },
+      permaventActorContext: {
+        workspaceMemberId: 'workspace-member-id',
+        userEmail: 'sales.rep@example.test',
+        roleUniversalIdentifier: 'sales-rep-role-universal-identifier',
+        isRestrictedSalesRep: true,
+      },
     });
 
     expect(result).toEqual({
@@ -374,7 +385,30 @@ describe('buildLogicFunctionEvent', () => {
         },
       },
       userWorkspaceId: 'uws-1',
+      permaventSalesScope: {
+        mode: 'ASSIGNED',
+        salesRepCodes: ['DM', 'RT'],
+        primarySalesRepCode: 'DM',
+      },
+      permaventActorContext: {
+        workspaceMemberId: 'workspace-member-id',
+        userEmail: 'sales.rep@example.test',
+        roleUniversalIdentifier: 'sales-rep-role-universal-identifier',
+        isRestrictedSalesRep: true,
+      },
     });
+  });
+
+  it('should default the Permavent sales scope to null', () => {
+    const result = buildLogicFunctionEvent({
+      request: createMockRequest(),
+      pathParameters: {},
+      forwardedRequestHeaders: [],
+      userWorkspaceId: 'uws-1',
+    });
+
+    expect(result.permaventSalesScope).toBeNull();
+    expect(result.permaventActorContext).toBeNull();
   });
 
   it('should preserve the request path as-is', () => {

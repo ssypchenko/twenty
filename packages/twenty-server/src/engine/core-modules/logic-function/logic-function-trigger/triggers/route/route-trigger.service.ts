@@ -12,6 +12,7 @@ import { WorkspaceActivationStatus } from 'twenty-shared/workspace';
 
 import { AuthException } from 'src/engine/core-modules/auth/auth.exception';
 import { AccessTokenService } from 'src/engine/core-modules/auth/token/services/access-token.service';
+import { buildUserAuthContext } from 'src/engine/core-modules/auth/utils/build-user-auth-context.util';
 import { type AuthContext } from 'src/engine/core-modules/auth/types/auth-context.type';
 import { WorkspaceDomainsService } from 'src/engine/core-modules/domain/workspace-domains/services/workspace-domains.service';
 import { type WorkspaceEntity } from 'src/engine/core-modules/workspace/workspace.entity';
@@ -21,6 +22,7 @@ import {
   RouteTriggerExceptionCode,
 } from 'src/engine/core-modules/logic-function/logic-function-trigger/triggers/route/exceptions/route-trigger.exception';
 import { LogicFunctionTriggerService } from 'src/engine/core-modules/logic-function/logic-function-trigger/logic-function-trigger.service';
+import { PermaventSalesScopeService } from 'src/engine/core-modules/permavent-sales-scope/permavent-sales-scope.service';
 import { type RouteTriggerResponse } from 'src/engine/core-modules/logic-function/logic-function-trigger/triggers/route/utils/route-trigger-response.util';
 import { sanitizeRouteTriggerPath } from 'src/engine/core-modules/logic-function/logic-function-trigger/triggers/route/utils/sanitize-route-trigger-path.util';
 import {
@@ -53,6 +55,7 @@ export class RouteTriggerService {
   constructor(
     private readonly accessTokenService: AccessTokenService,
     private readonly logicFunctionTriggerService: LogicFunctionTriggerService,
+    private readonly permaventSalesScopeService: PermaventSalesScopeService,
     private readonly workspaceDomainsService: WorkspaceDomainsService,
     private readonly twentyConfigService: TwentyConfigService,
     @InjectRepository(LogicFunctionEntity)
@@ -287,6 +290,8 @@ export class RouteTriggerService {
 
     let userWorkspaceId: string | null = null;
     let userId: string | null = null;
+    let permaventSalesScope = null;
+    let permaventActorContext = null;
 
     if (httpRouteSettings?.isAuthRequired) {
       const routeAuthenticationContext =
@@ -309,6 +314,28 @@ export class RouteTriggerService {
 
       userWorkspaceId = routeAuthenticationContext.userWorkspaceId ?? null;
       userId = routeAuthenticationContext.user?.id ?? null;
+
+      if (
+        isDefined(routeAuthenticationContext.userWorkspaceId) &&
+        isDefined(routeAuthenticationContext.user) &&
+        isDefined(routeAuthenticationContext.workspaceMemberId) &&
+        isDefined(routeAuthenticationContext.workspaceMember)
+      ) {
+        const userAuthContext = buildUserAuthContext({
+          workspace: routeAuthenticationContext.workspace,
+          userWorkspaceId: routeAuthenticationContext.userWorkspaceId,
+          user: routeAuthenticationContext.user,
+          workspaceMemberId: routeAuthenticationContext.workspaceMemberId,
+          workspaceMember: routeAuthenticationContext.workspaceMember,
+        });
+
+        [permaventSalesScope, permaventActorContext] = await Promise.all([
+          this.permaventSalesScopeService.resolveErpSalesScope(userAuthContext),
+          this.permaventSalesScopeService.resolveLogicFunctionActorContext(
+            userAuthContext,
+          ),
+        ]);
+      }
     }
 
     let outcome;
@@ -323,6 +350,8 @@ export class RouteTriggerService {
         forwardAllHeaders: isIsolatedOrigin,
         userId,
         userWorkspaceId,
+        permaventSalesScope,
+        permaventActorContext,
       });
     } catch (error) {
       if (error instanceof RouteTriggerException) {

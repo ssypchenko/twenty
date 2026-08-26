@@ -239,6 +239,8 @@ export type { PageLayoutWidgetConditionalDisplay } from './page-layout/PageLayou
 export type { RatioAggregateConfig } from './page-layout/ratio-aggregate-config.type';
 export type { PartialFieldMetadataItem } from './PartialFieldMetadataItem';
 export type { PartialFieldMetadataItemOption } from './PartialFieldMetadataOption';
+export type { PermaventLogicFunctionActorContext } from './PermaventLogicFunctionActorContext';
+export type { PermaventSalesScope } from './PermaventSalesScope';
 export type { QueryCursorDirection } from './QueryCursorDirection';
 export { RecordFilterGroupLogicalOperator } from './RecordFilterGroupLogicalOperator';
 export type { RecordFilterValueDependencies } from './RecordFilterValueDependencies';
