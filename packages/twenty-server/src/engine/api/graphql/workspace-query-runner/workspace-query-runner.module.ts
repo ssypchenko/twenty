@@ -7,6 +7,7 @@ import { FeatureFlagEntity } from 'src/engine/core-modules/feature-flag/feature-
 import { FileModule } from 'src/engine/core-modules/file/file.module';
 import { RecordPositionModule } from 'src/engine/core-modules/record-position/record-position.module';
 import { RecordTransformerModule } from 'src/engine/core-modules/record-transformer/record-transformer.module';
+import { PermaventUserAuditModule } from 'src/engine/core-modules/permavent-user-audit/permavent-user-audit.module';
 import { TelemetryModule } from 'src/engine/core-modules/telemetry/telemetry.module';
 import { SubscriptionsModule } from 'src/engine/subscriptions/subscriptions.module';
 import { WorkspaceDataSourceModule } from 'src/engine/workspace-datasource/workspace-datasource.module';
@@ -25,6 +26,7 @@ import { EntityEventsToDbListener } from './listeners/entity-events-to-db.listen
     RecordPositionModule,
     SubscriptionsModule,
     TimelineActivityModule,
+    PermaventUserAuditModule,
   ],
   providers: [EntityEventsToDbListener, TelemetryListener],
 })

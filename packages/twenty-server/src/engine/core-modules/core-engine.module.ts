@@ -55,6 +55,7 @@ import { MetricsModule } from 'src/engine/core-modules/metrics/metrics.module';
 import { MetricsService } from 'src/engine/core-modules/metrics/metrics.service';
 import { OpenApiModule } from 'src/engine/core-modules/open-api/open-api.module';
 import { PublicDomainModule } from 'src/engine/core-modules/public-domain/public-domain.module';
+import { PermaventUserAuditModule } from 'src/engine/core-modules/permavent-user-audit/permavent-user-audit.module';
 import { RedisClientModule } from 'src/engine/core-modules/redis-client/redis-client.module';
 import { RedisClientService } from 'src/engine/core-modules/redis-client/redis-client.service';
 import { SearchModule } from 'src/engine/core-modules/search/search.module';
@@ -172,6 +173,7 @@ import { FileModule } from './file/file.module';
     DashboardModule,
     EventLogsViewerModule,
     PreInstalledAppsModule,
+    PermaventUserAuditModule,
     AppBillingModule,
   ],
   providers: [
