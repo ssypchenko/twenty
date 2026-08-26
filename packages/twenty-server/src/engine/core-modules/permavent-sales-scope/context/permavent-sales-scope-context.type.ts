@@ -2,6 +2,7 @@ import { type WorkspaceAuthContextType } from 'src/engine/core-modules/auth/type
 
 export type PermaventSalesScopeContext = {
   authContextType: WorkspaceAuthContextType;
+  workspaceId: string | null;
   workspaceMemberId: string | null;
   userEmail: string | null;
   roleUniversalIdentifier: string | null;

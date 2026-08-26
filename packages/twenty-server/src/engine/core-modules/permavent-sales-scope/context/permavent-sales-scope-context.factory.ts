@@ -48,6 +48,7 @@ export class PermaventSalesScopeContextFactory {
     if (!isUserAuthContext(authContext)) {
       return {
         authContextType: authContext.type,
+        workspaceId: null,
         workspaceMemberId: null,
         userEmail: null,
         roleUniversalIdentifier: null,
@@ -89,6 +90,7 @@ export class PermaventSalesScopeContextFactory {
 
     return {
       authContextType: authContext.type,
+      workspaceId: authContext.workspace.id,
       workspaceMemberId: authContext.workspaceMemberId,
       userEmail: authContext.user.email.trim().toLowerCase(),
       roleUniversalIdentifier: roleUniversalIdentifier ?? null,

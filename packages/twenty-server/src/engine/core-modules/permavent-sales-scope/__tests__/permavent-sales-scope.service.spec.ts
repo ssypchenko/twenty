@@ -10,6 +10,7 @@ const createContext = (
   overrides: Partial<PermaventSalesScopeContext> = {},
 ): PermaventSalesScopeContext => ({
   authContextType: 'user',
+  workspaceId: 'workspace-id',
   workspaceMemberId: 'workspace-member-id',
   userEmail: 'sales.rep@example.test',
   roleUniversalIdentifier: 'sales-rep-role-universal-identifier',
