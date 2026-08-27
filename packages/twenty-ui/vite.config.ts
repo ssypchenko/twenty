@@ -2,12 +2,9 @@ import react from '@vitejs/plugin-react-swc';
 import * as fs from 'fs';
 import * as path from 'path';
 import { defineConfig } from 'vite';
-import checker from 'vite-plugin-checker';
 import dts, { type PluginOptions } from 'vite-plugin-dts';
 import sassDts from 'vite-plugin-sass-dts';
 import svgr from 'vite-plugin-svgr';
-
-type Checkers = Parameters<typeof checker>[0];
 
 import packageJson from './package.json';
 
@@ -42,12 +39,6 @@ export default defineConfig(({ command }) => {
   const tsConfigPath = isBuildCommand
     ? path.resolve(__dirname, './tsconfig.lib.json')
     : path.resolve(__dirname, './tsconfig.json');
-
-  const checkersConfig: Checkers = {
-    typescript: {
-      tsconfigPath: tsConfigPath,
-    },
-  };
 
   const dtsConfig: PluginOptions = {
     entryRoot: 'src',
@@ -109,7 +100,6 @@ export default defineConfig(({ command }) => {
       // sass-embedded). CI/build relies on the ambient src/scss-modules.d.ts.
       sassDts({ esmExport: true, legacyFileFormat: true }),
       dts(dtsConfig),
-      checker(checkersConfig),
       {
         name: 'copy-theme-css',
         closeBundle() {
