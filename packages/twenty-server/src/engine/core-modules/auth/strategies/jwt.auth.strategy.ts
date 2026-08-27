@@ -10,6 +10,8 @@ import {
   AuthExceptionCode,
 } from 'src/engine/core-modules/auth/auth.exception';
 import { type AccessTokenJwtPayload } from 'src/engine/core-modules/auth/types/access-token-jwt-payload.type';
+import { type McpAccessTokenJwtPayload } from 'src/engine/core-modules/auth/types/mcp-access-token-jwt-payload.type';
+import { McpToolAccess } from 'src/engine/core-modules/auth/types/mcp-tool-access.type';
 import { type ApiKeyTokenJwtPayload } from 'src/engine/core-modules/auth/types/api-key-token-jwt-payload.type';
 import { ApplicationAccessTokenJwtPayload } from 'src/engine/core-modules/auth/types/application-access-token-jwt-payload.type';
 import {
@@ -107,7 +109,10 @@ export class JwtAuthStrategy extends PassportStrategy(Strategy, 'jwt') {
   }
 
   private async validateAccessToken(
-    payload: AccessTokenJwtPayload | PlaygroundTokenJwtPayload,
+    payload:
+      | AccessTokenJwtPayload
+      | McpAccessTokenJwtPayload
+      | PlaygroundTokenJwtPayload,
   ): Promise<AuthContext> {
     let user: AuthContextUser | null = null;
     let context: AuthContext = {};
@@ -468,6 +473,9 @@ export class JwtAuthStrategy extends PassportStrategy(Strategy, 'jwt') {
       tokenType: this.isLegacyApiKeyPayload(payload)
         ? JwtTokenTypeEnum.API_KEY
         : payload.type,
+      ...(payload.type === JwtTokenTypeEnum.MCP_ACCESS && {
+        mcpToolAccess: McpToolAccess.READ_ONLY,
+      }),
     };
   }
 
@@ -486,6 +494,7 @@ export class JwtAuthStrategy extends PassportStrategy(Strategy, 'jwt') {
 
     if (
       payload.type === JwtTokenTypeEnum.ACCESS ||
+      payload.type === JwtTokenTypeEnum.MCP_ACCESS ||
       payload.type === JwtTokenTypeEnum.PLAYGROUND
     ) {
       return await this.validateAccessToken(payload);

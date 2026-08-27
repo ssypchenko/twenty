@@ -19,7 +19,7 @@ export class McpAuthGuard implements CanActivate {
   constructor(private readonly jwtAuthGuard: JwtAuthGuard) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
-    const isAuthenticated = await this.jwtAuthGuard.canActivate(context);
+    const isAuthenticated = await this.jwtAuthGuard.canActivateMcp(context);
 
     if (!isAuthenticated) {
       const request = context.switchToHttp().getRequest<Request>();

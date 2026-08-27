@@ -17,6 +17,7 @@ import { type AuthToken } from 'src/engine/core-modules/auth/dto/auth-token.dto'
 import { JwtAuthStrategy } from 'src/engine/core-modules/auth/strategies/jwt.auth.strategy';
 import { type AuthContext } from 'src/engine/core-modules/auth/types/auth-context.type';
 import { type AccessTokenJwtPayload } from 'src/engine/core-modules/auth/types/access-token-jwt-payload.type';
+import { type JwtPayload } from 'src/engine/core-modules/auth/types/jwt-payload.type';
 import { JwtTokenTypeEnum } from 'src/engine/core-modules/auth/types/jwt-token-type.enum';
 import { type PlaygroundTokenJwtPayload } from 'src/engine/core-modules/auth/types/playground-token-jwt-payload.type';
 import { JwtWrapperService } from 'src/engine/core-modules/jwt/services/jwt-wrapper.service';
@@ -188,14 +189,17 @@ export class AccessTokenService {
   async validateToken(token: string): Promise<AuthContext> {
     await this.jwtWrapperService.verifyJwtToken(token);
 
-    const decoded = this.jwtWrapperService.decode<AccessTokenJwtPayload>(token);
+    const decoded = this.jwtWrapperService.decode<JwtPayload>(token);
 
     const context = await this.jwtStrategy.validate(decoded);
 
     return context;
   }
 
-  async validateTokenByRequest(request: Request): Promise<AuthContext> {
+  async validateTokenByRequest(
+    request: Request,
+    options?: { allowMcpAccessToken?: boolean },
+  ): Promise<AuthContext> {
     const token = this.jwtWrapperService.extractJwtFromRequest()(request);
 
     if (token) {
@@ -208,20 +212,43 @@ export class AccessTokenService {
         );
       }
 
-      return this.validateToken(token);
+      const context = await this.validateToken(token);
+
+      this.assertMcpAccessTokenIsAllowed(context, options);
+
+      return context;
     }
 
     const sessionToken =
       this.userSessionCookieService.extractSessionTokenFromRequest(request);
 
     if (sessionToken) {
-      return this.validateSessionToken(sessionToken);
+      const context = await this.validateSessionToken(sessionToken);
+
+      this.assertMcpAccessTokenIsAllowed(context, options);
+
+      return context;
     }
 
     throw new AuthException(
       'Missing authentication token',
       AuthExceptionCode.FORBIDDEN_EXCEPTION,
     );
+  }
+
+  private assertMcpAccessTokenIsAllowed(
+    context: AuthContext,
+    options?: { allowMcpAccessToken?: boolean },
+  ): void {
+    if (
+      context.tokenType === JwtTokenTypeEnum.MCP_ACCESS &&
+      options?.allowMcpAccessToken !== true
+    ) {
+      throw new AuthException(
+        'MCP access tokens are only accepted by the MCP endpoint',
+        AuthExceptionCode.FORBIDDEN_EXCEPTION,
+      );
+    }
   }
 
   private async validateSessionToken(

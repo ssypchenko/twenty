@@ -21,11 +21,24 @@ export class JwtAuthGuard implements CanActivate {
   ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
+    return this.authenticate(context);
+  }
+
+  async canActivateMcp(context: ExecutionContext): Promise<boolean> {
+    return this.authenticate(context, { allowMcpAccessToken: true });
+  }
+
+  private async authenticate(
+    context: ExecutionContext,
+    options?: { allowMcpAccessToken?: boolean },
+  ): Promise<boolean> {
     const request = context.switchToHttp().getRequest();
 
     try {
-      const data =
-        await this.accessTokenService.validateTokenByRequest(request);
+      const data = await this.accessTokenService.validateTokenByRequest(
+        request,
+        options,
+      );
       const metadataVersion = data.workspace
         ? await this.workspaceStorageCacheService.getMetadataVersion(
             data.workspace.id,

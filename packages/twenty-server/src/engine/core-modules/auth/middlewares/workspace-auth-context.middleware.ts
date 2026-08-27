@@ -38,6 +38,7 @@ export class WorkspaceAuthContextMiddleware implements NestMiddleware {
       return buildApiKeyAuthContext({
         workspace: req.workspace!,
         apiKey: req.apiKey,
+        delegatedActor: req.delegatedActor,
       });
     }
 

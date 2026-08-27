@@ -25,10 +25,12 @@ import {
   listSkillsInputSchema,
 } from 'src/engine/api/mcp/tools/list-skills.tool';
 import { type McpToolAnnotations } from 'src/engine/api/mcp/types/mcp-tool-annotations.type';
+import { isMcpReadOnlyCatalogTool } from 'src/engine/api/mcp/utils/is-mcp-read-only-catalog-tool.util';
 import { wrapJsonRpcResponse } from 'src/engine/api/mcp/utils/wrap-jsonrpc-response.util';
 import { ApiKeyRoleService } from 'src/engine/core-modules/api-key/services/api-key-role.service';
 import { type FlatApiKey } from 'src/engine/core-modules/api-key/types/flat-api-key.type';
 import { type WorkspaceAuthContext } from 'src/engine/core-modules/auth/types/workspace-auth-context.type';
+import { McpToolAccess } from 'src/engine/core-modules/auth/types/mcp-tool-access.type';
 import { buildApiKeyAuthContext } from 'src/engine/core-modules/auth/utils/build-api-key-auth-context.util';
 import { COMMON_PRELOAD_TOOLS } from 'src/engine/core-modules/tool-provider/constants/common-preload-tools.const';
 import { ToolRegistryService } from 'src/engine/core-modules/tool-provider/services/tool-registry.service';
@@ -199,6 +201,7 @@ export class McpProtocolService {
       userId?: string;
       userWorkspaceId?: string;
       apiKey?: FlatApiKey;
+      mcpToolAccess?: McpToolAccess;
     },
   ): Promise<ToolSet> {
     const actorContext = await this.buildActorContext(
@@ -221,23 +224,36 @@ export class McpProtocolService {
       toolContext,
     );
 
+    const isToolAllowed = await this.buildToolAccessPredicate(
+      workspace.id,
+      roleId,
+      {
+        userId: options?.userId,
+        userWorkspaceId: options?.userWorkspaceId,
+        mcpToolAccess: options?.mcpToolAccess,
+      },
+    );
+
     return {
       ...annotatePreloadedMcpTools(preloadedTools),
       [GET_TOOL_CATALOG_TOOL_NAME]: {
         ...createGetToolCatalogTool(this.toolRegistry, workspace.id, roleId, {
           userId: options?.userId,
           userWorkspaceId: options?.userWorkspaceId,
-          excludeTools: MCP_EXCLUDED_TOOL_NAMES,
+          isToolAllowed,
         }),
         inputSchema: zodSchema(getToolCatalogInputSchema),
         annotations: MCP_CLOSED_WORLD_READ_ONLY_TOOL_ANNOTATIONS,
       } as McpAnnotatedTool,
       [EXECUTE_TOOL_TOOL_NAME]: {
         ...createExecuteToolTool(this.toolRegistry, toolContext, {
-          isToolAllowed: (toolName) => !MCP_EXCLUDED_TOOL_NAMES.has(toolName),
+          isToolAllowed,
         }),
         inputSchema: executeToolInputSchema,
-        annotations: MCP_EXECUTE_TOOL_ANNOTATIONS,
+        annotations:
+          options?.mcpToolAccess === McpToolAccess.READ_ONLY
+            ? MCP_CLOSED_WORLD_READ_ONLY_TOOL_ANNOTATIONS
+            : MCP_EXECUTE_TOOL_ANNOTATIONS,
       } as McpAnnotatedTool,
       [LOAD_SKILL_TOOL_NAME]: {
         ...createLoadSkillTool(
@@ -269,12 +285,41 @@ export class McpProtocolService {
       } as McpAnnotatedTool,
       [LEARN_TOOLS_TOOL_NAME]: {
         ...createLearnToolsTool(this.toolRegistry, toolContext, {
-          isToolAllowed: (toolName) => !MCP_EXCLUDED_TOOL_NAMES.has(toolName),
+          isToolAllowed,
         }),
         inputSchema: zodSchema(learnToolsInputSchema),
         annotations: MCP_CLOSED_WORLD_READ_ONLY_TOOL_ANNOTATIONS,
       } as McpAnnotatedTool,
     };
+  }
+
+  private async buildToolAccessPredicate(
+    workspaceId: string,
+    roleId: string,
+    options: {
+      userId?: string;
+      userWorkspaceId?: string;
+      mcpToolAccess?: McpToolAccess;
+    },
+  ): Promise<(toolName: string) => boolean> {
+    if (options.mcpToolAccess !== McpToolAccess.READ_ONLY) {
+      return (toolName) => !MCP_EXCLUDED_TOOL_NAMES.has(toolName);
+    }
+
+    const catalog = await this.toolRegistry.buildToolIndex(
+      workspaceId,
+      roleId,
+      {
+        userId: options.userId,
+        userWorkspaceId: options.userWorkspaceId,
+      },
+    );
+    const allowedToolNames = new Set(
+      catalog.filter(isMcpReadOnlyCatalogTool).map((entry) => entry.name),
+    );
+
+    return (toolName) =>
+      !MCP_EXCLUDED_TOOL_NAMES.has(toolName) && allowedToolNames.has(toolName);
   }
 
   // Returns null for JSON-RPC notifications (no id), which require no response body
@@ -285,11 +330,13 @@ export class McpProtocolService {
       userId,
       userWorkspaceId,
       apiKey,
+      mcpToolAccess,
     }: {
       workspace: FlatWorkspace;
       userId?: string;
       userWorkspaceId?: string;
       apiKey: FlatApiKey | undefined;
+      mcpToolAccess?: McpToolAccess;
     },
     sseWriter?: (data: Record<string, unknown>) => void,
   ): Promise<Record<string, unknown> | null> {
@@ -332,6 +379,7 @@ export class McpProtocolService {
         workspace.id,
         userWorkspaceId,
         apiKey,
+        mcpToolAccess,
       );
 
       const authContext = isDefined(apiKey)

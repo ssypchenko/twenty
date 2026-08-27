@@ -81,6 +81,27 @@ export class ConfigVariables {
 
   @ConfigVariablesMetadata({
     group: ConfigVariablesGroup.ADVANCED_SETTINGS,
+    description: 'Enable trusted delegated user context for approved API keys',
+    isEnvOnly: true,
+    isHiddenInAdminPanel: true,
+    type: ConfigVariableType.BOOLEAN,
+  })
+  @IsOptional()
+  PERMAVENT_DELEGATED_API_CONTEXT_ENABLED = false;
+
+  @ConfigVariablesMetadata({
+    group: ConfigVariablesGroup.ADVANCED_SETTINGS,
+    description:
+      'Comma-separated non-secret API key IDs approved for delegated user context',
+    isEnvOnly: true,
+    isHiddenInAdminPanel: true,
+    type: ConfigVariableType.STRING,
+  })
+  @IsOptional()
+  PERMAVENT_DELEGATED_API_KEY_IDS = '';
+
+  @ConfigVariablesMetadata({
+    group: ConfigVariablesGroup.ADVANCED_SETTINGS,
     description: 'Enable Permavent Weekly Sales Report logic functions',
     isEnvOnly: true,
     isHiddenInAdminPanel: true,
@@ -856,6 +877,45 @@ export class ConfigVariables {
     (env) => env.CODE_INTERPRETER_TYPE === CodeInterpreterDriverType.E_2_B,
   )
   E2B_API_KEY?: string;
+
+  @ConfigVariablesMetadata({
+    group: ConfigVariablesGroup.CODE_INTERPRETER_CONFIG,
+    description:
+      'Internal Permavent code interpreter runner URL for company-operated sandbox execution',
+    type: ConfigVariableType.STRING,
+  })
+  @IsUrl({ require_tld: false, require_protocol: true })
+  @ValidateIf(
+    (env) =>
+      env.CODE_INTERPRETER_TYPE ===
+      CodeInterpreterDriverType.PERMAVENT_INTERNAL,
+  )
+  PERMAVENT_CODE_INTERPRETER_RUNNER_URL?: string;
+
+  @ConfigVariablesMetadata({
+    group: ConfigVariablesGroup.CODE_INTERPRETER_CONFIG,
+    description: 'Authentication token for the internal Permavent code runner',
+    type: ConfigVariableType.STRING,
+    isSensitive: true,
+  })
+  @IsString()
+  @IsNotEmpty()
+  @ValidateIf(
+    (env) =>
+      env.CODE_INTERPRETER_TYPE ===
+      CodeInterpreterDriverType.PERMAVENT_INTERNAL,
+  )
+  PERMAVENT_CODE_INTERPRETER_RUNNER_TOKEN?: string;
+
+  @ConfigVariablesMetadata({
+    group: ConfigVariablesGroup.CODE_INTERPRETER_CONFIG,
+    description:
+      'HTTP request timeout in milliseconds for the internal Permavent code runner',
+    type: ConfigVariableType.NUMBER,
+  })
+  @IsOptional()
+  @CastToPositiveNumber()
+  PERMAVENT_CODE_INTERPRETER_RUNNER_REQUEST_TIMEOUT_MS = 130_000;
 
   @ConfigVariablesMetadata({
     group: ConfigVariablesGroup.CODE_INTERPRETER_CONFIG,

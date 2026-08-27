@@ -14,9 +14,6 @@ import { parseCorePath } from 'src/engine/api/rest/input-request-parsers/path-pa
 import { Depth } from 'src/engine/api/rest/input-request-parsers/types/depth.type';
 import { AuthenticatedRequest } from 'src/engine/api/rest/types/authenticated-request';
 import { ActorFromAuthContextService } from 'src/engine/core-modules/actor/services/actor-from-auth-context.service';
-import { ApiKeyRoleService } from 'src/engine/core-modules/api-key/services/api-key-role.service';
-import { isApiKeyAuthContext } from 'src/engine/core-modules/auth/guards/is-api-key-auth-context.guard';
-import { isUserAuthContext } from 'src/engine/core-modules/auth/guards/is-user-auth-context.guard';
 import { getWorkspaceAuthContext } from 'src/engine/core-modules/auth/storage/workspace-auth-context.storage';
 import { AccessTokenService } from 'src/engine/core-modules/auth/token/services/access-token.service';
 import { WorkspaceAuthContext } from 'src/engine/core-modules/auth/types/workspace-auth-context.type';
@@ -33,12 +30,10 @@ import { buildObjectIdByNameMaps } from 'src/engine/metadata-modules/flat-object
 import {
   PermissionsException,
   PermissionsExceptionCode,
-  PermissionsExceptionMessage,
 } from 'src/engine/metadata-modules/permissions/permissions.exception';
-import { UserRoleService } from 'src/engine/metadata-modules/user-role/user-role.service';
 import { WorkspaceCacheStorageService } from 'src/engine/workspace-cache-storage/workspace-cache-storage.service';
 import { WorkspaceCacheService } from 'src/engine/workspace-cache/services/workspace-cache.service';
-import { isApplicationAuthContext } from 'src/engine/core-modules/auth/guards/is-application-auth-context.guard';
+import { resolveObjectsPermissionsFromAuthContext } from 'src/engine/twenty-orm/utils/resolve-objects-permissions-from-auth-context.util';
 
 export interface PageInfo {
   hasNextPage?: boolean;
@@ -65,11 +60,7 @@ export abstract class RestApiBaseHandler {
   @Inject()
   protected readonly workspaceManyOrAllFlatEntityMapsCacheService: WorkspaceManyOrAllFlatEntityMapsCacheService;
   @Inject()
-  protected readonly apiKeyRoleService: ApiKeyRoleService;
-  @Inject()
   protected readonly commonSelectFieldsHelper: CommonSelectFieldsHelper;
-  @Inject()
-  protected readonly userRoleService: UserRoleService;
   @Inject()
   protected readonly accessTokenService: AccessTokenService;
   @Inject()
@@ -84,47 +75,27 @@ export abstract class RestApiBaseHandler {
   >;
 
   private getObjectsPermissions = async (authContext: WorkspaceAuthContext) => {
-    let roleId: string;
-
-    if (isApiKeyAuthContext(authContext)) {
-      roleId = await this.apiKeyRoleService.getRoleIdForApiKeyId(
-        authContext.apiKey.id,
+    const { apiKeyRoleMap, rolesPermissions, userWorkspaceRoleMap } =
+      await this.workspaceCacheService.getOrRecompute(
         authContext.workspace.id,
+        ['apiKeyRoleMap', 'rolesPermissions', 'userWorkspaceRoleMap'],
       );
-    } else if (isUserAuthContext(authContext)) {
-      const userWorkspaceRoleId =
-        await this.userRoleService.getRoleIdForUserWorkspace({
-          userWorkspaceId: authContext.userWorkspaceId,
-          workspaceId: authContext.workspace.id,
-        });
 
-      if (!isDefined(userWorkspaceRoleId)) {
-        throw new PermissionsException(
-          PermissionsExceptionMessage.NO_ROLE_FOUND_FOR_USER_WORKSPACE,
-          PermissionsExceptionCode.NO_ROLE_FOUND_FOR_USER_WORKSPACE,
-        );
-      }
+    const objectsPermissions = resolveObjectsPermissionsFromAuthContext({
+      authContext,
+      apiKeyRoleMap,
+      rolesPermissions,
+      userWorkspaceRoleMap,
+    });
 
-      roleId = userWorkspaceRoleId;
-    } else if (
-      isApplicationAuthContext(authContext) &&
-      isDefined(authContext.application.defaultRoleId)
-    ) {
-      roleId = authContext.application.defaultRoleId;
-    } else {
+    if (!objectsPermissions) {
       throw new PermissionsException(
         'Authentication context is invalid',
         PermissionsExceptionCode.NO_AUTHENTICATION_CONTEXT,
       );
     }
 
-    const { rolesPermissions } =
-      await this.workspaceCacheService.getOrRecompute(
-        authContext.workspace.id,
-        ['rolesPermissions'],
-      );
-
-    return { objectsPermissions: rolesPermissions[roleId] };
+    return { objectsPermissions };
   };
 
   async computeSelectedFields({

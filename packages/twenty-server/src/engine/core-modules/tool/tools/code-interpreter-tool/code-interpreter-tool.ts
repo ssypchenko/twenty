@@ -18,7 +18,9 @@ import {
 import { ApplicationService } from 'src/engine/core-modules/application/application.service';
 import { type AccessTokenJwtPayload } from 'src/engine/core-modules/auth/types/access-token-jwt-payload.type';
 import { JwtTokenTypeEnum } from 'src/engine/core-modules/auth/types/jwt-token-type.enum';
+import { type McpAccessTokenJwtPayload } from 'src/engine/core-modules/auth/types/mcp-access-token-jwt-payload.type';
 import { CodeInterpreterService } from 'src/engine/core-modules/code-interpreter/code-interpreter.service';
+import { CodeInterpreterDriverType } from 'src/engine/core-modules/code-interpreter/code-interpreter.interface';
 import { FileStorageService } from 'src/engine/core-modules/file-storage/services/file-storage.service';
 import { FileUrlService } from 'src/engine/core-modules/file/file-url/file-url.service';
 import { FileService } from 'src/engine/core-modules/file/services/file.service';
@@ -309,14 +311,24 @@ export class CodeInterpreterTool implements Tool {
     userId?: string,
     userWorkspaceId?: string,
   ): Promise<string> {
-    const payload: AccessTokenJwtPayload = {
+    const payloadBase = {
       sub: userId ?? workspaceId,
-      type: JwtTokenTypeEnum.ACCESS,
       workspaceId,
       userId: userId ?? workspaceId,
       userWorkspaceId: userWorkspaceId ?? workspaceId,
       authProvider: AuthProviderEnum.Password,
     };
+    const payload: AccessTokenJwtPayload | McpAccessTokenJwtPayload =
+      this.twentyConfigService.get('CODE_INTERPRETER_TYPE') ===
+      CodeInterpreterDriverType.PERMAVENT_INTERNAL
+        ? {
+            ...payloadBase,
+            type: JwtTokenTypeEnum.MCP_ACCESS,
+          }
+        : {
+            ...payloadBase,
+            type: JwtTokenTypeEnum.ACCESS,
+          };
 
     return this.jwtWrapperService.signAsyncOrThrow(payload, {
       expiresIn: '5m',

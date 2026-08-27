@@ -81,6 +81,17 @@ describe('resolveRoleIdsFromAuthContext', () => {
     ).toEqual([API_KEY_ROLE_ID]);
   });
 
+  it('should intersect the API key and delegated actor roles', () => {
+    expect(
+      resolve({
+        type: 'apiKey',
+        workspace: { id: 'workspace-1' },
+        apiKey: { id: API_KEY_ID },
+        delegatedActor: { roleId: USER_ROLE_ID },
+      } as unknown as WorkspaceAuthContext),
+    ).toEqual([API_KEY_ROLE_ID, USER_ROLE_ID]);
+  });
+
   it('should resolve the application role for an application-only request', () => {
     expect(
       resolve({

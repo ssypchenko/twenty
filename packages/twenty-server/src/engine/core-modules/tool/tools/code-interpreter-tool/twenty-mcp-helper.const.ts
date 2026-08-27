@@ -14,28 +14,35 @@ class TwentyMCP:
 
     Two categories of tools exist behind /mcp:
 
-     - MCP-native: execute_tool, learn_tools, load_skills,
-       search_help_center. These are the 4 surfaces exposed directly.
+     - MCP-native: execute_tool and the read-only discovery and help tools.
 
-     - Workspace catalog: 250+ CRUD / view / workflow / dashboard tools
-       like find_many_companies, create_one_person, update_one_opportunity. These are
-       reached through execute_tool as a dispatcher.
+     - Workspace catalog: read-only database tools such as
+       find_many_companies, find_one_company and group_by_companies. These are
+       reached through execute_tool as a dispatcher. Mutation tools are denied
+       by the signed sandbox token and the MCP server.
 
     call_tool(name, args) accepts both — catalog tools are routed via
     execute_tool transparently and the envelope is unwrapped, so callers
     see the inner tool's result directly.
 
-    For bulk imports, prefer the higher-level helpers over hand-rolled loops:
-     - bulk_upsert(plural, records): batched, idempotent write path (max 200/batch).
-     - lookup_by(plural, field, values): bounded { value: id } map for relations.
+    Use lookup_by(plural, field, values) for bounded read-only relation lookups.
     """
 
     _MCP_NATIVE_TOOLS = frozenset({
         'execute_tool',
+        'get_tool_catalog',
         'learn_tools',
         'load_skills',
+        'list_object_metadata_names',
+        'list_skills',
         'search_help_center',
     })
+
+    _READ_ONLY_CATALOG_PREFIXES = (
+        'find_one_',
+        'find_many_',
+        'group_by_',
+    )
 
     def __init__(self):
         self.url = os.environ.get('TWENTY_SERVER_URL', '')
@@ -51,7 +58,7 @@ class TwentyMCP:
         """
         Call any Twenty tool by name.
 
-        Catalog tools (find_many_companies, create_one_person, …) are routed
+        Read-only catalog tools (find_many_companies, find_one_company, …) are routed
         through execute_tool. MCP-native tools are called directly.
         The execute_tool envelope { success, message, result } is
         unwrapped so you always get the inner tool's result back.
@@ -69,6 +76,14 @@ class TwentyMCP:
         """
         if not self._available:
             raise RuntimeError('Twenty MCP bridge not available. Missing requests library or credentials.')
+
+        if name not in self._MCP_NATIVE_TOOLS and not name.startswith(self._READ_ONLY_CATALOG_PREFIXES):
+            raise PermissionError(f'Twenty MCP tool "{name}" is not available in the read-only Code Interpreter context.')
+
+        if name == 'execute_tool':
+            requested_tool = (arguments or {}).get('toolName')
+            if not isinstance(requested_tool, str) or not requested_tool.startswith(self._READ_ONLY_CATALOG_PREFIXES):
+                raise PermissionError('Twenty MCP execute_tool is restricted to read-only database tools in Code Interpreter.')
 
         if name in self._MCP_NATIVE_TOOLS:
             return self._raw_mcp_call(name, arguments)
@@ -88,44 +103,6 @@ class TwentyMCP:
             if 'result' in wrapped:
                 return wrapped['result']
         return wrapped
-
-    def bulk_upsert(self, plural: str, records: list, batch_size: int = 200):
-        """
-        Upsert many records in batches, paginating to completion.
-
-        This is the recommended write path for imports: upsert dedupes on the
-        object's unique fields (e.g. email) server-side, so re-running a partial
-        or timed-out import is idempotent. Batches are capped at 200 (the platform
-        maximum); the loop runs entirely server-side so the agent never pays the
-        per-batch context cost.
-
-        Args:
-            plural: Plural object name, e.g. 'companies', 'people'.
-            records: List of record dicts to upsert.
-            batch_size: Records per call (max 200).
-
-        Returns:
-            { 'created': int, 'updated': int, 'upserted': int, 'failed': int,
-              'errors': [ {offset, error}, ... up to 10 ] }
-
-        Example:
-            summary = twenty.bulk_upsert('people', people_rows)
-        """
-        size = min(max(int(batch_size), 1), 200)
-        created, updated, failed, errors = 0, 0, 0, []
-        for offset in range(0, len(records), size):
-            chunk = records[offset:offset + size]
-            try:
-                result = self.call_tool('upsert_many_' + plural, {'records': chunk})
-                if isinstance(result, dict):
-                    created += int(result.get('created', 0))
-                    updated += int(result.get('updated', 0))
-            except Exception as exc:
-                failed += len(chunk)
-                if len(errors) < 10:
-                    errors.append({'offset': offset, 'error': str(exc)})
-        return {'created': created, 'updated': updated,
-                'upserted': created + updated, 'failed': failed, 'errors': errors}
 
     def lookup_by(self, plural: str, field: str, values: list, select: list = None):
         """

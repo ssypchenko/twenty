@@ -15,6 +15,7 @@ interface BaseWorkspaceAuthContext {
 export interface ApiKeyWorkspaceAuthContext extends BaseWorkspaceAuthContext {
   type: 'apiKey';
   apiKey: NonNullable<RawAuthContext['apiKey']>;
+  delegatedActor?: RawAuthContext['delegatedActor'];
 }
 
 export interface UserWorkspaceAuthContext extends BaseWorkspaceAuthContext {

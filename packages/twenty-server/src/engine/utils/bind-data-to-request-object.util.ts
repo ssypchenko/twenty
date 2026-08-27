@@ -10,6 +10,7 @@ export const bindDataToRequestObject = (
 ) => {
   request.user = data.user;
   request.apiKey = data.apiKey;
+  request.delegatedActor = data.delegatedActor;
   request.application = data.application;
   request.userWorkspace = data.userWorkspace;
   request.workspace = data.workspace;

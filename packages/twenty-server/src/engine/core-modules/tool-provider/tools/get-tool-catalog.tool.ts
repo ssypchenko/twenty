@@ -33,7 +33,7 @@ export const createGetToolCatalogTool = (
   options?: {
     userId?: string;
     userWorkspaceId?: string;
-    excludeTools?: Set<string>;
+    isToolAllowed?: (toolName: string) => boolean;
   },
 ) => ({
   description:
@@ -52,15 +52,13 @@ export const createGetToolCatalogTool = (
       ? new Set(parameters.categories)
       : undefined;
 
-    const excludeSet = options?.excludeTools;
-
     const catalog: Record<
       string,
       Array<{ name: string; description: string }>
     > = {};
 
     for (const entry of entries as ToolIndexEntry[]) {
-      if (excludeSet?.has(entry.name)) {
+      if (options?.isToolAllowed?.(entry.name) === false) {
         continue;
       }
 
