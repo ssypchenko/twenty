@@ -1,6 +1,7 @@
 import { CommandMenuItem } from '@/command-menu/components/CommandMenuItem';
 import { FIND_MANY_FRONT_COMPONENTS } from '@/front-components/graphql/queries/findManyFrontComponents';
 import { useObjectMetadataItem } from '@/object-metadata/hooks/useObjectMetadataItem';
+import { PERMAVENT_COMPANY_OVERVIEW_WIDGETS_FEATURE_FLAG } from '@/page-layout/constants/PermaventCompanyOverviewWidgetsFeatureFlag';
 import { useInsertCreatedWidgetAtContext } from '@/page-layout/hooks/useInsertCreatedWidgetAtContext';
 import { pageLayoutDraftComponentState } from '@/page-layout/states/pageLayoutDraftComponentState';
 import { pageLayoutEditingWidgetIdComponentState } from '@/page-layout/states/pageLayoutEditingWidgetIdComponentState';
@@ -8,6 +9,8 @@ import { widgetCreationTargetTabIdComponentState } from '@/page-layout/states/wi
 import { widgetInsertionContextComponentState } from '@/page-layout/states/widgetInsertionContextComponentState';
 import { type PageLayoutWidget } from '@/page-layout/types/PageLayoutWidget';
 import { addWidgetToTab } from '@/page-layout/utils/addWidgetToTab';
+import { canCreatePermaventCompanyOverviewWidgets } from '@/page-layout/utils/canCreatePermaventCompanyOverviewWidgets';
+import { createDefaultActivityWidget } from '@/page-layout/utils/createDefaultActivityWidget';
 import { createDefaultFieldWidget } from '@/page-layout/utils/createDefaultFieldWidget';
 import { createDefaultFieldsWidget } from '@/page-layout/utils/createDefaultFieldsWidget';
 import { isVerticalListPosition } from '@/page-layout/utils/isVerticalListPosition';
@@ -25,13 +28,14 @@ import { SelectableListItem } from '@/ui/layout/selectable-list/components/Selec
 import { useAtomComponentState } from '@/ui/utilities/state/jotai/hooks/useAtomComponentState';
 import { useAtomComponentStateCallbackState } from '@/ui/utilities/state/jotai/hooks/useAtomComponentStateCallbackState';
 import { useAtomComponentStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomComponentStateValue';
+import { useIsFeatureEnabled } from '@/workspace/hooks/useIsFeatureEnabled';
 import { useQuery } from '@apollo/client/react';
 import { t } from '@lingui/core/macro';
 import { useStore } from 'jotai';
 import { useCallback } from 'react';
 import { SidePanelPages } from 'twenty-shared/types';
 import { isDefined } from 'twenty-shared/utils';
-import { IconApps, IconList } from 'twenty-ui/icon';
+import { IconApps, IconCheckbox, IconList, IconNotes } from 'twenty-ui/icon';
 import { v4 as uuidv4 } from 'uuid';
 import {
   type FrontComponent,
@@ -82,6 +86,16 @@ export const SidePanelPageLayoutRecordPageWidgetTypeSelect = () => {
   const { objectMetadataItem } = useObjectMetadataItem({
     objectNameSingular: targetObjectNameSingular,
   });
+
+  const isPermaventCompanyOverviewWidgetsEnabled = useIsFeatureEnabled(
+    PERMAVENT_COMPANY_OVERVIEW_WIDGETS_FEATURE_FLAG,
+  );
+
+  const canCreateCompanyOverviewWidgets =
+    canCreatePermaventCompanyOverviewWidgets({
+      isFeatureEnabled: isPermaventCompanyOverviewWidgetsEnabled,
+      targetObjectNameSingular,
+    });
 
   const allFieldWidgetFields = useFieldWidgetEligibleFields(
     targetObjectNameSingular,
@@ -264,6 +278,53 @@ export const SidePanelPageLayoutRecordPageWidgetTypeSelect = () => {
     tabId,
   ]);
 
+  const handleCreateActivityWidget = useCallback(
+    ({
+      title,
+      type,
+    }: {
+      title: string;
+      type: WidgetType.NOTES | WidgetType.TASKS;
+    }) => {
+      const replacePositionIndex = getExistingWidgetPositionIndex();
+
+      removeExistingWidgetIfReplacing();
+
+      const updatedPageLayout = store.get(pageLayoutDraftState);
+      const activeTab = updatedPageLayout.tabs.find((tab) => tab.id === tabId);
+      const positionIndex =
+        replacePositionIndex ?? activeTab?.widgets.length ?? 0;
+      const widgetId = uuidv4();
+
+      const newWidget = createDefaultActivityWidget({
+        id: widgetId,
+        pageLayoutTabId: tabId,
+        title,
+        type,
+        positionIndex,
+      });
+
+      store.set(pageLayoutDraftState, (prev) => ({
+        ...prev,
+        tabs: addWidgetToTab(prev.tabs, tabId, newWidget),
+      }));
+
+      setPageLayoutEditingWidgetId(widgetId);
+      insertCreatedWidgetAtContext(widgetId);
+      closeSidePanelMenu();
+    },
+    [
+      closeSidePanelMenu,
+      getExistingWidgetPositionIndex,
+      insertCreatedWidgetAtContext,
+      pageLayoutDraftState,
+      removeExistingWidgetIfReplacing,
+      setPageLayoutEditingWidgetId,
+      store,
+      tabId,
+    ],
+  );
+
   const handleCreateFrontComponentWidget = useCallback(
     (frontComponent: FrontComponent) => {
       const replacePositionIndex = getExistingWidgetPositionIndex();
@@ -333,6 +394,7 @@ export const SidePanelPageLayoutRecordPageWidgetTypeSelect = () => {
   const selectableItemIds = [
     'fields',
     'field',
+    ...(canCreateCompanyOverviewWidgets ? ['notes', 'tasks'] : []),
     ...frontComponentsWithSelectItemId.map(({ selectItemId }) => selectItemId),
   ];
 
@@ -355,6 +417,52 @@ export const SidePanelPageLayoutRecordPageWidgetTypeSelect = () => {
             onClick={handleCreateFieldWidget}
           />
         </SelectableListItem>
+        {canCreateCompanyOverviewWidgets && (
+          <>
+            <SelectableListItem
+              itemId="notes"
+              onEnter={() =>
+                handleCreateActivityWidget({
+                  title: t`Notes`,
+                  type: WidgetType.NOTES,
+                })
+              }
+            >
+              <CommandMenuItem
+                Icon={IconNotes}
+                label={t`Notes`}
+                id="notes"
+                onClick={() =>
+                  handleCreateActivityWidget({
+                    title: t`Notes`,
+                    type: WidgetType.NOTES,
+                  })
+                }
+              />
+            </SelectableListItem>
+            <SelectableListItem
+              itemId="tasks"
+              onEnter={() =>
+                handleCreateActivityWidget({
+                  title: t`Tasks`,
+                  type: WidgetType.TASKS,
+                })
+              }
+            >
+              <CommandMenuItem
+                Icon={IconCheckbox}
+                label={t`Tasks`}
+                id="tasks"
+                onClick={() =>
+                  handleCreateActivityWidget({
+                    title: t`Tasks`,
+                    type: WidgetType.TASKS,
+                  })
+                }
+              />
+            </SelectableListItem>
+          </>
+        )}
       </SidePanelGroup>
 
       {frontComponentsWithSelectItemId.length > 0 && (

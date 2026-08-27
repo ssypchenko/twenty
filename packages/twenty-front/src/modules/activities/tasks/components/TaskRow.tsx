@@ -85,7 +85,13 @@ const StyledCheckboxContainer = styled.div`
   display: flex;
 `;
 
-export const TaskRow = ({ task }: { task: Task }) => {
+export const TaskRow = ({
+  task,
+  showTargets = true,
+}: {
+  task: Task;
+  showTargets?: boolean;
+}) => {
   const { theme } = useContext(ThemeContext);
   const { openRecordInSidePanel } = useOpenRecordInSidePanel();
 
@@ -135,7 +141,7 @@ export const TaskRow = ({ task }: { task: Task }) => {
             {beautifyExactDate(task.dueAt)}
           </StyledDueDate>
         )}
-        {
+        {showTargets && (
           <StyledActivityTargetsContainer>
             <FieldContextProvider
               objectNameSingular={CoreObjectNameSingular.Task}
@@ -160,7 +166,7 @@ export const TaskRow = ({ task }: { task: Task }) => {
               </RecordFieldsScopeContextProvider>
             </FieldContextProvider>
           </StyledActivityTargetsContainer>
-        }
+        )}
       </StyledRightSideContainer>
     </ActivityRow>
   );

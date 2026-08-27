@@ -49,6 +49,15 @@ export const PUBLIC_FEATURE_FLAGS: PublicFeatureFlag[] = [
       icon: 'IconLayoutSidebarLeftExpand',
     },
   },
+  {
+    key: FeatureFlagKey.IS_PERMAVENT_COMPANY_OVERVIEW_WIDGETS_ENABLED,
+    metadata: {
+      label: 'Permavent Company and Branch Overview Widgets',
+      description:
+        'Allow compact Notes and Tasks widgets to be added to Company and Branch record page layouts',
+      icon: 'IconNotes',
+    },
+  },
   ...(process.env.CLOUDFLARE_API_KEY
     ? [
         // {
