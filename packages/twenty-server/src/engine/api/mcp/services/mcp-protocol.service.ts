@@ -379,7 +379,6 @@ export class McpProtocolService {
         workspace.id,
         userWorkspaceId,
         apiKey,
-        mcpToolAccess,
       );
 
       const authContext = isDefined(apiKey)
@@ -391,6 +390,7 @@ export class McpProtocolService {
         userId,
         userWorkspaceId,
         apiKey,
+        mcpToolAccess,
       });
 
       if (method === 'tools/call') {

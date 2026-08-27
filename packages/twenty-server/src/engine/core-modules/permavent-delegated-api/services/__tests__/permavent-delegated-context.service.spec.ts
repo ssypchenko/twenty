@@ -1,4 +1,5 @@
 import { AuthException } from 'src/engine/core-modules/auth/auth.exception';
+import { type RawAuthContext } from 'src/engine/core-modules/auth/types/raw-auth-context.type';
 import { PermaventDelegatedContextService } from 'src/engine/core-modules/permavent-delegated-api/services/permavent-delegated-context.service';
 
 const API_KEY_ID = '11111111-1111-4111-8111-111111111111';
@@ -50,9 +51,13 @@ const createService = (enabled = true) => {
   };
 };
 
-const authContext = {
-  apiKey: { id: API_KEY_ID },
-  workspace: { id: 'workspace-1' },
+const authContext: RawAuthContext = {
+  apiKey: {
+    id: API_KEY_ID,
+    name: 'Delegated API test key',
+    workspaceId: 'workspace-1',
+  } as NonNullable<RawAuthContext['apiKey']>,
+  workspace: { id: 'workspace-1' } as NonNullable<RawAuthContext['workspace']>,
 };
 
 describe('PermaventDelegatedContextService', () => {
