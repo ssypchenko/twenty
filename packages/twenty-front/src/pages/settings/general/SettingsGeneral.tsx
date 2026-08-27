@@ -10,6 +10,7 @@ import { SettingsLogs } from '@/settings/event-logs/components/SettingsLogs';
 import { DeleteWorkspace } from '@/settings/profile/components/DeleteWorkspace';
 import { useHasPermissionFlag } from '@/settings/roles/hooks/useHasPermissionFlag';
 import { SettingsSecuritySettings } from '@/settings/security/components/SettingsSecuritySettings';
+import { SettingsUserActivityLog } from '@/settings/security/components/SettingsUserActivityLog';
 import { NameField } from '@/settings/workspace/components/NameField';
 import { WorkspaceLogoUploader } from '@/settings/workspace/components/WorkspaceLogoUploader';
 import { useAtomStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomStateValue';
@@ -23,6 +24,7 @@ const SETTINGS_GENERAL_TABS_INSTANCE_ID = 'settings-general-tabs';
 const GENERAL_TAB_GENERAL = 'general';
 const GENERAL_TAB_SECURITY = 'security';
 const GENERAL_TAB_LOGS = 'logs';
+const GENERAL_TAB_USER_ACTIVITY_LOG = 'user-activity-log';
 
 export const SettingsGeneral = () => {
   const { t } = useLingui();
@@ -40,6 +42,11 @@ export const SettingsGeneral = () => {
     ...(hasSecurityPermission
       ? [
           { id: GENERAL_TAB_SECURITY, title: t`Security`, Icon: IconKey },
+          {
+            id: GENERAL_TAB_USER_ACTIVITY_LOG,
+            title: t`User activity log`,
+            Icon: IconHistory,
+          },
           { id: GENERAL_TAB_LOGS, title: t`Logs`, Icon: IconHistory },
         ]
       : []),
@@ -53,6 +60,10 @@ export const SettingsGeneral = () => {
   const renderActiveTabContent = () => {
     if (activeTabId === GENERAL_TAB_SECURITY) {
       return <SettingsSecuritySettings />;
+    }
+
+    if (activeTabId === GENERAL_TAB_USER_ACTIVITY_LOG) {
+      return <SettingsUserActivityLog />;
     }
 
     return (
