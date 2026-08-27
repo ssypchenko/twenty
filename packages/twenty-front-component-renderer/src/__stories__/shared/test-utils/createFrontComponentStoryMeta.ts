@@ -32,6 +32,7 @@ export const FRONT_COMPONENT_STORY_DEFAULT_ARGS: NonNullable<
   executionContext: {
     frontComponentId: 'unset',
     userId: null,
+    workspaceMemberId: null,
     recordId: null,
     selectedRecordIds: [],
     timelineActivityId: null,

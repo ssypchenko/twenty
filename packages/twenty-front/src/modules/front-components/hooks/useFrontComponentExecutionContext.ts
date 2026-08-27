@@ -25,6 +25,7 @@ import { type AppLocale } from 'twenty-shared/translations';
 
 import { useOpenAskAiPageWithPreprompt } from '@/ai/hooks/useOpenAskAiPageWithPreprompt';
 import { currentUserState } from '@/auth/states/currentUserState';
+import { currentWorkspaceMemberState } from '@/auth/states/currentWorkspaceMemberState';
 import { useCommandMenuConfirmationModal } from '@/command-menu-item/confirmation-modal/hooks/useCommandMenuConfirmationModal';
 import { useUnmountCommand } from '@/command-menu-item/engine-command/hooks/useUnmountEngineCommand';
 import { commandMenuItemProgressFamilyState } from '@/command-menu-item/states/commandMenuItemProgressFamilyState';
@@ -93,6 +94,7 @@ export const useFrontComponentExecutionContext = ({
   storageNamespace?: string;
 } => {
   const currentUser = useAtomStateValue(currentUserState);
+  const currentWorkspaceMember = useAtomStateValue(currentWorkspaceMemberState);
   const navigateApp = useNavigateApp();
   const store = useStore();
   const { requestAccessTokenRefresh } = useRequestApplicationTokenRefresh({
@@ -334,6 +336,7 @@ export const useFrontComponentExecutionContext = ({
   const executionContext: FrontComponentExecutionContext = {
     frontComponentId,
     userId: currentUser?.id ?? null,
+    workspaceMemberId: currentWorkspaceMember?.id ?? null,
     recordId: selectedRecordIds?.length === 1 ? selectedRecordIds[0] : null,
     selectedRecordIds: selectedRecordIds ?? [],
     timelineActivityId: timelineActivityId ?? null,

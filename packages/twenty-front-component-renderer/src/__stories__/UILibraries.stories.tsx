@@ -18,6 +18,7 @@ const meta: Meta<typeof FrontComponentRenderer> = {
     executionContext: {
       frontComponentId: 'storybook-test',
       userId: null,
+      workspaceMemberId: null,
       recordId: null,
       selectedRecordIds: [],
       timelineActivityId: null,

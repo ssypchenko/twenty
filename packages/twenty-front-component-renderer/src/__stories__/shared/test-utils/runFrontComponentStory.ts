@@ -21,6 +21,7 @@ export const runFrontComponentStory = ({
     executionContext: {
       frontComponentId: frontComponentBundleName,
       userId: null,
+      workspaceMemberId: null,
       recordId: null,
       selectedRecordIds: [],
       timelineActivityId: null,
