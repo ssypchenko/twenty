@@ -1,0 +1,233 @@
+#!/usr/bin/env bash
+set -Eeuo pipefail
+
+if (( BASH_VERSINFO[0] < 4 )); then
+  printf '%s\n' 'ERROR: Bash 4 or later is required for this server helper.' >&2
+  exit 1
+fi
+
+usage() {
+  cat <<'EOF'
+Usage: sudo twenty-refresh-test-from-live
+
+Replace the complete Test database and local file storage with Live copies.
+The helper creates rollback backups before starting the destructive phase.
+EOF
+}
+
+if [[ "${1:-}" == '--help' || "${1:-}" == '-h' ]]; then
+  usage
+  exit 0
+fi
+
+[[ "$#" -eq 0 ]] || {
+  usage >&2
+  exit 2
+}
+
+if [[ "${EUID}" -ne 0 ]]; then
+  exec sudo -n "$0" "$@"
+fi
+
+umask 077
+
+LIVE_DB_CONTAINER="twenty-db-1"
+TEST_PROJECT_DIR="/opt/twenty-test"
+TEST_DB_CONTAINER="twenty-test-db-1"
+TEST_REDIS_CONTAINER="twenty-test-redis-1"
+TEST_SERVER_CONTAINER="twenty-test-server-1"
+TEST_WORKER_CONTAINER="twenty-test-worker-1"
+LIVE_STORAGE_VOLUME="twenty_server-local-data"
+TEST_STORAGE_VOLUME="twenty-test_server-local-data"
+BACKUP_DIR="/opt/twenty-test/backups"
+TEST_HEALTH_URL="http://127.0.0.1:3002/healthz"
+LOCK_FILE="/run/lock/twenty-refresh-test-from-live.lock"
+TS="$(date -u +%Y%m%dT%H%M%SZ)"
+
+TEST_DB_BACKUP="$BACKUP_DIR/test-before-refresh-$TS.dump"
+LIVE_DB_BACKUP="$BACKUP_DIR/live-$TS.dump"
+TEST_STORAGE_BACKUP="$BACKUP_DIR/test-storage-before-refresh-$TS.tar.gz"
+
+TEST_BACKUPS_VALID=false
+DESTRUCTIVE_PHASE_STARTED=false
+REFRESH_COMPLETED=false
+
+exec 9>"$LOCK_FILE"
+if ! flock -n 9; then
+  echo "Another Test refresh is already running." >&2
+  exit 1
+fi
+
+wait_for_postgres() {
+  local container="$1"
+  local label="$2"
+
+  echo "Waiting for the $label database..."
+  for _ in $(seq 1 60); do
+    if docker exec "$container" sh -lc 'pg_isready -h localhost -U "$POSTGRES_USER" -d "$POSTGRES_DB"' >/dev/null 2>&1; then
+      return 0
+    fi
+    sleep 2
+  done
+
+  echo "Timed out waiting for the $label database." >&2
+  return 1
+}
+
+wait_for_test_health() {
+  echo "Waiting for the Test health check..."
+  for _ in $(seq 1 90); do
+    if curl --fail --silent --show-error "$TEST_HEALTH_URL" >/dev/null 2>&1; then
+      return 0
+    fi
+    sleep 2
+  done
+
+  echo "Timed out waiting for the Test health check." >&2
+  return 1
+}
+
+validate_dump() {
+  local dump_path="$1"
+
+  test -s "$dump_path"
+  docker exec -i "$TEST_DB_CONTAINER" pg_restore -l < "$dump_path" >/dev/null
+}
+
+restore_database() {
+  local dump_path="$1"
+
+  docker exec "$TEST_DB_CONTAINER" sh -lc 'dropdb --force -h localhost -U "$POSTGRES_USER" "$POSTGRES_DB"'
+  docker exec "$TEST_DB_CONTAINER" sh -lc 'createdb -h localhost -U "$POSTGRES_USER" "$POSTGRES_DB"'
+  docker exec -i "$TEST_DB_CONTAINER" sh -lc 'pg_restore -h localhost -U "$POSTGRES_USER" -d "$POSTGRES_DB" --no-owner --no-privileges' < "$dump_path"
+}
+
+backup_test_storage() {
+  local archive_name
+  archive_name="$(basename "$TEST_STORAGE_BACKUP")"
+
+  docker run --rm \
+    -v "$TEST_STORAGE_VOLUME":/from:ro \
+    -v "$BACKUP_DIR":/backup \
+    postgres:16 sh -lc "umask 077; tar -C /from -czf /backup/$archive_name.partial ."
+  mv "$TEST_STORAGE_BACKUP.partial" "$TEST_STORAGE_BACKUP"
+  chmod 600 "$TEST_STORAGE_BACKUP"
+
+  docker run --rm \
+    -v "$BACKUP_DIR":/backup:ro \
+    postgres:16 tar -tzf "/backup/$archive_name" >/dev/null
+}
+
+replace_test_storage_from_live() {
+  docker run --rm \
+    -v "$LIVE_STORAGE_VOLUME":/from:ro \
+    -v "$TEST_STORAGE_VOLUME":/to \
+    postgres:16 sh -lc 'find /to -mindepth 1 -maxdepth 1 -exec rm -rf {} +; cp -a /from/. /to/'
+}
+
+restore_test_storage() {
+  local archive_name
+  archive_name="$(basename "$TEST_STORAGE_BACKUP")"
+
+  docker run --rm \
+    -v "$TEST_STORAGE_VOLUME":/to \
+    -v "$BACKUP_DIR":/backup:ro \
+    postgres:16 sh -lc "find /to -mindepth 1 -maxdepth 1 -exec rm -rf {} +; tar -C /to -xzf /backup/$archive_name"
+}
+
+clear_test_redis() {
+  echo "Clearing Test Redis queues and caches..."
+  docker exec "$TEST_REDIS_CONTAINER" redis-cli FLUSHALL >/dev/null
+}
+
+start_test_stack() {
+  echo "Starting the Test stack..."
+  cd "$TEST_PROJECT_DIR"
+  docker compose up -d
+  wait_for_test_health
+
+  if [ "$(docker inspect -f '{{.State.Running}}' "$TEST_WORKER_CONTAINER")" != "true" ]; then
+    echo "The Test worker is not running." >&2
+    return 1
+  fi
+
+  if [ "$(docker inspect -f '{{.State.Health.Status}}' "$TEST_SERVER_CONTAINER")" != "healthy" ]; then
+    echo "The Test server is not healthy." >&2
+    return 1
+  fi
+}
+
+handle_error() {
+  local exit_code=$?
+  trap - ERR
+  set +e
+
+  echo "Refresh failed." >&2
+
+  if [ "$DESTRUCTIVE_PHASE_STARTED" = true ] && [ "$TEST_BACKUPS_VALID" = true ]; then
+    echo "Restoring the previous Test database and storage..." >&2
+    cd "$TEST_PROJECT_DIR"
+    docker compose stop server worker >/dev/null 2>&1 || true
+    restore_database "$TEST_DB_BACKUP"
+    restore_test_storage
+    clear_test_redis
+  fi
+
+  if [ "$REFRESH_COMPLETED" != true ]; then
+    start_test_stack
+  fi
+
+  rm -f "$TEST_DB_BACKUP.partial" "$LIVE_DB_BACKUP.partial" "$TEST_STORAGE_BACKUP.partial"
+  exit "$exit_code"
+}
+
+trap handle_error ERR
+
+install -d -m 700 "$BACKUP_DIR"
+cd "$TEST_PROJECT_DIR"
+
+echo "Starting the Test database and Redis..."
+docker compose up -d db redis
+wait_for_postgres "$TEST_DB_CONTAINER" "Test"
+wait_for_postgres "$LIVE_DB_CONTAINER" "Live"
+
+echo "Stopping the Test server and worker..."
+docker compose stop server worker >/dev/null 2>&1 || true
+
+echo "Backing up the current Test database..."
+docker exec "$TEST_DB_CONTAINER" sh -lc 'pg_dump -h localhost -U "$POSTGRES_USER" -d "$POSTGRES_DB" -Fc' > "$TEST_DB_BACKUP.partial"
+mv "$TEST_DB_BACKUP.partial" "$TEST_DB_BACKUP"
+chmod 600 "$TEST_DB_BACKUP"
+
+echo "Backing up the current Test file storage..."
+backup_test_storage
+
+echo "Dumping the Live database..."
+docker exec "$LIVE_DB_CONTAINER" sh -lc 'pg_dump -h localhost -U "$POSTGRES_USER" -d "$POSTGRES_DB" -Fc' > "$LIVE_DB_BACKUP.partial"
+mv "$LIVE_DB_BACKUP.partial" "$LIVE_DB_BACKUP"
+chmod 600 "$LIVE_DB_BACKUP"
+
+echo "Validating database backups..."
+validate_dump "$TEST_DB_BACKUP"
+validate_dump "$LIVE_DB_BACKUP"
+TEST_BACKUPS_VALID=true
+
+DESTRUCTIVE_PHASE_STARTED=true
+
+echo "Replacing the Test database with Live data..."
+restore_database "$LIVE_DB_BACKUP"
+
+echo "Synchronising Live file storage into Test..."
+replace_test_storage_from_live
+
+clear_test_redis
+start_test_stack
+
+REFRESH_COMPLETED=true
+trap - ERR
+
+echo "Refresh completed successfully."
+echo "Previous Test database: $TEST_DB_BACKUP"
+echo "Previous Test storage: $TEST_STORAGE_BACKUP"
+echo "Live database dump: $LIVE_DB_BACKUP"
+docker compose ps

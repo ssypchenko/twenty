@@ -1,0 +1,118 @@
+#!/usr/bin/env bash
+set -Eeuo pipefail
+
+readonly compose_directory='/opt/twenty-test'
+readonly db_container='twenty-test-db-1'
+readonly server_container='twenty-test-server-1'
+readonly worker_container='twenty-test-worker-1'
+readonly storage_volume='twenty-test_server-local-data'
+readonly health_url='http://127.0.0.1:3002/healthz'
+readonly lock_file='/run/lock/twenty-deploy-test-image.lock'
+
+usage() {
+  cat <<'EOF'
+Usage: sudo twenty-backup-test
+
+The command briefly stops Test writers, creates and validates PostgreSQL and
+local-storage backups, restarts Test, and verifies application health.
+EOF
+}
+
+fail() {
+  printf 'ERROR: %s\n' "$1" >&2
+  return 1
+}
+
+[[ "${EUID}" -eq 0 ]] || fail 'Run this command through sudo.'
+if [[ "${1:-}" == '--help' || "${1:-}" == '-h' ]]; then
+  usage
+  exit 0
+fi
+[[ "$#" -eq 0 ]] || fail 'This command does not accept arguments.'
+
+for command_name in curl docker flock sha256sum tar; do
+  command -v "$command_name" >/dev/null 2>&1 ||
+    fail "Required command is unavailable: ${command_name}"
+done
+
+exec 9>"$lock_file"
+flock -n 9 || fail 'Another Test backup or deployment is already running.'
+
+cd "$compose_directory"
+docker compose config --quiet
+
+umask 077
+readonly timestamp="$(date -u '+%Y%m%dT%H%M%SZ')"
+readonly backup_directory="${compose_directory}/backups/test-pre-upgrade-${timestamp}"
+readonly database_backup="${backup_directory}/database.dump"
+readonly storage_backup="${backup_directory}/storage.tar.gz"
+readonly operation_log="${backup_directory}/backup.log"
+readonly status_file="${backup_directory}/backup.status"
+
+install -d -m 700 "$backup_directory"
+exec > >(tee -a "$operation_log") 2>&1
+
+finish() {
+  local exit_code=$?
+  trap - EXIT
+  printf '%s\n' "$exit_code" > "$status_file"
+  printf 'Backup exit status: %s\n' "$exit_code"
+  printf 'Backup log: %s\n' "$operation_log"
+  printf 'Status file: %s\n' "$status_file"
+  exit "$exit_code"
+}
+trap finish EXIT
+
+wait_for_health() {
+  for _ in $(seq 1 90); do
+    if curl --fail --silent --show-error "$health_url" >/dev/null 2>&1; then
+      return 0
+    fi
+    sleep 2
+  done
+  fail 'Timed out waiting for the Test health check.'
+}
+
+restart_test_on_error() {
+  local exit_code=$?
+  trap - ERR
+  set +e
+  rm -f "${database_backup}.partial" "${storage_backup}.partial"
+  docker compose up -d
+  wait_for_health
+  exit "$exit_code"
+}
+trap restart_test_on_error ERR
+
+printf 'Starting Test pre-upgrade backup at %s.\n' \
+  "$(date -u '+%Y-%m-%d %H:%M:%S UTC')"
+
+docker compose up -d db redis
+printf 'Stopping Test writers.\n'
+docker compose stop server worker
+
+docker exec "$db_container" sh -lc \
+  'pg_dump -h localhost -U "$POSTGRES_USER" -d "$POSTGRES_DB" -Fc' \
+  > "${database_backup}.partial"
+mv "${database_backup}.partial" "$database_backup"
+chmod 600 "$database_backup"
+docker exec -i "$db_container" pg_restore -l < "$database_backup" >/dev/null
+
+docker run --rm \
+  -v "${storage_volume}:/from:ro" \
+  -v "${backup_directory}:/backup" \
+  postgres:16 sh -lc 'tar -C /from -czf /backup/storage.tar.gz.partial .'
+mv "${storage_backup}.partial" "$storage_backup"
+chmod 600 "$storage_backup"
+docker run --rm -v "${backup_directory}:/backup:ro" postgres:16 \
+  tar -tzf /backup/storage.tar.gz >/dev/null
+
+docker compose up -d
+wait_for_health
+[[ "$(docker inspect "$server_container" --format '{{.State.Health.Status}}')" == 'healthy' ]]
+[[ "$(docker inspect "$worker_container" --format '{{.State.Status}}')" == 'running' ]]
+
+trap - ERR
+printf 'Test pre-upgrade backup completed successfully.\n'
+sha256sum "$database_backup" "$storage_backup"
+docker compose ps

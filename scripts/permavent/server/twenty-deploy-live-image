@@ -1,0 +1,265 @@
+#!/usr/bin/env bash
+set -Eeuo pipefail
+
+if (( BASH_VERSINFO[0] < 4 )); then
+  printf '%s\n' 'ERROR: Bash 4 or later is required for this server helper.' >&2
+  exit 1
+fi
+
+readonly compose_directory='/opt/twenty'
+readonly image_repository='ghcr.io/ssypchenko/twenty'
+readonly live_hostname='crm.permavent.co.uk'
+readonly db_container='twenty-db-1'
+readonly redis_container='twenty-redis-1'
+readonly live_storage='twenty_server-local-data'
+readonly upgrade_order_repair_sql='/usr/local/share/twenty/permavent/twenty-repair-v2-18-upgrade-order.sql'
+readonly lock_file='/run/lock/twenty-live-maintenance.lock'
+
+usage() {
+  cat <<'EOF'
+Usage: sudo twenty-deploy-live-image <tag> <expected-oci-digest>
+
+The command backs up Live, verifies the immutable image, updates TAG, and
+recreates only the Live server and worker. A failed deployment restores the
+previous database, local storage, environment file and application image.
+EOF
+}
+
+fail() {
+  printf 'ERROR: %s\n' "$1" >&2
+  return 1
+}
+
+[[ "${EUID}" -eq 0 ]] || fail 'Run this command through sudo.'
+if [[ "${1:-}" == '--help' || "${1:-}" == '-h' ]]; then
+  usage
+  exit 0
+fi
+[[ "$#" -eq 2 ]] || {
+  usage >&2
+  exit 2
+}
+
+readonly tag="$1"
+readonly expected_digest="$2"
+[[ "$tag" =~ ^v[0-9]+\.[0-9]+\.[0-9]+-permavent\.[0-9]+$ ]] ||
+  fail "Invalid Permavent image tag: ${tag}"
+[[ "$expected_digest" =~ ^sha256:[0-9a-f]{64}$ ]] ||
+  fail 'The expected OCI digest must use sha256 and 64 lowercase hexadecimal characters.'
+
+for command_name in curl docker flock grep sed sha256sum tar; do
+  command -v "$command_name" >/dev/null 2>&1 ||
+    fail "Required command is unavailable: ${command_name}"
+done
+
+exec 9>"$lock_file"
+flock -n 9 || fail 'Another Live maintenance operation is already running.'
+
+cd "$compose_directory"
+[[ -f .env && -f docker-compose.yml ]] || fail 'The Live Compose layout is incomplete.'
+[[ -r "$upgrade_order_repair_sql" ]] ||
+  fail "Missing upgrade-order repair SQL: ${upgrade_order_repair_sql}"
+
+mapfile -t configured_rls_flags < <(grep -E '^PERMAVENT_SECURITY_RLS_ENABLED=' .env)
+[[ "${#configured_rls_flags[@]}" -eq 1 ]] ||
+  fail 'Live .env must contain exactly one PERMAVENT_SECURITY_RLS_ENABLED entry.'
+readonly configured_rls_value="${configured_rls_flags[0]#*=}"
+[[ "$configured_rls_value" == 'true' || "$configured_rls_value" == 'false' ]] ||
+  fail 'PERMAVENT_SECURITY_RLS_ENABLED must be true or false.'
+[[ "$(grep -Ec '^[[:space:]]{6}PERMAVENT_SECURITY_RLS_ENABLED:' docker-compose.yml)" -eq 2 ]] ||
+  fail 'Live Compose must forward PERMAVENT_SECURITY_RLS_ENABLED to server and worker.'
+mapfile -t configured_erp_scope_flags < <(grep -E '^PERMAVENT_ERP_SALES_SCOPE_ENABLED=' .env)
+[[ "${#configured_erp_scope_flags[@]}" -eq 1 ]] ||
+  fail 'Live .env must contain exactly one PERMAVENT_ERP_SALES_SCOPE_ENABLED entry.'
+[[ "${configured_erp_scope_flags[0]}" == 'PERMAVENT_ERP_SALES_SCOPE_ENABLED=true' ]] ||
+  fail 'Permavent ERP sales scope must be enabled for Live deployment.'
+[[ "$(grep -Ec '^[[:space:]]{6}PERMAVENT_ERP_SALES_SCOPE_ENABLED:' docker-compose.yml)" -eq 2 ]] ||
+  fail 'Live Compose must forward PERMAVENT_ERP_SALES_SCOPE_ENABLED to server and worker.'
+docker compose config --quiet
+
+umask 077
+readonly timestamp="$(date -u '+%Y%m%dT%H%M%SZ')"
+readonly run_directory="${compose_directory}/backups/live-image-deploy-${tag}-${timestamp}"
+readonly deployment_log="${run_directory}/deployment.log"
+readonly status_file="${run_directory}/deployment.status"
+readonly service_log="${run_directory}/services.log"
+readonly database_backup="${run_directory}/database-before-deployment.dump"
+readonly storage_backup="${run_directory}/storage-before-deployment.tar.gz"
+readonly env_backup="${run_directory}/live.env.before-deployment"
+readonly image="${image_repository}:${tag}"
+readonly expected_repo_digest="${image_repository}@${expected_digest}"
+
+install -d -m 700 "$run_directory"
+exec > >(tee -a "$deployment_log") 2>&1
+
+backups_valid=false
+deployment_started=false
+env_next="${run_directory}/live.env.next"
+
+finish() {
+  local exit_code=$?
+  trap - EXIT
+  rm -f "$env_next"
+  printf '%s\n' "$exit_code" > "$status_file"
+  printf 'Deployment exit status: %s\n' "$exit_code"
+  printf 'Deployment log: %s\n' "$deployment_log"
+  printf 'Status file: %s\n' "$status_file"
+  exit "$exit_code"
+}
+trap finish EXIT
+
+wait_for_health() {
+  for _ in $(seq 1 90); do
+    if curl --fail --silent --show-error http://127.0.0.1:3001/healthz >/dev/null 2>&1; then
+      return 0
+    fi
+    sleep 2
+  done
+  fail 'Timed out waiting for the Live health check.'
+}
+
+restore_database() {
+  docker exec "$db_container" sh -lc \
+    'dropdb --force -h localhost -U "$POSTGRES_USER" "$POSTGRES_DB"'
+  docker exec "$db_container" sh -lc \
+    'createdb -h localhost -U "$POSTGRES_USER" "$POSTGRES_DB"'
+  docker exec -i "$db_container" sh -lc \
+    'pg_restore -h localhost -U "$POSTGRES_USER" -d "$POSTGRES_DB" --no-owner --no-privileges' \
+    < "$database_backup"
+}
+
+restore_storage() {
+  docker run --rm \
+    -v "${live_storage}:/to" \
+    -v "${run_directory}:/backup:ro" \
+    postgres:16 sh -lc \
+    'find /to -mindepth 1 -maxdepth 1 -exec rm -rf {} +; tar -C /to -xzf /backup/storage-before-deployment.tar.gz'
+}
+
+rollback_on_error() {
+  local exit_code=$?
+  trap - ERR
+  set +e
+  printf 'Live deployment failed. Starting rollback.\n' >&2
+
+  if [[ "$deployment_started" == true && "$backups_valid" == true ]]; then
+    docker compose stop server worker >/dev/null 2>&1
+    restore_database
+    restore_storage
+    cp --preserve=mode,ownership,timestamps "$env_backup" .env
+    docker exec "$redis_container" redis-cli FLUSHALL >/dev/null
+  fi
+
+  docker compose up -d
+  wait_for_health
+  exit "$exit_code"
+}
+trap rollback_on_error ERR
+
+printf 'Starting Live image deployment at %s.\n' "$(date -u '+%Y-%m-%d %H:%M:%S UTC')"
+printf 'Image: %s\n' "$image"
+printf 'Expected OCI digest: %s\n' "$expected_digest"
+
+mapfile -t configured_tags < <(grep -E '^TAG=' .env)
+[[ "${#configured_tags[@]}" -eq 1 ]] || fail 'Live .env must contain exactly one TAG entry.'
+readonly current_tag="${configured_tags[0]#TAG=}"
+[[ "$current_tag" != "$tag" ]] || fail "Live already uses ${tag}."
+
+readonly db_container_before="$(docker compose ps -q db)"
+readonly redis_container_before="$(docker compose ps -q redis)"
+[[ -n "$db_container_before" && -n "$redis_container_before" ]] ||
+  fail 'Live PostgreSQL and Redis must be running.'
+
+docker pull "$image"
+repo_digests="$(docker image inspect "$image" --format '{{range .RepoDigests}}{{println .}}{{end}}')"
+grep -Fxq "$expected_repo_digest" <<< "$repo_digests" ||
+  fail 'The pulled image does not match the expected OCI digest.'
+[[ "$(docker image inspect "$image" --format '{{.Architecture}}/{{.Os}}')" == 'amd64/linux' ]] ||
+  fail 'The image platform must be linux/amd64.'
+readonly upstream_version="${tag%%-permavent.*}"
+image_environment="$(docker image inspect "$image" --format '{{range .Config.Env}}{{println .}}{{end}}')"
+grep -Fxq "APP_VERSION=${upstream_version}" <<< "$image_environment" ||
+  fail "The image does not declare APP_VERSION=${upstream_version}."
+
+cp --preserve=mode,ownership,timestamps .env "$env_backup"
+cp --preserve=mode,ownership,timestamps .env "$env_next"
+sed -i "s/^TAG=.*/TAG=${tag}/" "$env_next"
+docker compose --env-file "$env_next" config --quiet
+
+printf 'Stopping Live writers and creating rollback backups.\n'
+docker compose stop server worker
+docker exec "$db_container" sh -lc \
+  'pg_dump -h localhost -U "$POSTGRES_USER" -d "$POSTGRES_DB" -Fc' \
+  > "${database_backup}.partial"
+mv "${database_backup}.partial" "$database_backup"
+chmod 600 "$database_backup"
+docker exec -i "$db_container" pg_restore -l < "$database_backup" >/dev/null
+
+docker run --rm \
+  -v "${live_storage}:/from:ro" \
+  -v "${run_directory}:/backup" \
+  postgres:16 sh -lc \
+  'tar -C /from -czf /backup/storage-before-deployment.tar.gz.partial .'
+mv "${storage_backup}.partial" "$storage_backup"
+chmod 600 "$storage_backup"
+docker run --rm -v "${run_directory}:/backup:ro" postgres:16 \
+  tar -tzf /backup/storage-before-deployment.tar.gz >/dev/null
+backups_valid=true
+
+if [[ "$upstream_version" == 'v2.18.0' ]]; then
+  printf 'Repairing legacy Permavent v2.15 upgrade ordering before deployment.\n'
+  docker exec -i "$db_container" sh -lc \
+    'psql -v ON_ERROR_STOP=1 -h localhost -U "$POSTGRES_USER" -d "$POSTGRES_DB"' \
+    < "$upgrade_order_repair_sql"
+fi
+
+deployment_started=true
+mv "$env_next" .env
+readonly deployment_started_at="$(date -u '+%Y-%m-%dT%H:%M:%SZ')"
+
+docker compose up -d --no-deps --force-recreate server
+wait_for_health
+docker compose up -d --no-deps --force-recreate worker
+sleep 10
+
+readonly server_container="$(docker compose ps -q server)"
+readonly worker_container="$(docker compose ps -q worker)"
+readonly expected_image_id="$(docker image inspect "$image" --format '{{.Id}}')"
+[[ "$(docker inspect "$server_container" --format '{{.Image}}')" == "$expected_image_id" ]]
+[[ "$(docker inspect "$worker_container" --format '{{.Image}}')" == "$expected_image_id" ]]
+[[ "$(docker inspect "$server_container" --format '{{.State.Health.Status}}')" == 'healthy' ]]
+[[ "$(docker inspect "$worker_container" --format '{{.State.Status}}')" == 'running' ]]
+[[ "$(docker compose ps -q db)" == "$db_container_before" ]]
+[[ "$(docker compose ps -q redis)" == "$redis_container_before" ]]
+docker inspect "$server_container" --format '{{range .Config.Env}}{{println .}}{{end}}' |
+  grep -Fxq "PERMAVENT_SECURITY_RLS_ENABLED=${configured_rls_value}" ||
+  fail 'Permavent RLS configuration is incorrect in the Live server container.'
+docker inspect "$worker_container" --format '{{range .Config.Env}}{{println .}}{{end}}' |
+  grep -Fxq "PERMAVENT_SECURITY_RLS_ENABLED=${configured_rls_value}" ||
+  fail 'Permavent RLS configuration is incorrect in the Live worker container.'
+docker inspect "$server_container" --format '{{range .Config.Env}}{{println .}}{{end}}' |
+  grep -Fxq 'PERMAVENT_ERP_SALES_SCOPE_ENABLED=true' ||
+  fail 'Permavent ERP sales scope is not enabled in the Live server container.'
+docker inspect "$worker_container" --format '{{range .Config.Env}}{{println .}}{{end}}' |
+  grep -Fxq 'PERMAVENT_ERP_SALES_SCOPE_ENABLED=true' ||
+  fail 'Permavent ERP sales scope is not enabled in the Live worker container.'
+
+curl --fail --silent --show-error \
+  --resolve "${live_hostname}:443:127.0.0.1" \
+  "https://${live_hostname}/healthz" >/dev/null
+curl --fail --silent --show-error \
+  --resolve "${live_hostname}:443:127.0.0.1" \
+  "https://${live_hostname}/" >/dev/null
+
+docker compose logs --no-color --since "$deployment_started_at" server worker > "$service_log"
+if sed -E 's/\x1B\[[0-9;]*[mK]//g' "$service_log" |
+  grep -Ein '(^|[[:space:]])(ERROR|FATAL)([[:space:]]|$)|UnhandledPromiseRejection|QueryFailedError'; then
+  fail "Error diagnostics were found in ${service_log}."
+fi
+
+trap - ERR
+printf 'Live image deployment completed successfully.\n'
+printf 'Previous tag: %s\n' "$current_tag"
+printf 'Current tag: %s\n' "$tag"
+sha256sum .env docker-compose.yml "$database_backup" "$storage_backup"
+docker compose ps

@@ -1,0 +1,285 @@
+#!/usr/bin/env bash
+set -Eeuo pipefail
+
+readonly live_directory='/opt/twenty'
+readonly test_directory='/opt/twenty-test'
+readonly live_db='twenty-db-1'
+readonly test_db='twenty-test-db-1'
+readonly live_redis='twenty-redis-1'
+readonly live_server='twenty-server-1'
+readonly live_worker='twenty-worker-1'
+readonly test_server='twenty-test-server-1'
+readonly test_worker='twenty-test-worker-1'
+readonly live_storage='twenty_server-local-data'
+readonly test_storage='twenty-test_server-local-data'
+readonly live_health_url='http://127.0.0.1:3001/healthz'
+readonly test_health_url='http://127.0.0.1:3002/healthz'
+readonly lock_file='/run/lock/twenty-live-maintenance.lock'
+
+usage() {
+  cat <<'EOF'
+Usage: sudo twenty-promote-test-to-live
+
+The command completely replaces the Live PostgreSQL database and local file
+storage with a consistent Test snapshot. It preserves the current Live state
+only as a protected rollback backup.
+EOF
+}
+
+fail() {
+  printf 'ERROR: %s\n' "$1" >&2
+  return 1
+}
+
+[[ "${EUID}" -eq 0 ]] || fail 'Run this command through sudo.'
+if [[ "${1:-}" == '--help' || "${1:-}" == '-h' ]]; then
+  usage
+  exit 0
+fi
+[[ "$#" -eq 0 ]] || fail 'This command does not accept arguments.'
+
+for command_name in curl docker flock grep sha256sum tar; do
+  command -v "$command_name" >/dev/null 2>&1 ||
+    fail "Required command is unavailable: ${command_name}"
+done
+
+exec 9>"$lock_file"
+flock -n 9 || fail 'Another Live maintenance operation is already running.'
+
+umask 077
+readonly timestamp="$(date -u '+%Y%m%dT%H%M%SZ')"
+readonly run_directory="${live_directory}/backups/test-promotion-${timestamp}"
+readonly live_database_backup="${run_directory}/live-before-promotion.dump"
+readonly test_database_dump="${run_directory}/test-source.dump"
+readonly live_storage_backup="${run_directory}/live-storage-before-promotion.tar.gz"
+readonly live_env_backup="${run_directory}/live.env.before-promotion"
+readonly operation_log="${run_directory}/promotion.log"
+readonly status_file="${run_directory}/promotion.status"
+
+install -d -m 700 "$run_directory"
+exec > >(tee -a "$operation_log") 2>&1
+
+live_backups_valid=false
+replacement_started=false
+
+finish() {
+  local exit_code=$?
+  trap - EXIT
+  printf '%s\n' "$exit_code" > "$status_file"
+  printf 'Promotion exit status: %s\n' "$exit_code"
+  printf 'Promotion log: %s\n' "$operation_log"
+  printf 'Status file: %s\n' "$status_file"
+  exit "$exit_code"
+}
+trap finish EXIT
+
+wait_for_postgres() {
+  local container="$1"
+
+  for _ in $(seq 1 60); do
+    if docker exec "$container" sh -lc \
+      'pg_isready -h localhost -U "$POSTGRES_USER" -d "$POSTGRES_DB"' \
+      >/dev/null 2>&1; then
+      return 0
+    fi
+    sleep 2
+  done
+
+  fail "Timed out waiting for PostgreSQL in ${container}."
+}
+
+wait_for_health() {
+  local label="$1"
+  local url="$2"
+
+  for _ in $(seq 1 90); do
+    if curl --fail --silent --show-error "$url" >/dev/null 2>&1; then
+      return 0
+    fi
+    sleep 2
+  done
+
+  fail "Timed out waiting for the ${label} health check."
+}
+
+dump_database() {
+  local container="$1"
+  local output="$2"
+
+  docker exec "$container" sh -lc \
+    'pg_dump -h localhost -U "$POSTGRES_USER" -d "$POSTGRES_DB" -Fc' \
+    > "${output}.partial"
+  mv "${output}.partial" "$output"
+  chmod 600 "$output"
+}
+
+validate_dump() {
+  local dump_path="$1"
+
+  [[ -s "$dump_path" ]]
+  docker exec -i "$live_db" pg_restore -l < "$dump_path" >/dev/null
+}
+
+restore_database() {
+  local dump_path="$1"
+
+  docker exec "$live_db" sh -lc \
+    'dropdb --force -h localhost -U "$POSTGRES_USER" "$POSTGRES_DB"'
+  docker exec "$live_db" sh -lc \
+    'createdb -h localhost -U "$POSTGRES_USER" "$POSTGRES_DB"'
+  docker exec -i "$live_db" sh -lc \
+    'pg_restore -h localhost -U "$POSTGRES_USER" -d "$POSTGRES_DB" --no-owner --no-privileges' \
+    < "$dump_path"
+}
+
+backup_live_storage() {
+  docker run --rm \
+    -v "${live_storage}:/from:ro" \
+    -v "${run_directory}:/backup" \
+    postgres:16 sh -lc \
+    'tar -C /from -czf /backup/live-storage-before-promotion.tar.gz.partial .'
+  mv "${live_storage_backup}.partial" "$live_storage_backup"
+  chmod 600 "$live_storage_backup"
+  docker run --rm -v "${run_directory}:/backup:ro" postgres:16 \
+    tar -tzf /backup/live-storage-before-promotion.tar.gz >/dev/null
+}
+
+copy_test_storage_to_live() {
+  docker run --rm \
+    -v "${test_storage}:/from:ro" \
+    -v "${live_storage}:/to" \
+    postgres:16 sh -lc \
+    'find /to -mindepth 1 -maxdepth 1 -exec rm -rf {} +; cp -a /from/. /to/'
+}
+
+restore_live_storage() {
+  docker run --rm \
+    -v "${live_storage}:/to" \
+    -v "${run_directory}:/backup:ro" \
+    postgres:16 sh -lc \
+    'find /to -mindepth 1 -maxdepth 1 -exec rm -rf {} +; tar -C /to -xzf /backup/live-storage-before-promotion.tar.gz'
+}
+
+start_environment() {
+  local directory="$1"
+  local label="$2"
+  local health_url="$3"
+  local server_container="$4"
+  local worker_container="$5"
+
+  cd "$directory"
+  docker compose up -d
+  wait_for_health "$label" "$health_url"
+  [[ "$(docker inspect "$server_container" --format '{{.State.Health.Status}}')" == 'healthy' ]]
+  [[ "$(docker inspect "$worker_container" --format '{{.State.Status}}')" == 'running' ]]
+}
+
+rollback_on_error() {
+  local exit_code=$?
+  trap - ERR
+  set +e
+
+  printf 'Promotion failed. Starting rollback.\n' >&2
+  if [[ "$replacement_started" == true && "$live_backups_valid" == true ]]; then
+    cd "$live_directory"
+    docker compose stop server worker >/dev/null 2>&1
+    restore_database "$live_database_backup"
+    restore_live_storage
+    cp --preserve=mode,ownership,timestamps "$live_env_backup" "$live_directory/.env"
+    docker exec "$live_redis" redis-cli FLUSHALL >/dev/null
+  fi
+
+  start_environment "$live_directory" 'Live' "$live_health_url" "$live_server" "$live_worker"
+  start_environment "$test_directory" 'Test' "$test_health_url" "$test_server" "$test_worker"
+  rm -f "${live_database_backup}.partial" "${test_database_dump}.partial" \
+    "${live_storage_backup}.partial"
+  exit "$exit_code"
+}
+trap rollback_on_error ERR
+
+printf 'Starting complete Test-to-Live promotion at %s.\n' \
+  "$(date -u '+%Y-%m-%d %H:%M:%S UTC')"
+
+for directory in "$live_directory" "$test_directory"; do
+  [[ -f "${directory}/.env" ]] || fail "Missing ${directory}/.env"
+  [[ -f "${directory}/docker-compose.yml" ]] || fail "Missing Compose file in ${directory}"
+  [[ "$(grep -Ec '^[[:space:]]{6}PERMAVENT_SECURITY_RLS_ENABLED:' "${directory}/docker-compose.yml")" -eq 2 ]] ||
+    fail "${directory}/docker-compose.yml must forward PERMAVENT_SECURITY_RLS_ENABLED to server and worker."
+  [[ "$(grep -Ec '^[[:space:]]{6}PERMAVENT_ERP_SALES_SCOPE_ENABLED:' "${directory}/docker-compose.yml")" -eq 2 ]] ||
+    fail "${directory}/docker-compose.yml must forward PERMAVENT_ERP_SALES_SCOPE_ENABLED to server and worker."
+  (cd "$directory" && docker compose config --quiet)
+done
+
+live_tag="$(grep -E '^TAG=' "${live_directory}/.env" | cut -d= -f2-)"
+test_tag="$(grep -E '^TAG=' "${test_directory}/.env" | cut -d= -f2-)"
+[[ -n "$live_tag" && "$live_tag" == "$test_tag" ]] ||
+  fail "Live and Test must use the same image tag before promotion: Live=${live_tag:-missing}, Test=${test_tag:-missing}."
+
+test_rls="$(grep -E '^PERMAVENT_SECURITY_RLS_ENABLED=' "${test_directory}/.env" | cut -d= -f2- || true)"
+[[ "$test_rls" == 'true' || "$test_rls" == 'false' ]] ||
+  fail 'Test must explicitly configure PERMAVENT_SECURITY_RLS_ENABLED.'
+test_erp_scope="$(grep -E '^PERMAVENT_ERP_SALES_SCOPE_ENABLED=' "${test_directory}/.env" | cut -d= -f2- || true)"
+[[ "$test_erp_scope" == 'true' ]] ||
+  fail 'Test must explicitly enable PERMAVENT_ERP_SALES_SCOPE_ENABLED.'
+
+cp --preserve=mode,ownership,timestamps "${live_directory}/.env" "$live_env_backup"
+live_env_next="${run_directory}/live.env.next"
+cp --preserve=mode,ownership,timestamps "${live_directory}/.env" "$live_env_next"
+if grep -q '^PERMAVENT_SECURITY_RLS_ENABLED=' "$live_env_next"; then
+  sed -i "s/^PERMAVENT_SECURITY_RLS_ENABLED=.*/PERMAVENT_SECURITY_RLS_ENABLED=${test_rls}/" "$live_env_next"
+else
+  printf '\nPERMAVENT_SECURITY_RLS_ENABLED=%s\n' "$test_rls" >> "$live_env_next"
+fi
+if grep -q '^PERMAVENT_ERP_SALES_SCOPE_ENABLED=' "$live_env_next"; then
+  sed -i "s/^PERMAVENT_ERP_SALES_SCOPE_ENABLED=.*/PERMAVENT_ERP_SALES_SCOPE_ENABLED=${test_erp_scope}/" "$live_env_next"
+else
+  printf '\nPERMAVENT_ERP_SALES_SCOPE_ENABLED=%s\n' "$test_erp_scope" >> "$live_env_next"
+fi
+(cd "$live_directory" && docker compose --env-file "$live_env_next" config --quiet)
+
+cd "$test_directory"
+docker compose up -d db redis
+cd "$live_directory"
+docker compose up -d db redis
+wait_for_postgres "$test_db"
+wait_for_postgres "$live_db"
+
+printf 'Stopping Test and Live writers.\n'
+(cd "$test_directory" && docker compose stop server worker)
+(cd "$live_directory" && docker compose stop server worker)
+
+printf 'Creating and validating database backups.\n'
+dump_database "$live_db" "$live_database_backup"
+dump_database "$test_db" "$test_database_dump"
+backup_live_storage
+validate_dump "$live_database_backup"
+validate_dump "$test_database_dump"
+live_backups_valid=true
+
+replacement_started=true
+mv "$live_env_next" "${live_directory}/.env"
+restore_database "$test_database_dump"
+copy_test_storage_to_live
+docker exec "$live_redis" redis-cli FLUSHALL >/dev/null
+
+start_environment "$live_directory" 'Live' "$live_health_url" "$live_server" "$live_worker"
+start_environment "$test_directory" 'Test' "$test_health_url" "$test_server" "$test_worker"
+
+source_tables="$(docker exec "$test_db" sh -lc \
+  'psql -h localhost -U "$POSTGRES_USER" -d "$POSTGRES_DB" -At -c "SELECT count(*) FROM information_schema.tables WHERE table_schema NOT IN ('\''pg_catalog'\'', '\''information_schema'\'');"')"
+live_tables="$(docker exec "$live_db" sh -lc \
+  'psql -h localhost -U "$POSTGRES_USER" -d "$POSTGRES_DB" -At -c "SELECT count(*) FROM information_schema.tables WHERE table_schema NOT IN ('\''pg_catalog'\'', '\''information_schema'\'');"')"
+[[ "$source_tables" == "$live_tables" ]] || fail 'Live table count does not match Test after promotion.'
+
+curl --fail --silent --show-error \
+  --resolve crm.permavent.co.uk:443:127.0.0.1 \
+  https://crm.permavent.co.uk/healthz >/dev/null
+
+trap - ERR
+
+printf 'Test-to-Live promotion completed successfully.\n'
+printf 'Image tag: %s\n' "$test_tag"
+printf 'Application table count: %s\n' "$live_tables"
+printf 'Live database rollback backup: %s\n' "$live_database_backup"
+printf 'Live storage rollback backup: %s\n' "$live_storage_backup"
+sha256sum "$live_database_backup" "$test_database_dump" "$live_storage_backup"
