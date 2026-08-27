@@ -49,6 +49,7 @@ import { WorkspaceAuthContext } from 'src/engine/core-modules/auth/types/workspa
 import { FeatureFlagService } from 'src/engine/core-modules/feature-flag/services/feature-flag.service';
 import { MetricsService } from 'src/engine/core-modules/metrics/metrics.service';
 import { MetricsKeys } from 'src/engine/core-modules/metrics/types/metrics-keys.type';
+import { PermaventCompanyFocusFilterService } from 'src/engine/core-modules/permavent-sales-scope/focus/permavent-company-focus-filter.service';
 import { ThrottlerException } from 'src/engine/core-modules/throttler/throttler.exception';
 import { ThrottlerService } from 'src/engine/core-modules/throttler/throttler.service';
 import { TwentyConfigService } from 'src/engine/core-modules/twenty-config/twenty-config.service';
@@ -112,6 +113,8 @@ export abstract class CommonBaseQueryRunnerService<
   protected readonly metricsService: MetricsService;
   @Inject()
   protected readonly featureFlagService: FeatureFlagService;
+  @Inject()
+  protected readonly permaventCompanyFocusFilterService: PermaventCompanyFocusFilterService;
   @Inject()
   protected readonly workspaceDataSourceService: WorkspaceDataSourceService;
 
@@ -223,12 +226,26 @@ export abstract class CommonBaseQueryRunnerService<
 
     const computedArgs = await this.computeArgs(args, queryRunnerContext);
 
+    const focusArgs =
+      'filter' in computedArgs
+        ? ({
+            ...computedArgs,
+            filter: await this.permaventCompanyFocusFilterService.applyToFilter(
+              {
+                filter: computedArgs.filter as ObjectRecordFilter | undefined,
+                authContext,
+                flatObjectMetadata,
+              },
+            ),
+          } as CommonInput<Args>)
+        : computedArgs;
+
     const hookedArgs =
       (await this.workspaceQueryHookService.executePreQueryHooks(
         authContext,
         flatObjectMetadata.nameSingular,
         operationName,
-        computedArgs as WorkspacePreQueryHookPayload<CommonQueryNames>,
+        focusArgs as WorkspacePreQueryHookPayload<CommonQueryNames>,
       )) as CommonInput<Args>;
 
     return hookedArgs;

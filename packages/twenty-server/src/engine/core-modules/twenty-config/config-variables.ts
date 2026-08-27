@@ -81,6 +81,17 @@ export class ConfigVariables {
 
   @ConfigVariablesMetadata({
     group: ConfigVariablesGroup.ADVANCED_SETTINGS,
+    description:
+      'Expand the Permavent My Companies view marker for active Sales Rep assignments',
+    isEnvOnly: true,
+    isHiddenInAdminPanel: true,
+    type: ConfigVariableType.BOOLEAN,
+  })
+  @IsOptional()
+  PERMAVENT_MY_COMPANIES_FOCUS_ENABLED = false;
+
+  @ConfigVariablesMetadata({
+    group: ConfigVariablesGroup.ADVANCED_SETTINGS,
     description: 'Enable trusted delegated user context for approved API keys',
     isEnvOnly: true,
     isHiddenInAdminPanel: true,
