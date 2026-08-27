@@ -6,6 +6,10 @@ import { SIDE_PANEL_CLICK_OUTSIDE_ID } from '@/side-panel/constants/SidePanelCli
 import { SIDE_PANEL_CONSTRAINTS } from '@/side-panel/constants/SidePanelConstraints';
 import { useSidePanelCloseAnimationCompleteCleanup } from '@/side-panel/hooks/useSidePanelCloseAnimationCompleteCleanup';
 import { useSidePanelMenu } from '@/side-panel/hooks/useSidePanelMenu';
+import { useIsPermaventCompanyWideSidePanel } from '@/side-panel/permavent-company-wide-side-panel/hooks/useIsPermaventCompanyWideSidePanel';
+import { useParentElementWidth } from '@/side-panel/permavent-company-wide-side-panel/hooks/useParentElementWidth';
+import { permaventCompanyWideSidePanelWidthState } from '@/side-panel/permavent-company-wide-side-panel/states/permaventCompanyWideSidePanelWidthState';
+import { getPermaventCompanyWideSidePanelLayout } from '@/side-panel/permavent-company-wide-side-panel/utils/getPermaventCompanyWideSidePanelLayout';
 import { isSidePanelClosingState } from '@/side-panel/states/isSidePanelClosingState';
 import { isSidePanelOpenedState } from '@/side-panel/states/isSidePanelOpenedState';
 import {
@@ -76,6 +80,11 @@ export const SidePanelForDesktop = () => {
   const store = useStore();
   const isSidePanelOpened = useAtomStateValue(isSidePanelOpenedState);
   const [sidePanelWidth, setSidePanelWidth] = useAtomState(sidePanelWidthState);
+  const [
+    permaventCompanyWideSidePanelWidth,
+    setPermaventCompanyWideSidePanelWidth,
+  ] = useAtomState(permaventCompanyWideSidePanelWidthState);
+  const isPermaventCompanyWideSidePanel = useIsPermaventCompanyWideSidePanel();
   const { closeSidePanelMenu } = useSidePanelMenu();
   const { sidePanelCloseAnimationCompleteCleanup } =
     useSidePanelCloseAnimationCompleteCleanup();
@@ -85,10 +94,26 @@ export const SidePanelForDesktop = () => {
     null,
   );
   const [isResizing, setIsResizing] = useState(false);
+  const [sidePanelWrapperElement, setSidePanelWrapperElement] =
+    useState<HTMLDivElement | null>(null);
   const [shouldRenderContent, setShouldRenderContent] =
     useState(isSidePanelOpened);
   const [isShrinkingFromFullWidth, setIsShrinkingFromFullWidth] =
     useState(false);
+
+  const availableLayoutWidth = useParentElementWidth(sidePanelWrapperElement);
+  const permaventCompanySidePanelLayout = isPermaventCompanyWideSidePanel
+    ? getPermaventCompanyWideSidePanelLayout({
+        availableWidth: availableLayoutWidth,
+        persistedWidth: permaventCompanyWideSidePanelWidth,
+      })
+    : null;
+  const isPermaventCompanyWideSidePanelActive =
+    permaventCompanySidePanelLayout !== null;
+  const activeSidePanelConstraints =
+    permaventCompanySidePanelLayout?.constraints ?? SIDE_PANEL_CONSTRAINTS;
+  const activeSidePanelWidth =
+    permaventCompanySidePanelLayout?.width ?? sidePanelWidth;
 
   const handleContinueChatFromFullWidth = useCallback(() => {
     if (shouldReduceMotion === true) {
@@ -138,11 +163,18 @@ export const SidePanelForDesktop = () => {
 
   const handleWidthChange = useCallback(
     (width: number) => {
-      setSidePanelWidth(width);
+      if (isPermaventCompanyWideSidePanelActive)
+        setPermaventCompanyWideSidePanelWidth(width);
+      else setSidePanelWidth(width);
       setIsResizing(false);
       setTableWidthResizeIsActive(true);
     },
-    [setSidePanelWidth, setTableWidthResizeIsActive],
+    [
+      isPermaventCompanyWideSidePanelActive,
+      setPermaventCompanyWideSidePanelWidth,
+      setSidePanelWidth,
+      setTableWidthResizeIsActive,
+    ],
   );
 
   const handleResizeStart = useCallback(() => {
@@ -158,22 +190,24 @@ export const SidePanelForDesktop = () => {
 
   return (
     <>
-      <SidePanelWidthEffect />
+      <SidePanelWidthEffect sidePanelWidth={activeSidePanelWidth} />
       <SidePanelAskAiHandoffEffect
         onContinueChatFromFullWidth={handleContinueChatFromFullWidth}
       />
       <ResizablePanelGap
         side="left"
-        constraints={SIDE_PANEL_CONSTRAINTS}
-        currentWidth={sidePanelWidth}
+        constraints={activeSidePanelConstraints}
+        currentWidth={activeSidePanelWidth}
         onWidthChange={handleWidthChange}
         onCollapse={handleCollapse}
         gapWidth={0}
         cssVariableName={SIDE_PANEL_WIDTH_VAR}
         onResizeStart={handleResizeStart}
+        isKeyboardResizable={isPermaventCompanyWideSidePanelActive}
       />
 
       <StyledSidePanelWrapper
+        ref={setSidePanelWrapperElement}
         isOpen={isSidePanelOpened}
         isResizing={isResizing}
         onTransitionEnd={handleTransitionEnd}

@@ -3,6 +3,9 @@ import { styled } from '@linaria/react';
 import { useResizablePanel } from '@/ui/layout/resizable-panel/hooks/useResizablePanel';
 import { type ResizablePanelConstraints } from '@/ui/layout/resizable-panel/types/ResizablePanelConstraints';
 import { type ResizablePanelSide } from '@/ui/layout/resizable-panel/types/ResizablePanelSide';
+import { getKeyboardResizedPanelWidth } from '@/ui/layout/resizable-panel/utils/getKeyboardResizedPanelWidth';
+import { useCallback, type KeyboardEvent } from 'react';
+import { themeCssVariables } from 'twenty-ui/theme-constants';
 
 // Horizontal padding offset by an equal negative margin keeps the resize
 // handle grabbable even when the visual gap is 0, without shifting neighbors.
@@ -17,6 +20,11 @@ const StyledGap = styled.div<{ gapWidth: number }>`
   transition: width 0.15s ease;
   width: ${({ gapWidth }) => gapWidth}px;
   z-index: 1;
+
+  &:focus-visible {
+    outline: 2px solid ${themeCssVariables.color.blue};
+    outline-offset: -2px;
+  }
 `;
 
 type ResizablePanelGapProps = {
@@ -28,6 +36,7 @@ type ResizablePanelGapProps = {
   gapWidth: number;
   cssVariableName?: string;
   onResizeStart?: () => void;
+  isKeyboardResizable?: boolean;
 };
 
 export const ResizablePanelGap = ({
@@ -39,6 +48,7 @@ export const ResizablePanelGap = ({
   gapWidth,
   cssVariableName,
   onResizeStart,
+  isKeyboardResizable = false,
 }: ResizablePanelGapProps) => {
   const { handleMouseDown, handleMouseEnter, handleMouseLeave } =
     useResizablePanel({
@@ -51,12 +61,45 @@ export const ResizablePanelGap = ({
       onResizeStart,
     });
 
+  const handleKeyDown = useCallback(
+    (event: KeyboardEvent<HTMLDivElement>) => {
+      if (!isKeyboardResizable) return;
+      const nextWidth = getKeyboardResizedPanelWidth({
+        currentWidth,
+        constraints,
+        key: event.key,
+        shiftKey: event.shiftKey,
+        side,
+      });
+      if (nextWidth === null) return;
+      event.preventDefault();
+      onResizeStart?.();
+      onWidthChange(nextWidth);
+    },
+    [
+      constraints,
+      currentWidth,
+      isKeyboardResizable,
+      onResizeStart,
+      onWidthChange,
+      side,
+    ],
+  );
+
   return (
     <StyledGap
       gapWidth={gapWidth}
       onMouseDown={handleMouseDown}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
+      onKeyDown={handleKeyDown}
+      role={isKeyboardResizable ? 'separator' : undefined}
+      aria-label={isKeyboardResizable ? 'Resize panel' : undefined}
+      aria-orientation={isKeyboardResizable ? 'vertical' : undefined}
+      aria-valuemin={isKeyboardResizable ? constraints.min : undefined}
+      aria-valuemax={isKeyboardResizable ? constraints.max : undefined}
+      aria-valuenow={isKeyboardResizable ? currentWidth : undefined}
+      tabIndex={isKeyboardResizable ? 0 : undefined}
     />
   );
 };
