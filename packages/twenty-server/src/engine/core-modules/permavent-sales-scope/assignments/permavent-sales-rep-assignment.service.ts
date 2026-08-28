@@ -119,28 +119,28 @@ export class PermaventSalesRepAssignmentService {
           );
         const queryBuilder = assignmentRepository
           .createQueryBuilder('assignment')
-          .select('assignment.erpSalesRepCode', 'erpSalesRepCode')
-          .addSelect('assignment.isPrimary', 'isPrimary')
+          .select('assignment.erpsalesrepcode', 'erpSalesRepCode')
+          .addSelect('assignment.isprimary', 'isPrimary')
           .where('assignment.salesRepId = :workspaceMemberId', {
             workspaceMemberId,
           })
           .andWhere('assignment.deletedAt IS NULL')
-          .andWhere('assignment.isActive = true')
+          .andWhere('assignment.isactive = true')
           .andWhere(
-            '(assignment.validFrom IS NULL OR assignment.validFrom <= :businessDate)',
+            '(assignment.validfrom IS NULL OR assignment.validfrom <= :businessDate)',
             { businessDate },
           )
           .andWhere(
-            '(assignment.validTo IS NULL OR assignment.validTo > :businessDate)',
+            '(assignment.validto IS NULL OR assignment.validto > :businessDate)',
             { businessDate },
           );
 
         if (isPrimary) {
-          queryBuilder.andWhere('assignment.isPrimary = true');
+          queryBuilder.andWhere('assignment.isprimary = true');
         }
 
         return await queryBuilder
-          .orderBy('assignment.erpSalesRepCode', 'ASC')
+          .orderBy('assignment.erpsalesrepcode', 'ASC')
           .getRawMany<PermaventSalesRepAssignmentRecord>();
       },
       buildSystemAuthContext(workspaceId),
