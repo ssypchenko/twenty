@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 
 import { isDefined } from 'twenty-shared/utils';
 
+import { isDelegatedApiKeyAuthContext } from 'src/engine/core-modules/auth/guards/is-delegated-api-key-auth-context.guard';
 import { isUserAuthContext } from 'src/engine/core-modules/auth/guards/is-user-auth-context.guard';
 import { PermaventSalesRepAssignmentService } from 'src/engine/core-modules/permavent-sales-scope/assignments/permavent-sales-rep-assignment.service';
 import { PERMAVENT_ROLE_UNIVERSAL_IDENTIFIERS } from 'src/engine/core-modules/permavent-sales-scope/constants/permavent-role-universal-identifiers.constant';
@@ -45,7 +46,14 @@ export class PermaventSalesScopeContextFactory {
   private async createContext(
     authContext: WorkspaceAuthContext,
   ): Promise<PermaventSalesScopeContext> {
-    if (!isUserAuthContext(authContext)) {
+    const delegatedActor = isDelegatedApiKeyAuthContext(authContext)
+      ? authContext.delegatedActor
+      : undefined;
+    const userContext = isUserAuthContext(authContext)
+      ? authContext
+      : delegatedActor;
+
+    if (!userContext) {
       return {
         authContextType: authContext.type,
         workspaceId: null,
@@ -65,7 +73,9 @@ export class PermaventSalesScopeContextFactory {
         authContext.workspace.id,
         ['flatRoleMaps', 'userWorkspaceRoleMap'],
       );
-    const roleId = userWorkspaceRoleMap[authContext.userWorkspaceId];
+    const roleId = delegatedActor
+      ? delegatedActor.roleId
+      : userWorkspaceRoleMap[userContext.userWorkspaceId];
     const roleUniversalIdentifier = isDefined(roleId)
       ? flatRoleMaps.universalIdentifierById[roleId]
       : undefined;
@@ -79,11 +89,11 @@ export class PermaventSalesScopeContextFactory {
       ? await Promise.all([
           this.assignmentService.findAllowedSalesRepCodes({
             workspaceId: authContext.workspace.id,
-            workspaceMemberId: authContext.workspaceMemberId,
+            workspaceMemberId: userContext.workspaceMemberId,
           }),
           this.assignmentService.findPrimarySalesRepCode({
             workspaceId: authContext.workspace.id,
-            workspaceMemberId: authContext.workspaceMemberId,
+            workspaceMemberId: userContext.workspaceMemberId,
           }),
         ])
       : [[], null];
@@ -91,8 +101,8 @@ export class PermaventSalesScopeContextFactory {
     return {
       authContextType: authContext.type,
       workspaceId: authContext.workspace.id,
-      workspaceMemberId: authContext.workspaceMemberId,
-      userEmail: authContext.user.email.trim().toLowerCase(),
+      workspaceMemberId: userContext.workspaceMemberId,
+      userEmail: userContext.user.email.trim().toLowerCase(),
       roleUniversalIdentifier: roleUniversalIdentifier ?? null,
       isSalesManager,
       isRestrictedSalesRep,
