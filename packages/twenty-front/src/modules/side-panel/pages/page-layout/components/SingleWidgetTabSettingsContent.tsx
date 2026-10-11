@@ -6,6 +6,11 @@ import { SidePanelList } from '@/side-panel/components/SidePanelList';
 import { SingleWidgetTabVisibilityDropdownContent } from '@/side-panel/pages/page-layout/components/dropdown-content/SingleWidgetTabVisibilityDropdownContent';
 import { TAB_SETTINGS_SELECTABLE_ITEM_IDS } from '@/side-panel/pages/page-layout/constants/settings/TabSettingsSelectableItemIds';
 import { useTranslatedVisibilityLabel } from '@/side-panel/pages/page-layout/hooks/useTranslatedVisibilityLabel';
+import {
+  PERMAVENT_OPENING_TAB_SETTINGS_ITEM_ID,
+  PermaventOpeningTabSettingsItem,
+  type PermaventOpeningTabSettings,
+} from '@/side-panel/permavent-company-wide-side-panel/components/PermaventOpeningTabSettingsItem';
 import { DropdownContent } from '@/ui/layout/dropdown/components/DropdownContent';
 import { ConfirmationModal } from '@/ui/layout/modal/components/ConfirmationModal';
 import { useModal } from '@/ui/layout/modal/hooks/useModal';
@@ -27,6 +32,7 @@ const RESET_TAB_TO_DEFAULT_MENU_ITEM_ID =
   'reset-single-widget-tab-to-default-menu-item';
 
 type SingleWidgetTabSettingsContentProps = {
+  openingTabSettings?: PermaventOpeningTabSettings;
   pageLayoutId: string;
   singleWidget: PageLayoutWidget;
   canSetAsPinned: boolean;
@@ -42,6 +48,7 @@ type SingleWidgetTabSettingsContentProps = {
 };
 
 export const SingleWidgetTabSettingsContent = ({
+  openingTabSettings,
   pageLayoutId,
   singleWidget,
   canSetAsPinned,
@@ -70,6 +77,7 @@ export const SingleWidgetTabSettingsContent = ({
   };
 
   const selectableItemIds = [
+    ...(openingTabSettings ? [PERMAVENT_OPENING_TAB_SETTINGS_ITEM_ID] : []),
     ...(canSetAsPinned ? [TAB_SETTINGS_SELECTABLE_ITEM_IDS.SET_AS_PINNED] : []),
     ...(canMoveLeft ? [TAB_SETTINGS_SELECTABLE_ITEM_IDS.MOVE_LEFT] : []),
     ...(canMoveRight ? [TAB_SETTINGS_SELECTABLE_ITEM_IDS.MOVE_RIGHT] : []),
@@ -82,6 +90,12 @@ export const SingleWidgetTabSettingsContent = ({
     <>
       <SidePanelList selectableItemIds={selectableItemIds}>
         <SidePanelGroup heading={t`Placement`}>
+          {openingTabSettings && (
+            <PermaventOpeningTabSettingsItem
+              isOpeningTab={openingTabSettings.isOpeningTab}
+              onSetOpeningTab={openingTabSettings.onSetOpeningTab}
+            />
+          )}
           {canSetAsPinned && (
             <SelectableListItem
               itemId={TAB_SETTINGS_SELECTABLE_ITEM_IDS.SET_AS_PINNED}

@@ -1,10 +1,11 @@
 import { Injectable, Logger } from '@nestjs/common';
 
-import { PageLayoutTabLayoutMode } from 'twenty-shared/types';
+import { FeatureFlagKey, PageLayoutTabLayoutMode } from 'twenty-shared/types';
 import { computeDiffBetweenObjects, isDefined } from 'twenty-shared/utils';
 import { v4 } from 'uuid';
 
 import { ApplicationService } from 'src/engine/core-modules/application/application.service';
+import { FeatureFlagService } from 'src/engine/core-modules/feature-flag/services/feature-flag.service';
 import { WorkspaceManyOrAllFlatEntityMapsCacheService } from 'src/engine/metadata-modules/flat-entity/services/workspace-many-or-all-flat-entity-maps-cache.service';
 import { AllFlatEntityMaps } from 'src/engine/metadata-modules/flat-entity/types/all-flat-entity-maps.type';
 import { addFlatEntityToFlatEntityMapsOrThrow } from 'src/engine/metadata-modules/flat-entity/utils/add-flat-entity-to-flat-entity-maps-or-throw.util';
@@ -36,6 +37,7 @@ import {
   generatePageLayoutExceptionMessage,
 } from 'src/engine/metadata-modules/page-layout/exceptions/page-layout.exception';
 import { fromFlatPageLayoutWithTabsAndWidgetsToPageLayoutDto } from 'src/engine/metadata-modules/page-layout/utils/from-flat-page-layout-with-tabs-and-widgets-to-page-layout-dto.util';
+import { resolvePermaventRecordOpeningTabUpdate } from 'src/engine/metadata-modules/page-layout/utils/resolve-permavent-record-opening-tab-update.util';
 import { isCallerOverridingEntity } from 'src/engine/metadata-modules/utils/is-caller-overriding-entity.util';
 import { resolveEffectiveEntity } from 'src/engine/metadata-modules/utils/resolve-effective-entity.util';
 import { sanitizeOverridableEntityInput } from 'src/engine/metadata-modules/utils/sanitize-overridable-entity-input.util';
@@ -60,6 +62,7 @@ export class PageLayoutUpdateService {
     private readonly applicationService: ApplicationService,
     private readonly dashboardSyncService: DashboardSyncService,
     private readonly viewService: ViewService,
+    private readonly featureFlagService: FeatureFlagService,
   ) {}
 
   async updatePageLayoutWithTabs({
@@ -156,6 +159,36 @@ export class PageLayoutUpdateService {
         }),
       flatPageLayoutTabMaps,
     );
+
+    if (updateData.defaultTabToFocusOnMobileAndSidePanelId !== undefined) {
+      const objectMetadata = findFlatEntityByIdInFlatEntityMaps({
+        flatEntityId: flatPageLayoutToUpdate.objectMetadataId ?? '',
+        flatEntityMaps: flatObjectMetadataMaps,
+      });
+      const isOpeningTabChanged =
+        updateData.defaultTabToFocusOnMobileAndSidePanelId !==
+        existingPageLayout.defaultTabToFocusOnMobileAndSidePanelId;
+      const isFeatureEnabled =
+        isOpeningTabChanged &&
+        (await this.featureFlagService.isFeatureEnabled(
+          FeatureFlagKey.IS_PERMAVENT_COMPANY_WIDE_SIDE_PANEL_ENABLED,
+          workspaceId,
+        ));
+
+      Object.assign(
+        flatPageLayoutToUpdate,
+        resolvePermaventRecordOpeningTabUpdate({
+          pageLayout: flatPageLayoutToUpdate,
+          requestedTabId: updateData.defaultTabToFocusOnMobileAndSidePanelId,
+          objectNameSingular: objectMetadata?.nameSingular,
+          isFeatureEnabled,
+          tabs: Object.values(
+            optimisticFlatPageLayoutTabMaps.byUniversalIdentifier,
+          ).filter(isDefined),
+          receivedTabIds: tabs.map((tab) => tab.id),
+        }),
+      );
+    }
 
     const { widgetsToCreate, widgetsToUpdate, widgetsToDelete } =
       this.computeWidgetOperationsForAllTabs({

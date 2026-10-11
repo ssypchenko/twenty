@@ -2,6 +2,11 @@ import { CommandMenuItem } from '@/command-menu/components/CommandMenuItem';
 import { SidePanelGroup } from '@/side-panel/components/SidePanelGroup';
 import { SidePanelList } from '@/side-panel/components/SidePanelList';
 import { TAB_SETTINGS_SELECTABLE_ITEM_IDS } from '@/side-panel/pages/page-layout/constants/settings/TabSettingsSelectableItemIds';
+import {
+  PERMAVENT_OPENING_TAB_SETTINGS_ITEM_ID,
+  PermaventOpeningTabSettingsItem,
+  type PermaventOpeningTabSettings,
+} from '@/side-panel/permavent-company-wide-side-panel/components/PermaventOpeningTabSettingsItem';
 import { ConfirmationModal } from '@/ui/layout/modal/components/ConfirmationModal';
 import { useModal } from '@/ui/layout/modal/hooks/useModal';
 import { SelectableListItem } from '@/ui/layout/selectable-list/components/SelectableListItem';
@@ -21,6 +26,7 @@ const RESET_TAB_TO_DEFAULT_MENU_ITEM_ID =
   'reset-regular-tab-to-default-menu-item';
 
 type RegularTabSettingsContentProps = {
+  openingTabSettings?: PermaventOpeningTabSettings;
   canSetAsPinned: boolean;
   canMoveLeft: boolean;
   canMoveRight: boolean;
@@ -35,6 +41,7 @@ type RegularTabSettingsContentProps = {
 };
 
 export const RegularTabSettingsContent = ({
+  openingTabSettings,
   canSetAsPinned,
   canMoveLeft,
   canMoveRight,
@@ -58,6 +65,7 @@ export const RegularTabSettingsContent = ({
   };
 
   const selectableItemIds = [
+    ...(openingTabSettings ? [PERMAVENT_OPENING_TAB_SETTINGS_ITEM_ID] : []),
     ...(canMoveLeft ? [TAB_SETTINGS_SELECTABLE_ITEM_IDS.MOVE_LEFT] : []),
     ...(canMoveRight ? [TAB_SETTINGS_SELECTABLE_ITEM_IDS.MOVE_RIGHT] : []),
     ...(canSetAsPinned ? [TAB_SETTINGS_SELECTABLE_ITEM_IDS.SET_AS_PINNED] : []),
@@ -70,6 +78,12 @@ export const RegularTabSettingsContent = ({
     <>
       <SidePanelList selectableItemIds={selectableItemIds}>
         <SidePanelGroup heading={t`Settings`}>
+          {openingTabSettings && (
+            <PermaventOpeningTabSettingsItem
+              isOpeningTab={openingTabSettings.isOpeningTab}
+              onSetOpeningTab={openingTabSettings.onSetOpeningTab}
+            />
+          )}
           {canMoveLeft && (
             <SelectableListItem
               itemId={TAB_SETTINGS_SELECTABLE_ITEM_IDS.MOVE_LEFT}

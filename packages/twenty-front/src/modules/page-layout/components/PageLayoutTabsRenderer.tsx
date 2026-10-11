@@ -13,10 +13,13 @@ import { getScrollWrapperInstanceIdFromPageLayoutAndRecord } from '@/page-layout
 import { getTabListInstanceIdFromPageLayoutAndRecord } from '@/page-layout/utils/getTabListInstanceIdFromPageLayoutAndRecord';
 import { shouldEnableTabEditingFeatures } from '@/page-layout/utils/shouldEnableTabEditingFeatures';
 import { sortTabsByPosition } from '@/page-layout/utils/sortTabsByPosition';
+import { PERMAVENT_COMPANY_WIDE_SIDE_PANEL_FEATURE_FLAG } from '@/side-panel/permavent-company-wide-side-panel/constants/PermaventCompanyWideSidePanelFeatureFlag';
+import { getPermaventRecordOpeningTabId } from '@/side-panel/permavent-company-wide-side-panel/utils/getPermaventRecordOpeningTabId';
 import { useLayoutRenderingContext } from '@/ui/layout/contexts/LayoutRenderingContext';
 import { activeTabIdComponentState } from '@/ui/layout/tab-list/states/activeTabIdComponentState';
 import { ScrollWrapper } from '@/ui/utilities/scroll/components/ScrollWrapper';
 import { useAtomComponentStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomComponentStateValue';
+import { useIsFeatureEnabled } from '@/workspace/hooks/useIsFeatureEnabled';
 import { styled } from '@linaria/react';
 import { isDefined } from 'twenty-shared/utils';
 import { MOBILE_VIEWPORT, themeCssVariables } from 'twenty-ui/theme-constants';
@@ -98,6 +101,9 @@ const StyledScrollWrapperContainer = styled.div`
 
 export const PageLayoutTabsRenderer = () => {
   const { currentPageLayout } = useCurrentPageLayoutOrThrow();
+  const isPermaventWidePanelEnabled = useIsFeatureEnabled(
+    PERMAVENT_COMPANY_WIDE_SIDE_PANEL_FEATURE_FLAG,
+  );
 
   const { isInSidePanel, layoutType, targetRecordIdentifier } =
     useLayoutRenderingContext();
@@ -158,10 +164,16 @@ export const PageLayoutTabsRenderer = () => {
           <PageLayoutTabListEffect
             tabs={sortedTabs}
             componentInstanceId={tabListInstanceId}
-            defaultTabToFocusOnMobileAndSidePanelId={
-              currentPageLayout.defaultTabToFocusOnMobileAndSidePanelId ??
-              undefined
-            }
+            defaultTabToFocusOnMobileAndSidePanelId={getPermaventRecordOpeningTabId(
+              {
+                tabs: sortedTabs,
+                configuredTabId:
+                  currentPageLayout.defaultTabToFocusOnMobileAndSidePanelId,
+                objectNameSingular:
+                  targetRecordIdentifier?.targetObjectNameSingular,
+                isFeatureEnabled: isPermaventWidePanelEnabled,
+              },
+            )}
           />
           {(sortedTabs.length > 1 || isPageLayoutInEditMode) && (
             <PageLayoutTabList

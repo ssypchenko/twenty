@@ -33,6 +33,11 @@ export class UpdatePageLayoutWithTabsInput {
   @IsOptional()
   objectMetadataId: string | null;
 
+  @Field(() => UUIDScalarType, { nullable: true })
+  @IsUUID()
+  @IsOptional()
+  defaultTabToFocusOnMobileAndSidePanelId?: string | null;
+
   @Field(() => [UpdatePageLayoutTabWithWidgetsInput])
   @IsArray()
   @ArrayMinSize(1)

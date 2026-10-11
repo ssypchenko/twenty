@@ -49,7 +49,11 @@ export class UpdatePageLayoutActionHandlerService extends WorkspaceMigrationRunn
         allFlatEntityMaps,
       });
 
-    if (isDefined(defaultTabToFocusOnMobileAndSidePanelUniversalIdentifier)) {
+    if (defaultTabToFocusOnMobileAndSidePanelUniversalIdentifier === null) {
+      transpiledUpdate.defaultTabToFocusOnMobileAndSidePanelId = null;
+    } else if (
+      isDefined(defaultTabToFocusOnMobileAndSidePanelUniversalIdentifier)
+    ) {
       const flatPageLayoutTab = findFlatEntityByUniversalIdentifier({
         flatEntityMaps: allFlatEntityMaps.flatPageLayoutTabMaps,
         universalIdentifier:

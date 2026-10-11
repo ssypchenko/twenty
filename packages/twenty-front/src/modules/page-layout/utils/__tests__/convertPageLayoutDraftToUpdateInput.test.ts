@@ -48,6 +48,34 @@ const makeTab = (
   }) as DraftPageLayout['tabs'][number];
 
 describe('convertPageLayoutDraftToUpdateInput', () => {
+  it('sends the configured opening tab only when the extension is enabled', () => {
+    const draft = makeDraft([makeTab('tab-1', [])]);
+    draft.defaultTabToFocusOnMobileAndSidePanelId = 'tab-1';
+
+    expect(convertPageLayoutDraftToUpdateInput(draft)).not.toHaveProperty(
+      'defaultTabToFocusOnMobileAndSidePanelId',
+    );
+    expect(
+      convertPageLayoutDraftToUpdateInput(draft, { includeOpeningTab: true })
+        .defaultTabToFocusOnMobileAndSidePanelId,
+    ).toBe('tab-1');
+  });
+
+  it('clears the saved opening tab when that tab is removed', () => {
+    const draft = makeDraft([
+      makeTab('tab-1', [], undefined, { isActive: false }),
+      makeTab('tab-2', []),
+    ]);
+    draft.defaultTabToFocusOnMobileAndSidePanelId = 'tab-1';
+
+    const input = convertPageLayoutDraftToUpdateInput(draft, {
+      includeOpeningTab: true,
+    });
+
+    expect(input.defaultTabToFocusOnMobileAndSidePanelId).toBeNull();
+    expect(input.tabs.map((tab) => tab.id)).toEqual(['tab-2']);
+  });
+
   it('should convert a draft layout to update input', () => {
     const widget = makeWidget({ id: 'w1' });
     const draft = makeDraft([makeTab('tab-1', [widget])]);

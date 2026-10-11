@@ -5978,6 +5978,7 @@ export type UpdatePageLayoutWidgetWithIdInput = {
 };
 
 export type UpdatePageLayoutWithTabsInput = {
+  defaultTabToFocusOnMobileAndSidePanelId?: InputMaybe<Scalars['UUID']['input']>;
   name: Scalars['String']['input'];
   objectMetadataId?: InputMaybe<Scalars['UUID']['input']>;
   tabs: Array<UpdatePageLayoutTabWithWidgetsInput>;

@@ -4,6 +4,19 @@ import { type AllUniversalWorkspaceMigrationAction } from 'src/engine/workspace-
 export const computeOrderedMigrationActions = (
   aggregatedOrchestratorActionsReport: OrchestratorActionsReport,
 ): AllUniversalWorkspaceMigrationAction[] => {
+  const newPageLayoutTabUniversalIdentifiers = new Set(
+    aggregatedOrchestratorActionsReport.pageLayoutTab.create.map(
+      (action) => action.flatEntity.universalIdentifier,
+    ),
+  );
+  const pageLayoutUpdatesAfterTabCreation =
+    aggregatedOrchestratorActionsReport.pageLayout.update.filter((action) =>
+      newPageLayoutTabUniversalIdentifiers.has(
+        action.update
+          .defaultTabToFocusOnMobileAndSidePanelUniversalIdentifier ?? '',
+      ),
+    );
+
   return [
     ...aggregatedOrchestratorActionsReport.searchFieldMetadata.delete,
     ...aggregatedOrchestratorActionsReport.searchFieldMetadata.create,
@@ -89,10 +102,13 @@ export const computeOrderedMigrationActions = (
 
     ...aggregatedOrchestratorActionsReport.pageLayout.delete,
     ...aggregatedOrchestratorActionsReport.pageLayout.create,
-    ...aggregatedOrchestratorActionsReport.pageLayout.update,
+    ...aggregatedOrchestratorActionsReport.pageLayout.update.filter(
+      (action) => !pageLayoutUpdatesAfterTabCreation.includes(action),
+    ),
 
     ...aggregatedOrchestratorActionsReport.pageLayoutTab.delete,
     ...aggregatedOrchestratorActionsReport.pageLayoutTab.create,
+    ...pageLayoutUpdatesAfterTabCreation,
     ...aggregatedOrchestratorActionsReport.pageLayoutTab.update,
 
     ...aggregatedOrchestratorActionsReport.pageLayoutWidget.delete,

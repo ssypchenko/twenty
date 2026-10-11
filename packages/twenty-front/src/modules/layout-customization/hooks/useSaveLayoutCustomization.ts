@@ -6,6 +6,7 @@ import { navigationMenuItemsDraftState } from '@/navigation-menu-item/common/sta
 import { navigationMenuItemsSelector } from '@/navigation-menu-item/common/states/navigationMenuItemsSelector';
 import { filterWorkspaceNavigationMenuItems } from '@/navigation-menu-item/common/utils/filterWorkspaceNavigationMenuItems';
 import { useSaveNavigationMenuItemsDraft } from '@/navigation-menu-item/edit/hooks/useSaveNavigationMenuItemsDraft';
+import { useObjectMetadataItems } from '@/object-metadata/hooks/useObjectMetadataItems';
 import { useCreatePendingFieldsWidgetViews } from '@/page-layout/hooks/useCreatePendingFieldsWidgetViews';
 import { useCreatePendingRecordTableWidgetViews } from '@/page-layout/hooks/useCreatePendingRecordTableWidgetViews';
 import { useSavePageLayoutWidgetsData } from '@/page-layout/hooks/useSavePageLayoutWidgetsData';
@@ -18,6 +19,9 @@ import { type PageLayout } from '@/page-layout/types/PageLayout';
 import { convertPageLayoutDraftToUpdateInput } from '@/page-layout/utils/convertPageLayoutDraftToUpdateInput';
 import { convertPageLayoutToTabLayouts } from '@/page-layout/utils/convertPageLayoutToTabLayouts';
 import { transformPageLayout } from '@/page-layout/utils/transformPageLayout';
+import { PERMAVENT_COMPANY_WIDE_SIDE_PANEL_FEATURE_FLAG } from '@/side-panel/permavent-company-wide-side-panel/constants/PermaventCompanyWideSidePanelFeatureFlag';
+import { isPermaventWideSidePanelObject } from '@/side-panel/permavent-company-wide-side-panel/utils/isPermaventWideSidePanelObject';
+import { useIsFeatureEnabled } from '@/workspace/hooks/useIsFeatureEnabled';
 import { useSnackBar } from '@/ui/feedback/snack-bar-manager/hooks/useSnackBar';
 import { useLingui } from '@lingui/react/macro';
 import { useStore } from 'jotai';
@@ -25,11 +29,16 @@ import { useCallback, useState } from 'react';
 import { isDefined } from 'twenty-shared/utils';
 import { isDeeplyEqual } from '~/utils/isDeeplyEqual';
 import { logError } from '~/utils/logError';
+import { PageLayoutType } from '~/generated-metadata/graphql';
 
 export const useSaveLayoutCustomization = () => {
   const [isSaving, setIsSaving] = useState(false);
   const store = useStore();
   const { t } = useLingui();
+  const { objectMetadataItems } = useObjectMetadataItems();
+  const isPermaventWidePanelEnabled = useIsFeatureEnabled(
+    PERMAVENT_COMPANY_WIDE_SIDE_PANEL_FEATURE_FLAG,
+  );
 
   const { saveDraft } = useSaveNavigationMenuItemsDraft();
   const { saveCommandMenuItemsDraft } = useSaveCommandMenuItemsDraft();
@@ -107,7 +116,15 @@ export const useSaveLayoutCustomization = () => {
         await createPendingRecordTableWidgetViews(pageLayoutId);
 
         if (isPageLayoutStructureDirty) {
-          const updateInput = convertPageLayoutDraftToUpdateInput(draft);
+          const objectNameSingular = objectMetadataItems.find(
+            (item) => item.id === draft.objectMetadataId,
+          )?.nameSingular;
+          const updateInput = convertPageLayoutDraftToUpdateInput(draft, {
+            includeOpeningTab:
+              isPermaventWidePanelEnabled &&
+              draft.type === PageLayoutType.RECORD_PAGE &&
+              isPermaventWideSidePanelObject(objectNameSingular),
+          });
           const result = await updatePageLayoutWithTabsAndWidgets(
             pageLayoutId,
             updateInput,
@@ -161,6 +178,8 @@ export const useSaveLayoutCustomization = () => {
       setIsSaving(false);
     }
   }, [
+    objectMetadataItems,
+    isPermaventWidePanelEnabled,
     saveDraft,
     saveCommandMenuItemsDraft,
     isCommandMenuItemsDirty,
