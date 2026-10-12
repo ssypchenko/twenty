@@ -1,0 +1,114 @@
+{
+  "target": "twenty/v2.46.0",
+  "batch": 4,
+  "range": [
+    54,
+    72
+  ],
+  "files": [
+    {
+      "path": "packages/twenty-front/src/modules/side-panel/permavent-company-wide-side-panel/hooks/__tests__/usePermaventOpeningTabSettings.test.tsx",
+      "exists": false,
+      "error_type": "404",
+      "error": null
+    },
+    {
+      "path": "packages/twenty-front/src/modules/side-panel/permavent-company-wide-side-panel/hooks/useIsPermaventCompanyWideSidePanel.ts",
+      "exists": false,
+      "error_type": "404",
+      "error": null
+    },
+    {
+      "path": "packages/twenty-front/src/modules/side-panel/permavent-company-wide-side-panel/hooks/useParentElementWidth.ts",
+      "exists": false,
+      "error_type": "404",
+      "error": null
+    },
+    {
+      "path": "packages/twenty-front/src/modules/side-panel/permavent-company-wide-side-panel/hooks/usePermaventOpeningTabSettings.ts",
+      "exists": false,
+      "error_type": "404",
+      "error": null
+    },
+    {
+      "path": "packages/twenty-front/src/modules/side-panel/permavent-company-wide-side-panel/states/permaventCompanyWideSidePanelWidthState.ts",
+      "exists": false,
+      "error_type": "404",
+      "error": null
+    },
+    {
+      "path": "packages/twenty-front/src/modules/side-panel/permavent-company-wide-side-panel/utils/__tests__/getPermaventCompanyWideSidePanelLayout.test.ts",
+      "exists": false,
+      "error_type": "404",
+      "error": null
+    },
+    {
+      "path": "packages/twenty-front/src/modules/side-panel/permavent-company-wide-side-panel/utils/__tests__/getPermaventRecordOpeningTabId.test.ts",
+      "exists": false,
+      "error_type": "404",
+      "error": null
+    },
+    {
+      "path": "packages/twenty-front/src/modules/side-panel/permavent-company-wide-side-panel/utils/__tests__/isPermaventWideSidePanelObject.test.ts",
+      "exists": false,
+      "error_type": "404",
+      "error": null
+    },
+    {
+      "path": "packages/twenty-front/src/modules/side-panel/permavent-company-wide-side-panel/utils/getPermaventCompanyWideSidePanelLayout.ts",
+      "exists": false,
+      "error_type": "404",
+      "error": null
+    },
+    {
+      "path": "packages/twenty-front/src/modules/side-panel/permavent-company-wide-side-panel/utils/getPermaventRecordOpeningTabId.ts",
+      "exists": false,
+      "error_type": "404",
+      "error": null
+    },
+    {
+      "path": "packages/twenty-front/src/modules/side-panel/permavent-company-wide-side-panel/utils/isPermaventWideSidePanelObject.ts",
+      "exists": false,
+      "error_type": "404",
+      "error": null
+    },
+    {
+      "path": "packages/twenty-front/src/modules/ui/layout/resizable-panel/components/ResizablePanelGap.tsx",
+      "exists": false,
+      "error_type": "404",
+      "error": null
+    },
+    {
+      "path": "packages/twenty-front/src/modules/ui/layout/resizable-panel/utils/__tests__/getKeyboardResizedPanelWidth.test.ts",
+      "exists": false,
+      "error_type": "404",
+      "error": null
+    },
+    {
+      "path": "packages/twenty-front/src/modules/ui/layout/resizable-panel/utils/getKeyboardResizedPanelWidth.ts",
+      "exists": false,
+      "error_type": "404",
+      "error": null
+    },
+    {
+      "path": "packages/twenty-front/src/modules/workspace/hooks/useIsFeatureEnabled.ts",
+      "exists": true,
+      "blob_sha": "e7b5d1843a260923514a3003660268cdd4266737"
+    },
+    {
+      "path": "packages/twenty-front/src/pages/settings/general/SettingsGeneral.tsx",
+      "exists": true,
+      "blob_sha": "65a20b719951b8a719d0404469dba55f2c1f54ea"
+    },
+    {
+      "path": "packages/twenty-sdk/project.json",
+      "exists": true,
+      "blob_sha": "5422a3a1c2d7e23aa59a61cf1e05964933c476af"
+    },
+    {
+      "path": "packages/twenty-sdk/src/sdk/front-component/types/FrontComponentExecutionContext.ts",
+      "exists": true,
+      "blob_sha": "866bab59dff54829358507886b1b54ba42c48b17"
+    }
+  ]
+}
