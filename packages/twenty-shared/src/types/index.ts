@@ -352,3 +352,6 @@ export { ViewVisibility } from './ViewVisibility';
 export { WebhookSubscriptionChannelType } from './WebhookSubscriptionChannelType';
 export { WebhookSubscriptionStatus } from './WebhookSubscriptionStatus';
 export { WorkflowVisibility } from './WorkflowVisibility';
+
+export type { PermaventSalesScope } from './PermaventSalesScope';
+export type { PermaventLogicFunctionActorContext } from './PermaventLogicFunctionActorContext';
