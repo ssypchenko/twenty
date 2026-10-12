@@ -1,0 +1,2528 @@
+{
+  "comparison": {
+    "base": "b1c895c44bfa36537c4ab0be10b171c876e05336",
+    "head": "7546570ec82fcd7d1a3b7d7599c161d11c044424",
+    "ahead": 21,
+    "behind": 0,
+    "files_returned": 198,
+    "too_large": false
+  },
+  "custom_commits": [
+    {
+      "sha": "f73e909d095581c8a32317bc9be1659a6d27403d",
+      "subject": "Customise password reset email",
+      "changed_files": 2
+    },
+    {
+      "sha": "3225fe6e1b2470f0e81781a71d8227b38e7cb2a3",
+      "subject": "Customise invitation email",
+      "changed_files": 2
+    },
+    {
+      "sha": "02b032a605ccffcd6852207f7d2781a018aad7ef",
+      "subject": "Customise email footer branding",
+      "changed_files": 16
+    },
+    {
+      "sha": "063c1c1c1b46ebfeb235ce63c876773545c89b43",
+      "subject": "Add Permavent Sales Scope contract",
+      "changed_files": 18
+    },
+    {
+      "sha": "78fd4b37ee7ef5be1a8b4bdcf4e4c866e4db8b69",
+      "subject": "Add Permavent Weekly Sales Report",
+      "changed_files": 12
+    },
+    {
+      "sha": "ba3a8ab31cfab67270d24e4c5a5ff407c51e17f5",
+      "subject": "Add Permavent user activity audit",
+      "changed_files": 19
+    },
+    {
+      "sha": "7d1cca847a9ccbac102e76f52a3a3ce53e14d21d",
+      "subject": "Add Permavent user activity log settings",
+      "changed_files": 3
+    },
+    {
+      "sha": "b5dbe51304898b98dc28add9a5f8e2d2e77756d2",
+      "subject": "Serialise Twenty SDK build targets",
+      "changed_files": 1
+    },
+    {
+      "sha": "3a1139feed59d252baeedcdac67cb9905df02b4e",
+      "subject": "Add Permavent wide side panel",
+      "changed_files": 17
+    },
+    {
+      "sha": "568d02352a99c584d70bc2fb75f3b506273916ab",
+      "subject": "Add Company and Branch overview widgets",
+      "changed_files": 18
+    },
+    {
+      "sha": "8badc400a845468f82003ff9897c47898c2cc51a",
+      "subject": "Expose workspace member context to Twenty Apps",
+      "changed_files": 9
+    },
+    {
+      "sha": "23a21226a6c1de945ae78c61ce8bfa97c125b971",
+      "subject": "Migrate Code Interpreter and delegated API context",
+      "changed_files": 42
+    },
+    {
+      "sha": "a1dccf539848c5bbe0801b87446d479001fbdd87",
+      "subject": "Migrate My Companies focus marker",
+      "changed_files": 6
+    },
+    {
+      "sha": "39477bbb8697c9f7818db347c740c10c29fb0ad1",
+      "subject": "Resolve Twenty UI TS5042 build blocker",
+      "changed_files": 1
+    },
+    {
+      "sha": "bfba2073a7cc0c1d990b2d5cd52beddfaa4330de",
+      "subject": "Fix server migration type and MCP access issues",
+      "changed_files": 4
+    },
+    {
+      "sha": "5a21a15521b317af4d40f0e4448ddff4f8208039",
+      "subject": "Fix email template fixture typecheck",
+      "changed_files": 1
+    },
+    {
+      "sha": "d88b330b107a55f698a0b07305eef70c2f2a44f8",
+      "subject": "Restore Permavent release helpers for v2.35.2",
+      "changed_files": 14
+    },
+    {
+      "sha": "b2e8314a7c88603234abbb20b6a90e91523da7b0",
+      "subject": "Fix Sales Rep assignment field queries",
+      "changed_files": 2
+    },
+    {
+      "sha": "504c73341c6348239607d19de453f795da6242a7",
+      "subject": "Support delegated weekly report actors",
+      "changed_files": 2
+    },
+    {
+      "sha": "69da6b1d8c33d15ce4d9a81da01f6c859933458b",
+      "subject": "Configure Company and Branch opening tabs",
+      "changed_files": 22
+    },
+    {
+      "sha": "7546570ec82fcd7d1a3b7d7599c161d11c044424",
+      "subject": "Explain Company and Branch opening tab settings",
+      "changed_files": 1
+    }
+  ],
+  "group_counts": {
+    "email-branding": 16,
+    "sdk-context": 10,
+    "cross-cutting": 23,
+    "overview-widgets": 15,
+    "opening-tab": 17,
+    "user-audit": 13,
+    "wide-panel": 19,
+    "feature-flags": 4,
+    "mcp": 9,
+    "delegated-auth": 23,
+    "code-interpreter": 6,
+    "weekly-report": 15,
+    "sales-scope": 13,
+    "release-helpers": 15
+  },
+  "unmapped_commits": 0,
+  "files_without_commit": [],
+  "source": "GitHub compare_commits + fetch_commit for 21 accepted changes",
+  "files": [
+    {
+      "path": "packages/twenty-emails/src/components/BaseEmail.tsx",
+      "change": "modified",
+      "previous_path": null,
+      "additions": 8,
+      "deletions": 2,
+      "category": "email-branding",
+      "commits": [
+        "02b032a605"
+      ],
+      "target_path_review": "pending"
+    },
+    {
+      "path": "packages/twenty-emails/src/components/BaseHead.tsx",
+      "change": "modified",
+      "previous_path": null,
+      "additions": 1,
+      "deletions": 1,
+      "category": "email-branding",
+      "commits": [
+        "02b032a605"
+      ],
+      "target_path_review": "pending"
+    },
+    {
+      "path": "packages/twenty-emails/src/components/Footer.tsx",
+      "change": "modified",
+      "previous_path": null,
+      "additions": 9,
+      "deletions": 41,
+      "category": "email-branding",
+      "commits": [
+        "02b032a605"
+      ],
+      "target_path_review": "pending"
+    },
+    {
+      "path": "packages/twenty-emails/src/components/Logo.tsx",
+      "change": "modified",
+      "previous_path": null,
+      "additions": 14,
+      "deletions": 5,
+      "category": "email-branding",
+      "commits": [
+        "02b032a605"
+      ],
+      "target_path_review": "pending"
+    },
+    {
+      "path": "packages/twenty-emails/src/components/WhatIsTwenty.tsx",
+      "change": "removed",
+      "previous_path": null,
+      "additions": 0,
+      "deletions": 20,
+      "category": "email-branding",
+      "commits": [
+        "02b032a605"
+      ],
+      "target_path_review": "pending"
+    },
+    {
+      "path": "packages/twenty-emails/src/constants/DefaultWorkspaceLogo.ts",
+      "change": "removed",
+      "previous_path": null,
+      "additions": 0,
+      "deletions": 2,
+      "category": "email-branding",
+      "commits": [
+        "02b032a605"
+      ],
+      "target_path_review": "pending"
+    },
+    {
+      "path": "packages/twenty-emails/src/emails/clean-suspended-workspace.email.tsx",
+      "change": "modified",
+      "previous_path": null,
+      "additions": 5,
+      "deletions": 5,
+      "category": "email-branding",
+      "commits": [
+        "02b032a605"
+      ],
+      "target_path_review": "pending"
+    },
+    {
+      "path": "packages/twenty-emails/src/emails/password-reset-link.email.tsx",
+      "change": "modified",
+      "previous_path": null,
+      "additions": 30,
+      "deletions": 12,
+      "category": "email-branding",
+      "commits": [
+        "f73e909d09"
+      ],
+      "target_path_review": "pending"
+    },
+    {
+      "path": "packages/twenty-emails/src/emails/password-update-notify.email.tsx",
+      "change": "modified",
+      "previous_path": null,
+      "additions": 3,
+      "deletions": 3,
+      "category": "email-branding",
+      "commits": [
+        "02b032a605"
+      ],
+      "target_path_review": "pending"
+    },
+    {
+      "path": "packages/twenty-emails/src/emails/send-email-verification-link.email.tsx",
+      "change": "modified",
+      "previous_path": null,
+      "additions": 4,
+      "deletions": 4,
+      "category": "email-branding",
+      "commits": [
+        "02b032a605"
+      ],
+      "target_path_review": "pending"
+    },
+    {
+      "path": "packages/twenty-emails/src/emails/send-invite-link.email.tsx",
+      "change": "modified",
+      "previous_path": null,
+      "additions": 16,
+      "deletions": 11,
+      "category": "email-branding",
+      "commits": [
+        "3225fe6e1b"
+      ],
+      "target_path_review": "pending"
+    },
+    {
+      "path": "packages/twenty-emails/src/emails/validate-approved-access-domain.email.tsx",
+      "change": "modified",
+      "previous_path": null,
+      "additions": 5,
+      "deletions": 6,
+      "category": "email-branding",
+      "commits": [
+        "02b032a605"
+      ],
+      "target_path_review": "pending"
+    },
+    {
+      "path": "packages/twenty-emails/src/emails/warn-suspended-workspace.email.tsx",
+      "change": "modified",
+      "previous_path": null,
+      "additions": 4,
+      "deletions": 1,
+      "category": "email-branding",
+      "commits": [
+        "02b032a605"
+      ],
+      "target_path_review": "pending"
+    },
+    {
+      "path": "packages/twenty-front-component-renderer/src/__stories__/FrontComponentRenderer.stories.tsx",
+      "change": "modified",
+      "previous_path": null,
+      "additions": 2,
+      "deletions": 0,
+      "category": "sdk-context",
+      "commits": [
+        "8badc400a8"
+      ],
+      "target_path_review": "pending"
+    },
+    {
+      "path": "packages/twenty-front-component-renderer/src/__stories__/Geometry.stories.tsx",
+      "change": "modified",
+      "previous_path": null,
+      "additions": 1,
+      "deletions": 0,
+      "category": "sdk-context",
+      "commits": [
+        "8badc400a8"
+      ],
+      "target_path_review": "pending"
+    },
+    {
+      "path": "packages/twenty-front-component-renderer/src/__stories__/UILibraries.stories.tsx",
+      "change": "modified",
+      "previous_path": null,
+      "additions": 1,
+      "deletions": 0,
+      "category": "sdk-context",
+      "commits": [
+        "8badc400a8"
+      ],
+      "target_path_review": "pending"
+    },
+    {
+      "path": "packages/twenty-front-component-renderer/src/__stories__/shared/test-utils/createFrontComponentStoryMeta.ts",
+      "change": "modified",
+      "previous_path": null,
+      "additions": 1,
+      "deletions": 0,
+      "category": "sdk-context",
+      "commits": [
+        "8badc400a8"
+      ],
+      "target_path_review": "pending"
+    },
+    {
+      "path": "packages/twenty-front-component-renderer/src/__stories__/shared/test-utils/runFrontComponentStory.ts",
+      "change": "modified",
+      "previous_path": null,
+      "additions": 1,
+      "deletions": 0,
+      "category": "sdk-context",
+      "commits": [
+        "8badc400a8"
+      ],
+      "target_path_review": "pending"
+    },
+    {
+      "path": "packages/twenty-front-component-renderer/src/types/FrontComponentExecutionContext.ts",
+      "change": "modified",
+      "previous_path": null,
+      "additions": 1,
+      "deletions": 0,
+      "category": "sdk-context",
+      "commits": [
+        "8badc400a8"
+      ],
+      "target_path_review": "pending"
+    },
+    {
+      "path": "packages/twenty-front/public/images/branding/permavent-logo.png",
+      "change": "added",
+      "previous_path": null,
+      "additions": 0,
+      "deletions": 0,
+      "category": "cross-cutting",
+      "commits": [
+        "02b032a605"
+      ],
+      "target_path_review": "pending"
+    },
+    {
+      "path": "packages/twenty-front/src/generated-metadata/graphql.ts",
+      "change": "modified",
+      "previous_path": null,
+      "additions": 1,
+      "deletions": 0,
+      "category": "cross-cutting",
+      "commits": [
+        "69da6b1d8c"
+      ],
+      "target_path_review": "pending"
+    },
+    {
+      "path": "packages/twenty-front/src/modules/activities/notes/components/CompactNoteList.tsx",
+      "change": "added",
+      "previous_path": null,
+      "additions": 121,
+      "deletions": 0,
+      "category": "overview-widgets",
+      "commits": [
+        "568d02352a"
+      ],
+      "target_path_review": "pending"
+    },
+    {
+      "path": "packages/twenty-front/src/modules/activities/notes/components/NotesCard.tsx",
+      "change": "modified",
+      "previous_path": null,
+      "additions": 81,
+      "deletions": 7,
+      "category": "overview-widgets",
+      "commits": [
+        "568d02352a"
+      ],
+      "target_path_review": "pending"
+    },
+    {
+      "path": "packages/twenty-front/src/modules/activities/tasks/components/CompactTasksCard.tsx",
+      "change": "added",
+      "previous_path": null,
+      "additions": 101,
+      "deletions": 0,
+      "category": "overview-widgets",
+      "commits": [
+        "568d02352a"
+      ],
+      "target_path_review": "pending"
+    },
+    {
+      "path": "packages/twenty-front/src/modules/activities/tasks/components/TaskRow.tsx",
+      "change": "modified",
+      "previous_path": null,
+      "additions": 9,
+      "deletions": 3,
+      "category": "overview-widgets",
+      "commits": [
+        "568d02352a"
+      ],
+      "target_path_review": "pending"
+    },
+    {
+      "path": "packages/twenty-front/src/modules/activities/tasks/utils/__tests__/sortOpenTasksForCompactWidget.test.ts",
+      "change": "added",
+      "previous_path": null,
+      "additions": 72,
+      "deletions": 0,
+      "category": "overview-widgets",
+      "commits": [
+        "568d02352a"
+      ],
+      "target_path_review": "pending"
+    },
+    {
+      "path": "packages/twenty-front/src/modules/activities/tasks/utils/sortOpenTasksForCompactWidget.ts",
+      "change": "added",
+      "previous_path": null,
+      "additions": 36,
+      "deletions": 0,
+      "category": "overview-widgets",
+      "commits": [
+        "568d02352a"
+      ],
+      "target_path_review": "pending"
+    },
+    {
+      "path": "packages/twenty-front/src/modules/front-components/hooks/__tests__/useFrontComponentExecutionContext.test.tsx",
+      "change": "modified",
+      "previous_path": null,
+      "additions": 21,
+      "deletions": 1,
+      "category": "sdk-context",
+      "commits": [
+        "8badc400a8"
+      ],
+      "target_path_review": "pending"
+    },
+    {
+      "path": "packages/twenty-front/src/modules/front-components/hooks/useFrontComponentExecutionContext.ts",
+      "change": "modified",
+      "previous_path": null,
+      "additions": 3,
+      "deletions": 0,
+      "category": "sdk-context",
+      "commits": [
+        "8badc400a8"
+      ],
+      "target_path_review": "pending"
+    },
+    {
+      "path": "packages/twenty-front/src/modules/layout-customization/hooks/useSaveLayoutCustomization.ts",
+      "change": "modified",
+      "previous_path": null,
+      "additions": 20,
+      "deletions": 1,
+      "category": "opening-tab",
+      "commits": [
+        "69da6b1d8c"
+      ],
+      "target_path_review": "pending"
+    },
+    {
+      "path": "packages/twenty-front/src/modules/page-layout/components/PageLayoutTabsRenderer.tsx",
+      "change": "modified",
+      "previous_path": null,
+      "additions": 16,
+      "deletions": 4,
+      "category": "opening-tab",
+      "commits": [
+        "69da6b1d8c"
+      ],
+      "target_path_review": "pending"
+    },
+    {
+      "path": "packages/twenty-front/src/modules/page-layout/constants/PermaventCompanyOverviewWidgetsFeatureFlag.ts",
+      "change": "added",
+      "previous_path": null,
+      "additions": 4,
+      "deletions": 0,
+      "category": "overview-widgets",
+      "commits": [
+        "568d02352a"
+      ],
+      "target_path_review": "pending"
+    },
+    {
+      "path": "packages/twenty-front/src/modules/page-layout/utils/__tests__/canCreatePermaventCompanyOverviewWidgets.test.ts",
+      "change": "added",
+      "previous_path": null,
+      "additions": 37,
+      "deletions": 0,
+      "category": "overview-widgets",
+      "commits": [
+        "568d02352a"
+      ],
+      "target_path_review": "pending"
+    },
+    {
+      "path": "packages/twenty-front/src/modules/page-layout/utils/__tests__/convertPageLayoutDraftToUpdateInput.test.ts",
+      "change": "modified",
+      "previous_path": null,
+      "additions": 28,
+      "deletions": 0,
+      "category": "opening-tab",
+      "commits": [
+        "69da6b1d8c"
+      ],
+      "target_path_review": "pending"
+    },
+    {
+      "path": "packages/twenty-front/src/modules/page-layout/utils/__tests__/createDefaultActivityWidget.test.ts",
+      "change": "added",
+      "previous_path": null,
+      "additions": 51,
+      "deletions": 0,
+      "category": "overview-widgets",
+      "commits": [
+        "568d02352a"
+      ],
+      "target_path_review": "pending"
+    },
+    {
+      "path": "packages/twenty-front/src/modules/page-layout/utils/canCreatePermaventCompanyOverviewWidgets.ts",
+      "change": "added",
+      "previous_path": null,
+      "additions": 16,
+      "deletions": 0,
+      "category": "overview-widgets",
+      "commits": [
+        "568d02352a"
+      ],
+      "target_path_review": "pending"
+    },
+    {
+      "path": "packages/twenty-front/src/modules/page-layout/utils/convertPageLayoutDraftToUpdateInput.ts",
+      "change": "modified",
+      "previous_path": null,
+      "additions": 10,
+      "deletions": 0,
+      "category": "opening-tab",
+      "commits": [
+        "69da6b1d8c"
+      ],
+      "target_path_review": "pending"
+    },
+    {
+      "path": "packages/twenty-front/src/modules/page-layout/utils/createDefaultActivityWidget.ts",
+      "change": "added",
+      "previous_path": null,
+      "additions": 60,
+      "deletions": 0,
+      "category": "overview-widgets",
+      "commits": [
+        "568d02352a"
+      ],
+      "target_path_review": "pending"
+    },
+    {
+      "path": "packages/twenty-front/src/modules/page-layout/widgets/notes/components/NoteWidget.tsx",
+      "change": "modified",
+      "previous_path": null,
+      "additions": 24,
+      "deletions": 5,
+      "category": "overview-widgets",
+      "commits": [
+        "568d02352a"
+      ],
+      "target_path_review": "pending"
+    },
+    {
+      "path": "packages/twenty-front/src/modules/page-layout/widgets/tasks/components/TaskWidget.tsx",
+      "change": "modified",
+      "previous_path": null,
+      "additions": 25,
+      "deletions": 5,
+      "category": "overview-widgets",
+      "commits": [
+        "568d02352a"
+      ],
+      "target_path_review": "pending"
+    },
+    {
+      "path": "packages/twenty-front/src/modules/page-layout/widgets/utils/__tests__/isCompactActivityWidgetLayout.test.ts",
+      "change": "added",
+      "previous_path": null,
+      "additions": 16,
+      "deletions": 0,
+      "category": "overview-widgets",
+      "commits": [
+        "568d02352a"
+      ],
+      "target_path_review": "pending"
+    },
+    {
+      "path": "packages/twenty-front/src/modules/page-layout/widgets/utils/isCompactActivityWidgetLayout.ts",
+      "change": "added",
+      "previous_path": null,
+      "additions": 5,
+      "deletions": 0,
+      "category": "overview-widgets",
+      "commits": [
+        "568d02352a"
+      ],
+      "target_path_review": "pending"
+    },
+    {
+      "path": "packages/twenty-front/src/modules/settings/security/components/SettingsUserActivityLog.tsx",
+      "change": "added",
+      "previous_path": null,
+      "additions": 513,
+      "deletions": 0,
+      "category": "user-audit",
+      "commits": [
+        "7d1cca847a"
+      ],
+      "target_path_review": "pending"
+    },
+    {
+      "path": "packages/twenty-front/src/modules/settings/security/graphql/queries/getPermaventUserAuditEntries.ts",
+      "change": "added",
+      "previous_path": null,
+      "additions": 25,
+      "deletions": 0,
+      "category": "user-audit",
+      "commits": [
+        "7d1cca847a"
+      ],
+      "target_path_review": "pending"
+    },
+    {
+      "path": "packages/twenty-front/src/modules/side-panel/components/SidePanelForDesktop.tsx",
+      "change": "modified",
+      "previous_path": null,
+      "additions": 39,
+      "deletions": 5,
+      "category": "wide-panel",
+      "commits": [
+        "3a1139feed"
+      ],
+      "target_path_review": "pending"
+    },
+    {
+      "path": "packages/twenty-front/src/modules/side-panel/components/SidePanelWidthEffect.tsx",
+      "change": "modified",
+      "previous_path": null,
+      "additions": 8,
+      "deletions": 10,
+      "category": "wide-panel",
+      "commits": [
+        "3a1139feed"
+      ],
+      "target_path_review": "pending"
+    },
+    {
+      "path": "packages/twenty-front/src/modules/side-panel/pages/page-layout/components/RegularTabSettingsContent.tsx",
+      "change": "modified",
+      "previous_path": null,
+      "additions": 14,
+      "deletions": 0,
+      "category": "wide-panel",
+      "commits": [
+        "69da6b1d8c"
+      ],
+      "target_path_review": "pending"
+    },
+    {
+      "path": "packages/twenty-front/src/modules/side-panel/pages/page-layout/components/SidePanelPageLayoutRecordPageWidgetTypeSelect.tsx",
+      "change": "modified",
+      "previous_path": null,
+      "additions": 109,
+      "deletions": 1,
+      "category": "wide-panel",
+      "commits": [
+        "568d02352a"
+      ],
+      "target_path_review": "pending"
+    },
+    {
+      "path": "packages/twenty-front/src/modules/side-panel/pages/page-layout/components/SidePanelPageLayoutTabSettingsContent.tsx",
+      "change": "modified",
+      "previous_path": null,
+      "additions": 7,
+      "deletions": 0,
+      "category": "wide-panel",
+      "commits": [
+        "69da6b1d8c"
+      ],
+      "target_path_review": "pending"
+    },
+    {
+      "path": "packages/twenty-front/src/modules/side-panel/pages/page-layout/components/SingleWidgetTabSettingsContent.tsx",
+      "change": "modified",
+      "previous_path": null,
+      "additions": 14,
+      "deletions": 0,
+      "category": "wide-panel",
+      "commits": [
+        "69da6b1d8c"
+      ],
+      "target_path_review": "pending"
+    },
+    {
+      "path": "packages/twenty-front/src/modules/side-panel/permavent-company-wide-side-panel/components/PermaventOpeningTabSettingsItem.tsx",
+      "change": "added",
+      "previous_path": null,
+      "additions": 37,
+      "deletions": 0,
+      "category": "opening-tab",
+      "commits": [
+        "69da6b1d8c"
+      ],
+      "target_path_review": "pending"
+    },
+    {
+      "path": "packages/twenty-front/src/modules/side-panel/permavent-company-wide-side-panel/constants/PermaventCompanyWideSidePanel.ts",
+      "change": "added",
+      "previous_path": null,
+      "additions": 8,
+      "deletions": 0,
+      "category": "wide-panel",
+      "commits": [
+        "3a1139feed"
+      ],
+      "target_path_review": "pending"
+    },
+    {
+      "path": "packages/twenty-front/src/modules/side-panel/permavent-company-wide-side-panel/constants/PermaventCompanyWideSidePanelFeatureFlag.ts",
+      "change": "added",
+      "previous_path": null,
+      "additions": 4,
+      "deletions": 0,
+      "category": "wide-panel",
+      "commits": [
+        "3a1139feed"
+      ],
+      "target_path_review": "pending"
+    },
+    {
+      "path": "packages/twenty-front/src/modules/side-panel/permavent-company-wide-side-panel/hooks/__tests__/useIsPermaventCompanyWideSidePanel.test.tsx",
+      "change": "added",
+      "previous_path": null,
+      "additions": 77,
+      "deletions": 0,
+      "category": "wide-panel",
+      "commits": [
+        "3a1139feed"
+      ],
+      "target_path_review": "pending"
+    },
+    {
+      "path": "packages/twenty-front/src/modules/side-panel/permavent-company-wide-side-panel/hooks/__tests__/usePermaventOpeningTabSettings.test.tsx",
+      "change": "added",
+      "previous_path": null,
+      "additions": 159,
+      "deletions": 0,
+      "category": "opening-tab",
+      "commits": [
+        "69da6b1d8c"
+      ],
+      "target_path_review": "pending"
+    },
+    {
+      "path": "packages/twenty-front/src/modules/side-panel/permavent-company-wide-side-panel/hooks/useIsPermaventCompanyWideSidePanel.ts",
+      "change": "added",
+      "previous_path": null,
+      "additions": 37,
+      "deletions": 0,
+      "category": "wide-panel",
+      "commits": [
+        "3a1139feed"
+      ],
+      "target_path_review": "pending"
+    },
+    {
+      "path": "packages/twenty-front/src/modules/side-panel/permavent-company-wide-side-panel/hooks/useParentElementWidth.ts",
+      "change": "added",
+      "previous_path": null,
+      "additions": 30,
+      "deletions": 0,
+      "category": "wide-panel",
+      "commits": [
+        "3a1139feed"
+      ],
+      "target_path_review": "pending"
+    },
+    {
+      "path": "packages/twenty-front/src/modules/side-panel/permavent-company-wide-side-panel/hooks/usePermaventOpeningTabSettings.ts",
+      "change": "added",
+      "previous_path": null,
+      "additions": 51,
+      "deletions": 0,
+      "category": "opening-tab",
+      "commits": [
+        "69da6b1d8c"
+      ],
+      "target_path_review": "pending"
+    },
+    {
+      "path": "packages/twenty-front/src/modules/side-panel/permavent-company-wide-side-panel/states/permaventCompanyWideSidePanelWidthState.ts",
+      "change": "added",
+      "previous_path": null,
+      "additions": 12,
+      "deletions": 0,
+      "category": "wide-panel",
+      "commits": [
+        "3a1139feed"
+      ],
+      "target_path_review": "pending"
+    },
+    {
+      "path": "packages/twenty-front/src/modules/side-panel/permavent-company-wide-side-panel/utils/__tests__/getPermaventCompanyWideSidePanelLayout.test.ts",
+      "change": "added",
+      "previous_path": null,
+      "additions": 57,
+      "deletions": 0,
+      "category": "wide-panel",
+      "commits": [
+        "3a1139feed"
+      ],
+      "target_path_review": "pending"
+    },
+    {
+      "path": "packages/twenty-front/src/modules/side-panel/permavent-company-wide-side-panel/utils/__tests__/getPermaventRecordOpeningTabId.test.ts",
+      "change": "added",
+      "previous_path": null,
+      "additions": 118,
+      "deletions": 0,
+      "category": "opening-tab",
+      "commits": [
+        "69da6b1d8c"
+      ],
+      "target_path_review": "pending"
+    },
+    {
+      "path": "packages/twenty-front/src/modules/side-panel/permavent-company-wide-side-panel/utils/__tests__/isPermaventWideSidePanelObject.test.ts",
+      "change": "added",
+      "previous_path": null,
+      "additions": 19,
+      "deletions": 0,
+      "category": "wide-panel",
+      "commits": [
+        "3a1139feed"
+      ],
+      "target_path_review": "pending"
+    },
+    {
+      "path": "packages/twenty-front/src/modules/side-panel/permavent-company-wide-side-panel/utils/getPermaventCompanyWideSidePanelLayout.ts",
+      "change": "added",
+      "previous_path": null,
+      "additions": 55,
+      "deletions": 0,
+      "category": "wide-panel",
+      "commits": [
+        "3a1139feed"
+      ],
+      "target_path_review": "pending"
+    },
+    {
+      "path": "packages/twenty-front/src/modules/side-panel/permavent-company-wide-side-panel/utils/getPermaventRecordOpeningTabId.ts",
+      "change": "added",
+      "previous_path": null,
+      "additions": 37,
+      "deletions": 0,
+      "category": "opening-tab",
+      "commits": [
+        "69da6b1d8c"
+      ],
+      "target_path_review": "pending"
+    },
+    {
+      "path": "packages/twenty-front/src/modules/side-panel/permavent-company-wide-side-panel/utils/isPermaventWideSidePanelObject.ts",
+      "change": "added",
+      "previous_path": null,
+      "additions": 7,
+      "deletions": 0,
+      "category": "wide-panel",
+      "commits": [
+        "3a1139feed"
+      ],
+      "target_path_review": "pending"
+    },
+    {
+      "path": "packages/twenty-front/src/modules/ui/layout/resizable-panel/components/ResizablePanelGap.tsx",
+      "change": "modified",
+      "previous_path": null,
+      "additions": 43,
+      "deletions": 0,
+      "category": "wide-panel",
+      "commits": [
+        "3a1139feed"
+      ],
+      "target_path_review": "pending"
+    },
+    {
+      "path": "packages/twenty-front/src/modules/ui/layout/resizable-panel/utils/__tests__/getKeyboardResizedPanelWidth.test.ts",
+      "change": "added",
+      "previous_path": null,
+      "additions": 78,
+      "deletions": 0,
+      "category": "wide-panel",
+      "commits": [
+        "3a1139feed"
+      ],
+      "target_path_review": "pending"
+    },
+    {
+      "path": "packages/twenty-front/src/modules/ui/layout/resizable-panel/utils/getKeyboardResizedPanelWidth.ts",
+      "change": "added",
+      "previous_path": null,
+      "additions": 45,
+      "deletions": 0,
+      "category": "wide-panel",
+      "commits": [
+        "3a1139feed"
+      ],
+      "target_path_review": "pending"
+    },
+    {
+      "path": "packages/twenty-front/src/modules/workspace/hooks/useIsFeatureEnabled.ts",
+      "change": "modified",
+      "previous_path": null,
+      "additions": 4,
+      "deletions": 1,
+      "category": "feature-flags",
+      "commits": [
+        "69da6b1d8c"
+      ],
+      "target_path_review": "pending"
+    },
+    {
+      "path": "packages/twenty-front/src/pages/settings/general/SettingsGeneral.tsx",
+      "change": "modified",
+      "previous_path": null,
+      "additions": 11,
+      "deletions": 0,
+      "category": "cross-cutting",
+      "commits": [
+        "7d1cca847a"
+      ],
+      "target_path_review": "pending"
+    },
+    {
+      "path": "packages/twenty-sdk/project.json",
+      "change": "modified",
+      "previous_path": null,
+      "additions": 1,
+      "deletions": 1,
+      "category": "sdk-context",
+      "commits": [
+        "b5dbe51304"
+      ],
+      "target_path_review": "pending"
+    },
+    {
+      "path": "packages/twenty-sdk/src/sdk/front-component/types/FrontComponentExecutionContext.ts",
+      "change": "modified",
+      "previous_path": null,
+      "additions": 1,
+      "deletions": 0,
+      "category": "sdk-context",
+      "commits": [
+        "8badc400a8"
+      ],
+      "target_path_review": "pending"
+    },
+    {
+      "path": "packages/twenty-server/@types/express.d.ts",
+      "change": "modified",
+      "previous_path": null,
+      "additions": 4,
+      "deletions": 0,
+      "category": "cross-cutting",
+      "commits": [
+        "23a21226a6"
+      ],
+      "target_path_review": "pending"
+    },
+    {
+      "path": "packages/twenty-server/src/database/commands/cron-register-all.command.ts",
+      "change": "modified",
+      "previous_path": null,
+      "additions": 6,
+      "deletions": 0,
+      "category": "cross-cutting",
+      "commits": [
+        "ba3a8ab31c"
+      ],
+      "target_path_review": "pending"
+    },
+    {
+      "path": "packages/twenty-server/src/database/commands/database-command.module.ts",
+      "change": "modified",
+      "previous_path": null,
+      "additions": 2,
+      "deletions": 0,
+      "category": "cross-cutting",
+      "commits": [
+        "ba3a8ab31c"
+      ],
+      "target_path_review": "pending"
+    },
+    {
+      "path": "packages/twenty-server/src/database/commands/upgrade-version-command/2-30/2-30-instance-command-fast-1786230000000-create-permavent-user-audit-entry.ts",
+      "change": "added",
+      "previous_path": null,
+      "additions": 14,
+      "deletions": 0,
+      "category": "user-audit",
+      "commits": [
+        "ba3a8ab31c"
+      ],
+      "target_path_review": "pending"
+    },
+    {
+      "path": "packages/twenty-server/src/database/commands/upgrade-version-command/instance-commands.constant.ts",
+      "change": "modified",
+      "previous_path": null,
+      "additions": 2,
+      "deletions": 0,
+      "category": "cross-cutting",
+      "commits": [
+        "ba3a8ab31c"
+      ],
+      "target_path_review": "pending"
+    },
+    {
+      "path": "packages/twenty-server/src/engine/api/common/common-query-runners/common-base-query-runner.service.ts",
+      "change": "modified",
+      "previous_path": null,
+      "additions": 18,
+      "deletions": 1,
+      "category": "cross-cutting",
+      "commits": [
+        "a1dccf5398"
+      ],
+      "target_path_review": "pending"
+    },
+    {
+      "path": "packages/twenty-server/src/engine/api/common/core-common-api.module.ts",
+      "change": "modified",
+      "previous_path": null,
+      "additions": 2,
+      "deletions": 0,
+      "category": "cross-cutting",
+      "commits": [
+        "a1dccf5398"
+      ],
+      "target_path_review": "pending"
+    },
+    {
+      "path": "packages/twenty-server/src/engine/api/graphql/workspace-query-runner/listeners/__tests__/entity-events-to-db.listener.spec.ts",
+      "change": "added",
+      "previous_path": null,
+      "additions": 89,
+      "deletions": 0,
+      "category": "cross-cutting",
+      "commits": [
+        "ba3a8ab31c"
+      ],
+      "target_path_review": "pending"
+    },
+    {
+      "path": "packages/twenty-server/src/engine/api/graphql/workspace-query-runner/listeners/entity-events-to-db.listener.ts",
+      "change": "modified",
+      "previous_path": null,
+      "additions": 11,
+      "deletions": 0,
+      "category": "cross-cutting",
+      "commits": [
+        "ba3a8ab31c"
+      ],
+      "target_path_review": "pending"
+    },
+    {
+      "path": "packages/twenty-server/src/engine/api/graphql/workspace-query-runner/workspace-query-runner.module.ts",
+      "change": "modified",
+      "previous_path": null,
+      "additions": 2,
+      "deletions": 0,
+      "category": "cross-cutting",
+      "commits": [
+        "ba3a8ab31c"
+      ],
+      "target_path_review": "pending"
+    },
+    {
+      "path": "packages/twenty-server/src/engine/api/mcp/controllers/mcp-core.controller.ts",
+      "change": "modified",
+      "previous_path": null,
+      "additions": 6,
+      "deletions": 1,
+      "category": "mcp",
+      "commits": [
+        "23a21226a6"
+      ],
+      "target_path_review": "pending"
+    },
+    {
+      "path": "packages/twenty-server/src/engine/api/mcp/guards/__tests__/mcp-auth.guard.spec.ts",
+      "change": "modified",
+      "previous_path": null,
+      "additions": 3,
+      "deletions": 3,
+      "category": "mcp",
+      "commits": [
+        "23a21226a6"
+      ],
+      "target_path_review": "pending"
+    },
+    {
+      "path": "packages/twenty-server/src/engine/api/mcp/guards/mcp-auth.guard.ts",
+      "change": "modified",
+      "previous_path": null,
+      "additions": 1,
+      "deletions": 1,
+      "category": "mcp",
+      "commits": [
+        "23a21226a6"
+      ],
+      "target_path_review": "pending"
+    },
+    {
+      "path": "packages/twenty-server/src/engine/api/mcp/services/__tests__/mcp-protocol.service.spec.ts",
+      "change": "added",
+      "previous_path": null,
+      "additions": 45,
+      "deletions": 0,
+      "category": "mcp",
+      "commits": [
+        "bfba2073a7"
+      ],
+      "target_path_review": "pending"
+    },
+    {
+      "path": "packages/twenty-server/src/engine/api/mcp/services/mcp-protocol.service.ts",
+      "change": "modified",
+      "previous_path": null,
+      "additions": 52,
+      "deletions": 4,
+      "category": "mcp",
+      "commits": [
+        "23a21226a6",
+        "bfba2073a7"
+      ],
+      "target_path_review": "pending"
+    },
+    {
+      "path": "packages/twenty-server/src/engine/api/mcp/utils/__tests__/is-mcp-read-only-catalog-tool.util.spec.ts",
+      "change": "added",
+      "previous_path": null,
+      "additions": 32,
+      "deletions": 0,
+      "category": "mcp",
+      "commits": [
+        "23a21226a6"
+      ],
+      "target_path_review": "pending"
+    },
+    {
+      "path": "packages/twenty-server/src/engine/api/mcp/utils/is-mcp-read-only-catalog-tool.util.ts",
+      "change": "added",
+      "previous_path": null,
+      "additions": 14,
+      "deletions": 0,
+      "category": "mcp",
+      "commits": [
+        "23a21226a6"
+      ],
+      "target_path_review": "pending"
+    },
+    {
+      "path": "packages/twenty-server/src/engine/api/rest/core/handlers/rest-api-base.handler.ts",
+      "change": "modified",
+      "previous_path": null,
+      "additions": 12,
+      "deletions": 41,
+      "category": "cross-cutting",
+      "commits": [
+        "23a21226a6"
+      ],
+      "target_path_review": "pending"
+    },
+    {
+      "path": "packages/twenty-server/src/engine/core-modules/actor/services/actor-from-auth-context.service.ts",
+      "change": "modified",
+      "previous_path": null,
+      "additions": 8,
+      "deletions": 0,
+      "category": "delegated-auth",
+      "commits": [
+        "23a21226a6"
+      ],
+      "target_path_review": "pending"
+    },
+    {
+      "path": "packages/twenty-server/src/engine/core-modules/approved-access-domain/services/approved-access-domain.service.ts",
+      "change": "modified",
+      "previous_path": null,
+      "additions": 1,
+      "deletions": 1,
+      "category": "cross-cutting",
+      "commits": [
+        "02b032a605"
+      ],
+      "target_path_review": "pending"
+    },
+    {
+      "path": "packages/twenty-server/src/engine/core-modules/approved-access-domain/services/approved-access-domain.spec.ts",
+      "change": "modified",
+      "previous_path": null,
+      "additions": 1,
+      "deletions": 1,
+      "category": "cross-cutting",
+      "commits": [
+        "02b032a605"
+      ],
+      "target_path_review": "pending"
+    },
+    {
+      "path": "packages/twenty-server/src/engine/core-modules/auth/guards/is-delegated-api-key-auth-context.guard.ts",
+      "change": "added",
+      "previous_path": null,
+      "additions": 14,
+      "deletions": 0,
+      "category": "delegated-auth",
+      "commits": [
+        "23a21226a6"
+      ],
+      "target_path_review": "pending"
+    },
+    {
+      "path": "packages/twenty-server/src/engine/core-modules/auth/middlewares/workspace-auth-context.middleware.ts",
+      "change": "modified",
+      "previous_path": null,
+      "additions": 1,
+      "deletions": 0,
+      "category": "delegated-auth",
+      "commits": [
+        "23a21226a6"
+      ],
+      "target_path_review": "pending"
+    },
+    {
+      "path": "packages/twenty-server/src/engine/core-modules/auth/services/reset-password.service.ts",
+      "change": "modified",
+      "previous_path": null,
+      "additions": 2,
+      "deletions": 2,
+      "category": "delegated-auth",
+      "commits": [
+        "f73e909d09"
+      ],
+      "target_path_review": "pending"
+    },
+    {
+      "path": "packages/twenty-server/src/engine/core-modules/auth/strategies/jwt.auth.strategy.ts",
+      "change": "modified",
+      "previous_path": null,
+      "additions": 10,
+      "deletions": 1,
+      "category": "delegated-auth",
+      "commits": [
+        "23a21226a6"
+      ],
+      "target_path_review": "pending"
+    },
+    {
+      "path": "packages/twenty-server/src/engine/core-modules/auth/token/services/access-token.service.ts",
+      "change": "modified",
+      "previous_path": null,
+      "additions": 31,
+      "deletions": 4,
+      "category": "delegated-auth",
+      "commits": [
+        "23a21226a6"
+      ],
+      "target_path_review": "pending"
+    },
+    {
+      "path": "packages/twenty-server/src/engine/core-modules/auth/types/delegated-api-key-actor.type.ts",
+      "change": "added",
+      "previous_path": null,
+      "additions": 12,
+      "deletions": 0,
+      "category": "delegated-auth",
+      "commits": [
+        "23a21226a6"
+      ],
+      "target_path_review": "pending"
+    },
+    {
+      "path": "packages/twenty-server/src/engine/core-modules/auth/types/jwt-payload.type.ts",
+      "change": "modified",
+      "previous_path": null,
+      "additions": 2,
+      "deletions": 0,
+      "category": "delegated-auth",
+      "commits": [
+        "23a21226a6"
+      ],
+      "target_path_review": "pending"
+    },
+    {
+      "path": "packages/twenty-server/src/engine/core-modules/auth/types/jwt-token-type.enum.ts",
+      "change": "modified",
+      "previous_path": null,
+      "additions": 1,
+      "deletions": 0,
+      "category": "delegated-auth",
+      "commits": [
+        "23a21226a6"
+      ],
+      "target_path_review": "pending"
+    },
+    {
+      "path": "packages/twenty-server/src/engine/core-modules/auth/types/mcp-access-token-jwt-payload.type.ts",
+      "change": "added",
+      "previous_path": null,
+      "additions": 12,
+      "deletions": 0,
+      "category": "delegated-auth",
+      "commits": [
+        "23a21226a6"
+      ],
+      "target_path_review": "pending"
+    },
+    {
+      "path": "packages/twenty-server/src/engine/core-modules/auth/types/mcp-tool-access.type.ts",
+      "change": "added",
+      "previous_path": null,
+      "additions": 3,
+      "deletions": 0,
+      "category": "delegated-auth",
+      "commits": [
+        "23a21226a6"
+      ],
+      "target_path_review": "pending"
+    },
+    {
+      "path": "packages/twenty-server/src/engine/core-modules/auth/types/raw-auth-context.type.ts",
+      "change": "modified",
+      "previous_path": null,
+      "additions": 4,
+      "deletions": 0,
+      "category": "delegated-auth",
+      "commits": [
+        "23a21226a6"
+      ],
+      "target_path_review": "pending"
+    },
+    {
+      "path": "packages/twenty-server/src/engine/core-modules/auth/types/workspace-auth-context.type.ts",
+      "change": "modified",
+      "previous_path": null,
+      "additions": 1,
+      "deletions": 0,
+      "category": "delegated-auth",
+      "commits": [
+        "23a21226a6"
+      ],
+      "target_path_review": "pending"
+    },
+    {
+      "path": "packages/twenty-server/src/engine/core-modules/auth/utils/build-api-key-auth-context.util.ts",
+      "change": "modified",
+      "previous_path": null,
+      "additions": 2,
+      "deletions": 0,
+      "category": "delegated-auth",
+      "commits": [
+        "23a21226a6"
+      ],
+      "target_path_review": "pending"
+    },
+    {
+      "path": "packages/twenty-server/src/engine/core-modules/code-interpreter/code-interpreter-driver.factory.ts",
+      "change": "modified",
+      "previous_path": null,
+      "additions": 30,
+      "deletions": 1,
+      "category": "code-interpreter",
+      "commits": [
+        "23a21226a6"
+      ],
+      "target_path_review": "pending"
+    },
+    {
+      "path": "packages/twenty-server/src/engine/core-modules/code-interpreter/code-interpreter.interface.ts",
+      "change": "modified",
+      "previous_path": null,
+      "additions": 1,
+      "deletions": 0,
+      "category": "code-interpreter",
+      "commits": [
+        "23a21226a6"
+      ],
+      "target_path_review": "pending"
+    },
+    {
+      "path": "packages/twenty-server/src/engine/core-modules/code-interpreter/drivers/__tests__/permavent-internal.driver.spec.ts",
+      "change": "added",
+      "previous_path": null,
+      "additions": 109,
+      "deletions": 0,
+      "category": "code-interpreter",
+      "commits": [
+        "23a21226a6"
+      ],
+      "target_path_review": "pending"
+    },
+    {
+      "path": "packages/twenty-server/src/engine/core-modules/code-interpreter/drivers/permavent-internal.driver.ts",
+      "change": "added",
+      "previous_path": null,
+      "additions": 198,
+      "deletions": 0,
+      "category": "code-interpreter",
+      "commits": [
+        "23a21226a6"
+      ],
+      "target_path_review": "pending"
+    },
+    {
+      "path": "packages/twenty-server/src/engine/core-modules/core-engine.module.ts",
+      "change": "modified",
+      "previous_path": null,
+      "additions": 2,
+      "deletions": 0,
+      "category": "cross-cutting",
+      "commits": [
+        "ba3a8ab31c"
+      ],
+      "target_path_review": "pending"
+    },
+    {
+      "path": "packages/twenty-server/src/engine/core-modules/email-verification/services/email-verification.service.ts",
+      "change": "modified",
+      "previous_path": null,
+      "additions": 1,
+      "deletions": 1,
+      "category": "email-branding",
+      "commits": [
+        "02b032a605"
+      ],
+      "target_path_review": "pending"
+    },
+    {
+      "path": "packages/twenty-server/src/engine/core-modules/email/__tests__/email-templates-rendering.spec.ts",
+      "change": "modified",
+      "previous_path": null,
+      "additions": 2,
+      "deletions": 0,
+      "category": "email-branding",
+      "commits": [
+        "5a21a15521"
+      ],
+      "target_path_review": "pending"
+    },
+    {
+      "path": "packages/twenty-server/src/engine/core-modules/feature-flag/constants/public-feature-flag.const.ts",
+      "change": "modified",
+      "previous_path": null,
+      "additions": 18,
+      "deletions": 0,
+      "category": "feature-flags",
+      "commits": [
+        "3a1139feed",
+        "568d02352a"
+      ],
+      "target_path_review": "pending"
+    },
+    {
+      "path": "packages/twenty-server/src/engine/core-modules/logic-function/logic-function-trigger/logic-function-trigger.module.ts",
+      "change": "modified",
+      "previous_path": null,
+      "additions": 2,
+      "deletions": 0,
+      "category": "weekly-report",
+      "commits": [
+        "063c1c1c1b"
+      ],
+      "target_path_review": "pending"
+    },
+    {
+      "path": "packages/twenty-server/src/engine/core-modules/logic-function/logic-function-trigger/logic-function-trigger.service.ts",
+      "change": "modified",
+      "previous_path": null,
+      "additions": 10,
+      "deletions": 0,
+      "category": "weekly-report",
+      "commits": [
+        "063c1c1c1b"
+      ],
+      "target_path_review": "pending"
+    },
+    {
+      "path": "packages/twenty-server/src/engine/core-modules/logic-function/logic-function-trigger/triggers/route/route-trigger.service.ts",
+      "change": "modified",
+      "previous_path": null,
+      "additions": 29,
+      "deletions": 0,
+      "category": "weekly-report",
+      "commits": [
+        "063c1c1c1b"
+      ],
+      "target_path_review": "pending"
+    },
+    {
+      "path": "packages/twenty-server/src/engine/core-modules/logic-function/logic-function-trigger/triggers/route/utils/__tests__/build-logic-function-event.util.spec.ts",
+      "change": "modified",
+      "previous_path": null,
+      "additions": 34,
+      "deletions": 0,
+      "category": "weekly-report",
+      "commits": [
+        "063c1c1c1b"
+      ],
+      "target_path_review": "pending"
+    },
+    {
+      "path": "packages/twenty-server/src/engine/core-modules/logic-function/logic-function-trigger/triggers/route/utils/build-logic-function-event.util.ts",
+      "change": "modified",
+      "previous_path": null,
+      "additions": 11,
+      "deletions": 1,
+      "category": "weekly-report",
+      "commits": [
+        "063c1c1c1b"
+      ],
+      "target_path_review": "pending"
+    },
+    {
+      "path": "packages/twenty-server/src/engine/core-modules/permavent-delegated-api/constants/permavent-delegated-context-header.constant.ts",
+      "change": "added",
+      "previous_path": null,
+      "additions": 2,
+      "deletions": 0,
+      "category": "delegated-auth",
+      "commits": [
+        "23a21226a6"
+      ],
+      "target_path_review": "pending"
+    },
+    {
+      "path": "packages/twenty-server/src/engine/core-modules/permavent-delegated-api/permavent-delegated-api.module.ts",
+      "change": "added",
+      "previous_path": null,
+      "additions": 18,
+      "deletions": 0,
+      "category": "delegated-auth",
+      "commits": [
+        "23a21226a6"
+      ],
+      "target_path_review": "pending"
+    },
+    {
+      "path": "packages/twenty-server/src/engine/core-modules/permavent-delegated-api/services/__tests__/permavent-delegated-context.service.spec.ts",
+      "change": "added",
+      "previous_path": null,
+      "additions": 103,
+      "deletions": 0,
+      "category": "delegated-auth",
+      "commits": [
+        "23a21226a6",
+        "bfba2073a7"
+      ],
+      "target_path_review": "pending"
+    },
+    {
+      "path": "packages/twenty-server/src/engine/core-modules/permavent-delegated-api/services/permavent-delegated-context.service.ts",
+      "change": "added",
+      "previous_path": null,
+      "additions": 225,
+      "deletions": 0,
+      "category": "delegated-auth",
+      "commits": [
+        "23a21226a6"
+      ],
+      "target_path_review": "pending"
+    },
+    {
+      "path": "packages/twenty-server/src/engine/core-modules/permavent-sales-scope/__tests__/permavent-sales-scope.service.spec.ts",
+      "change": "added",
+      "previous_path": null,
+      "additions": 99,
+      "deletions": 0,
+      "category": "sales-scope",
+      "commits": [
+        "063c1c1c1b",
+        "78fd4b37ee"
+      ],
+      "target_path_review": "pending"
+    },
+    {
+      "path": "packages/twenty-server/src/engine/core-modules/permavent-sales-scope/assignments/__tests__/permavent-sales-rep-assignment.service.spec.ts",
+      "change": "added",
+      "previous_path": null,
+      "additions": 94,
+      "deletions": 0,
+      "category": "sales-scope",
+      "commits": [
+        "b2e8314a7c"
+      ],
+      "target_path_review": "pending"
+    },
+    {
+      "path": "packages/twenty-server/src/engine/core-modules/permavent-sales-scope/assignments/normalise-permavent-sales-rep-code.util.ts",
+      "change": "added",
+      "previous_path": null,
+      "additions": 15,
+      "deletions": 0,
+      "category": "sales-scope",
+      "commits": [
+        "063c1c1c1b"
+      ],
+      "target_path_review": "pending"
+    },
+    {
+      "path": "packages/twenty-server/src/engine/core-modules/permavent-sales-scope/assignments/permavent-sales-rep-assignment.service.ts",
+      "change": "added",
+      "previous_path": null,
+      "additions": 162,
+      "deletions": 0,
+      "category": "sales-scope",
+      "commits": [
+        "063c1c1c1b",
+        "b2e8314a7c"
+      ],
+      "target_path_review": "pending"
+    },
+    {
+      "path": "packages/twenty-server/src/engine/core-modules/permavent-sales-scope/constants/permavent-role-universal-identifiers.constant.ts",
+      "change": "added",
+      "previous_path": null,
+      "additions": 4,
+      "deletions": 0,
+      "category": "sales-scope",
+      "commits": [
+        "063c1c1c1b"
+      ],
+      "target_path_review": "pending"
+    },
+    {
+      "path": "packages/twenty-server/src/engine/core-modules/permavent-sales-scope/context/__tests__/permavent-sales-scope-context.factory.spec.ts",
+      "change": "added",
+      "previous_path": null,
+      "additions": 95,
+      "deletions": 0,
+      "category": "sales-scope",
+      "commits": [
+        "504c73341c"
+      ],
+      "target_path_review": "pending"
+    },
+    {
+      "path": "packages/twenty-server/src/engine/core-modules/permavent-sales-scope/context/permavent-sales-scope-context.factory.ts",
+      "change": "added",
+      "previous_path": null,
+      "additions": 114,
+      "deletions": 0,
+      "category": "sales-scope",
+      "commits": [
+        "063c1c1c1b",
+        "78fd4b37ee",
+        "504c73341c"
+      ],
+      "target_path_review": "pending"
+    },
+    {
+      "path": "packages/twenty-server/src/engine/core-modules/permavent-sales-scope/context/permavent-sales-scope-context.type.ts",
+      "change": "added",
+      "previous_path": null,
+      "additions": 14,
+      "deletions": 0,
+      "category": "sales-scope",
+      "commits": [
+        "063c1c1c1b",
+        "78fd4b37ee"
+      ],
+      "target_path_review": "pending"
+    },
+    {
+      "path": "packages/twenty-server/src/engine/core-modules/permavent-sales-scope/focus/__tests__/permavent-company-focus-filter.service.spec.ts",
+      "change": "added",
+      "previous_path": null,
+      "additions": 111,
+      "deletions": 0,
+      "category": "sales-scope",
+      "commits": [
+        "a1dccf5398"
+      ],
+      "target_path_review": "pending"
+    },
+    {
+      "path": "packages/twenty-server/src/engine/core-modules/permavent-sales-scope/focus/permavent-company-focus-filter.service.ts",
+      "change": "added",
+      "previous_path": null,
+      "additions": 123,
+      "deletions": 0,
+      "category": "sales-scope",
+      "commits": [
+        "a1dccf5398"
+      ],
+      "target_path_review": "pending"
+    },
+    {
+      "path": "packages/twenty-server/src/engine/core-modules/permavent-sales-scope/permavent-sales-scope.module.ts",
+      "change": "added",
+      "previous_path": null,
+      "additions": 23,
+      "deletions": 0,
+      "category": "sales-scope",
+      "commits": [
+        "063c1c1c1b",
+        "a1dccf5398"
+      ],
+      "target_path_review": "pending"
+    },
+    {
+      "path": "packages/twenty-server/src/engine/core-modules/permavent-sales-scope/permavent-sales-scope.service.ts",
+      "change": "added",
+      "previous_path": null,
+      "additions": 76,
+      "deletions": 0,
+      "category": "sales-scope",
+      "commits": [
+        "063c1c1c1b"
+      ],
+      "target_path_review": "pending"
+    },
+    {
+      "path": "packages/twenty-server/src/engine/core-modules/permavent-user-audit/__tests__/permavent-user-audit.resolver.spec.ts",
+      "change": "added",
+      "previous_path": null,
+      "additions": 47,
+      "deletions": 0,
+      "category": "user-audit",
+      "commits": [
+        "ba3a8ab31c"
+      ],
+      "target_path_review": "pending"
+    },
+    {
+      "path": "packages/twenty-server/src/engine/core-modules/permavent-user-audit/__tests__/permavent-user-audit.service.spec.ts",
+      "change": "added",
+      "previous_path": null,
+      "additions": 192,
+      "deletions": 0,
+      "category": "user-audit",
+      "commits": [
+        "ba3a8ab31c"
+      ],
+      "target_path_review": "pending"
+    },
+    {
+      "path": "packages/twenty-server/src/engine/core-modules/permavent-user-audit/constants/permavent-user-audit-cleanup-cron-pattern.constant.ts",
+      "change": "added",
+      "previous_path": null,
+      "additions": 1,
+      "deletions": 0,
+      "category": "user-audit",
+      "commits": [
+        "ba3a8ab31c"
+      ],
+      "target_path_review": "pending"
+    },
+    {
+      "path": "packages/twenty-server/src/engine/core-modules/permavent-user-audit/cron/permavent-user-audit-cleanup.cron.command.ts",
+      "change": "added",
+      "previous_path": null,
+      "additions": 31,
+      "deletions": 0,
+      "category": "user-audit",
+      "commits": [
+        "ba3a8ab31c"
+      ],
+      "target_path_review": "pending"
+    },
+    {
+      "path": "packages/twenty-server/src/engine/core-modules/permavent-user-audit/cron/permavent-user-audit-cleanup.cron.job.ts",
+      "change": "added",
+      "previous_path": null,
+      "additions": 27,
+      "deletions": 0,
+      "category": "user-audit",
+      "commits": [
+        "ba3a8ab31c"
+      ],
+      "target_path_review": "pending"
+    },
+    {
+      "path": "packages/twenty-server/src/engine/core-modules/permavent-user-audit/permavent-user-audit-entry.entity.ts",
+      "change": "added",
+      "previous_path": null,
+      "additions": 38,
+      "deletions": 0,
+      "category": "user-audit",
+      "commits": [
+        "ba3a8ab31c"
+      ],
+      "target_path_review": "pending"
+    },
+    {
+      "path": "packages/twenty-server/src/engine/core-modules/permavent-user-audit/permavent-user-audit.job.ts",
+      "change": "added",
+      "previous_path": null,
+      "additions": 15,
+      "deletions": 0,
+      "category": "user-audit",
+      "commits": [
+        "ba3a8ab31c"
+      ],
+      "target_path_review": "pending"
+    },
+    {
+      "path": "packages/twenty-server/src/engine/core-modules/permavent-user-audit/permavent-user-audit.module.ts",
+      "change": "added",
+      "previous_path": null,
+      "additions": 31,
+      "deletions": 0,
+      "category": "user-audit",
+      "commits": [
+        "ba3a8ab31c"
+      ],
+      "target_path_review": "pending"
+    },
+    {
+      "path": "packages/twenty-server/src/engine/core-modules/permavent-user-audit/permavent-user-audit.resolver.ts",
+      "change": "added",
+      "previous_path": null,
+      "additions": 131,
+      "deletions": 0,
+      "category": "user-audit",
+      "commits": [
+        "ba3a8ab31c"
+      ],
+      "target_path_review": "pending"
+    },
+    {
+      "path": "packages/twenty-server/src/engine/core-modules/permavent-user-audit/permavent-user-audit.service.ts",
+      "change": "added",
+      "previous_path": null,
+      "additions": 339,
+      "deletions": 0,
+      "category": "user-audit",
+      "commits": [
+        "ba3a8ab31c"
+      ],
+      "target_path_review": "pending"
+    },
+    {
+      "path": "packages/twenty-server/src/engine/core-modules/record-crud/services/common-api-context-builder.service.ts",
+      "change": "modified",
+      "previous_path": null,
+      "additions": 23,
+      "deletions": 1,
+      "category": "delegated-auth",
+      "commits": [
+        "23a21226a6"
+      ],
+      "target_path_review": "pending"
+    },
+    {
+      "path": "packages/twenty-server/src/engine/core-modules/tool-provider/tools/get-tool-catalog.tool.ts",
+      "change": "modified",
+      "previous_path": null,
+      "additions": 2,
+      "deletions": 4,
+      "category": "mcp",
+      "commits": [
+        "23a21226a6"
+      ],
+      "target_path_review": "pending"
+    },
+    {
+      "path": "packages/twenty-server/src/engine/core-modules/tool/tools/code-interpreter-tool/__tests__/code-interpreter-tool.spec.ts",
+      "change": "added",
+      "previous_path": null,
+      "additions": 99,
+      "deletions": 0,
+      "category": "code-interpreter",
+      "commits": [
+        "23a21226a6"
+      ],
+      "target_path_review": "pending"
+    },
+    {
+      "path": "packages/twenty-server/src/engine/core-modules/tool/tools/code-interpreter-tool/code-interpreter-tool.ts",
+      "change": "modified",
+      "previous_path": null,
+      "additions": 14,
+      "deletions": 2,
+      "category": "code-interpreter",
+      "commits": [
+        "23a21226a6"
+      ],
+      "target_path_review": "pending"
+    },
+    {
+      "path": "packages/twenty-server/src/engine/core-modules/tool/tools/code-interpreter-tool/twenty-mcp-helper.const.ts",
+      "change": "modified",
+      "previous_path": null,
+      "additions": 24,
+      "deletions": 47,
+      "category": "mcp",
+      "commits": [
+        "23a21226a6"
+      ],
+      "target_path_review": "pending"
+    },
+    {
+      "path": "packages/twenty-server/src/engine/core-modules/twenty-config/config-variables.ts",
+      "change": "modified",
+      "previous_path": null,
+      "additions": 113,
+      "deletions": 0,
+      "category": "feature-flags",
+      "commits": [
+        "063c1c1c1b",
+        "ba3a8ab31c",
+        "23a21226a6",
+        "a1dccf5398"
+      ],
+      "target_path_review": "pending"
+    },
+    {
+      "path": "packages/twenty-server/src/engine/core-modules/workspace-invitation/services/workspace-invitation.service.ts",
+      "change": "modified",
+      "previous_path": null,
+      "additions": 2,
+      "deletions": 2,
+      "category": "email-branding",
+      "commits": [
+        "3225fe6e1b",
+        "bfba2073a7"
+      ],
+      "target_path_review": "pending"
+    },
+    {
+      "path": "packages/twenty-server/src/engine/guards/jwt-auth.guard.ts",
+      "change": "modified",
+      "previous_path": null,
+      "additions": 15,
+      "deletions": 2,
+      "category": "delegated-auth",
+      "commits": [
+        "23a21226a6"
+      ],
+      "target_path_review": "pending"
+    },
+    {
+      "path": "packages/twenty-server/src/engine/metadata-modules/page-layout/dtos/inputs/update-page-layout-with-tabs.input.ts",
+      "change": "modified",
+      "previous_path": null,
+      "additions": 5,
+      "deletions": 0,
+      "category": "opening-tab",
+      "commits": [
+        "69da6b1d8c"
+      ],
+      "target_path_review": "pending"
+    },
+    {
+      "path": "packages/twenty-server/src/engine/metadata-modules/page-layout/services/page-layout-update.service.ts",
+      "change": "modified",
+      "previous_path": null,
+      "additions": 34,
+      "deletions": 1,
+      "category": "opening-tab",
+      "commits": [
+        "69da6b1d8c"
+      ],
+      "target_path_review": "pending"
+    },
+    {
+      "path": "packages/twenty-server/src/engine/metadata-modules/page-layout/utils/__tests__/resolve-permavent-record-opening-tab-update.util.spec.ts",
+      "change": "added",
+      "previous_path": null,
+      "additions": 110,
+      "deletions": 0,
+      "category": "opening-tab",
+      "commits": [
+        "69da6b1d8c"
+      ],
+      "target_path_review": "pending"
+    },
+    {
+      "path": "packages/twenty-server/src/engine/metadata-modules/page-layout/utils/resolve-permavent-record-opening-tab-update.util.ts",
+      "change": "added",
+      "previous_path": null,
+      "additions": 90,
+      "deletions": 0,
+      "category": "opening-tab",
+      "commits": [
+        "69da6b1d8c"
+      ],
+      "target_path_review": "pending"
+    },
+    {
+      "path": "packages/twenty-server/src/engine/middlewares/middleware.module.ts",
+      "change": "modified",
+      "previous_path": null,
+      "additions": 2,
+      "deletions": 0,
+      "category": "cross-cutting",
+      "commits": [
+        "23a21226a6"
+      ],
+      "target_path_review": "pending"
+    },
+    {
+      "path": "packages/twenty-server/src/engine/middlewares/middleware.service.ts",
+      "change": "modified",
+      "previous_path": null,
+      "additions": 17,
+      "deletions": 1,
+      "category": "cross-cutting",
+      "commits": [
+        "23a21226a6"
+      ],
+      "target_path_review": "pending"
+    },
+    {
+      "path": "packages/twenty-server/src/engine/twenty-orm/utils/__tests__/resolve-role-ids-from-auth-context.util.spec.ts",
+      "change": "modified",
+      "previous_path": null,
+      "additions": 11,
+      "deletions": 0,
+      "category": "delegated-auth",
+      "commits": [
+        "23a21226a6"
+      ],
+      "target_path_review": "pending"
+    },
+    {
+      "path": "packages/twenty-server/src/engine/twenty-orm/utils/resolve-objects-permissions-from-auth-context.util.ts",
+      "change": "added",
+      "previous_path": null,
+      "additions": 51,
+      "deletions": 0,
+      "category": "delegated-auth",
+      "commits": [
+        "23a21226a6"
+      ],
+      "target_path_review": "pending"
+    },
+    {
+      "path": "packages/twenty-server/src/engine/twenty-orm/utils/resolve-role-ids-from-auth-context.util.ts",
+      "change": "modified",
+      "previous_path": null,
+      "additions": 9,
+      "deletions": 0,
+      "category": "delegated-auth",
+      "commits": [
+        "23a21226a6"
+      ],
+      "target_path_review": "pending"
+    },
+    {
+      "path": "packages/twenty-server/src/engine/utils/bind-data-to-request-object.util.ts",
+      "change": "modified",
+      "previous_path": null,
+      "additions": 1,
+      "deletions": 0,
+      "category": "cross-cutting",
+      "commits": [
+        "23a21226a6"
+      ],
+      "target_path_review": "pending"
+    },
+    {
+      "path": "packages/twenty-server/src/engine/workspace-manager/workspace-cleaner/services/cleaner.workspace-service.ts",
+      "change": "modified",
+      "previous_path": null,
+      "additions": 2,
+      "deletions": 0,
+      "category": "cross-cutting",
+      "commits": [
+        "02b032a605"
+      ],
+      "target_path_review": "pending"
+    },
+    {
+      "path": "packages/twenty-server/src/engine/workspace-manager/workspace-migration/utils/__tests__/compute-ordered-migration-actions.util.spec.ts",
+      "change": "added",
+      "previous_path": null,
+      "additions": 61,
+      "deletions": 0,
+      "category": "opening-tab",
+      "commits": [
+        "69da6b1d8c"
+      ],
+      "target_path_review": "pending"
+    },
+    {
+      "path": "packages/twenty-server/src/engine/workspace-manager/workspace-migration/utils/compute-ordered-migration-actions.util.ts",
+      "change": "modified",
+      "previous_path": null,
+      "additions": 17,
+      "deletions": 1,
+      "category": "opening-tab",
+      "commits": [
+        "69da6b1d8c"
+      ],
+      "target_path_review": "pending"
+    },
+    {
+      "path": "packages/twenty-server/src/engine/workspace-manager/workspace-migration/workspace-migration-runner/action-handlers/page-layout/services/__tests__/update-page-layout-action-handler.service.spec.ts",
+      "change": "added",
+      "previous_path": null,
+      "additions": 75,
+      "deletions": 0,
+      "category": "opening-tab",
+      "commits": [
+        "69da6b1d8c"
+      ],
+      "target_path_review": "pending"
+    },
+    {
+      "path": "packages/twenty-server/src/engine/workspace-manager/workspace-migration/workspace-migration-runner/action-handlers/page-layout/services/update-page-layout-action-handler.service.ts",
+      "change": "modified",
+      "previous_path": null,
+      "additions": 5,
+      "deletions": 1,
+      "category": "opening-tab",
+      "commits": [
+        "69da6b1d8c"
+      ],
+      "target_path_review": "pending"
+    },
+    {
+      "path": "packages/twenty-server/src/modules/modules.module.ts",
+      "change": "modified",
+      "previous_path": null,
+      "additions": 2,
+      "deletions": 0,
+      "category": "cross-cutting",
+      "commits": [
+        "78fd4b37ee"
+      ],
+      "target_path_review": "pending"
+    },
+    {
+      "path": "packages/twenty-server/src/modules/permavent-weekly-sales-report/controllers/permavent-weekly-sales-report.controller.ts",
+      "change": "added",
+      "previous_path": null,
+      "additions": 27,
+      "deletions": 0,
+      "category": "weekly-report",
+      "commits": [
+        "78fd4b37ee"
+      ],
+      "target_path_review": "pending"
+    },
+    {
+      "path": "packages/twenty-server/src/modules/permavent-weekly-sales-report/dtos/permavent-weekly-sales-report-source-request.dto.ts",
+      "change": "added",
+      "previous_path": null,
+      "additions": 7,
+      "deletions": 0,
+      "category": "weekly-report",
+      "commits": [
+        "78fd4b37ee"
+      ],
+      "target_path_review": "pending"
+    },
+    {
+      "path": "packages/twenty-server/src/modules/permavent-weekly-sales-report/permavent-weekly-sales-report.module.ts",
+      "change": "added",
+      "previous_path": null,
+      "additions": 14,
+      "deletions": 0,
+      "category": "weekly-report",
+      "commits": [
+        "78fd4b37ee"
+      ],
+      "target_path_review": "pending"
+    },
+    {
+      "path": "packages/twenty-server/src/modules/permavent-weekly-sales-report/services/__tests__/permavent-weekly-sales-report-source.service.spec.ts",
+      "change": "added",
+      "previous_path": null,
+      "additions": 240,
+      "deletions": 0,
+      "category": "weekly-report",
+      "commits": [
+        "78fd4b37ee"
+      ],
+      "target_path_review": "pending"
+    },
+    {
+      "path": "packages/twenty-server/src/modules/permavent-weekly-sales-report/services/permavent-weekly-sales-report-source.service.ts",
+      "change": "added",
+      "previous_path": null,
+      "additions": 521,
+      "deletions": 0,
+      "category": "weekly-report",
+      "commits": [
+        "78fd4b37ee"
+      ],
+      "target_path_review": "pending"
+    },
+    {
+      "path": "packages/twenty-server/src/modules/permavent-weekly-sales-report/types/permavent-weekly-sales-report-source.type.ts",
+      "change": "added",
+      "previous_path": null,
+      "additions": 74,
+      "deletions": 0,
+      "category": "weekly-report",
+      "commits": [
+        "78fd4b37ee"
+      ],
+      "target_path_review": "pending"
+    },
+    {
+      "path": "packages/twenty-server/src/modules/permavent-weekly-sales-report/utils/__tests__/get-permavent-london-week-window.util.spec.ts",
+      "change": "added",
+      "previous_path": null,
+      "additions": 23,
+      "deletions": 0,
+      "category": "weekly-report",
+      "commits": [
+        "78fd4b37ee"
+      ],
+      "target_path_review": "pending"
+    },
+    {
+      "path": "packages/twenty-server/src/modules/permavent-weekly-sales-report/utils/get-permavent-london-week-window.util.ts",
+      "change": "added",
+      "previous_path": null,
+      "additions": 29,
+      "deletions": 0,
+      "category": "weekly-report",
+      "commits": [
+        "78fd4b37ee"
+      ],
+      "target_path_review": "pending"
+    },
+    {
+      "path": "packages/twenty-shared/src/types/FeatureFlagKey.ts",
+      "change": "modified",
+      "previous_path": null,
+      "additions": 2,
+      "deletions": 0,
+      "category": "feature-flags",
+      "commits": [
+        "3a1139feed",
+        "568d02352a"
+      ],
+      "target_path_review": "pending"
+    },
+    {
+      "path": "packages/twenty-shared/src/types/LogicFunctionEvent.ts",
+      "change": "modified",
+      "previous_path": null,
+      "additions": 9,
+      "deletions": 0,
+      "category": "weekly-report",
+      "commits": [
+        "063c1c1c1b"
+      ],
+      "target_path_review": "pending"
+    },
+    {
+      "path": "packages/twenty-shared/src/types/PermaventLogicFunctionActorContext.ts",
+      "change": "added",
+      "previous_path": null,
+      "additions": 6,
+      "deletions": 0,
+      "category": "weekly-report",
+      "commits": [
+        "063c1c1c1b"
+      ],
+      "target_path_review": "pending"
+    },
+    {
+      "path": "packages/twenty-shared/src/types/PermaventSalesScope.ts",
+      "change": "added",
+      "previous_path": null,
+      "additions": 14,
+      "deletions": 0,
+      "category": "sales-scope",
+      "commits": [
+        "063c1c1c1b"
+      ],
+      "target_path_review": "pending"
+    },
+    {
+      "path": "packages/twenty-shared/src/types/index.ts",
+      "change": "modified",
+      "previous_path": null,
+      "additions": 2,
+      "deletions": 0,
+      "category": "cross-cutting",
+      "commits": [
+        "063c1c1c1b"
+      ],
+      "target_path_review": "pending"
+    },
+    {
+      "path": "packages/twenty-ui/vite.config.ts",
+      "change": "modified",
+      "previous_path": null,
+      "additions": 0,
+      "deletions": 10,
+      "category": "cross-cutting",
+      "commits": [
+        "39477bbb86"
+      ],
+      "target_path_review": "pending"
+    },
+    {
+      "path": "scripts/permavent/build-production-image.sh",
+      "change": "added",
+      "previous_path": null,
+      "additions": 119,
+      "deletions": 0,
+      "category": "release-helpers",
+      "commits": [
+        "d88b330b10"
+      ],
+      "target_path_review": "pending"
+    },
+    {
+      "path": "scripts/permavent/check-boundaries.sh",
+      "change": "added",
+      "previous_path": null,
+      "additions": 120,
+      "deletions": 0,
+      "category": "release-helpers",
+      "commits": [
+        "d88b330b10"
+      ],
+      "target_path_review": "pending"
+    },
+    {
+      "path": "scripts/permavent/docs/company-branch-opening-tab.md",
+      "change": "added",
+      "previous_path": null,
+      "additions": 54,
+      "deletions": 0,
+      "category": "release-helpers",
+      "commits": [
+        "7546570ec8"
+      ],
+      "target_path_review": "pending"
+    },
+    {
+      "path": "scripts/permavent/lib/common.sh",
+      "change": "added",
+      "previous_path": null,
+      "additions": 123,
+      "deletions": 0,
+      "category": "release-helpers",
+      "commits": [
+        "d88b330b10"
+      ],
+      "target_path_review": "pending"
+    },
+    {
+      "path": "scripts/permavent/preflight.sh",
+      "change": "added",
+      "previous_path": null,
+      "additions": 155,
+      "deletions": 0,
+      "category": "release-helpers",
+      "commits": [
+        "d88b330b10"
+      ],
+      "target_path_review": "pending"
+    },
+    {
+      "path": "scripts/permavent/run-server-tests.sh",
+      "change": "added",
+      "previous_path": null,
+      "additions": 78,
+      "deletions": 0,
+      "category": "release-helpers",
+      "commits": [
+        "d88b330b10"
+      ],
+      "target_path_review": "pending"
+    },
+    {
+      "path": "scripts/permavent/server/twenty-backup-test",
+      "change": "added",
+      "previous_path": null,
+      "additions": 118,
+      "deletions": 0,
+      "category": "release-helpers",
+      "commits": [
+        "d88b330b10"
+      ],
+      "target_path_review": "pending"
+    },
+    {
+      "path": "scripts/permavent/server/twenty-deploy-live-image",
+      "change": "added",
+      "previous_path": null,
+      "additions": 265,
+      "deletions": 0,
+      "category": "release-helpers",
+      "commits": [
+        "d88b330b10"
+      ],
+      "target_path_review": "pending"
+    },
+    {
+      "path": "scripts/permavent/server/twenty-deploy-test-image",
+      "change": "added",
+      "previous_path": null,
+      "additions": 218,
+      "deletions": 0,
+      "category": "release-helpers",
+      "commits": [
+        "d88b330b10"
+      ],
+      "target_path_review": "pending"
+    },
+    {
+      "path": "scripts/permavent/server/twenty-promote-test-to-live",
+      "change": "added",
+      "previous_path": null,
+      "additions": 285,
+      "deletions": 0,
+      "category": "release-helpers",
+      "commits": [
+        "d88b330b10"
+      ],
+      "target_path_review": "pending"
+    },
+    {
+      "path": "scripts/permavent/server/twenty-refresh-test-from-live",
+      "change": "added",
+      "previous_path": null,
+      "additions": 233,
+      "deletions": 0,
+      "category": "release-helpers",
+      "commits": [
+        "d88b330b10"
+      ],
+      "target_path_review": "pending"
+    },
+    {
+      "path": "scripts/permavent/server/twenty-repair-test-v2-18-upgrade-order",
+      "change": "added",
+      "previous_path": null,
+      "additions": 117,
+      "deletions": 0,
+      "category": "release-helpers",
+      "commits": [
+        "d88b330b10"
+      ],
+      "target_path_review": "pending"
+    },
+    {
+      "path": "scripts/permavent/server/twenty-repair-v2-18-upgrade-order.sql",
+      "change": "added",
+      "previous_path": null,
+      "additions": 224,
+      "deletions": 0,
+      "category": "release-helpers",
+      "commits": [
+        "d88b330b10"
+      ],
+      "target_path_review": "pending"
+    },
+    {
+      "path": "scripts/permavent/verify-changes.sh",
+      "change": "added",
+      "previous_path": null,
+      "additions": 133,
+      "deletions": 0,
+      "category": "release-helpers",
+      "commits": [
+        "d88b330b10"
+      ],
+      "target_path_review": "pending"
+    },
+    {
+      "path": "scripts/permavent/verify-production-image.sh",
+      "change": "added",
+      "previous_path": null,
+      "additions": 207,
+      "deletions": 0,
+      "category": "release-helpers",
+      "commits": [
+        "d88b330b10"
+      ],
+      "target_path_review": "pending"
+    }
+  ]
+}
