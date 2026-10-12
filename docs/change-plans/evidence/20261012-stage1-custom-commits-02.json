@@ -1,0 +1,467 @@
+{
+  "snapshot_date": "2026-10-12",
+  "source": "GitHub fetch_commit; titles from owner migration register",
+  "part": 2,
+  "commits": [
+    {
+      "sha": "23a21226a6c1de945ae78c61ce8bfa97c125b971",
+      "subject": "Migrate Code Interpreter and delegated API context",
+      "files": [
+        {
+          "path": "packages/twenty-server/@types/express.d.ts",
+          "previous_filename": null
+        },
+        {
+          "path": "packages/twenty-server/src/engine/api/mcp/controllers/mcp-core.controller.ts",
+          "previous_filename": null
+        },
+        {
+          "path": "packages/twenty-server/src/engine/api/mcp/guards/__tests__/mcp-auth.guard.spec.ts",
+          "previous_filename": null
+        },
+        {
+          "path": "packages/twenty-server/src/engine/api/mcp/guards/mcp-auth.guard.ts",
+          "previous_filename": null
+        },
+        {
+          "path": "packages/twenty-server/src/engine/api/mcp/services/mcp-protocol.service.ts",
+          "previous_filename": null
+        },
+        {
+          "path": "packages/twenty-server/src/engine/api/mcp/utils/__tests__/is-mcp-read-only-catalog-tool.util.spec.ts",
+          "previous_filename": null
+        },
+        {
+          "path": "packages/twenty-server/src/engine/api/mcp/utils/is-mcp-read-only-catalog-tool.util.ts",
+          "previous_filename": null
+        },
+        {
+          "path": "packages/twenty-server/src/engine/api/rest/core/handlers/rest-api-base.handler.ts",
+          "previous_filename": null
+        },
+        {
+          "path": "packages/twenty-server/src/engine/core-modules/actor/services/actor-from-auth-context.service.ts",
+          "previous_filename": null
+        },
+        {
+          "path": "packages/twenty-server/src/engine/core-modules/auth/guards/is-delegated-api-key-auth-context.guard.ts",
+          "previous_filename": null
+        },
+        {
+          "path": "packages/twenty-server/src/engine/core-modules/auth/middlewares/workspace-auth-context.middleware.ts",
+          "previous_filename": null
+        },
+        {
+          "path": "packages/twenty-server/src/engine/core-modules/auth/strategies/jwt.auth.strategy.ts",
+          "previous_filename": null
+        },
+        {
+          "path": "packages/twenty-server/src/engine/core-modules/auth/token/services/access-token.service.ts",
+          "previous_filename": null
+        },
+        {
+          "path": "packages/twenty-server/src/engine/core-modules/auth/types/delegated-api-key-actor.type.ts",
+          "previous_filename": null
+        },
+        {
+          "path": "packages/twenty-server/src/engine/core-modules/auth/types/jwt-payload.type.ts",
+          "previous_filename": null
+        },
+        {
+          "path": "packages/twenty-server/src/engine/core-modules/auth/types/jwt-token-type.enum.ts",
+          "previous_filename": null
+        },
+        {
+          "path": "packages/twenty-server/src/engine/core-modules/auth/types/mcp-access-token-jwt-payload.type.ts",
+          "previous_filename": null
+        },
+        {
+          "path": "packages/twenty-server/src/engine/core-modules/auth/types/mcp-tool-access.type.ts",
+          "previous_filename": null
+        },
+        {
+          "path": "packages/twenty-server/src/engine/core-modules/auth/types/raw-auth-context.type.ts",
+          "previous_filename": null
+        },
+        {
+          "path": "packages/twenty-server/src/engine/core-modules/auth/types/workspace-auth-context.type.ts",
+          "previous_filename": null
+        },
+        {
+          "path": "packages/twenty-server/src/engine/core-modules/auth/utils/build-api-key-auth-context.util.ts",
+          "previous_filename": null
+        },
+        {
+          "path": "packages/twenty-server/src/engine/core-modules/code-interpreter/code-interpreter-driver.factory.ts",
+          "previous_filename": null
+        },
+        {
+          "path": "packages/twenty-server/src/engine/core-modules/code-interpreter/code-interpreter.interface.ts",
+          "previous_filename": null
+        },
+        {
+          "path": "packages/twenty-server/src/engine/core-modules/code-interpreter/drivers/__tests__/permavent-internal.driver.spec.ts",
+          "previous_filename": null
+        },
+        {
+          "path": "packages/twenty-server/src/engine/core-modules/code-interpreter/drivers/permavent-internal.driver.ts",
+          "previous_filename": null
+        },
+        {
+          "path": "packages/twenty-server/src/engine/core-modules/permavent-delegated-api/constants/permavent-delegated-context-header.constant.ts",
+          "previous_filename": null
+        },
+        {
+          "path": "packages/twenty-server/src/engine/core-modules/permavent-delegated-api/permavent-delegated-api.module.ts",
+          "previous_filename": null
+        },
+        {
+          "path": "packages/twenty-server/src/engine/core-modules/permavent-delegated-api/services/__tests__/permavent-delegated-context.service.spec.ts",
+          "previous_filename": null
+        },
+        {
+          "path": "packages/twenty-server/src/engine/core-modules/permavent-delegated-api/services/permavent-delegated-context.service.ts",
+          "previous_filename": null
+        },
+        {
+          "path": "packages/twenty-server/src/engine/core-modules/record-crud/services/common-api-context-builder.service.ts",
+          "previous_filename": null
+        },
+        {
+          "path": "packages/twenty-server/src/engine/core-modules/tool-provider/tools/get-tool-catalog.tool.ts",
+          "previous_filename": null
+        },
+        {
+          "path": "packages/twenty-server/src/engine/core-modules/tool/tools/code-interpreter-tool/__tests__/code-interpreter-tool.spec.ts",
+          "previous_filename": null
+        },
+        {
+          "path": "packages/twenty-server/src/engine/core-modules/tool/tools/code-interpreter-tool/code-interpreter-tool.ts",
+          "previous_filename": null
+        },
+        {
+          "path": "packages/twenty-server/src/engine/core-modules/tool/tools/code-interpreter-tool/twenty-mcp-helper.const.ts",
+          "previous_filename": null
+        },
+        {
+          "path": "packages/twenty-server/src/engine/core-modules/twenty-config/config-variables.ts",
+          "previous_filename": null
+        },
+        {
+          "path": "packages/twenty-server/src/engine/guards/jwt-auth.guard.ts",
+          "previous_filename": null
+        },
+        {
+          "path": "packages/twenty-server/src/engine/middlewares/middleware.module.ts",
+          "previous_filename": null
+        },
+        {
+          "path": "packages/twenty-server/src/engine/middlewares/middleware.service.ts",
+          "previous_filename": null
+        },
+        {
+          "path": "packages/twenty-server/src/engine/twenty-orm/utils/__tests__/resolve-role-ids-from-auth-context.util.spec.ts",
+          "previous_filename": null
+        },
+        {
+          "path": "packages/twenty-server/src/engine/twenty-orm/utils/resolve-objects-permissions-from-auth-context.util.ts",
+          "previous_filename": null
+        },
+        {
+          "path": "packages/twenty-server/src/engine/twenty-orm/utils/resolve-role-ids-from-auth-context.util.ts",
+          "previous_filename": null
+        },
+        {
+          "path": "packages/twenty-server/src/engine/utils/bind-data-to-request-object.util.ts",
+          "previous_filename": null
+        }
+      ],
+      "changed_files": 42,
+      "error": null
+    },
+    {
+      "sha": "a1dccf539848c5bbe0801b87446d479001fbdd87",
+      "subject": "Migrate My Companies focus marker",
+      "files": [
+        {
+          "path": "packages/twenty-server/src/engine/api/common/common-query-runners/common-base-query-runner.service.ts",
+          "previous_filename": null
+        },
+        {
+          "path": "packages/twenty-server/src/engine/api/common/core-common-api.module.ts",
+          "previous_filename": null
+        },
+        {
+          "path": "packages/twenty-server/src/engine/core-modules/permavent-sales-scope/focus/__tests__/permavent-company-focus-filter.service.spec.ts",
+          "previous_filename": null
+        },
+        {
+          "path": "packages/twenty-server/src/engine/core-modules/permavent-sales-scope/focus/permavent-company-focus-filter.service.ts",
+          "previous_filename": null
+        },
+        {
+          "path": "packages/twenty-server/src/engine/core-modules/permavent-sales-scope/permavent-sales-scope.module.ts",
+          "previous_filename": null
+        },
+        {
+          "path": "packages/twenty-server/src/engine/core-modules/twenty-config/config-variables.ts",
+          "previous_filename": null
+        }
+      ],
+      "changed_files": 6,
+      "error": null
+    },
+    {
+      "sha": "39477bbb8697c9f7818db347c740c10c29fb0ad1",
+      "subject": "Resolve Twenty UI TS5042 build blocker",
+      "files": [
+        {
+          "path": "packages/twenty-ui/vite.config.ts",
+          "previous_filename": null
+        }
+      ],
+      "changed_files": 1,
+      "error": null
+    },
+    {
+      "sha": "bfba2073a7cc0c1d990b2d5cd52beddfaa4330de",
+      "subject": "Fix server migration type and MCP access issues",
+      "files": [
+        {
+          "path": "packages/twenty-server/src/engine/api/mcp/services/__tests__/mcp-protocol.service.spec.ts",
+          "previous_filename": null
+        },
+        {
+          "path": "packages/twenty-server/src/engine/api/mcp/services/mcp-protocol.service.ts",
+          "previous_filename": null
+        },
+        {
+          "path": "packages/twenty-server/src/engine/core-modules/permavent-delegated-api/services/__tests__/permavent-delegated-context.service.spec.ts",
+          "previous_filename": null
+        },
+        {
+          "path": "packages/twenty-server/src/engine/core-modules/workspace-invitation/services/workspace-invitation.service.ts",
+          "previous_filename": null
+        }
+      ],
+      "changed_files": 4,
+      "error": null
+    },
+    {
+      "sha": "5a21a15521b317af4d40f0e4448ddff4f8208039",
+      "subject": "Fix email template fixture typecheck",
+      "files": [
+        {
+          "path": "packages/twenty-server/src/engine/core-modules/email/__tests__/email-templates-rendering.spec.ts",
+          "previous_filename": null
+        }
+      ],
+      "changed_files": 1,
+      "error": null
+    },
+    {
+      "sha": "d88b330b107a55f698a0b07305eef70c2f2a44f8",
+      "subject": "Restore Permavent release helpers for v2.35.2",
+      "files": [
+        {
+          "path": "scripts/permavent/build-production-image.sh",
+          "previous_filename": null
+        },
+        {
+          "path": "scripts/permavent/check-boundaries.sh",
+          "previous_filename": null
+        },
+        {
+          "path": "scripts/permavent/lib/common.sh",
+          "previous_filename": null
+        },
+        {
+          "path": "scripts/permavent/preflight.sh",
+          "previous_filename": null
+        },
+        {
+          "path": "scripts/permavent/run-server-tests.sh",
+          "previous_filename": null
+        },
+        {
+          "path": "scripts/permavent/server/twenty-backup-test",
+          "previous_filename": null
+        },
+        {
+          "path": "scripts/permavent/server/twenty-deploy-live-image",
+          "previous_filename": null
+        },
+        {
+          "path": "scripts/permavent/server/twenty-deploy-test-image",
+          "previous_filename": null
+        },
+        {
+          "path": "scripts/permavent/server/twenty-promote-test-to-live",
+          "previous_filename": null
+        },
+        {
+          "path": "scripts/permavent/server/twenty-refresh-test-from-live",
+          "previous_filename": null
+        },
+        {
+          "path": "scripts/permavent/server/twenty-repair-test-v2-18-upgrade-order",
+          "previous_filename": null
+        },
+        {
+          "path": "scripts/permavent/server/twenty-repair-v2-18-upgrade-order.sql",
+          "previous_filename": null
+        },
+        {
+          "path": "scripts/permavent/verify-changes.sh",
+          "previous_filename": null
+        },
+        {
+          "path": "scripts/permavent/verify-production-image.sh",
+          "previous_filename": null
+        }
+      ],
+      "changed_files": 14,
+      "error": null
+    },
+    {
+      "sha": "b2e8314a7c88603234abbb20b6a90e91523da7b0",
+      "subject": "Fix Sales Rep assignment field queries",
+      "files": [
+        {
+          "path": "packages/twenty-server/src/engine/core-modules/permavent-sales-scope/assignments/__tests__/permavent-sales-rep-assignment.service.spec.ts",
+          "previous_filename": null
+        },
+        {
+          "path": "packages/twenty-server/src/engine/core-modules/permavent-sales-scope/assignments/permavent-sales-rep-assignment.service.ts",
+          "previous_filename": null
+        }
+      ],
+      "changed_files": 2,
+      "error": null
+    },
+    {
+      "sha": "504c73341c6348239607d19de453f795da6242a7",
+      "subject": "Support delegated weekly report actors",
+      "files": [
+        {
+          "path": "packages/twenty-server/src/engine/core-modules/permavent-sales-scope/context/__tests__/permavent-sales-scope-context.factory.spec.ts",
+          "previous_filename": null
+        },
+        {
+          "path": "packages/twenty-server/src/engine/core-modules/permavent-sales-scope/context/permavent-sales-scope-context.factory.ts",
+          "previous_filename": null
+        }
+      ],
+      "changed_files": 2,
+      "error": null
+    },
+    {
+      "sha": "69da6b1d8c33d15ce4d9a81da01f6c859933458b",
+      "subject": "Configure Company and Branch opening tabs",
+      "files": [
+        {
+          "path": "packages/twenty-front/src/generated-metadata/graphql.ts",
+          "previous_filename": null
+        },
+        {
+          "path": "packages/twenty-front/src/modules/layout-customization/hooks/useSaveLayoutCustomization.ts",
+          "previous_filename": null
+        },
+        {
+          "path": "packages/twenty-front/src/modules/page-layout/components/PageLayoutTabsRenderer.tsx",
+          "previous_filename": null
+        },
+        {
+          "path": "packages/twenty-front/src/modules/page-layout/utils/__tests__/convertPageLayoutDraftToUpdateInput.test.ts",
+          "previous_filename": null
+        },
+        {
+          "path": "packages/twenty-front/src/modules/page-layout/utils/convertPageLayoutDraftToUpdateInput.ts",
+          "previous_filename": null
+        },
+        {
+          "path": "packages/twenty-front/src/modules/side-panel/pages/page-layout/components/RegularTabSettingsContent.tsx",
+          "previous_filename": null
+        },
+        {
+          "path": "packages/twenty-front/src/modules/side-panel/pages/page-layout/components/SidePanelPageLayoutTabSettingsContent.tsx",
+          "previous_filename": null
+        },
+        {
+          "path": "packages/twenty-front/src/modules/side-panel/pages/page-layout/components/SingleWidgetTabSettingsContent.tsx",
+          "previous_filename": null
+        },
+        {
+          "path": "packages/twenty-front/src/modules/side-panel/permavent-company-wide-side-panel/components/PermaventOpeningTabSettingsItem.tsx",
+          "previous_filename": null
+        },
+        {
+          "path": "packages/twenty-front/src/modules/side-panel/permavent-company-wide-side-panel/hooks/__tests__/usePermaventOpeningTabSettings.test.tsx",
+          "previous_filename": null
+        },
+        {
+          "path": "packages/twenty-front/src/modules/side-panel/permavent-company-wide-side-panel/hooks/usePermaventOpeningTabSettings.ts",
+          "previous_filename": null
+        },
+        {
+          "path": "packages/twenty-front/src/modules/side-panel/permavent-company-wide-side-panel/utils/__tests__/getPermaventRecordOpeningTabId.test.ts",
+          "previous_filename": null
+        },
+        {
+          "path": "packages/twenty-front/src/modules/side-panel/permavent-company-wide-side-panel/utils/getPermaventRecordOpeningTabId.ts",
+          "previous_filename": null
+        },
+        {
+          "path": "packages/twenty-front/src/modules/workspace/hooks/useIsFeatureEnabled.ts",
+          "previous_filename": null
+        },
+        {
+          "path": "packages/twenty-server/src/engine/metadata-modules/page-layout/dtos/inputs/update-page-layout-with-tabs.input.ts",
+          "previous_filename": null
+        },
+        {
+          "path": "packages/twenty-server/src/engine/metadata-modules/page-layout/services/page-layout-update.service.ts",
+          "previous_filename": null
+        },
+        {
+          "path": "packages/twenty-server/src/engine/metadata-modules/page-layout/utils/__tests__/resolve-permavent-record-opening-tab-update.util.spec.ts",
+          "previous_filename": null
+        },
+        {
+          "path": "packages/twenty-server/src/engine/metadata-modules/page-layout/utils/resolve-permavent-record-opening-tab-update.util.ts",
+          "previous_filename": null
+        },
+        {
+          "path": "packages/twenty-server/src/engine/workspace-manager/workspace-migration/utils/__tests__/compute-ordered-migration-actions.util.spec.ts",
+          "previous_filename": null
+        },
+        {
+          "path": "packages/twenty-server/src/engine/workspace-manager/workspace-migration/utils/compute-ordered-migration-actions.util.ts",
+          "previous_filename": null
+        },
+        {
+          "path": "packages/twenty-server/src/engine/workspace-manager/workspace-migration/workspace-migration-runner/action-handlers/page-layout/services/__tests__/update-page-layout-action-handler.service.spec.ts",
+          "previous_filename": null
+        },
+        {
+          "path": "packages/twenty-server/src/engine/workspace-manager/workspace-migration/workspace-migration-runner/action-handlers/page-layout/services/update-page-layout-action-handler.service.ts",
+          "previous_filename": null
+        }
+      ],
+      "changed_files": 22,
+      "error": null
+    },
+    {
+      "sha": "7546570ec82fcd7d1a3b7d7599c161d11c044424",
+      "subject": "Explain Company and Branch opening tab settings",
+      "files": [
+        {
+          "path": "scripts/permavent/docs/company-branch-opening-tab.md",
+          "previous_filename": null
+        }
+      ],
+      "changed_files": 1,
+      "error": null
+    }
+  ]
+}
