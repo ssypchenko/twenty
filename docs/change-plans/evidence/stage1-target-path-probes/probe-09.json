@@ -1,0 +1,105 @@
+{
+  "target": "twenty/v2.46.0",
+  "batch": 9,
+  "range": [
+    144,
+    162
+  ],
+  "files": [
+    {
+      "path": "packages/twenty-server/src/engine/core-modules/permavent-user-audit/permavent-user-audit.service.ts",
+      "exists": false,
+      "error_type": "404",
+      "error": null
+    },
+    {
+      "path": "packages/twenty-server/src/engine/core-modules/record-crud/services/common-api-context-builder.service.ts",
+      "exists": true,
+      "blob_sha": "f36c53e05d55262a120c9cc3de20743b717a0490"
+    },
+    {
+      "path": "packages/twenty-server/src/engine/core-modules/tool-provider/tools/get-tool-catalog.tool.ts",
+      "exists": true,
+      "blob_sha": "79c7239f3d7e5e9f8b71d698da1a20515f23dcf6"
+    },
+    {
+      "path": "packages/twenty-server/src/engine/core-modules/tool/tools/code-interpreter-tool/__tests__/code-interpreter-tool.spec.ts",
+      "exists": false,
+      "error_type": "404",
+      "error": null
+    },
+    {
+      "path": "packages/twenty-server/src/engine/core-modules/tool/tools/code-interpreter-tool/code-interpreter-tool.ts",
+      "exists": true,
+      "blob_sha": "ad2d427b91281ae276a700b6b1e99b69cc25558b"
+    },
+    {
+      "path": "packages/twenty-server/src/engine/core-modules/tool/tools/code-interpreter-tool/twenty-mcp-helper.const.ts",
+      "exists": true,
+      "blob_sha": "e53429bb4efe8c1056d702661d25e04b83ef67dc"
+    },
+    {
+      "path": "packages/twenty-server/src/engine/core-modules/twenty-config/config-variables.ts",
+      "exists": true,
+      "blob_sha": "878725c888d52369802a8565c8f469cb91c3f32e"
+    },
+    {
+      "path": "packages/twenty-server/src/engine/core-modules/workspace-invitation/services/workspace-invitation.service.ts",
+      "exists": true,
+      "blob_sha": "bd0ada76e7528bc8b00b5b8b51055a20b54a3933"
+    },
+    {
+      "path": "packages/twenty-server/src/engine/guards/jwt-auth.guard.ts",
+      "exists": true,
+      "blob_sha": "a5aaadf0a8fd07003c2104ecefcdff42c812e828"
+    },
+    {
+      "path": "packages/twenty-server/src/engine/metadata-modules/page-layout/dtos/inputs/update-page-layout-with-tabs.input.ts",
+      "exists": true,
+      "blob_sha": "6ce9ef168b46bac30cad13ad2541193888acb274"
+    },
+    {
+      "path": "packages/twenty-server/src/engine/metadata-modules/page-layout/services/page-layout-update.service.ts",
+      "exists": true,
+      "blob_sha": "c750f530483b4c09b7ec9b68d277167419d6deaa"
+    },
+    {
+      "path": "packages/twenty-server/src/engine/metadata-modules/page-layout/utils/__tests__/resolve-permavent-record-opening-tab-update.util.spec.ts",
+      "exists": false,
+      "error_type": "404",
+      "error": null
+    },
+    {
+      "path": "packages/twenty-server/src/engine/metadata-modules/page-layout/utils/resolve-permavent-record-opening-tab-update.util.ts",
+      "exists": false,
+      "error_type": "404",
+      "error": null
+    },
+    {
+      "path": "packages/twenty-server/src/engine/middlewares/middleware.module.ts",
+      "exists": true,
+      "blob_sha": "84803a3debca966bfcf7293e242d590ecb0d70c8"
+    },
+    {
+      "path": "packages/twenty-server/src/engine/middlewares/middleware.service.ts",
+      "exists": true,
+      "blob_sha": "1cf7b4c91c3a853c655b2d50298923f5f4774f89"
+    },
+    {
+      "path": "packages/twenty-server/src/engine/twenty-orm/utils/__tests__/resolve-role-ids-from-auth-context.util.spec.ts",
+      "exists": true,
+      "blob_sha": "9b79a08ce889d2fd83bbd46fcd3a520a9ed3af2e"
+    },
+    {
+      "path": "packages/twenty-server/src/engine/twenty-orm/utils/resolve-objects-permissions-from-auth-context.util.ts",
+      "exists": false,
+      "error_type": "404",
+      "error": null
+    },
+    {
+      "path": "packages/twenty-server/src/engine/twenty-orm/utils/resolve-role-ids-from-auth-context.util.ts",
+      "exists": true,
+      "blob_sha": "39057d80b463360609b89e256fb85a8640ede849"
+    }
+  ]
+}
