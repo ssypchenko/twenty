@@ -1,0 +1,96 @@
+{
+  "base": "b1c895c44bfa36537c4ab0be10b171c876e05336",
+  "batch": 2,
+  "files": [
+    {
+      "path": "packages/twenty-front-component-renderer/src/types/FrontComponentExecutionContext.ts",
+      "exists": true,
+      "blob_sha": "9515c8883f2e035c50e80ac94575eb655e24ddbf"
+    },
+    {
+      "path": "packages/twenty-front/src/generated-metadata/graphql.ts",
+      "exists": true,
+      "blob_sha": "13abbd28cc443e1180d569755176e55616ccd230"
+    },
+    {
+      "path": "packages/twenty-front/src/modules/activities/notes/components/NotesCard.tsx",
+      "exists": true,
+      "blob_sha": "967184b34e833f8a26c481228c34f4d6919c7f59"
+    },
+    {
+      "path": "packages/twenty-front/src/modules/activities/tasks/components/TaskRow.tsx",
+      "exists": true,
+      "blob_sha": "2439af787e10bb68386d9979b2564e81ce1df2ea"
+    },
+    {
+      "path": "packages/twenty-front/src/modules/front-components/hooks/__tests__/useFrontComponentExecutionContext.test.tsx",
+      "exists": true,
+      "blob_sha": "34f72d7afabdff6bffb07f0970aa4eb24a79169b"
+    },
+    {
+      "path": "packages/twenty-front/src/modules/front-components/hooks/useFrontComponentExecutionContext.ts",
+      "exists": true,
+      "blob_sha": "277259ed2cdc29c734330fc500e35b76e57c7e98"
+    },
+    {
+      "path": "packages/twenty-front/src/modules/layout-customization/hooks/useSaveLayoutCustomization.ts",
+      "exists": true,
+      "blob_sha": "2007d493ccb7b38c7c997e371604762e3cc8c4a9"
+    },
+    {
+      "path": "packages/twenty-front/src/modules/page-layout/components/PageLayoutTabsRenderer.tsx",
+      "exists": true,
+      "blob_sha": "3c5de103042df198b9a95b36d124992f573c07d7"
+    },
+    {
+      "path": "packages/twenty-front/src/modules/page-layout/utils/__tests__/convertPageLayoutDraftToUpdateInput.test.ts",
+      "exists": true,
+      "blob_sha": "7b3ae3c5f59eb65b1689ed74ac07b8d345245664"
+    },
+    {
+      "path": "packages/twenty-front/src/modules/page-layout/utils/convertPageLayoutDraftToUpdateInput.ts",
+      "exists": true,
+      "blob_sha": "a862b81dd78d9a3b92893440c1cdc818f86e6120"
+    },
+    {
+      "path": "packages/twenty-front/src/modules/page-layout/widgets/notes/components/NoteWidget.tsx",
+      "exists": true,
+      "blob_sha": "4c9e9dcaf494b7dd4f757ef0573e15787c76c24a"
+    },
+    {
+      "path": "packages/twenty-front/src/modules/page-layout/widgets/tasks/components/TaskWidget.tsx",
+      "exists": true,
+      "blob_sha": "ee65097e4aa1e17bb54c4195a214df2e70e605dd"
+    },
+    {
+      "path": "packages/twenty-front/src/modules/side-panel/components/SidePanelForDesktop.tsx",
+      "exists": true,
+      "blob_sha": "f86470101f2e9851dac7ad940d83421d9704bfbe"
+    },
+    {
+      "path": "packages/twenty-front/src/modules/side-panel/components/SidePanelWidthEffect.tsx",
+      "exists": true,
+      "blob_sha": "e5585df8c510d7ed89943b5dbefeb73af43f5df3"
+    },
+    {
+      "path": "packages/twenty-front/src/modules/side-panel/pages/page-layout/components/RegularTabSettingsContent.tsx",
+      "exists": true,
+      "blob_sha": "3bfe8a0aea512bf1be2938d2c59437918585bf1d"
+    },
+    {
+      "path": "packages/twenty-front/src/modules/side-panel/pages/page-layout/components/SidePanelPageLayoutRecordPageWidgetTypeSelect.tsx",
+      "exists": true,
+      "blob_sha": "cce2c5ae1cc862726a75c8222febe56f422aca27"
+    },
+    {
+      "path": "packages/twenty-front/src/modules/side-panel/pages/page-layout/components/SidePanelPageLayoutTabSettingsContent.tsx",
+      "exists": true,
+      "blob_sha": "84d8c8fa6a1054736c4aecb232d97986b73c471e"
+    },
+    {
+      "path": "packages/twenty-front/src/modules/side-panel/pages/page-layout/components/SingleWidgetTabSettingsContent.tsx",
+      "exists": true,
+      "blob_sha": "696a137e954ead0cfd2ed1985671b9c7ce3e0011"
+    }
+  ]
+}
