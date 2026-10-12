@@ -28,6 +28,7 @@ import { CallAgentDatabaseEventTriggersJob } from 'src/engine/metadata-modules/a
 import { findAgentDatabaseEventTriggersMatchingEvent } from 'src/engine/metadata-modules/ai/ai-agent-trigger/utils/find-agent-database-event-triggers-matching-event.util';
 import { findLogicFunctionsTriggeredByEventName } from 'src/engine/core-modules/logic-function/logic-function-trigger/triggers/database-event/utils/find-logic-functions-triggered-by-event-name';
 import { WorkspaceCacheService } from 'src/engine/workspace-cache/services/workspace-cache.service';
+import { RecordPermaventUserAuditJob } from 'src/engine/core-modules/permavent-user-audit/permavent-user-audit.job';
 import { WorkspaceEventBatch } from 'src/engine/workspace-event-emitter/types/workspace-event-batch.type';
 import { ObjectRecordEventPublisher } from 'src/engine/subscriptions/object-record-event/object-record-event-publisher';
 import { UpsertTimelineActivityFromInternalEvent } from 'src/modules/timeline/jobs/upsert-timeline-activity-from-internal-event.job';
@@ -142,6 +143,15 @@ export class EntityEventsToDbListener {
     }
 
     if (isAuditLogBatchEvent) {
+      // Permavent workspace audit is independent of Twenty billing audit logs.
+      // The job itself enforces PERMAVENT_USER_AUDIT_ENABLED and excludes audit self-events.
+      promises.push(
+        this.entityEventsToDbQueueService.add<WorkspaceEventBatch<T>>(
+          RecordPermaventUserAuditJob.name,
+          batchEvent,
+          { retryLimit: 3 },
+        ),
+      );
       promises.push(this.enqueueEventLogIfEntitled(batchEvent));
     }
 

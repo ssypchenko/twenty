@@ -3,6 +3,7 @@ import { Module } from '@nestjs/common';
 import { TelemetryListener } from 'src/engine/api/graphql/workspace-query-runner/listeners/telemetry.listener';
 import { BillingModule } from 'src/engine/core-modules/billing/billing.module';
 import { TelemetryModule } from 'src/engine/core-modules/telemetry/telemetry.module';
+import { PermaventUserAuditModule } from 'src/engine/core-modules/permavent-user-audit/permavent-user-audit.module';
 import { WorkspaceCacheModule } from 'src/engine/workspace-cache/workspace-cache.module';
 import { TimelineActivityModule } from 'src/modules/timeline/timeline-activity.module';
 
@@ -14,6 +15,7 @@ import { EntityEventsToDbListener } from './listeners/entity-events-to-db.listen
     TimelineActivityModule,
     WorkspaceCacheModule,
     BillingModule,
+    PermaventUserAuditModule,
   ],
   providers: [EntityEventsToDbListener, TelemetryListener],
 })
