@@ -1,0 +1,552 @@
+{
+  "snapshot_date": "2026-10-12",
+  "source": "GitHub fetch_commit",
+  "part": 1,
+  "commits": [
+    {
+      "sha": "f73e909d095581c8a32317bc9be1659a6d27403d",
+      "files": [
+        {
+          "path": "packages/twenty-emails/src/emails/password-reset-link.email.tsx",
+          "previous_filename": null
+        },
+        {
+          "path": "packages/twenty-server/src/engine/core-modules/auth/services/reset-password.service.ts",
+          "previous_filename": null
+        }
+      ],
+      "changed_files": 2,
+      "error": null
+    },
+    {
+      "sha": "3225fe6e1b2470f0e81781a71d8227b38e7cb2a3",
+      "files": [
+        {
+          "path": "packages/twenty-emails/src/emails/send-invite-link.email.tsx",
+          "previous_filename": null
+        },
+        {
+          "path": "packages/twenty-server/src/engine/core-modules/workspace-invitation/services/workspace-invitation.service.ts",
+          "previous_filename": null
+        }
+      ],
+      "changed_files": 2,
+      "error": null
+    },
+    {
+      "sha": "02b032a605ccffcd6852207f7d2781a018aad7ef",
+      "files": [
+        {
+          "path": "packages/twenty-emails/src/components/BaseEmail.tsx",
+          "previous_filename": null
+        },
+        {
+          "path": "packages/twenty-emails/src/components/BaseHead.tsx",
+          "previous_filename": null
+        },
+        {
+          "path": "packages/twenty-emails/src/components/Footer.tsx",
+          "previous_filename": null
+        },
+        {
+          "path": "packages/twenty-emails/src/components/Logo.tsx",
+          "previous_filename": null
+        },
+        {
+          "path": "packages/twenty-emails/src/components/WhatIsTwenty.tsx",
+          "previous_filename": null
+        },
+        {
+          "path": "packages/twenty-emails/src/constants/DefaultWorkspaceLogo.ts",
+          "previous_filename": null
+        },
+        {
+          "path": "packages/twenty-emails/src/emails/clean-suspended-workspace.email.tsx",
+          "previous_filename": null
+        },
+        {
+          "path": "packages/twenty-emails/src/emails/password-update-notify.email.tsx",
+          "previous_filename": null
+        },
+        {
+          "path": "packages/twenty-emails/src/emails/send-email-verification-link.email.tsx",
+          "previous_filename": null
+        },
+        {
+          "path": "packages/twenty-emails/src/emails/validate-approved-access-domain.email.tsx",
+          "previous_filename": null
+        },
+        {
+          "path": "packages/twenty-emails/src/emails/warn-suspended-workspace.email.tsx",
+          "previous_filename": null
+        },
+        {
+          "path": "packages/twenty-front/public/images/branding/permavent-logo.png",
+          "previous_filename": null
+        },
+        {
+          "path": "packages/twenty-server/src/engine/core-modules/approved-access-domain/services/approved-access-domain.service.ts",
+          "previous_filename": null
+        },
+        {
+          "path": "packages/twenty-server/src/engine/core-modules/approved-access-domain/services/approved-access-domain.spec.ts",
+          "previous_filename": null
+        },
+        {
+          "path": "packages/twenty-server/src/engine/core-modules/email-verification/services/email-verification.service.ts",
+          "previous_filename": null
+        },
+        {
+          "path": "packages/twenty-server/src/engine/workspace-manager/workspace-cleaner/services/cleaner.workspace-service.ts",
+          "previous_filename": null
+        }
+      ],
+      "changed_files": 16,
+      "error": null
+    },
+    {
+      "sha": "063c1c1c1b46ebfeb235ce63c876773545c89b43",
+      "files": [
+        {
+          "path": "packages/twenty-server/src/engine/core-modules/logic-function/logic-function-trigger/logic-function-trigger.module.ts",
+          "previous_filename": null
+        },
+        {
+          "path": "packages/twenty-server/src/engine/core-modules/logic-function/logic-function-trigger/logic-function-trigger.service.ts",
+          "previous_filename": null
+        },
+        {
+          "path": "packages/twenty-server/src/engine/core-modules/logic-function/logic-function-trigger/triggers/route/route-trigger.service.ts",
+          "previous_filename": null
+        },
+        {
+          "path": "packages/twenty-server/src/engine/core-modules/logic-function/logic-function-trigger/triggers/route/utils/__tests__/build-logic-function-event.util.spec.ts",
+          "previous_filename": null
+        },
+        {
+          "path": "packages/twenty-server/src/engine/core-modules/logic-function/logic-function-trigger/triggers/route/utils/build-logic-function-event.util.ts",
+          "previous_filename": null
+        },
+        {
+          "path": "packages/twenty-server/src/engine/core-modules/permavent-sales-scope/__tests__/permavent-sales-scope.service.spec.ts",
+          "previous_filename": null
+        },
+        {
+          "path": "packages/twenty-server/src/engine/core-modules/permavent-sales-scope/assignments/normalise-permavent-sales-rep-code.util.ts",
+          "previous_filename": null
+        },
+        {
+          "path": "packages/twenty-server/src/engine/core-modules/permavent-sales-scope/assignments/permavent-sales-rep-assignment.service.ts",
+          "previous_filename": null
+        },
+        {
+          "path": "packages/twenty-server/src/engine/core-modules/permavent-sales-scope/constants/permavent-role-universal-identifiers.constant.ts",
+          "previous_filename": null
+        },
+        {
+          "path": "packages/twenty-server/src/engine/core-modules/permavent-sales-scope/context/permavent-sales-scope-context.factory.ts",
+          "previous_filename": null
+        },
+        {
+          "path": "packages/twenty-server/src/engine/core-modules/permavent-sales-scope/context/permavent-sales-scope-context.type.ts",
+          "previous_filename": null
+        },
+        {
+          "path": "packages/twenty-server/src/engine/core-modules/permavent-sales-scope/permavent-sales-scope.module.ts",
+          "previous_filename": null
+        },
+        {
+          "path": "packages/twenty-server/src/engine/core-modules/permavent-sales-scope/permavent-sales-scope.service.ts",
+          "previous_filename": null
+        },
+        {
+          "path": "packages/twenty-server/src/engine/core-modules/twenty-config/config-variables.ts",
+          "previous_filename": null
+        },
+        {
+          "path": "packages/twenty-shared/src/types/LogicFunctionEvent.ts",
+          "previous_filename": null
+        },
+        {
+          "path": "packages/twenty-shared/src/types/PermaventLogicFunctionActorContext.ts",
+          "previous_filename": null
+        },
+        {
+          "path": "packages/twenty-shared/src/types/PermaventSalesScope.ts",
+          "previous_filename": null
+        },
+        {
+          "path": "packages/twenty-shared/src/types/index.ts",
+          "previous_filename": null
+        }
+      ],
+      "changed_files": 18,
+      "error": null
+    },
+    {
+      "sha": "78fd4b37ee7ef5be1a8b4bdcf4e4c866e4db8b69",
+      "files": [
+        {
+          "path": "packages/twenty-server/src/engine/core-modules/permavent-sales-scope/__tests__/permavent-sales-scope.service.spec.ts",
+          "previous_filename": null
+        },
+        {
+          "path": "packages/twenty-server/src/engine/core-modules/permavent-sales-scope/context/permavent-sales-scope-context.factory.ts",
+          "previous_filename": null
+        },
+        {
+          "path": "packages/twenty-server/src/engine/core-modules/permavent-sales-scope/context/permavent-sales-scope-context.type.ts",
+          "previous_filename": null
+        },
+        {
+          "path": "packages/twenty-server/src/modules/modules.module.ts",
+          "previous_filename": null
+        },
+        {
+          "path": "packages/twenty-server/src/modules/permavent-weekly-sales-report/controllers/permavent-weekly-sales-report.controller.ts",
+          "previous_filename": null
+        },
+        {
+          "path": "packages/twenty-server/src/modules/permavent-weekly-sales-report/dtos/permavent-weekly-sales-report-source-request.dto.ts",
+          "previous_filename": null
+        },
+        {
+          "path": "packages/twenty-server/src/modules/permavent-weekly-sales-report/permavent-weekly-sales-report.module.ts",
+          "previous_filename": null
+        },
+        {
+          "path": "packages/twenty-server/src/modules/permavent-weekly-sales-report/services/__tests__/permavent-weekly-sales-report-source.service.spec.ts",
+          "previous_filename": null
+        },
+        {
+          "path": "packages/twenty-server/src/modules/permavent-weekly-sales-report/services/permavent-weekly-sales-report-source.service.ts",
+          "previous_filename": null
+        },
+        {
+          "path": "packages/twenty-server/src/modules/permavent-weekly-sales-report/types/permavent-weekly-sales-report-source.type.ts",
+          "previous_filename": null
+        },
+        {
+          "path": "packages/twenty-server/src/modules/permavent-weekly-sales-report/utils/__tests__/get-permavent-london-week-window.util.spec.ts",
+          "previous_filename": null
+        },
+        {
+          "path": "packages/twenty-server/src/modules/permavent-weekly-sales-report/utils/get-permavent-london-week-window.util.ts",
+          "previous_filename": null
+        }
+      ],
+      "changed_files": 12,
+      "error": null
+    },
+    {
+      "sha": "ba3a8ab31cfab67270d24e4c5a5ff407c51e17f5",
+      "files": [
+        {
+          "path": "packages/twenty-server/src/database/commands/cron-register-all.command.ts",
+          "previous_filename": null
+        },
+        {
+          "path": "packages/twenty-server/src/database/commands/database-command.module.ts",
+          "previous_filename": null
+        },
+        {
+          "path": "packages/twenty-server/src/database/commands/upgrade-version-command/2-30/2-30-instance-command-fast-1786230000000-create-permavent-user-audit-entry.ts",
+          "previous_filename": null
+        },
+        {
+          "path": "packages/twenty-server/src/database/commands/upgrade-version-command/instance-commands.constant.ts",
+          "previous_filename": null
+        },
+        {
+          "path": "packages/twenty-server/src/engine/api/graphql/workspace-query-runner/listeners/__tests__/entity-events-to-db.listener.spec.ts",
+          "previous_filename": null
+        },
+        {
+          "path": "packages/twenty-server/src/engine/api/graphql/workspace-query-runner/listeners/entity-events-to-db.listener.ts",
+          "previous_filename": null
+        },
+        {
+          "path": "packages/twenty-server/src/engine/api/graphql/workspace-query-runner/workspace-query-runner.module.ts",
+          "previous_filename": null
+        },
+        {
+          "path": "packages/twenty-server/src/engine/core-modules/core-engine.module.ts",
+          "previous_filename": null
+        },
+        {
+          "path": "packages/twenty-server/src/engine/core-modules/permavent-user-audit/__tests__/permavent-user-audit.resolver.spec.ts",
+          "previous_filename": null
+        },
+        {
+          "path": "packages/twenty-server/src/engine/core-modules/permavent-user-audit/__tests__/permavent-user-audit.service.spec.ts",
+          "previous_filename": null
+        },
+        {
+          "path": "packages/twenty-server/src/engine/core-modules/permavent-user-audit/constants/permavent-user-audit-cleanup-cron-pattern.constant.ts",
+          "previous_filename": null
+        },
+        {
+          "path": "packages/twenty-server/src/engine/core-modules/permavent-user-audit/cron/permavent-user-audit-cleanup.cron.command.ts",
+          "previous_filename": null
+        },
+        {
+          "path": "packages/twenty-server/src/engine/core-modules/permavent-user-audit/cron/permavent-user-audit-cleanup.cron.job.ts",
+          "previous_filename": null
+        },
+        {
+          "path": "packages/twenty-server/src/engine/core-modules/permavent-user-audit/permavent-user-audit-entry.entity.ts",
+          "previous_filename": null
+        },
+        {
+          "path": "packages/twenty-server/src/engine/core-modules/permavent-user-audit/permavent-user-audit.job.ts",
+          "previous_filename": null
+        },
+        {
+          "path": "packages/twenty-server/src/engine/core-modules/permavent-user-audit/permavent-user-audit.module.ts",
+          "previous_filename": null
+        },
+        {
+          "path": "packages/twenty-server/src/engine/core-modules/permavent-user-audit/permavent-user-audit.resolver.ts",
+          "previous_filename": null
+        },
+        {
+          "path": "packages/twenty-server/src/engine/core-modules/permavent-user-audit/permavent-user-audit.service.ts",
+          "previous_filename": null
+        },
+        {
+          "path": "packages/twenty-server/src/engine/core-modules/twenty-config/config-variables.ts",
+          "previous_filename": null
+        }
+      ],
+      "changed_files": 19,
+      "error": null
+    },
+    {
+      "sha": "7d1cca847a9ccbac102e76f52a3a3ce53e14d21d",
+      "files": [
+        {
+          "path": "packages/twenty-front/src/modules/settings/security/components/SettingsUserActivityLog.tsx",
+          "previous_filename": null
+        },
+        {
+          "path": "packages/twenty-front/src/modules/settings/security/graphql/queries/getPermaventUserAuditEntries.ts",
+          "previous_filename": null
+        },
+        {
+          "path": "packages/twenty-front/src/pages/settings/general/SettingsGeneral.tsx",
+          "previous_filename": null
+        }
+      ],
+      "changed_files": 3,
+      "error": null
+    },
+    {
+      "sha": "b5dbe51304898b98dc28add9a5f8e2d2e77756d2",
+      "files": [
+        {
+          "path": "packages/twenty-sdk/project.json",
+          "previous_filename": null
+        }
+      ],
+      "changed_files": 1,
+      "error": null
+    },
+    {
+      "sha": "3a1139feed59d252baeedcdac67cb9905df02b4e",
+      "files": [
+        {
+          "path": "packages/twenty-front/src/modules/side-panel/components/SidePanelForDesktop.tsx",
+          "previous_filename": null
+        },
+        {
+          "path": "packages/twenty-front/src/modules/side-panel/components/SidePanelWidthEffect.tsx",
+          "previous_filename": null
+        },
+        {
+          "path": "packages/twenty-front/src/modules/side-panel/permavent-company-wide-side-panel/constants/PermaventCompanyWideSidePanel.ts",
+          "previous_filename": null
+        },
+        {
+          "path": "packages/twenty-front/src/modules/side-panel/permavent-company-wide-side-panel/constants/PermaventCompanyWideSidePanelFeatureFlag.ts",
+          "previous_filename": null
+        },
+        {
+          "path": "packages/twenty-front/src/modules/side-panel/permavent-company-wide-side-panel/hooks/__tests__/useIsPermaventCompanyWideSidePanel.test.tsx",
+          "previous_filename": null
+        },
+        {
+          "path": "packages/twenty-front/src/modules/side-panel/permavent-company-wide-side-panel/hooks/useIsPermaventCompanyWideSidePanel.ts",
+          "previous_filename": null
+        },
+        {
+          "path": "packages/twenty-front/src/modules/side-panel/permavent-company-wide-side-panel/hooks/useParentElementWidth.ts",
+          "previous_filename": null
+        },
+        {
+          "path": "packages/twenty-front/src/modules/side-panel/permavent-company-wide-side-panel/states/permaventCompanyWideSidePanelWidthState.ts",
+          "previous_filename": null
+        },
+        {
+          "path": "packages/twenty-front/src/modules/side-panel/permavent-company-wide-side-panel/utils/__tests__/getPermaventCompanyWideSidePanelLayout.test.ts",
+          "previous_filename": null
+        },
+        {
+          "path": "packages/twenty-front/src/modules/side-panel/permavent-company-wide-side-panel/utils/__tests__/isPermaventWideSidePanelObject.test.ts",
+          "previous_filename": null
+        },
+        {
+          "path": "packages/twenty-front/src/modules/side-panel/permavent-company-wide-side-panel/utils/getPermaventCompanyWideSidePanelLayout.ts",
+          "previous_filename": null
+        },
+        {
+          "path": "packages/twenty-front/src/modules/side-panel/permavent-company-wide-side-panel/utils/isPermaventWideSidePanelObject.ts",
+          "previous_filename": null
+        },
+        {
+          "path": "packages/twenty-front/src/modules/ui/layout/resizable-panel/components/ResizablePanelGap.tsx",
+          "previous_filename": null
+        },
+        {
+          "path": "packages/twenty-front/src/modules/ui/layout/resizable-panel/utils/__tests__/getKeyboardResizedPanelWidth.test.ts",
+          "previous_filename": null
+        },
+        {
+          "path": "packages/twenty-front/src/modules/ui/layout/resizable-panel/utils/getKeyboardResizedPanelWidth.ts",
+          "previous_filename": null
+        },
+        {
+          "path": "packages/twenty-server/src/engine/core-modules/feature-flag/constants/public-feature-flag.const.ts",
+          "previous_filename": null
+        },
+        {
+          "path": "packages/twenty-shared/src/types/FeatureFlagKey.ts",
+          "previous_filename": null
+        }
+      ],
+      "changed_files": 17,
+      "error": null
+    },
+    {
+      "sha": "568d02352a99c584d70bc2fb75f3b506273916ab",
+      "files": [
+        {
+          "path": "packages/twenty-front/src/modules/activities/notes/components/CompactNoteList.tsx",
+          "previous_filename": null
+        },
+        {
+          "path": "packages/twenty-front/src/modules/activities/notes/components/NotesCard.tsx",
+          "previous_filename": null
+        },
+        {
+          "path": "packages/twenty-front/src/modules/activities/tasks/components/CompactTasksCard.tsx",
+          "previous_filename": null
+        },
+        {
+          "path": "packages/twenty-front/src/modules/activities/tasks/components/TaskRow.tsx",
+          "previous_filename": null
+        },
+        {
+          "path": "packages/twenty-front/src/modules/activities/tasks/utils/__tests__/sortOpenTasksForCompactWidget.test.ts",
+          "previous_filename": null
+        },
+        {
+          "path": "packages/twenty-front/src/modules/activities/tasks/utils/sortOpenTasksForCompactWidget.ts",
+          "previous_filename": null
+        },
+        {
+          "path": "packages/twenty-front/src/modules/page-layout/constants/PermaventCompanyOverviewWidgetsFeatureFlag.ts",
+          "previous_filename": null
+        },
+        {
+          "path": "packages/twenty-front/src/modules/page-layout/utils/__tests__/canCreatePermaventCompanyOverviewWidgets.test.ts",
+          "previous_filename": null
+        },
+        {
+          "path": "packages/twenty-front/src/modules/page-layout/utils/__tests__/createDefaultActivityWidget.test.ts",
+          "previous_filename": null
+        },
+        {
+          "path": "packages/twenty-front/src/modules/page-layout/utils/canCreatePermaventCompanyOverviewWidgets.ts",
+          "previous_filename": null
+        },
+        {
+          "path": "packages/twenty-front/src/modules/page-layout/utils/createDefaultActivityWidget.ts",
+          "previous_filename": null
+        },
+        {
+          "path": "packages/twenty-front/src/modules/page-layout/widgets/notes/components/NoteWidget.tsx",
+          "previous_filename": null
+        },
+        {
+          "path": "packages/twenty-front/src/modules/page-layout/widgets/tasks/components/TaskWidget.tsx",
+          "previous_filename": null
+        },
+        {
+          "path": "packages/twenty-front/src/modules/page-layout/widgets/utils/__tests__/isCompactActivityWidgetLayout.test.ts",
+          "previous_filename": null
+        },
+        {
+          "path": "packages/twenty-front/src/modules/page-layout/widgets/utils/isCompactActivityWidgetLayout.ts",
+          "previous_filename": null
+        },
+        {
+          "path": "packages/twenty-front/src/modules/side-panel/pages/page-layout/components/SidePanelPageLayoutRecordPageWidgetTypeSelect.tsx",
+          "previous_filename": null
+        },
+        {
+          "path": "packages/twenty-server/src/engine/core-modules/feature-flag/constants/public-feature-flag.const.ts",
+          "previous_filename": null
+        },
+        {
+          "path": "packages/twenty-shared/src/types/FeatureFlagKey.ts",
+          "previous_filename": null
+        }
+      ],
+      "changed_files": 18,
+      "error": null
+    },
+    {
+      "sha": "8badc400a845468f82003ff9897c47898c2cc51a",
+      "files": [
+        {
+          "path": "packages/twenty-front-component-renderer/src/__stories__/FrontComponentRenderer.stories.tsx",
+          "previous_filename": null
+        },
+        {
+          "path": "packages/twenty-front-component-renderer/src/__stories__/Geometry.stories.tsx",
+          "previous_filename": null
+        },
+        {
+          "path": "packages/twenty-front-component-renderer/src/__stories__/UILibraries.stories.tsx",
+          "previous_filename": null
+        },
+        {
+          "path": "packages/twenty-front-component-renderer/src/__stories__/shared/test-utils/createFrontComponentStoryMeta.ts",
+          "previous_filename": null
+        },
+        {
+          "path": "packages/twenty-front-component-renderer/src/__stories__/shared/test-utils/runFrontComponentStory.ts",
+          "previous_filename": null
+        },
+        {
+          "path": "packages/twenty-front-component-renderer/src/types/FrontComponentExecutionContext.ts",
+          "previous_filename": null
+        },
+        {
+          "path": "packages/twenty-front/src/modules/front-components/hooks/__tests__/useFrontComponentExecutionContext.test.tsx",
+          "previous_filename": null
+        },
+        {
+          "path": "packages/twenty-front/src/modules/front-components/hooks/useFrontComponentExecutionContext.ts",
+          "previous_filename": null
+        },
+        {
+          "path": "packages/twenty-sdk/src/sdk/front-component/types/FrontComponentExecutionContext.ts",
+          "previous_filename": null
+        }
+      ],
+      "changed_files": 9,
+      "error": null
+    }
+  ]
+}
