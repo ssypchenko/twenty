@@ -3,7 +3,7 @@ import { Injectable, Logger } from '@nestjs/common';
 import { type ObjectLiteral } from 'typeorm';
 
 import { normalisePermaventSalesRepCode } from 'src/engine/core-modules/permavent-sales-scope/assignments/normalise-permavent-sales-rep-code.util';
-import { GlobalWorkspaceOrmManager } from 'src/engine/twenty-orm/global-workspace-orm.manager';
+import { WorkspaceOrmManager } from 'src/engine/twenty-orm/workspace-orm.manager';
 import { buildSystemAuthContext } from 'src/engine/twenty-orm/utils/build-system-auth-context.util';
 
 const PERMAVENT_ASSIGNMENT_OBJECT_NAME = 'salesrepassignment';
@@ -25,7 +25,7 @@ export class PermaventSalesRepAssignmentService {
   private readonly logger = new Logger(PermaventSalesRepAssignmentService.name);
 
   constructor(
-    private readonly globalWorkspaceOrmManager: GlobalWorkspaceOrmManager,
+    private readonly workspaceOrmManager: WorkspaceOrmManager,
   ) {}
 
   public async findAllowedSalesRepCodes({
@@ -110,10 +110,10 @@ export class PermaventSalesRepAssignmentService {
   > {
     const businessDate = this.formatBusinessDate(at);
 
-    return await this.globalWorkspaceOrmManager.executeInWorkspaceContext(
+    return await this.workspaceOrmManager.executeInWorkspaceContext(
       async () => {
         const assignmentRepository =
-          await this.globalWorkspaceOrmManager.getRepository<PermaventSalesRepAssignmentRecord>(
+          await this.workspaceOrmManager.getRepository<PermaventSalesRepAssignmentRecord>(
             PERMAVENT_ASSIGNMENT_OBJECT_NAME,
             { shouldBypassPermissionChecks: true },
           );
