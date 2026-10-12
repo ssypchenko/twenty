@@ -1,0 +1,109 @@
+{
+  "target": "twenty/v2.46.0",
+  "batch": 7,
+  "range": [
+    108,
+    126
+  ],
+  "files": [
+    {
+      "path": "packages/twenty-server/src/engine/core-modules/code-interpreter/drivers/__tests__/permavent-internal.driver.spec.ts",
+      "exists": false,
+      "error_type": "404",
+      "error": null
+    },
+    {
+      "path": "packages/twenty-server/src/engine/core-modules/code-interpreter/drivers/permavent-internal.driver.ts",
+      "exists": false,
+      "error_type": "404",
+      "error": null
+    },
+    {
+      "path": "packages/twenty-server/src/engine/core-modules/core-engine.module.ts",
+      "exists": true,
+      "blob_sha": "c797477c68e464ae0f6b63468c6293543000134d"
+    },
+    {
+      "path": "packages/twenty-server/src/engine/core-modules/email-verification/services/email-verification.service.ts",
+      "exists": true,
+      "blob_sha": "81ed73fbcf2b9b5e72ddaa98338df802771a5196"
+    },
+    {
+      "path": "packages/twenty-server/src/engine/core-modules/email/__tests__/email-templates-rendering.spec.ts",
+      "exists": true,
+      "blob_sha": "081c6fbb2e397b120bb59878fb38ebf308f56118"
+    },
+    {
+      "path": "packages/twenty-server/src/engine/core-modules/feature-flag/constants/public-feature-flag.const.ts",
+      "exists": true,
+      "blob_sha": "8e67afd95fefcaf1d47fcd1d512e3d17896b8255"
+    },
+    {
+      "path": "packages/twenty-server/src/engine/core-modules/logic-function/logic-function-trigger/logic-function-trigger.module.ts",
+      "exists": true,
+      "blob_sha": "368be2aa0d2d6a1dbccec78f8a2811167bc3316b"
+    },
+    {
+      "path": "packages/twenty-server/src/engine/core-modules/logic-function/logic-function-trigger/logic-function-trigger.service.ts",
+      "exists": true,
+      "blob_sha": "3f5e6d68eb2bdf3e4e724055899401e435a24e91"
+    },
+    {
+      "path": "packages/twenty-server/src/engine/core-modules/logic-function/logic-function-trigger/triggers/route/route-trigger.service.ts",
+      "exists": true,
+      "blob_sha": "d69d89e0d26a3283f73c58753d443c4f88df74bc"
+    },
+    {
+      "path": "packages/twenty-server/src/engine/core-modules/logic-function/logic-function-trigger/triggers/route/utils/__tests__/build-logic-function-event.util.spec.ts",
+      "exists": true,
+      "blob_sha": "a0f9617580d21e419bead63e7234a4149ec38829"
+    },
+    {
+      "path": "packages/twenty-server/src/engine/core-modules/logic-function/logic-function-trigger/triggers/route/utils/build-logic-function-event.util.ts",
+      "exists": true,
+      "blob_sha": "15ab17f3bc77752ff3dd89529542f9f6b6fe6861"
+    },
+    {
+      "path": "packages/twenty-server/src/engine/core-modules/permavent-delegated-api/constants/permavent-delegated-context-header.constant.ts",
+      "exists": false,
+      "error_type": "404",
+      "error": null
+    },
+    {
+      "path": "packages/twenty-server/src/engine/core-modules/permavent-delegated-api/permavent-delegated-api.module.ts",
+      "exists": false,
+      "error_type": "404",
+      "error": null
+    },
+    {
+      "path": "packages/twenty-server/src/engine/core-modules/permavent-delegated-api/services/__tests__/permavent-delegated-context.service.spec.ts",
+      "exists": false,
+      "error_type": "404",
+      "error": null
+    },
+    {
+      "path": "packages/twenty-server/src/engine/core-modules/permavent-delegated-api/services/permavent-delegated-context.service.ts",
+      "exists": false,
+      "error_type": "404",
+      "error": null
+    },
+    {
+      "path": "packages/twenty-server/src/engine/core-modules/permavent-sales-scope/__tests__/permavent-sales-scope.service.spec.ts",
+      "exists": false,
+      "error_type": "404",
+      "error": null
+    },
+    {
+      "path": "packages/twenty-server/src/engine/core-modules/permavent-sales-scope/assignments/__tests__/permavent-sales-rep-assignment.service.spec.ts",
+      "exists": false,
+      "error_type": "404",
+      "error": null
+    },
+    {
+      "path": "packages/twenty-server/src/engine/core-modules/permavent-sales-scope/assignments/normalise-permavent-sales-rep-code.util.ts",
+      "exists": false,
+      "error_type": "404",
+      "error": null
+    }
+  ]
+}
