@@ -1,0 +1,96 @@
+{
+  "base": "b1c895c44bfa36537c4ab0be10b171c876e05336",
+  "batch": 3,
+  "files": [
+    {
+      "path": "packages/twenty-front/src/modules/ui/layout/resizable-panel/components/ResizablePanelGap.tsx",
+      "exists": true,
+      "blob_sha": "c426bab6e1f37477c0de4bdba3ed90afcf10409d"
+    },
+    {
+      "path": "packages/twenty-front/src/modules/workspace/hooks/useIsFeatureEnabled.ts",
+      "exists": true,
+      "blob_sha": "e7b5d1843a260923514a3003660268cdd4266737"
+    },
+    {
+      "path": "packages/twenty-front/src/pages/settings/general/SettingsGeneral.tsx",
+      "exists": true,
+      "blob_sha": "d64f5ba364df2629c8386831f0f21c01df2813f2"
+    },
+    {
+      "path": "packages/twenty-sdk/project.json",
+      "exists": true,
+      "blob_sha": "9a5adc2073829b1da75c1150370932880b0be3c3"
+    },
+    {
+      "path": "packages/twenty-sdk/src/sdk/front-component/types/FrontComponentExecutionContext.ts",
+      "exists": true,
+      "blob_sha": "9515c8883f2e035c50e80ac94575eb655e24ddbf"
+    },
+    {
+      "path": "packages/twenty-server/@types/express.d.ts",
+      "exists": true,
+      "blob_sha": "4c92df2bc0cf1424fbf7b308663d13bbd99675f0"
+    },
+    {
+      "path": "packages/twenty-server/src/database/commands/cron-register-all.command.ts",
+      "exists": true,
+      "blob_sha": "9e6f2120b2baa31ab056427752d9861693350132"
+    },
+    {
+      "path": "packages/twenty-server/src/database/commands/database-command.module.ts",
+      "exists": true,
+      "blob_sha": "8f191ce8414b5c41d204bdf0dd0f9f57a7d32d09"
+    },
+    {
+      "path": "packages/twenty-server/src/database/commands/upgrade-version-command/instance-commands.constant.ts",
+      "exists": true,
+      "blob_sha": "b3ced395a37e7101ec982df2423433c8e26f7dc4"
+    },
+    {
+      "path": "packages/twenty-server/src/engine/api/common/common-query-runners/common-base-query-runner.service.ts",
+      "exists": true,
+      "blob_sha": "b33039c425a5ebb14c8929044c4bbfd16e8168cc"
+    },
+    {
+      "path": "packages/twenty-server/src/engine/api/common/core-common-api.module.ts",
+      "exists": true,
+      "blob_sha": "fb58808e8ce3d4f17c2cac5cfb14fed9088a33a9"
+    },
+    {
+      "path": "packages/twenty-server/src/engine/api/graphql/workspace-query-runner/listeners/entity-events-to-db.listener.ts",
+      "exists": true,
+      "blob_sha": "86876782e47faed5b16b0b03b0ffdca3799d4851"
+    },
+    {
+      "path": "packages/twenty-server/src/engine/api/graphql/workspace-query-runner/workspace-query-runner.module.ts",
+      "exists": true,
+      "blob_sha": "aca96187c5665cee1560220797e2abf64c76101c"
+    },
+    {
+      "path": "packages/twenty-server/src/engine/api/mcp/controllers/mcp-core.controller.ts",
+      "exists": true,
+      "blob_sha": "d08aee12911a4f5212b75172be332c83bb4a1461"
+    },
+    {
+      "path": "packages/twenty-server/src/engine/api/mcp/guards/__tests__/mcp-auth.guard.spec.ts",
+      "exists": true,
+      "blob_sha": "80d893cb4a0915025b43a8043ed6919f7d940d9c"
+    },
+    {
+      "path": "packages/twenty-server/src/engine/api/mcp/guards/mcp-auth.guard.ts",
+      "exists": true,
+      "blob_sha": "8df66a919f5ff3a4cd41f74a2a1330b8fc6d5b88"
+    },
+    {
+      "path": "packages/twenty-server/src/engine/api/mcp/services/mcp-protocol.service.ts",
+      "exists": true,
+      "blob_sha": "e4b4e870312893362f188de998214a7509c9cb93"
+    },
+    {
+      "path": "packages/twenty-server/src/engine/api/rest/core/handlers/rest-api-base.handler.ts",
+      "exists": true,
+      "blob_sha": "5bdb30263274c9cf183571760c58df3b4a3d7c74"
+    }
+  ]
+}
