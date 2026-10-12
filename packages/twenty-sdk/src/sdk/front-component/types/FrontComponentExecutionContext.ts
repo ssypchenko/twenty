@@ -7,6 +7,8 @@ import { type FrontComponentToolCall } from './FrontComponentToolCall';
 export type FrontComponentExecutionContext = {
   frontComponentId: string;
   userId: string | null;
+  /** Display-context identity of the currently logged-in workspace member. Never use as proof of authorization. */
+  workspaceMemberId?: string | null;
   /**
    * @deprecated Use `selectedRecordIds` instead. Derive single record as `selectedRecordIds.length === 1 ? selectedRecordIds[0] : null`.
    */
