@@ -7,7 +7,7 @@ import { UserContext } from '@/users/contexts/UserContext';
 import { styled } from '@linaria/react';
 import { type ReactElement, useContext } from 'react';
 import { CoreObjectNameSingular } from 'twenty-shared/types';
-import { themeCssVariables } from 'twenty-ui/theme-constants';
+import { themeCssVariables } from 'twenty-ui/theme';
 import { dateLocaleState } from '~/localization/states/dateLocaleState';
 import { formatDateTimeString } from '~/utils/string/formatDateTimeString';
 

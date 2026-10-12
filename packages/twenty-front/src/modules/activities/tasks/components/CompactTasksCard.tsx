@@ -10,8 +10,8 @@ import { styled } from '@linaria/react';
 import { t } from '@lingui/core/macro';
 import { CoreObjectNameSingular } from 'twenty-shared/types';
 import { IconPlus } from 'twenty-ui/icon';
-import { Button } from 'twenty-ui/input';
-import { themeCssVariables } from 'twenty-ui/theme-constants';
+import { Button } from 'twenty-ui/primitives/input';
+import { themeCssVariables } from 'twenty-ui/theme';
 
 const StyledContainer = styled.div`
   display: flex;
@@ -65,12 +65,10 @@ export const CompactTasksCard = () => {
           <span>{t`No open tasks`}</span>
           {canCreateActivity && (
             <Button
-              Icon={IconPlus}
+              startIcon={<IconPlus />}
               size="small"
-              title={t`New task`}
-              variant="secondary"
-              onClick={createActivity}
-            />
+                            variant="outline"
+              onClick={createActivity}>{t`New task`}</Button>
           )}
         </StyledEmptyContainer>
       ) : (
@@ -81,12 +79,10 @@ export const CompactTasksCard = () => {
             </StyledOpenCount>
             {canCreateActivity && (
               <Button
-                Icon={IconPlus}
+                startIcon={<IconPlus />}
                 size="small"
-                title={t`New task`}
-                variant="secondary"
-                onClick={createActivity}
-              />
+                                variant="outline"
+                onClick={createActivity}>{t`New task`}</Button>
             )}
           </StyledHeader>
           <ActivityList>
