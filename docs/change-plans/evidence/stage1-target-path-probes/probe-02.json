@@ -1,0 +1,110 @@
+{
+  "target": "twenty/v2.46.0",
+  "batch": 2,
+  "range": [
+    18,
+    36
+  ],
+  "files": [
+    {
+      "path": "packages/twenty-front-component-renderer/src/types/FrontComponentExecutionContext.ts",
+      "exists": false,
+      "error_type": "404",
+      "error": null
+    },
+    {
+      "path": "packages/twenty-front/public/images/branding/permavent-logo.png",
+      "exists": false,
+      "error_type": "404",
+      "error": null
+    },
+    {
+      "path": "packages/twenty-front/src/generated-metadata/graphql.ts",
+      "exists": true,
+      "blob_sha": "dcdfca328157d946f1ca12a6f39116c14d611c17"
+    },
+    {
+      "path": "packages/twenty-front/src/modules/activities/notes/components/CompactNoteList.tsx",
+      "exists": false,
+      "error_type": "404",
+      "error": null
+    },
+    {
+      "path": "packages/twenty-front/src/modules/activities/notes/components/NotesCard.tsx",
+      "exists": true,
+      "blob_sha": "967184b34e833f8a26c481228c34f4d6919c7f59"
+    },
+    {
+      "path": "packages/twenty-front/src/modules/activities/tasks/components/CompactTasksCard.tsx",
+      "exists": false,
+      "error_type": "404",
+      "error": null
+    },
+    {
+      "path": "packages/twenty-front/src/modules/activities/tasks/components/TaskRow.tsx",
+      "exists": true,
+      "blob_sha": "c5d09ad174cdfd6f6d7c200e85d23b90ee0f9988"
+    },
+    {
+      "path": "packages/twenty-front/src/modules/activities/tasks/utils/__tests__/sortOpenTasksForCompactWidget.test.ts",
+      "exists": false,
+      "error_type": "404",
+      "error": null
+    },
+    {
+      "path": "packages/twenty-front/src/modules/activities/tasks/utils/sortOpenTasksForCompactWidget.ts",
+      "exists": false,
+      "error_type": "404",
+      "error": null
+    },
+    {
+      "path": "packages/twenty-front/src/modules/front-components/hooks/__tests__/useFrontComponentExecutionContext.test.tsx",
+      "exists": true,
+      "blob_sha": "e6d6458f93a247a8efd5ff4a0b98bb0ab14a25ef"
+    },
+    {
+      "path": "packages/twenty-front/src/modules/front-components/hooks/useFrontComponentExecutionContext.ts",
+      "exists": true,
+      "blob_sha": "12f6c0328df4993dae40b0a0e502c60d6d9102b6"
+    },
+    {
+      "path": "packages/twenty-front/src/modules/layout-customization/hooks/useSaveLayoutCustomization.ts",
+      "exists": true,
+      "blob_sha": "807e334e632b390af97ad9e3b2aecd428f81e334"
+    },
+    {
+      "path": "packages/twenty-front/src/modules/page-layout/components/PageLayoutTabsRenderer.tsx",
+      "exists": true,
+      "blob_sha": "b8898b7f5a268ea4c2947baaea4dd4d6982da21a"
+    },
+    {
+      "path": "packages/twenty-front/src/modules/page-layout/constants/PermaventCompanyOverviewWidgetsFeatureFlag.ts",
+      "exists": false,
+      "error_type": "404",
+      "error": null
+    },
+    {
+      "path": "packages/twenty-front/src/modules/page-layout/utils/__tests__/canCreatePermaventCompanyOverviewWidgets.test.ts",
+      "exists": false,
+      "error_type": "404",
+      "error": null
+    },
+    {
+      "path": "packages/twenty-front/src/modules/page-layout/utils/__tests__/convertPageLayoutDraftToUpdateInput.test.ts",
+      "exists": true,
+      "blob_sha": "dc28d42856464aa4bd7b44a2821d97392095274d"
+    },
+    {
+      "path": "packages/twenty-front/src/modules/page-layout/utils/__tests__/createDefaultActivityWidget.test.ts",
+      "exists": false,
+      "error_type": "404",
+      "error": null
+    },
+    {
+      "path": "packages/twenty-front/src/modules/page-layout/utils/canCreatePermaventCompanyOverviewWidgets.ts",
+      "exists": false,
+      "error_type": "404",
+      "error": null
+    }
+  ]
+}
