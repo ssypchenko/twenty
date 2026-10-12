@@ -7,7 +7,7 @@ import { FieldMetadataType } from 'twenty-shared/types';
 
 import { TwentyConfigService } from 'src/engine/core-modules/twenty-config/twenty-config.service';
 import { FieldMetadataEntity } from 'src/engine/metadata-modules/field-metadata/field-metadata.entity';
-import { GlobalWorkspaceOrmManager } from 'src/engine/twenty-orm/global-workspace-orm.manager';
+import { WorkspaceOrmManager } from 'src/engine/twenty-orm/workspace-orm.manager';
 import { buildSystemAuthContext } from 'src/engine/twenty-orm/utils/build-system-auth-context.util';
 import { type WorkspaceEventBatch } from 'src/engine/workspace-event-emitter/types/workspace-event-batch.type';
 import { WorkspaceMemberWorkspaceEntity } from 'src/modules/workspace-member/standard-objects/workspace-member.workspace-entity';
@@ -38,7 +38,7 @@ export class PermaventUserAuditService {
     @InjectRepository(FieldMetadataEntity)
     private readonly fieldMetadataRepository: Repository<FieldMetadataEntity>,
     private readonly config: TwentyConfigService,
-    private readonly globalWorkspaceOrmManager: GlobalWorkspaceOrmManager,
+    private readonly workspaceOrmManager: WorkspaceOrmManager,
   ) {}
 
   async recordCrudBatch(
@@ -301,10 +301,10 @@ export class PermaventUserAuditService {
     if (uniqueWorkspaceMemberIds.length === 0) return new Map();
 
     try {
-      return await this.globalWorkspaceOrmManager.executeInWorkspaceContext(
+      return await this.workspaceOrmManager.executeInWorkspaceContext(
         async () => {
           const workspaceMemberRepository =
-            await this.globalWorkspaceOrmManager.getRepository<WorkspaceMemberWorkspaceEntity>(
+            await this.workspaceOrmManager.getRepository<WorkspaceMemberWorkspaceEntity>(
               'workspaceMember',
               { shouldBypassPermissionChecks: true },
             );

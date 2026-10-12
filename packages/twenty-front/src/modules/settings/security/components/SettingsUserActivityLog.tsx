@@ -13,7 +13,7 @@ import { useState } from 'react';
 import { IconBox, IconCopy, IconHistory, IconUser } from 'twenty-ui/icon';
 import { Button, type SelectOption } from 'twenty-ui/input';
 import { Card } from 'twenty-ui/surfaces';
-import { themeCssVariables } from 'twenty-ui/theme-constants';
+import { themeCssVariables } from 'twenty-ui/theme';
 import { useCopyToClipboard } from '~/hooks/useCopyToClipboard';
 
 const OMITTED_VALUE = '[VALUE_OMITTED]';
