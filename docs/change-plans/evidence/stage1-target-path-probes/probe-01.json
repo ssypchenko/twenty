@@ -1,0 +1,100 @@
+{
+  "target": "twenty/v2.46.0",
+  "batch": 1,
+  "range": [
+    0,
+    18
+  ],
+  "files": [
+    {
+      "path": "packages/twenty-emails/src/components/BaseEmail.tsx",
+      "exists": true,
+      "blob_sha": "63d24b422aae3b5e71afa91dd8ac4b62f7528311"
+    },
+    {
+      "path": "packages/twenty-emails/src/components/BaseHead.tsx",
+      "exists": true,
+      "blob_sha": "61680ce5dc5e0c5b806266062f8f7826fa6debcc"
+    },
+    {
+      "path": "packages/twenty-emails/src/components/Footer.tsx",
+      "exists": true,
+      "blob_sha": "66837123172c552ee6ab668507b5cd7b2f43ba73"
+    },
+    {
+      "path": "packages/twenty-emails/src/components/Logo.tsx",
+      "exists": true,
+      "blob_sha": "784aeb169b0778aae7a05faa400ce603f9511a50"
+    },
+    {
+      "path": "packages/twenty-emails/src/components/WhatIsTwenty.tsx",
+      "exists": true,
+      "blob_sha": "096a6c0b5812352306ef94b2ce3a175941590655"
+    },
+    {
+      "path": "packages/twenty-emails/src/constants/DefaultWorkspaceLogo.ts",
+      "exists": true,
+      "blob_sha": "7428bf82b1ec56dc69719834e8a4cf4bfdfa7fd4"
+    },
+    {
+      "path": "packages/twenty-emails/src/emails/clean-suspended-workspace.email.tsx",
+      "exists": true,
+      "blob_sha": "3b867236894e4467652a80ae82deb7db931f79fc"
+    },
+    {
+      "path": "packages/twenty-emails/src/emails/password-reset-link.email.tsx",
+      "exists": true,
+      "blob_sha": "51a9c8e62f2ee3200a542a2528b5d64fb5db6e4c"
+    },
+    {
+      "path": "packages/twenty-emails/src/emails/password-update-notify.email.tsx",
+      "exists": true,
+      "blob_sha": "f8c73db9192b2a66583684dacb64e70c7f55dc90"
+    },
+    {
+      "path": "packages/twenty-emails/src/emails/send-email-verification-link.email.tsx",
+      "exists": true,
+      "blob_sha": "c9acec0bad33425d565f9936580649cb90fb4193"
+    },
+    {
+      "path": "packages/twenty-emails/src/emails/send-invite-link.email.tsx",
+      "exists": true,
+      "blob_sha": "d29b3ba13e1e4789531f6e70828d0c913154e519"
+    },
+    {
+      "path": "packages/twenty-emails/src/emails/validate-approved-access-domain.email.tsx",
+      "exists": true,
+      "blob_sha": "05104d01b28b3bb058defce88e9b212b4788f622"
+    },
+    {
+      "path": "packages/twenty-emails/src/emails/warn-suspended-workspace.email.tsx",
+      "exists": true,
+      "blob_sha": "9443a4fcfbdbc5df15c456abb82b544c0867b776"
+    },
+    {
+      "path": "packages/twenty-front-component-renderer/src/__stories__/FrontComponentRenderer.stories.tsx",
+      "exists": true,
+      "blob_sha": "3bea8de4c378b8dbec88cd8df2b6778ebbe6e181"
+    },
+    {
+      "path": "packages/twenty-front-component-renderer/src/__stories__/Geometry.stories.tsx",
+      "exists": true,
+      "blob_sha": "ac98de1635ba6b1441fa4f629d08bb830432d5be"
+    },
+    {
+      "path": "packages/twenty-front-component-renderer/src/__stories__/UILibraries.stories.tsx",
+      "exists": true,
+      "blob_sha": "171c6204e18731c9bed31de87ed2c8e499d3a327"
+    },
+    {
+      "path": "packages/twenty-front-component-renderer/src/__stories__/shared/test-utils/createFrontComponentStoryMeta.ts",
+      "exists": true,
+      "blob_sha": "18fe742156234cd0da59b982d41c9003941d2496"
+    },
+    {
+      "path": "packages/twenty-front-component-renderer/src/__stories__/shared/test-utils/runFrontComponentStory.ts",
+      "exists": true,
+      "blob_sha": "ffd1bcc978f8053a172b311227736a585b350933"
+    }
+  ]
+}
