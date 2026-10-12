@@ -1,0 +1,116 @@
+{
+  "target": "twenty/v2.46.0",
+  "batch": 11,
+  "range": [
+    180,
+    198
+  ],
+  "files": [
+    {
+      "path": "packages/twenty-shared/src/types/PermaventSalesScope.ts",
+      "exists": false,
+      "error_type": "404",
+      "error": null
+    },
+    {
+      "path": "packages/twenty-shared/src/types/index.ts",
+      "exists": true,
+      "blob_sha": "1e3dafe43cc3ed92423c14ee163748791441980d"
+    },
+    {
+      "path": "packages/twenty-ui/vite.config.ts",
+      "exists": true,
+      "blob_sha": "8a26f2e1872224876bf228c86c4ede6b8f3f5e4d"
+    },
+    {
+      "path": "scripts/permavent/build-production-image.sh",
+      "exists": false,
+      "error_type": "404",
+      "error": null
+    },
+    {
+      "path": "scripts/permavent/check-boundaries.sh",
+      "exists": false,
+      "error_type": "404",
+      "error": null
+    },
+    {
+      "path": "scripts/permavent/docs/company-branch-opening-tab.md",
+      "exists": false,
+      "error_type": "404",
+      "error": null
+    },
+    {
+      "path": "scripts/permavent/lib/common.sh",
+      "exists": false,
+      "error_type": "404",
+      "error": null
+    },
+    {
+      "path": "scripts/permavent/preflight.sh",
+      "exists": false,
+      "error_type": "404",
+      "error": null
+    },
+    {
+      "path": "scripts/permavent/run-server-tests.sh",
+      "exists": false,
+      "error_type": "404",
+      "error": null
+    },
+    {
+      "path": "scripts/permavent/server/twenty-backup-test",
+      "exists": false,
+      "error_type": "404",
+      "error": null
+    },
+    {
+      "path": "scripts/permavent/server/twenty-deploy-live-image",
+      "exists": false,
+      "error_type": "404",
+      "error": null
+    },
+    {
+      "path": "scripts/permavent/server/twenty-deploy-test-image",
+      "exists": false,
+      "error_type": "404",
+      "error": null
+    },
+    {
+      "path": "scripts/permavent/server/twenty-promote-test-to-live",
+      "exists": false,
+      "error_type": "404",
+      "error": null
+    },
+    {
+      "path": "scripts/permavent/server/twenty-refresh-test-from-live",
+      "exists": false,
+      "error_type": "404",
+      "error": null
+    },
+    {
+      "path": "scripts/permavent/server/twenty-repair-test-v2-18-upgrade-order",
+      "exists": false,
+      "error_type": "404",
+      "error": null
+    },
+    {
+      "path": "scripts/permavent/server/twenty-repair-v2-18-upgrade-order.sql",
+      "exists": false,
+      "error_type": "404",
+      "error": null
+    },
+    {
+      "path": "scripts/permavent/verify-changes.sh",
+      "exists": false,
+      "error_type": "404",
+      "error": null
+    },
+    {
+      "path": "scripts/permavent/verify-production-image.sh",
+      "exists": false,
+      "error_type": "404",
+      "error": null
+    }
+  ]
+}
