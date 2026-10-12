@@ -8,6 +8,7 @@ import { buildCreatedByFromFullNameMetadata } from 'src/engine/core-modules/acto
 import { isApiKeyAuthContext } from 'src/engine/core-modules/auth/guards/is-api-key-auth-context.guard';
 import { isApplicationAuthContext } from 'src/engine/core-modules/auth/guards/is-application-auth-context.guard';
 import { isUserAuthContext } from 'src/engine/core-modules/auth/guards/is-user-auth-context.guard';
+import { isDelegatedApiKeyAuthContext } from 'src/engine/core-modules/auth/guards/is-delegated-api-key-auth-context.guard';
 import { type WorkspaceAuthContext } from 'src/engine/core-modules/auth/types/workspace-auth-context.type';
 
 export const buildActorMetadataFromAuthContext = (
@@ -17,6 +18,13 @@ export const buildActorMetadataFromAuthContext = (
     return buildCreatedByFromFullNameMetadata({
       fullNameMetadata: authContext.workspaceMember.name,
       workspaceMemberId: authContext.workspaceMemberId,
+    });
+  }
+
+  if (isDelegatedApiKeyAuthContext(authContext)) {
+    return buildCreatedByFromFullNameMetadata({
+      fullNameMetadata: authContext.delegatedActor.workspaceMember.name,
+      workspaceMemberId: authContext.delegatedActor.workspaceMemberId,
     });
   }
 
