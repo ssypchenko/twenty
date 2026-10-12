@@ -105,7 +105,9 @@
       "target_path_exists": true,
       "base_blob_sha": "63d24b422aae3b5e71afa91dd8ac4b62f7528311",
       "target_blob_sha": "63d24b422aae3b5e71afa91dd8ac4b62f7528311",
-      "disposition": "UNCHANGED_UPSTREAM_PATH"
+      "disposition": "UNCHANGED_UPSTREAM_PATH",
+      "local_git_upstream_overlap_status": null,
+      "stage2_merge_handling": "REAPPLY_TARGET_TEST"
     },
     {
       "path": "packages/twenty-emails/src/components/BaseHead.tsx",
@@ -121,7 +123,9 @@
       "target_path_exists": true,
       "base_blob_sha": "61680ce5dc5e0c5b806266062f8f7826fa6debcc",
       "target_blob_sha": "61680ce5dc5e0c5b806266062f8f7826fa6debcc",
-      "disposition": "UNCHANGED_UPSTREAM_PATH"
+      "disposition": "UNCHANGED_UPSTREAM_PATH",
+      "local_git_upstream_overlap_status": null,
+      "stage2_merge_handling": "REAPPLY_TARGET_TEST"
     },
     {
       "path": "packages/twenty-emails/src/components/Footer.tsx",
@@ -137,7 +141,9 @@
       "target_path_exists": true,
       "base_blob_sha": "66837123172c552ee6ab668507b5cd7b2f43ba73",
       "target_blob_sha": "66837123172c552ee6ab668507b5cd7b2f43ba73",
-      "disposition": "UNCHANGED_UPSTREAM_PATH"
+      "disposition": "UNCHANGED_UPSTREAM_PATH",
+      "local_git_upstream_overlap_status": null,
+      "stage2_merge_handling": "REAPPLY_TARGET_TEST"
     },
     {
       "path": "packages/twenty-emails/src/components/Logo.tsx",
@@ -153,7 +159,9 @@
       "target_path_exists": true,
       "base_blob_sha": "784aeb169b0778aae7a05faa400ce603f9511a50",
       "target_blob_sha": "784aeb169b0778aae7a05faa400ce603f9511a50",
-      "disposition": "UNCHANGED_UPSTREAM_PATH"
+      "disposition": "UNCHANGED_UPSTREAM_PATH",
+      "local_git_upstream_overlap_status": null,
+      "stage2_merge_handling": "REAPPLY_TARGET_TEST"
     },
     {
       "path": "packages/twenty-emails/src/components/WhatIsTwenty.tsx",
@@ -169,7 +177,9 @@
       "target_path_exists": true,
       "base_blob_sha": "096a6c0b5812352306ef94b2ce3a175941590655",
       "target_blob_sha": "096a6c0b5812352306ef94b2ce3a175941590655",
-      "disposition": "REMOVAL_REVIEW_TARGET_PRESENT"
+      "disposition": "REMOVAL_REVIEW_TARGET_PRESENT",
+      "local_git_upstream_overlap_status": null,
+      "stage2_merge_handling": "RECONSIDER_DELETION"
     },
     {
       "path": "packages/twenty-emails/src/constants/DefaultWorkspaceLogo.ts",
@@ -185,7 +195,9 @@
       "target_path_exists": true,
       "base_blob_sha": "7428bf82b1ec56dc69719834e8a4cf4bfdfa7fd4",
       "target_blob_sha": "7428bf82b1ec56dc69719834e8a4cf4bfdfa7fd4",
-      "disposition": "REMOVAL_REVIEW_TARGET_PRESENT"
+      "disposition": "REMOVAL_REVIEW_TARGET_PRESENT",
+      "local_git_upstream_overlap_status": null,
+      "stage2_merge_handling": "RECONSIDER_DELETION"
     },
     {
       "path": "packages/twenty-emails/src/emails/clean-suspended-workspace.email.tsx",
@@ -201,7 +213,9 @@
       "target_path_exists": true,
       "base_blob_sha": "3b867236894e4467652a80ae82deb7db931f79fc",
       "target_blob_sha": "3b867236894e4467652a80ae82deb7db931f79fc",
-      "disposition": "UNCHANGED_UPSTREAM_PATH"
+      "disposition": "UNCHANGED_UPSTREAM_PATH",
+      "local_git_upstream_overlap_status": null,
+      "stage2_merge_handling": "REAPPLY_TARGET_TEST"
     },
     {
       "path": "packages/twenty-emails/src/emails/password-reset-link.email.tsx",
@@ -217,7 +231,9 @@
       "target_path_exists": true,
       "base_blob_sha": "51a9c8e62f2ee3200a542a2528b5d64fb5db6e4c",
       "target_blob_sha": "51a9c8e62f2ee3200a542a2528b5d64fb5db6e4c",
-      "disposition": "UNCHANGED_UPSTREAM_PATH"
+      "disposition": "UNCHANGED_UPSTREAM_PATH",
+      "local_git_upstream_overlap_status": null,
+      "stage2_merge_handling": "REAPPLY_TARGET_TEST"
     },
     {
       "path": "packages/twenty-emails/src/emails/password-update-notify.email.tsx",
@@ -233,7 +249,9 @@
       "target_path_exists": true,
       "base_blob_sha": "f8c73db9192b2a66583684dacb64e70c7f55dc90",
       "target_blob_sha": "f8c73db9192b2a66583684dacb64e70c7f55dc90",
-      "disposition": "UNCHANGED_UPSTREAM_PATH"
+      "disposition": "UNCHANGED_UPSTREAM_PATH",
+      "local_git_upstream_overlap_status": null,
+      "stage2_merge_handling": "REAPPLY_TARGET_TEST"
     },
     {
       "path": "packages/twenty-emails/src/emails/send-email-verification-link.email.tsx",
@@ -249,7 +267,9 @@
       "target_path_exists": true,
       "base_blob_sha": "c9acec0bad33425d565f9936580649cb90fb4193",
       "target_blob_sha": "c9acec0bad33425d565f9936580649cb90fb4193",
-      "disposition": "UNCHANGED_UPSTREAM_PATH"
+      "disposition": "UNCHANGED_UPSTREAM_PATH",
+      "local_git_upstream_overlap_status": null,
+      "stage2_merge_handling": "REAPPLY_TARGET_TEST"
     },
     {
       "path": "packages/twenty-emails/src/emails/send-invite-link.email.tsx",
@@ -265,7 +285,9 @@
       "target_path_exists": true,
       "base_blob_sha": "d29b3ba13e1e4789531f6e70828d0c913154e519",
       "target_blob_sha": "d29b3ba13e1e4789531f6e70828d0c913154e519",
-      "disposition": "UNCHANGED_UPSTREAM_PATH"
+      "disposition": "UNCHANGED_UPSTREAM_PATH",
+      "local_git_upstream_overlap_status": null,
+      "stage2_merge_handling": "REAPPLY_TARGET_TEST"
     },
     {
       "path": "packages/twenty-emails/src/emails/validate-approved-access-domain.email.tsx",
@@ -281,7 +303,9 @@
       "target_path_exists": true,
       "base_blob_sha": "05104d01b28b3bb058defce88e9b212b4788f622",
       "target_blob_sha": "05104d01b28b3bb058defce88e9b212b4788f622",
-      "disposition": "UNCHANGED_UPSTREAM_PATH"
+      "disposition": "UNCHANGED_UPSTREAM_PATH",
+      "local_git_upstream_overlap_status": null,
+      "stage2_merge_handling": "REAPPLY_TARGET_TEST"
     },
     {
       "path": "packages/twenty-emails/src/emails/warn-suspended-workspace.email.tsx",
@@ -297,7 +321,9 @@
       "target_path_exists": true,
       "base_blob_sha": "9443a4fcfbdbc5df15c456abb82b544c0867b776",
       "target_blob_sha": "9443a4fcfbdbc5df15c456abb82b544c0867b776",
-      "disposition": "UNCHANGED_UPSTREAM_PATH"
+      "disposition": "UNCHANGED_UPSTREAM_PATH",
+      "local_git_upstream_overlap_status": null,
+      "stage2_merge_handling": "REAPPLY_TARGET_TEST"
     },
     {
       "path": "packages/twenty-front-component-renderer/src/__stories__/FrontComponentRenderer.stories.tsx",
@@ -313,7 +339,9 @@
       "target_path_exists": true,
       "base_blob_sha": "3bea8de4c378b8dbec88cd8df2b6778ebbe6e181",
       "target_blob_sha": "3bea8de4c378b8dbec88cd8df2b6778ebbe6e181",
-      "disposition": "UNCHANGED_UPSTREAM_PATH"
+      "disposition": "UNCHANGED_UPSTREAM_PATH",
+      "local_git_upstream_overlap_status": null,
+      "stage2_merge_handling": "REAPPLY_TARGET_TEST"
     },
     {
       "path": "packages/twenty-front-component-renderer/src/__stories__/Geometry.stories.tsx",
@@ -329,7 +357,9 @@
       "target_path_exists": true,
       "base_blob_sha": "ac98de1635ba6b1441fa4f629d08bb830432d5be",
       "target_blob_sha": "ac98de1635ba6b1441fa4f629d08bb830432d5be",
-      "disposition": "UNCHANGED_UPSTREAM_PATH"
+      "disposition": "UNCHANGED_UPSTREAM_PATH",
+      "local_git_upstream_overlap_status": null,
+      "stage2_merge_handling": "REAPPLY_TARGET_TEST"
     },
     {
       "path": "packages/twenty-front-component-renderer/src/__stories__/UILibraries.stories.tsx",
@@ -345,7 +375,9 @@
       "target_path_exists": true,
       "base_blob_sha": "171c6204e18731c9bed31de87ed2c8e499d3a327",
       "target_blob_sha": "171c6204e18731c9bed31de87ed2c8e499d3a327",
-      "disposition": "UNCHANGED_UPSTREAM_PATH"
+      "disposition": "UNCHANGED_UPSTREAM_PATH",
+      "local_git_upstream_overlap_status": null,
+      "stage2_merge_handling": "REAPPLY_TARGET_TEST"
     },
     {
       "path": "packages/twenty-front-component-renderer/src/__stories__/shared/test-utils/createFrontComponentStoryMeta.ts",
@@ -361,7 +393,9 @@
       "target_path_exists": true,
       "base_blob_sha": "e00ce5523d5551eb5c5300ac0c6520230db30215",
       "target_blob_sha": "18fe742156234cd0da59b982d41c9003941d2496",
-      "disposition": "UPSTREAM_CHANGED_REBASE_MANUALLY"
+      "disposition": "UPSTREAM_CHANGED_REBASE_MANUALLY",
+      "local_git_upstream_overlap_status": "M",
+      "stage2_merge_handling": "MANUAL_REBASE"
     },
     {
       "path": "packages/twenty-front-component-renderer/src/__stories__/shared/test-utils/runFrontComponentStory.ts",
@@ -377,7 +411,9 @@
       "target_path_exists": true,
       "base_blob_sha": "72cae9ca9c6335748f39fe73509ea9a7ab874648",
       "target_blob_sha": "ffd1bcc978f8053a172b311227736a585b350933",
-      "disposition": "UPSTREAM_CHANGED_REBASE_MANUALLY"
+      "disposition": "UPSTREAM_CHANGED_REBASE_MANUALLY",
+      "local_git_upstream_overlap_status": "M",
+      "stage2_merge_handling": "MANUAL_REBASE"
     },
     {
       "path": "packages/twenty-front-component-renderer/src/types/FrontComponentExecutionContext.ts",
@@ -393,7 +429,9 @@
       "target_path_exists": false,
       "base_blob_sha": "9515c8883f2e035c50e80ac94575eb655e24ddbf",
       "target_blob_sha": null,
-      "disposition": "UPSTREAM_REMOVED_OR_MOVED"
+      "disposition": "UPSTREAM_REMOVED_OR_MOVED",
+      "local_git_upstream_overlap_status": "D",
+      "stage2_merge_handling": "TARGET_REMOVED_REWRITE"
     },
     {
       "path": "packages/twenty-front/public/images/branding/permavent-logo.png",
@@ -409,7 +447,9 @@
       "target_path_exists": false,
       "base_blob_sha": null,
       "target_blob_sha": null,
-      "disposition": "CUSTOM_NEW_PATH"
+      "disposition": "CUSTOM_NEW_PATH",
+      "local_git_upstream_overlap_status": null,
+      "stage2_merge_handling": "PORT_CUSTOM_SOURCE"
     },
     {
       "path": "packages/twenty-front/src/generated-metadata/graphql.ts",
@@ -425,7 +465,9 @@
       "target_path_exists": true,
       "base_blob_sha": "13abbd28cc443e1180d569755176e55616ccd230",
       "target_blob_sha": "dcdfca328157d946f1ca12a6f39116c14d611c17",
-      "disposition": "UPSTREAM_CHANGED_REBASE_MANUALLY"
+      "disposition": "UPSTREAM_CHANGED_REBASE_MANUALLY",
+      "local_git_upstream_overlap_status": "M",
+      "stage2_merge_handling": "MANUAL_REBASE"
     },
     {
       "path": "packages/twenty-front/src/modules/activities/notes/components/CompactNoteList.tsx",
@@ -441,7 +483,9 @@
       "target_path_exists": false,
       "base_blob_sha": null,
       "target_blob_sha": null,
-      "disposition": "CUSTOM_NEW_PATH"
+      "disposition": "CUSTOM_NEW_PATH",
+      "local_git_upstream_overlap_status": null,
+      "stage2_merge_handling": "PORT_CUSTOM_SOURCE"
     },
     {
       "path": "packages/twenty-front/src/modules/activities/notes/components/NotesCard.tsx",
@@ -457,7 +501,9 @@
       "target_path_exists": true,
       "base_blob_sha": "967184b34e833f8a26c481228c34f4d6919c7f59",
       "target_blob_sha": "967184b34e833f8a26c481228c34f4d6919c7f59",
-      "disposition": "UNCHANGED_UPSTREAM_PATH"
+      "disposition": "UNCHANGED_UPSTREAM_PATH",
+      "local_git_upstream_overlap_status": null,
+      "stage2_merge_handling": "REAPPLY_TARGET_TEST"
     },
     {
       "path": "packages/twenty-front/src/modules/activities/tasks/components/CompactTasksCard.tsx",
@@ -473,7 +519,9 @@
       "target_path_exists": false,
       "base_blob_sha": null,
       "target_blob_sha": null,
-      "disposition": "CUSTOM_NEW_PATH"
+      "disposition": "CUSTOM_NEW_PATH",
+      "local_git_upstream_overlap_status": null,
+      "stage2_merge_handling": "PORT_CUSTOM_SOURCE"
     },
     {
       "path": "packages/twenty-front/src/modules/activities/tasks/components/TaskRow.tsx",
@@ -489,7 +537,9 @@
       "target_path_exists": true,
       "base_blob_sha": "2439af787e10bb68386d9979b2564e81ce1df2ea",
       "target_blob_sha": "c5d09ad174cdfd6f6d7c200e85d23b90ee0f9988",
-      "disposition": "UPSTREAM_CHANGED_REBASE_MANUALLY"
+      "disposition": "UPSTREAM_CHANGED_REBASE_MANUALLY",
+      "local_git_upstream_overlap_status": "M",
+      "stage2_merge_handling": "MANUAL_REBASE"
     },
     {
       "path": "packages/twenty-front/src/modules/activities/tasks/utils/__tests__/sortOpenTasksForCompactWidget.test.ts",
@@ -505,7 +555,9 @@
       "target_path_exists": false,
       "base_blob_sha": null,
       "target_blob_sha": null,
-      "disposition": "CUSTOM_NEW_PATH"
+      "disposition": "CUSTOM_NEW_PATH",
+      "local_git_upstream_overlap_status": null,
+      "stage2_merge_handling": "PORT_CUSTOM_SOURCE"
     },
     {
       "path": "packages/twenty-front/src/modules/activities/tasks/utils/sortOpenTasksForCompactWidget.ts",
@@ -521,7 +573,9 @@
       "target_path_exists": false,
       "base_blob_sha": null,
       "target_blob_sha": null,
-      "disposition": "CUSTOM_NEW_PATH"
+      "disposition": "CUSTOM_NEW_PATH",
+      "local_git_upstream_overlap_status": null,
+      "stage2_merge_handling": "PORT_CUSTOM_SOURCE"
     },
     {
       "path": "packages/twenty-front/src/modules/front-components/hooks/__tests__/useFrontComponentExecutionContext.test.tsx",
@@ -537,7 +591,9 @@
       "target_path_exists": true,
       "base_blob_sha": "34f72d7afabdff6bffb07f0970aa4eb24a79169b",
       "target_blob_sha": "e6d6458f93a247a8efd5ff4a0b98bb0ab14a25ef",
-      "disposition": "UPSTREAM_CHANGED_REBASE_MANUALLY"
+      "disposition": "UPSTREAM_CHANGED_REBASE_MANUALLY",
+      "local_git_upstream_overlap_status": "M",
+      "stage2_merge_handling": "MANUAL_REBASE"
     },
     {
       "path": "packages/twenty-front/src/modules/front-components/hooks/useFrontComponentExecutionContext.ts",
@@ -553,7 +609,9 @@
       "target_path_exists": true,
       "base_blob_sha": "277259ed2cdc29c734330fc500e35b76e57c7e98",
       "target_blob_sha": "12f6c0328df4993dae40b0a0e502c60d6d9102b6",
-      "disposition": "UPSTREAM_CHANGED_REBASE_MANUALLY"
+      "disposition": "UPSTREAM_CHANGED_REBASE_MANUALLY",
+      "local_git_upstream_overlap_status": "M",
+      "stage2_merge_handling": "MANUAL_REBASE"
     },
     {
       "path": "packages/twenty-front/src/modules/layout-customization/hooks/useSaveLayoutCustomization.ts",
@@ -569,7 +627,9 @@
       "target_path_exists": true,
       "base_blob_sha": "2007d493ccb7b38c7c997e371604762e3cc8c4a9",
       "target_blob_sha": "807e334e632b390af97ad9e3b2aecd428f81e334",
-      "disposition": "UPSTREAM_CHANGED_REBASE_MANUALLY"
+      "disposition": "UPSTREAM_CHANGED_REBASE_MANUALLY",
+      "local_git_upstream_overlap_status": "M",
+      "stage2_merge_handling": "MANUAL_REBASE"
     },
     {
       "path": "packages/twenty-front/src/modules/page-layout/components/PageLayoutTabsRenderer.tsx",
@@ -585,7 +645,9 @@
       "target_path_exists": true,
       "base_blob_sha": "3c5de103042df198b9a95b36d124992f573c07d7",
       "target_blob_sha": "b8898b7f5a268ea4c2947baaea4dd4d6982da21a",
-      "disposition": "UPSTREAM_CHANGED_REBASE_MANUALLY"
+      "disposition": "UPSTREAM_CHANGED_REBASE_MANUALLY",
+      "local_git_upstream_overlap_status": "M",
+      "stage2_merge_handling": "MANUAL_REBASE"
     },
     {
       "path": "packages/twenty-front/src/modules/page-layout/constants/PermaventCompanyOverviewWidgetsFeatureFlag.ts",
@@ -601,7 +663,9 @@
       "target_path_exists": false,
       "base_blob_sha": null,
       "target_blob_sha": null,
-      "disposition": "CUSTOM_NEW_PATH"
+      "disposition": "CUSTOM_NEW_PATH",
+      "local_git_upstream_overlap_status": null,
+      "stage2_merge_handling": "PORT_CUSTOM_SOURCE"
     },
     {
       "path": "packages/twenty-front/src/modules/page-layout/utils/__tests__/canCreatePermaventCompanyOverviewWidgets.test.ts",
@@ -617,7 +681,9 @@
       "target_path_exists": false,
       "base_blob_sha": null,
       "target_blob_sha": null,
-      "disposition": "CUSTOM_NEW_PATH"
+      "disposition": "CUSTOM_NEW_PATH",
+      "local_git_upstream_overlap_status": null,
+      "stage2_merge_handling": "PORT_CUSTOM_SOURCE"
     },
     {
       "path": "packages/twenty-front/src/modules/page-layout/utils/__tests__/convertPageLayoutDraftToUpdateInput.test.ts",
@@ -633,7 +699,9 @@
       "target_path_exists": true,
       "base_blob_sha": "7b3ae3c5f59eb65b1689ed74ac07b8d345245664",
       "target_blob_sha": "dc28d42856464aa4bd7b44a2821d97392095274d",
-      "disposition": "UPSTREAM_CHANGED_REBASE_MANUALLY"
+      "disposition": "UPSTREAM_CHANGED_REBASE_MANUALLY",
+      "local_git_upstream_overlap_status": "M",
+      "stage2_merge_handling": "MANUAL_REBASE"
     },
     {
       "path": "packages/twenty-front/src/modules/page-layout/utils/__tests__/createDefaultActivityWidget.test.ts",
@@ -649,7 +717,9 @@
       "target_path_exists": false,
       "base_blob_sha": null,
       "target_blob_sha": null,
-      "disposition": "CUSTOM_NEW_PATH"
+      "disposition": "CUSTOM_NEW_PATH",
+      "local_git_upstream_overlap_status": null,
+      "stage2_merge_handling": "PORT_CUSTOM_SOURCE"
     },
     {
       "path": "packages/twenty-front/src/modules/page-layout/utils/canCreatePermaventCompanyOverviewWidgets.ts",
@@ -665,7 +735,9 @@
       "target_path_exists": false,
       "base_blob_sha": null,
       "target_blob_sha": null,
-      "disposition": "CUSTOM_NEW_PATH"
+      "disposition": "CUSTOM_NEW_PATH",
+      "local_git_upstream_overlap_status": null,
+      "stage2_merge_handling": "PORT_CUSTOM_SOURCE"
     },
     {
       "path": "packages/twenty-front/src/modules/page-layout/utils/convertPageLayoutDraftToUpdateInput.ts",
@@ -681,7 +753,9 @@
       "target_path_exists": true,
       "base_blob_sha": "a862b81dd78d9a3b92893440c1cdc818f86e6120",
       "target_blob_sha": "f0624c0424753f79f4be3ffee36053f35b586976",
-      "disposition": "UPSTREAM_CHANGED_REBASE_MANUALLY"
+      "disposition": "UPSTREAM_CHANGED_REBASE_MANUALLY",
+      "local_git_upstream_overlap_status": "M",
+      "stage2_merge_handling": "MANUAL_REBASE"
     },
     {
       "path": "packages/twenty-front/src/modules/page-layout/utils/createDefaultActivityWidget.ts",
@@ -697,7 +771,9 @@
       "target_path_exists": false,
       "base_blob_sha": null,
       "target_blob_sha": null,
-      "disposition": "CUSTOM_NEW_PATH"
+      "disposition": "CUSTOM_NEW_PATH",
+      "local_git_upstream_overlap_status": null,
+      "stage2_merge_handling": "PORT_CUSTOM_SOURCE"
     },
     {
       "path": "packages/twenty-front/src/modules/page-layout/widgets/notes/components/NoteWidget.tsx",
@@ -713,7 +789,9 @@
       "target_path_exists": true,
       "base_blob_sha": "4c9e9dcaf494b7dd4f757ef0573e15787c76c24a",
       "target_blob_sha": "4c9e9dcaf494b7dd4f757ef0573e15787c76c24a",
-      "disposition": "UNCHANGED_UPSTREAM_PATH"
+      "disposition": "UNCHANGED_UPSTREAM_PATH",
+      "local_git_upstream_overlap_status": null,
+      "stage2_merge_handling": "REAPPLY_TARGET_TEST"
     },
     {
       "path": "packages/twenty-front/src/modules/page-layout/widgets/tasks/components/TaskWidget.tsx",
@@ -729,7 +807,9 @@
       "target_path_exists": true,
       "base_blob_sha": "ee65097e4aa1e17bb54c4195a214df2e70e605dd",
       "target_blob_sha": "ee65097e4aa1e17bb54c4195a214df2e70e605dd",
-      "disposition": "UNCHANGED_UPSTREAM_PATH"
+      "disposition": "UNCHANGED_UPSTREAM_PATH",
+      "local_git_upstream_overlap_status": null,
+      "stage2_merge_handling": "REAPPLY_TARGET_TEST"
     },
     {
       "path": "packages/twenty-front/src/modules/page-layout/widgets/utils/__tests__/isCompactActivityWidgetLayout.test.ts",
@@ -745,7 +825,9 @@
       "target_path_exists": false,
       "base_blob_sha": null,
       "target_blob_sha": null,
-      "disposition": "CUSTOM_NEW_PATH"
+      "disposition": "CUSTOM_NEW_PATH",
+      "local_git_upstream_overlap_status": null,
+      "stage2_merge_handling": "PORT_CUSTOM_SOURCE"
     },
     {
       "path": "packages/twenty-front/src/modules/page-layout/widgets/utils/isCompactActivityWidgetLayout.ts",
@@ -761,7 +843,9 @@
       "target_path_exists": false,
       "base_blob_sha": null,
       "target_blob_sha": null,
-      "disposition": "CUSTOM_NEW_PATH"
+      "disposition": "CUSTOM_NEW_PATH",
+      "local_git_upstream_overlap_status": null,
+      "stage2_merge_handling": "PORT_CUSTOM_SOURCE"
     },
     {
       "path": "packages/twenty-front/src/modules/settings/security/components/SettingsUserActivityLog.tsx",
@@ -777,7 +861,9 @@
       "target_path_exists": false,
       "base_blob_sha": null,
       "target_blob_sha": null,
-      "disposition": "CUSTOM_NEW_PATH"
+      "disposition": "CUSTOM_NEW_PATH",
+      "local_git_upstream_overlap_status": null,
+      "stage2_merge_handling": "PORT_CUSTOM_SOURCE"
     },
     {
       "path": "packages/twenty-front/src/modules/settings/security/graphql/queries/getPermaventUserAuditEntries.ts",
@@ -793,7 +879,9 @@
       "target_path_exists": false,
       "base_blob_sha": null,
       "target_blob_sha": null,
-      "disposition": "CUSTOM_NEW_PATH"
+      "disposition": "CUSTOM_NEW_PATH",
+      "local_git_upstream_overlap_status": null,
+      "stage2_merge_handling": "PORT_CUSTOM_SOURCE"
     },
     {
       "path": "packages/twenty-front/src/modules/side-panel/components/SidePanelForDesktop.tsx",
@@ -809,7 +897,9 @@
       "target_path_exists": true,
       "base_blob_sha": "f86470101f2e9851dac7ad940d83421d9704bfbe",
       "target_blob_sha": "641aa74dbc0ea633c4eb4ad07538d60b83a5c206",
-      "disposition": "UPSTREAM_CHANGED_REBASE_MANUALLY"
+      "disposition": "UPSTREAM_CHANGED_REBASE_MANUALLY",
+      "local_git_upstream_overlap_status": "M",
+      "stage2_merge_handling": "MANUAL_REBASE"
     },
     {
       "path": "packages/twenty-front/src/modules/side-panel/components/SidePanelWidthEffect.tsx",
@@ -825,7 +915,9 @@
       "target_path_exists": true,
       "base_blob_sha": "e5585df8c510d7ed89943b5dbefeb73af43f5df3",
       "target_blob_sha": "e5585df8c510d7ed89943b5dbefeb73af43f5df3",
-      "disposition": "UNCHANGED_UPSTREAM_PATH"
+      "disposition": "UNCHANGED_UPSTREAM_PATH",
+      "local_git_upstream_overlap_status": null,
+      "stage2_merge_handling": "REAPPLY_TARGET_TEST"
     },
     {
       "path": "packages/twenty-front/src/modules/side-panel/pages/page-layout/components/RegularTabSettingsContent.tsx",
@@ -841,7 +933,9 @@
       "target_path_exists": true,
       "base_blob_sha": "3bfe8a0aea512bf1be2938d2c59437918585bf1d",
       "target_blob_sha": "286d3b03db32bc811745b49f66574888dae2cf42",
-      "disposition": "UPSTREAM_CHANGED_REBASE_MANUALLY"
+      "disposition": "UPSTREAM_CHANGED_REBASE_MANUALLY",
+      "local_git_upstream_overlap_status": "M",
+      "stage2_merge_handling": "MANUAL_REBASE"
     },
     {
       "path": "packages/twenty-front/src/modules/side-panel/pages/page-layout/components/SidePanelPageLayoutRecordPageWidgetTypeSelect.tsx",
@@ -857,7 +951,9 @@
       "target_path_exists": true,
       "base_blob_sha": "cce2c5ae1cc862726a75c8222febe56f422aca27",
       "target_blob_sha": "8a9ad7588a3c6438d76f829038c2c3f7c9ab5c49",
-      "disposition": "UPSTREAM_CHANGED_REBASE_MANUALLY"
+      "disposition": "UPSTREAM_CHANGED_REBASE_MANUALLY",
+      "local_git_upstream_overlap_status": "M",
+      "stage2_merge_handling": "MANUAL_REBASE"
     },
     {
       "path": "packages/twenty-front/src/modules/side-panel/pages/page-layout/components/SidePanelPageLayoutTabSettingsContent.tsx",
@@ -873,7 +969,9 @@
       "target_path_exists": true,
       "base_blob_sha": "84d8c8fa6a1054736c4aecb232d97986b73c471e",
       "target_blob_sha": "8e1111f48dd66260202fab03f26fe93341a388a5",
-      "disposition": "UPSTREAM_CHANGED_REBASE_MANUALLY"
+      "disposition": "UPSTREAM_CHANGED_REBASE_MANUALLY",
+      "local_git_upstream_overlap_status": "M",
+      "stage2_merge_handling": "MANUAL_REBASE"
     },
     {
       "path": "packages/twenty-front/src/modules/side-panel/pages/page-layout/components/SingleWidgetTabSettingsContent.tsx",
@@ -889,7 +987,9 @@
       "target_path_exists": true,
       "base_blob_sha": "696a137e954ead0cfd2ed1985671b9c7ce3e0011",
       "target_blob_sha": "deae5509b0e96d8cacc44f996b654f1e480449ae",
-      "disposition": "UPSTREAM_CHANGED_REBASE_MANUALLY"
+      "disposition": "UPSTREAM_CHANGED_REBASE_MANUALLY",
+      "local_git_upstream_overlap_status": "M",
+      "stage2_merge_handling": "MANUAL_REBASE"
     },
     {
       "path": "packages/twenty-front/src/modules/side-panel/permavent-company-wide-side-panel/components/PermaventOpeningTabSettingsItem.tsx",
@@ -905,7 +1005,9 @@
       "target_path_exists": false,
       "base_blob_sha": null,
       "target_blob_sha": null,
-      "disposition": "CUSTOM_NEW_PATH"
+      "disposition": "CUSTOM_NEW_PATH",
+      "local_git_upstream_overlap_status": null,
+      "stage2_merge_handling": "PORT_CUSTOM_SOURCE"
     },
     {
       "path": "packages/twenty-front/src/modules/side-panel/permavent-company-wide-side-panel/constants/PermaventCompanyWideSidePanel.ts",
@@ -921,7 +1023,9 @@
       "target_path_exists": false,
       "base_blob_sha": null,
       "target_blob_sha": null,
-      "disposition": "CUSTOM_NEW_PATH"
+      "disposition": "CUSTOM_NEW_PATH",
+      "local_git_upstream_overlap_status": null,
+      "stage2_merge_handling": "PORT_CUSTOM_SOURCE"
     },
     {
       "path": "packages/twenty-front/src/modules/side-panel/permavent-company-wide-side-panel/constants/PermaventCompanyWideSidePanelFeatureFlag.ts",
@@ -937,7 +1041,9 @@
       "target_path_exists": false,
       "base_blob_sha": null,
       "target_blob_sha": null,
-      "disposition": "CUSTOM_NEW_PATH"
+      "disposition": "CUSTOM_NEW_PATH",
+      "local_git_upstream_overlap_status": null,
+      "stage2_merge_handling": "PORT_CUSTOM_SOURCE"
     },
     {
       "path": "packages/twenty-front/src/modules/side-panel/permavent-company-wide-side-panel/hooks/__tests__/useIsPermaventCompanyWideSidePanel.test.tsx",
@@ -953,7 +1059,9 @@
       "target_path_exists": false,
       "base_blob_sha": null,
       "target_blob_sha": null,
-      "disposition": "CUSTOM_NEW_PATH"
+      "disposition": "CUSTOM_NEW_PATH",
+      "local_git_upstream_overlap_status": null,
+      "stage2_merge_handling": "PORT_CUSTOM_SOURCE"
     },
     {
       "path": "packages/twenty-front/src/modules/side-panel/permavent-company-wide-side-panel/hooks/__tests__/usePermaventOpeningTabSettings.test.tsx",
@@ -969,7 +1077,9 @@
       "target_path_exists": false,
       "base_blob_sha": null,
       "target_blob_sha": null,
-      "disposition": "CUSTOM_NEW_PATH"
+      "disposition": "CUSTOM_NEW_PATH",
+      "local_git_upstream_overlap_status": null,
+      "stage2_merge_handling": "PORT_CUSTOM_SOURCE"
     },
     {
       "path": "packages/twenty-front/src/modules/side-panel/permavent-company-wide-side-panel/hooks/useIsPermaventCompanyWideSidePanel.ts",
@@ -985,7 +1095,9 @@
       "target_path_exists": false,
       "base_blob_sha": null,
       "target_blob_sha": null,
-      "disposition": "CUSTOM_NEW_PATH"
+      "disposition": "CUSTOM_NEW_PATH",
+      "local_git_upstream_overlap_status": null,
+      "stage2_merge_handling": "PORT_CUSTOM_SOURCE"
     },
     {
       "path": "packages/twenty-front/src/modules/side-panel/permavent-company-wide-side-panel/hooks/useParentElementWidth.ts",
@@ -1001,7 +1113,9 @@
       "target_path_exists": false,
       "base_blob_sha": null,
       "target_blob_sha": null,
-      "disposition": "CUSTOM_NEW_PATH"
+      "disposition": "CUSTOM_NEW_PATH",
+      "local_git_upstream_overlap_status": null,
+      "stage2_merge_handling": "PORT_CUSTOM_SOURCE"
     },
     {
       "path": "packages/twenty-front/src/modules/side-panel/permavent-company-wide-side-panel/hooks/usePermaventOpeningTabSettings.ts",
@@ -1017,7 +1131,9 @@
       "target_path_exists": false,
       "base_blob_sha": null,
       "target_blob_sha": null,
-      "disposition": "CUSTOM_NEW_PATH"
+      "disposition": "CUSTOM_NEW_PATH",
+      "local_git_upstream_overlap_status": null,
+      "stage2_merge_handling": "PORT_CUSTOM_SOURCE"
     },
     {
       "path": "packages/twenty-front/src/modules/side-panel/permavent-company-wide-side-panel/states/permaventCompanyWideSidePanelWidthState.ts",
@@ -1033,7 +1149,9 @@
       "target_path_exists": false,
       "base_blob_sha": null,
       "target_blob_sha": null,
-      "disposition": "CUSTOM_NEW_PATH"
+      "disposition": "CUSTOM_NEW_PATH",
+      "local_git_upstream_overlap_status": null,
+      "stage2_merge_handling": "PORT_CUSTOM_SOURCE"
     },
     {
       "path": "packages/twenty-front/src/modules/side-panel/permavent-company-wide-side-panel/utils/__tests__/getPermaventCompanyWideSidePanelLayout.test.ts",
@@ -1049,7 +1167,9 @@
       "target_path_exists": false,
       "base_blob_sha": null,
       "target_blob_sha": null,
-      "disposition": "CUSTOM_NEW_PATH"
+      "disposition": "CUSTOM_NEW_PATH",
+      "local_git_upstream_overlap_status": null,
+      "stage2_merge_handling": "PORT_CUSTOM_SOURCE"
     },
     {
       "path": "packages/twenty-front/src/modules/side-panel/permavent-company-wide-side-panel/utils/__tests__/getPermaventRecordOpeningTabId.test.ts",
@@ -1065,7 +1185,9 @@
       "target_path_exists": false,
       "base_blob_sha": null,
       "target_blob_sha": null,
-      "disposition": "CUSTOM_NEW_PATH"
+      "disposition": "CUSTOM_NEW_PATH",
+      "local_git_upstream_overlap_status": null,
+      "stage2_merge_handling": "PORT_CUSTOM_SOURCE"
     },
     {
       "path": "packages/twenty-front/src/modules/side-panel/permavent-company-wide-side-panel/utils/__tests__/isPermaventWideSidePanelObject.test.ts",
@@ -1081,7 +1203,9 @@
       "target_path_exists": false,
       "base_blob_sha": null,
       "target_blob_sha": null,
-      "disposition": "CUSTOM_NEW_PATH"
+      "disposition": "CUSTOM_NEW_PATH",
+      "local_git_upstream_overlap_status": null,
+      "stage2_merge_handling": "PORT_CUSTOM_SOURCE"
     },
     {
       "path": "packages/twenty-front/src/modules/side-panel/permavent-company-wide-side-panel/utils/getPermaventCompanyWideSidePanelLayout.ts",
@@ -1097,7 +1221,9 @@
       "target_path_exists": false,
       "base_blob_sha": null,
       "target_blob_sha": null,
-      "disposition": "CUSTOM_NEW_PATH"
+      "disposition": "CUSTOM_NEW_PATH",
+      "local_git_upstream_overlap_status": null,
+      "stage2_merge_handling": "PORT_CUSTOM_SOURCE"
     },
     {
       "path": "packages/twenty-front/src/modules/side-panel/permavent-company-wide-side-panel/utils/getPermaventRecordOpeningTabId.ts",
@@ -1113,7 +1239,9 @@
       "target_path_exists": false,
       "base_blob_sha": null,
       "target_blob_sha": null,
-      "disposition": "CUSTOM_NEW_PATH"
+      "disposition": "CUSTOM_NEW_PATH",
+      "local_git_upstream_overlap_status": null,
+      "stage2_merge_handling": "PORT_CUSTOM_SOURCE"
     },
     {
       "path": "packages/twenty-front/src/modules/side-panel/permavent-company-wide-side-panel/utils/isPermaventWideSidePanelObject.ts",
@@ -1129,7 +1257,9 @@
       "target_path_exists": false,
       "base_blob_sha": null,
       "target_blob_sha": null,
-      "disposition": "CUSTOM_NEW_PATH"
+      "disposition": "CUSTOM_NEW_PATH",
+      "local_git_upstream_overlap_status": null,
+      "stage2_merge_handling": "PORT_CUSTOM_SOURCE"
     },
     {
       "path": "packages/twenty-front/src/modules/ui/layout/resizable-panel/components/ResizablePanelGap.tsx",
@@ -1145,7 +1275,9 @@
       "target_path_exists": false,
       "base_blob_sha": "c426bab6e1f37477c0de4bdba3ed90afcf10409d",
       "target_blob_sha": null,
-      "disposition": "UPSTREAM_REMOVED_OR_MOVED"
+      "disposition": "UPSTREAM_REMOVED_OR_MOVED",
+      "local_git_upstream_overlap_status": "D",
+      "stage2_merge_handling": "TARGET_REMOVED_REWRITE"
     },
     {
       "path": "packages/twenty-front/src/modules/ui/layout/resizable-panel/utils/__tests__/getKeyboardResizedPanelWidth.test.ts",
@@ -1161,7 +1293,9 @@
       "target_path_exists": false,
       "base_blob_sha": null,
       "target_blob_sha": null,
-      "disposition": "CUSTOM_NEW_PATH"
+      "disposition": "CUSTOM_NEW_PATH",
+      "local_git_upstream_overlap_status": null,
+      "stage2_merge_handling": "PORT_CUSTOM_SOURCE"
     },
     {
       "path": "packages/twenty-front/src/modules/ui/layout/resizable-panel/utils/getKeyboardResizedPanelWidth.ts",
@@ -1177,7 +1311,9 @@
       "target_path_exists": false,
       "base_blob_sha": null,
       "target_blob_sha": null,
-      "disposition": "CUSTOM_NEW_PATH"
+      "disposition": "CUSTOM_NEW_PATH",
+      "local_git_upstream_overlap_status": null,
+      "stage2_merge_handling": "PORT_CUSTOM_SOURCE"
     },
     {
       "path": "packages/twenty-front/src/modules/workspace/hooks/useIsFeatureEnabled.ts",
@@ -1193,7 +1329,9 @@
       "target_path_exists": true,
       "base_blob_sha": "e7b5d1843a260923514a3003660268cdd4266737",
       "target_blob_sha": "e7b5d1843a260923514a3003660268cdd4266737",
-      "disposition": "UNCHANGED_UPSTREAM_PATH"
+      "disposition": "UNCHANGED_UPSTREAM_PATH",
+      "local_git_upstream_overlap_status": null,
+      "stage2_merge_handling": "REAPPLY_TARGET_TEST"
     },
     {
       "path": "packages/twenty-front/src/pages/settings/general/SettingsGeneral.tsx",
@@ -1209,7 +1347,9 @@
       "target_path_exists": true,
       "base_blob_sha": "d64f5ba364df2629c8386831f0f21c01df2813f2",
       "target_blob_sha": "65a20b719951b8a719d0404469dba55f2c1f54ea",
-      "disposition": "UPSTREAM_CHANGED_REBASE_MANUALLY"
+      "disposition": "UPSTREAM_CHANGED_REBASE_MANUALLY",
+      "local_git_upstream_overlap_status": "M",
+      "stage2_merge_handling": "MANUAL_REBASE"
     },
     {
       "path": "packages/twenty-sdk/project.json",
@@ -1225,7 +1365,9 @@
       "target_path_exists": true,
       "base_blob_sha": "9a5adc2073829b1da75c1150370932880b0be3c3",
       "target_blob_sha": "5422a3a1c2d7e23aa59a61cf1e05964933c476af",
-      "disposition": "UPSTREAM_CHANGED_REBASE_MANUALLY"
+      "disposition": "UPSTREAM_CHANGED_REBASE_MANUALLY",
+      "local_git_upstream_overlap_status": "M",
+      "stage2_merge_handling": "MANUAL_REBASE"
     },
     {
       "path": "packages/twenty-sdk/src/sdk/front-component/types/FrontComponentExecutionContext.ts",
@@ -1241,7 +1383,9 @@
       "target_path_exists": true,
       "base_blob_sha": "9515c8883f2e035c50e80ac94575eb655e24ddbf",
       "target_blob_sha": "866bab59dff54829358507886b1b54ba42c48b17",
-      "disposition": "UPSTREAM_CHANGED_REBASE_MANUALLY"
+      "disposition": "UPSTREAM_CHANGED_REBASE_MANUALLY",
+      "local_git_upstream_overlap_status": "M",
+      "stage2_merge_handling": "MANUAL_REBASE"
     },
     {
       "path": "packages/twenty-server/@types/express.d.ts",
@@ -1257,7 +1401,9 @@
       "target_path_exists": true,
       "base_blob_sha": "4c92df2bc0cf1424fbf7b308663d13bbd99675f0",
       "target_blob_sha": "d03132f22d9617a1c7005d743a849f658e336795",
-      "disposition": "UPSTREAM_CHANGED_REBASE_MANUALLY"
+      "disposition": "UPSTREAM_CHANGED_REBASE_MANUALLY",
+      "local_git_upstream_overlap_status": "M",
+      "stage2_merge_handling": "MANUAL_REBASE"
     },
     {
       "path": "packages/twenty-server/src/database/commands/cron-register-all.command.ts",
@@ -1273,7 +1419,9 @@
       "target_path_exists": true,
       "base_blob_sha": "9e6f2120b2baa31ab056427752d9861693350132",
       "target_blob_sha": "e88cdd7fd077c97b7c58afdcf6245d1f2d041547",
-      "disposition": "UPSTREAM_CHANGED_REBASE_MANUALLY"
+      "disposition": "UPSTREAM_CHANGED_REBASE_MANUALLY",
+      "local_git_upstream_overlap_status": "M",
+      "stage2_merge_handling": "MANUAL_REBASE"
     },
     {
       "path": "packages/twenty-server/src/database/commands/database-command.module.ts",
@@ -1289,7 +1437,9 @@
       "target_path_exists": true,
       "base_blob_sha": "8f191ce8414b5c41d204bdf0dd0f9f57a7d32d09",
       "target_blob_sha": "bb34d62f875c8a7d10e2920ff5a3075f4ceafc04",
-      "disposition": "UPSTREAM_CHANGED_REBASE_MANUALLY"
+      "disposition": "UPSTREAM_CHANGED_REBASE_MANUALLY",
+      "local_git_upstream_overlap_status": "M",
+      "stage2_merge_handling": "MANUAL_REBASE"
     },
     {
       "path": "packages/twenty-server/src/database/commands/upgrade-version-command/2-30/2-30-instance-command-fast-1786230000000-create-permavent-user-audit-entry.ts",
@@ -1305,7 +1455,9 @@
       "target_path_exists": false,
       "base_blob_sha": null,
       "target_blob_sha": null,
-      "disposition": "CUSTOM_NEW_PATH"
+      "disposition": "CUSTOM_NEW_PATH",
+      "local_git_upstream_overlap_status": null,
+      "stage2_merge_handling": "PORT_CUSTOM_SOURCE"
     },
     {
       "path": "packages/twenty-server/src/database/commands/upgrade-version-command/instance-commands.constant.ts",
@@ -1321,7 +1473,9 @@
       "target_path_exists": true,
       "base_blob_sha": "b3ced395a37e7101ec982df2423433c8e26f7dc4",
       "target_blob_sha": "c53476f2f495c76fd0f15c23c1548e340b747bcd",
-      "disposition": "UPSTREAM_CHANGED_REBASE_MANUALLY"
+      "disposition": "UPSTREAM_CHANGED_REBASE_MANUALLY",
+      "local_git_upstream_overlap_status": "M",
+      "stage2_merge_handling": "MANUAL_REBASE"
     },
     {
       "path": "packages/twenty-server/src/engine/api/common/common-query-runners/common-base-query-runner.service.ts",
@@ -1337,7 +1491,9 @@
       "target_path_exists": true,
       "base_blob_sha": "b33039c425a5ebb14c8929044c4bbfd16e8168cc",
       "target_blob_sha": "32f75fec59d897151ba9f065b2422e0ee6d93379",
-      "disposition": "UPSTREAM_CHANGED_REBASE_MANUALLY"
+      "disposition": "UPSTREAM_CHANGED_REBASE_MANUALLY",
+      "local_git_upstream_overlap_status": "M",
+      "stage2_merge_handling": "MANUAL_REBASE"
     },
     {
       "path": "packages/twenty-server/src/engine/api/common/core-common-api.module.ts",
@@ -1353,7 +1509,9 @@
       "target_path_exists": true,
       "base_blob_sha": "fb58808e8ce3d4f17c2cac5cfb14fed9088a33a9",
       "target_blob_sha": "652dac83f5146dc9ddd5bb5174c1f385e781c93d",
-      "disposition": "UPSTREAM_CHANGED_REBASE_MANUALLY"
+      "disposition": "UPSTREAM_CHANGED_REBASE_MANUALLY",
+      "local_git_upstream_overlap_status": "M",
+      "stage2_merge_handling": "MANUAL_REBASE"
     },
     {
       "path": "packages/twenty-server/src/engine/api/graphql/workspace-query-runner/listeners/__tests__/entity-events-to-db.listener.spec.ts",
@@ -1369,7 +1527,9 @@
       "target_path_exists": true,
       "base_blob_sha": null,
       "target_blob_sha": "364b8aab9fd26f4780bb54a816e5f67d1796b041",
-      "disposition": "ADDED_PATH_COLLISION"
+      "disposition": "ADDED_PATH_COLLISION",
+      "local_git_upstream_overlap_status": "A",
+      "stage2_merge_handling": "ADD_ADD_COLLISION_MERGE_TESTS"
     },
     {
       "path": "packages/twenty-server/src/engine/api/graphql/workspace-query-runner/listeners/entity-events-to-db.listener.ts",
@@ -1385,7 +1545,9 @@
       "target_path_exists": true,
       "base_blob_sha": "86876782e47faed5b16b0b03b0ffdca3799d4851",
       "target_blob_sha": "680f37b5e045dff83d9a64cc594021856d41e1c5",
-      "disposition": "UPSTREAM_CHANGED_REBASE_MANUALLY"
+      "disposition": "UPSTREAM_CHANGED_REBASE_MANUALLY",
+      "local_git_upstream_overlap_status": "M",
+      "stage2_merge_handling": "MANUAL_REBASE"
     },
     {
       "path": "packages/twenty-server/src/engine/api/graphql/workspace-query-runner/workspace-query-runner.module.ts",
@@ -1401,7 +1563,9 @@
       "target_path_exists": true,
       "base_blob_sha": "aca96187c5665cee1560220797e2abf64c76101c",
       "target_blob_sha": "bb6b033f9dbf8751394b7c0c8d2471e56057697e",
-      "disposition": "UPSTREAM_CHANGED_REBASE_MANUALLY"
+      "disposition": "UPSTREAM_CHANGED_REBASE_MANUALLY",
+      "local_git_upstream_overlap_status": "M",
+      "stage2_merge_handling": "MANUAL_REBASE"
     },
     {
       "path": "packages/twenty-server/src/engine/api/mcp/controllers/mcp-core.controller.ts",
@@ -1417,7 +1581,9 @@
       "target_path_exists": true,
       "base_blob_sha": "d08aee12911a4f5212b75172be332c83bb4a1461",
       "target_blob_sha": "f8d1df71d08cb449eb5cd25ad2602fea3383aeb5",
-      "disposition": "UPSTREAM_CHANGED_REBASE_MANUALLY"
+      "disposition": "UPSTREAM_CHANGED_REBASE_MANUALLY",
+      "local_git_upstream_overlap_status": "M",
+      "stage2_merge_handling": "MANUAL_REBASE"
     },
     {
       "path": "packages/twenty-server/src/engine/api/mcp/guards/__tests__/mcp-auth.guard.spec.ts",
@@ -1433,7 +1599,9 @@
       "target_path_exists": true,
       "base_blob_sha": "80d893cb4a0915025b43a8043ed6919f7d940d9c",
       "target_blob_sha": "80d893cb4a0915025b43a8043ed6919f7d940d9c",
-      "disposition": "UNCHANGED_UPSTREAM_PATH"
+      "disposition": "UNCHANGED_UPSTREAM_PATH",
+      "local_git_upstream_overlap_status": null,
+      "stage2_merge_handling": "REAPPLY_TARGET_TEST"
     },
     {
       "path": "packages/twenty-server/src/engine/api/mcp/guards/mcp-auth.guard.ts",
@@ -1449,7 +1617,9 @@
       "target_path_exists": true,
       "base_blob_sha": "8df66a919f5ff3a4cd41f74a2a1330b8fc6d5b88",
       "target_blob_sha": "8df66a919f5ff3a4cd41f74a2a1330b8fc6d5b88",
-      "disposition": "UNCHANGED_UPSTREAM_PATH"
+      "disposition": "UNCHANGED_UPSTREAM_PATH",
+      "local_git_upstream_overlap_status": null,
+      "stage2_merge_handling": "REAPPLY_TARGET_TEST"
     },
     {
       "path": "packages/twenty-server/src/engine/api/mcp/services/__tests__/mcp-protocol.service.spec.ts",
@@ -1465,7 +1635,9 @@
       "target_path_exists": false,
       "base_blob_sha": null,
       "target_blob_sha": null,
-      "disposition": "CUSTOM_NEW_PATH"
+      "disposition": "CUSTOM_NEW_PATH",
+      "local_git_upstream_overlap_status": null,
+      "stage2_merge_handling": "PORT_CUSTOM_SOURCE"
     },
     {
       "path": "packages/twenty-server/src/engine/api/mcp/services/mcp-protocol.service.ts",
@@ -1482,7 +1654,9 @@
       "target_path_exists": true,
       "base_blob_sha": "e4b4e870312893362f188de998214a7509c9cb93",
       "target_blob_sha": "f3e69185bfee8e0c6cf2bfa046ed398ccd144d0a",
-      "disposition": "UPSTREAM_CHANGED_REBASE_MANUALLY"
+      "disposition": "UPSTREAM_CHANGED_REBASE_MANUALLY",
+      "local_git_upstream_overlap_status": "M",
+      "stage2_merge_handling": "MANUAL_REBASE"
     },
     {
       "path": "packages/twenty-server/src/engine/api/mcp/utils/__tests__/is-mcp-read-only-catalog-tool.util.spec.ts",
@@ -1498,7 +1672,9 @@
       "target_path_exists": false,
       "base_blob_sha": null,
       "target_blob_sha": null,
-      "disposition": "CUSTOM_NEW_PATH"
+      "disposition": "CUSTOM_NEW_PATH",
+      "local_git_upstream_overlap_status": null,
+      "stage2_merge_handling": "PORT_CUSTOM_SOURCE"
     },
     {
       "path": "packages/twenty-server/src/engine/api/mcp/utils/is-mcp-read-only-catalog-tool.util.ts",
@@ -1514,7 +1690,9 @@
       "target_path_exists": false,
       "base_blob_sha": null,
       "target_blob_sha": null,
-      "disposition": "CUSTOM_NEW_PATH"
+      "disposition": "CUSTOM_NEW_PATH",
+      "local_git_upstream_overlap_status": null,
+      "stage2_merge_handling": "PORT_CUSTOM_SOURCE"
     },
     {
       "path": "packages/twenty-server/src/engine/api/rest/core/handlers/rest-api-base.handler.ts",
@@ -1530,7 +1708,9 @@
       "target_path_exists": true,
       "base_blob_sha": "5bdb30263274c9cf183571760c58df3b4a3d7c74",
       "target_blob_sha": "61617a1d64e55558c1b6a4092876faed41b985eb",
-      "disposition": "UPSTREAM_CHANGED_REBASE_MANUALLY"
+      "disposition": "UPSTREAM_CHANGED_REBASE_MANUALLY",
+      "local_git_upstream_overlap_status": "M",
+      "stage2_merge_handling": "MANUAL_REBASE"
     },
     {
       "path": "packages/twenty-server/src/engine/core-modules/actor/services/actor-from-auth-context.service.ts",
@@ -1546,7 +1726,9 @@
       "target_path_exists": true,
       "base_blob_sha": "86890e04cc109f6e8683606c0aea221e04f92522",
       "target_blob_sha": "1300e77390c5acfb141bf06ae8c2e9b4a2303311",
-      "disposition": "UPSTREAM_CHANGED_REBASE_MANUALLY"
+      "disposition": "UPSTREAM_CHANGED_REBASE_MANUALLY",
+      "local_git_upstream_overlap_status": "M",
+      "stage2_merge_handling": "MANUAL_REBASE"
     },
     {
       "path": "packages/twenty-server/src/engine/core-modules/approved-access-domain/services/approved-access-domain.service.ts",
@@ -1562,7 +1744,9 @@
       "target_path_exists": true,
       "base_blob_sha": "fd80a80ccacdfcc2963e11fb798fee642b361215",
       "target_blob_sha": "e75815099f86cad7060f54ff29d1dd317462b4ab",
-      "disposition": "UPSTREAM_CHANGED_REBASE_MANUALLY"
+      "disposition": "UPSTREAM_CHANGED_REBASE_MANUALLY",
+      "local_git_upstream_overlap_status": "M",
+      "stage2_merge_handling": "MANUAL_REBASE"
     },
     {
       "path": "packages/twenty-server/src/engine/core-modules/approved-access-domain/services/approved-access-domain.spec.ts",
@@ -1578,7 +1762,9 @@
       "target_path_exists": true,
       "base_blob_sha": "17e3c19f9c8dfb864aa4a7aa61cc0b9b629d79c9",
       "target_blob_sha": "ac5afea7d4d2173b17daa61f692aee683c38bb4b",
-      "disposition": "UPSTREAM_CHANGED_REBASE_MANUALLY"
+      "disposition": "UPSTREAM_CHANGED_REBASE_MANUALLY",
+      "local_git_upstream_overlap_status": "M",
+      "stage2_merge_handling": "MANUAL_REBASE"
     },
     {
       "path": "packages/twenty-server/src/engine/core-modules/auth/guards/is-delegated-api-key-auth-context.guard.ts",
@@ -1594,7 +1780,9 @@
       "target_path_exists": false,
       "base_blob_sha": null,
       "target_blob_sha": null,
-      "disposition": "CUSTOM_NEW_PATH"
+      "disposition": "CUSTOM_NEW_PATH",
+      "local_git_upstream_overlap_status": null,
+      "stage2_merge_handling": "PORT_CUSTOM_SOURCE"
     },
     {
       "path": "packages/twenty-server/src/engine/core-modules/auth/middlewares/workspace-auth-context.middleware.ts",
@@ -1610,7 +1798,9 @@
       "target_path_exists": true,
       "base_blob_sha": "0f6b17efa8528d23f846e33e9ff25d372d9b24c9",
       "target_blob_sha": "0f6b17efa8528d23f846e33e9ff25d372d9b24c9",
-      "disposition": "UNCHANGED_UPSTREAM_PATH"
+      "disposition": "UNCHANGED_UPSTREAM_PATH",
+      "local_git_upstream_overlap_status": null,
+      "stage2_merge_handling": "REAPPLY_TARGET_TEST"
     },
     {
       "path": "packages/twenty-server/src/engine/core-modules/auth/services/reset-password.service.ts",
@@ -1626,7 +1816,9 @@
       "target_path_exists": true,
       "base_blob_sha": "76cfc49d23bdbc7ad54b9f38fabef7c7076becbb",
       "target_blob_sha": "76cfc49d23bdbc7ad54b9f38fabef7c7076becbb",
-      "disposition": "UNCHANGED_UPSTREAM_PATH"
+      "disposition": "UNCHANGED_UPSTREAM_PATH",
+      "local_git_upstream_overlap_status": null,
+      "stage2_merge_handling": "REAPPLY_TARGET_TEST"
     },
     {
       "path": "packages/twenty-server/src/engine/core-modules/auth/strategies/jwt.auth.strategy.ts",
@@ -1642,7 +1834,9 @@
       "target_path_exists": true,
       "base_blob_sha": "479539696f7f00c8dcb4fa9028111a21d393cab2",
       "target_blob_sha": "891d327fd7148a0a464f38211c27610d6e8b012c",
-      "disposition": "UPSTREAM_CHANGED_REBASE_MANUALLY"
+      "disposition": "UPSTREAM_CHANGED_REBASE_MANUALLY",
+      "local_git_upstream_overlap_status": "M",
+      "stage2_merge_handling": "MANUAL_REBASE"
     },
     {
       "path": "packages/twenty-server/src/engine/core-modules/auth/token/services/access-token.service.ts",
@@ -1658,7 +1852,9 @@
       "target_path_exists": true,
       "base_blob_sha": "3fd457d78ca992e71319503150b3839f1d33f1a8",
       "target_blob_sha": "446ea91ed7d223748818a3c8358a816c26bd060c",
-      "disposition": "UPSTREAM_CHANGED_REBASE_MANUALLY"
+      "disposition": "UPSTREAM_CHANGED_REBASE_MANUALLY",
+      "local_git_upstream_overlap_status": "M",
+      "stage2_merge_handling": "MANUAL_REBASE"
     },
     {
       "path": "packages/twenty-server/src/engine/core-modules/auth/types/delegated-api-key-actor.type.ts",
@@ -1674,7 +1870,9 @@
       "target_path_exists": false,
       "base_blob_sha": null,
       "target_blob_sha": null,
-      "disposition": "CUSTOM_NEW_PATH"
+      "disposition": "CUSTOM_NEW_PATH",
+      "local_git_upstream_overlap_status": null,
+      "stage2_merge_handling": "PORT_CUSTOM_SOURCE"
     },
     {
       "path": "packages/twenty-server/src/engine/core-modules/auth/types/jwt-payload.type.ts",
@@ -1690,7 +1888,9 @@
       "target_path_exists": true,
       "base_blob_sha": "5aa4752915fba02d3bd6e2b154a13021feeeb98d",
       "target_blob_sha": "5aa4752915fba02d3bd6e2b154a13021feeeb98d",
-      "disposition": "UNCHANGED_UPSTREAM_PATH"
+      "disposition": "UNCHANGED_UPSTREAM_PATH",
+      "local_git_upstream_overlap_status": null,
+      "stage2_merge_handling": "REAPPLY_TARGET_TEST"
     },
     {
       "path": "packages/twenty-server/src/engine/core-modules/auth/types/jwt-token-type.enum.ts",
@@ -1706,7 +1906,9 @@
       "target_path_exists": true,
       "base_blob_sha": "7b5ba9886f9f8a44fc8cd08dcba776d0798bf18c",
       "target_blob_sha": "7b5ba9886f9f8a44fc8cd08dcba776d0798bf18c",
-      "disposition": "UNCHANGED_UPSTREAM_PATH"
+      "disposition": "UNCHANGED_UPSTREAM_PATH",
+      "local_git_upstream_overlap_status": null,
+      "stage2_merge_handling": "REAPPLY_TARGET_TEST"
     },
     {
       "path": "packages/twenty-server/src/engine/core-modules/auth/types/mcp-access-token-jwt-payload.type.ts",
@@ -1722,7 +1924,9 @@
       "target_path_exists": false,
       "base_blob_sha": null,
       "target_blob_sha": null,
-      "disposition": "CUSTOM_NEW_PATH"
+      "disposition": "CUSTOM_NEW_PATH",
+      "local_git_upstream_overlap_status": null,
+      "stage2_merge_handling": "PORT_CUSTOM_SOURCE"
     },
     {
       "path": "packages/twenty-server/src/engine/core-modules/auth/types/mcp-tool-access.type.ts",
@@ -1738,7 +1942,9 @@
       "target_path_exists": false,
       "base_blob_sha": null,
       "target_blob_sha": null,
-      "disposition": "CUSTOM_NEW_PATH"
+      "disposition": "CUSTOM_NEW_PATH",
+      "local_git_upstream_overlap_status": null,
+      "stage2_merge_handling": "PORT_CUSTOM_SOURCE"
     },
     {
       "path": "packages/twenty-server/src/engine/core-modules/auth/types/raw-auth-context.type.ts",
@@ -1754,7 +1960,9 @@
       "target_path_exists": true,
       "base_blob_sha": "0f31e1e6bc826806c74d07e64f9d308812d9e140",
       "target_blob_sha": "89cc4a3e7b8e7d7d4ee3a5730e4a352d28c98114",
-      "disposition": "UPSTREAM_CHANGED_REBASE_MANUALLY"
+      "disposition": "UPSTREAM_CHANGED_REBASE_MANUALLY",
+      "local_git_upstream_overlap_status": "M",
+      "stage2_merge_handling": "MANUAL_REBASE"
     },
     {
       "path": "packages/twenty-server/src/engine/core-modules/auth/types/workspace-auth-context.type.ts",
@@ -1770,7 +1978,9 @@
       "target_path_exists": true,
       "base_blob_sha": "81e5cbacd7b2794c654983c2d64d362153b8383c",
       "target_blob_sha": "2080f3af35a1770c9e3c5cd43a724abdf58309c8",
-      "disposition": "UPSTREAM_CHANGED_REBASE_MANUALLY"
+      "disposition": "UPSTREAM_CHANGED_REBASE_MANUALLY",
+      "local_git_upstream_overlap_status": "M",
+      "stage2_merge_handling": "MANUAL_REBASE"
     },
     {
       "path": "packages/twenty-server/src/engine/core-modules/auth/utils/build-api-key-auth-context.util.ts",
@@ -1786,7 +1996,9 @@
       "target_path_exists": true,
       "base_blob_sha": "ae3cef5d4a0b8a9b9d6c767e27e57b9a31fc03f2",
       "target_blob_sha": "ae3cef5d4a0b8a9b9d6c767e27e57b9a31fc03f2",
-      "disposition": "UNCHANGED_UPSTREAM_PATH"
+      "disposition": "UNCHANGED_UPSTREAM_PATH",
+      "local_git_upstream_overlap_status": null,
+      "stage2_merge_handling": "REAPPLY_TARGET_TEST"
     },
     {
       "path": "packages/twenty-server/src/engine/core-modules/code-interpreter/code-interpreter-driver.factory.ts",
@@ -1802,7 +2014,9 @@
       "target_path_exists": true,
       "base_blob_sha": "b4ccb4ffae85770db4ce0c4a23519812cc06a31a",
       "target_blob_sha": "b4ccb4ffae85770db4ce0c4a23519812cc06a31a",
-      "disposition": "UNCHANGED_UPSTREAM_PATH"
+      "disposition": "UNCHANGED_UPSTREAM_PATH",
+      "local_git_upstream_overlap_status": null,
+      "stage2_merge_handling": "REAPPLY_TARGET_TEST"
     },
     {
       "path": "packages/twenty-server/src/engine/core-modules/code-interpreter/code-interpreter.interface.ts",
@@ -1818,7 +2032,9 @@
       "target_path_exists": true,
       "base_blob_sha": "fd48480d0a3066ea087a58c7e7aeb75cdaefa82a",
       "target_blob_sha": "fd48480d0a3066ea087a58c7e7aeb75cdaefa82a",
-      "disposition": "UNCHANGED_UPSTREAM_PATH"
+      "disposition": "UNCHANGED_UPSTREAM_PATH",
+      "local_git_upstream_overlap_status": null,
+      "stage2_merge_handling": "REAPPLY_TARGET_TEST"
     },
     {
       "path": "packages/twenty-server/src/engine/core-modules/code-interpreter/drivers/__tests__/permavent-internal.driver.spec.ts",
@@ -1834,7 +2050,9 @@
       "target_path_exists": false,
       "base_blob_sha": null,
       "target_blob_sha": null,
-      "disposition": "CUSTOM_NEW_PATH"
+      "disposition": "CUSTOM_NEW_PATH",
+      "local_git_upstream_overlap_status": null,
+      "stage2_merge_handling": "PORT_CUSTOM_SOURCE"
     },
     {
       "path": "packages/twenty-server/src/engine/core-modules/code-interpreter/drivers/permavent-internal.driver.ts",
@@ -1850,7 +2068,9 @@
       "target_path_exists": false,
       "base_blob_sha": null,
       "target_blob_sha": null,
-      "disposition": "CUSTOM_NEW_PATH"
+      "disposition": "CUSTOM_NEW_PATH",
+      "local_git_upstream_overlap_status": null,
+      "stage2_merge_handling": "PORT_CUSTOM_SOURCE"
     },
     {
       "path": "packages/twenty-server/src/engine/core-modules/core-engine.module.ts",
@@ -1866,7 +2086,9 @@
       "target_path_exists": true,
       "base_blob_sha": "723455b9e9232bfd2e7591b388d38e7249fd0240",
       "target_blob_sha": "c797477c68e464ae0f6b63468c6293543000134d",
-      "disposition": "UPSTREAM_CHANGED_REBASE_MANUALLY"
+      "disposition": "UPSTREAM_CHANGED_REBASE_MANUALLY",
+      "local_git_upstream_overlap_status": "M",
+      "stage2_merge_handling": "MANUAL_REBASE"
     },
     {
       "path": "packages/twenty-server/src/engine/core-modules/email-verification/services/email-verification.service.ts",
@@ -1882,7 +2104,9 @@
       "target_path_exists": true,
       "base_blob_sha": "81ed73fbcf2b9b5e72ddaa98338df802771a5196",
       "target_blob_sha": "81ed73fbcf2b9b5e72ddaa98338df802771a5196",
-      "disposition": "UNCHANGED_UPSTREAM_PATH"
+      "disposition": "UNCHANGED_UPSTREAM_PATH",
+      "local_git_upstream_overlap_status": null,
+      "stage2_merge_handling": "REAPPLY_TARGET_TEST"
     },
     {
       "path": "packages/twenty-server/src/engine/core-modules/email/__tests__/email-templates-rendering.spec.ts",
@@ -1898,7 +2122,9 @@
       "target_path_exists": true,
       "base_blob_sha": "081c6fbb2e397b120bb59878fb38ebf308f56118",
       "target_blob_sha": "081c6fbb2e397b120bb59878fb38ebf308f56118",
-      "disposition": "UNCHANGED_UPSTREAM_PATH"
+      "disposition": "UNCHANGED_UPSTREAM_PATH",
+      "local_git_upstream_overlap_status": null,
+      "stage2_merge_handling": "REAPPLY_TARGET_TEST"
     },
     {
       "path": "packages/twenty-server/src/engine/core-modules/feature-flag/constants/public-feature-flag.const.ts",
@@ -1915,7 +2141,9 @@
       "target_path_exists": true,
       "base_blob_sha": "2aea4336bee5b549897ee8fdbb378c9932a1a84c",
       "target_blob_sha": "8e67afd95fefcaf1d47fcd1d512e3d17896b8255",
-      "disposition": "UPSTREAM_CHANGED_REBASE_MANUALLY"
+      "disposition": "UPSTREAM_CHANGED_REBASE_MANUALLY",
+      "local_git_upstream_overlap_status": "M",
+      "stage2_merge_handling": "MANUAL_REBASE"
     },
     {
       "path": "packages/twenty-server/src/engine/core-modules/logic-function/logic-function-trigger/logic-function-trigger.module.ts",
@@ -1931,7 +2159,9 @@
       "target_path_exists": true,
       "base_blob_sha": "d9ce5ef75c7b070b2c15c983011ec72f9a238afd",
       "target_blob_sha": "368be2aa0d2d6a1dbccec78f8a2811167bc3316b",
-      "disposition": "UPSTREAM_CHANGED_REBASE_MANUALLY"
+      "disposition": "UPSTREAM_CHANGED_REBASE_MANUALLY",
+      "local_git_upstream_overlap_status": "M",
+      "stage2_merge_handling": "MANUAL_REBASE"
     },
     {
       "path": "packages/twenty-server/src/engine/core-modules/logic-function/logic-function-trigger/logic-function-trigger.service.ts",
@@ -1947,7 +2177,9 @@
       "target_path_exists": true,
       "base_blob_sha": "3f5e6d68eb2bdf3e4e724055899401e435a24e91",
       "target_blob_sha": "3f5e6d68eb2bdf3e4e724055899401e435a24e91",
-      "disposition": "UNCHANGED_UPSTREAM_PATH"
+      "disposition": "UNCHANGED_UPSTREAM_PATH",
+      "local_git_upstream_overlap_status": null,
+      "stage2_merge_handling": "REAPPLY_TARGET_TEST"
     },
     {
       "path": "packages/twenty-server/src/engine/core-modules/logic-function/logic-function-trigger/triggers/route/route-trigger.service.ts",
@@ -1963,7 +2195,9 @@
       "target_path_exists": true,
       "base_blob_sha": "e3745689278112865c552a1136a1f5bc5c975909",
       "target_blob_sha": "d69d89e0d26a3283f73c58753d443c4f88df74bc",
-      "disposition": "UPSTREAM_CHANGED_REBASE_MANUALLY"
+      "disposition": "UPSTREAM_CHANGED_REBASE_MANUALLY",
+      "local_git_upstream_overlap_status": "M",
+      "stage2_merge_handling": "MANUAL_REBASE"
     },
     {
       "path": "packages/twenty-server/src/engine/core-modules/logic-function/logic-function-trigger/triggers/route/utils/__tests__/build-logic-function-event.util.spec.ts",
@@ -1979,7 +2213,9 @@
       "target_path_exists": true,
       "base_blob_sha": "a03dfa2357b6faf732d8242ff6af7c88558dbe95",
       "target_blob_sha": "a0f9617580d21e419bead63e7234a4149ec38829",
-      "disposition": "UPSTREAM_CHANGED_REBASE_MANUALLY"
+      "disposition": "UPSTREAM_CHANGED_REBASE_MANUALLY",
+      "local_git_upstream_overlap_status": "M",
+      "stage2_merge_handling": "MANUAL_REBASE"
     },
     {
       "path": "packages/twenty-server/src/engine/core-modules/logic-function/logic-function-trigger/triggers/route/utils/build-logic-function-event.util.ts",
@@ -1995,7 +2231,9 @@
       "target_path_exists": true,
       "base_blob_sha": "dd8b09378c7edecb0df27f7f4c0a801ebe8065c7",
       "target_blob_sha": "15ab17f3bc77752ff3dd89529542f9f6b6fe6861",
-      "disposition": "UPSTREAM_CHANGED_REBASE_MANUALLY"
+      "disposition": "UPSTREAM_CHANGED_REBASE_MANUALLY",
+      "local_git_upstream_overlap_status": "M",
+      "stage2_merge_handling": "MANUAL_REBASE"
     },
     {
       "path": "packages/twenty-server/src/engine/core-modules/permavent-delegated-api/constants/permavent-delegated-context-header.constant.ts",
@@ -2011,7 +2249,9 @@
       "target_path_exists": false,
       "base_blob_sha": null,
       "target_blob_sha": null,
-      "disposition": "CUSTOM_NEW_PATH"
+      "disposition": "CUSTOM_NEW_PATH",
+      "local_git_upstream_overlap_status": null,
+      "stage2_merge_handling": "PORT_CUSTOM_SOURCE"
     },
     {
       "path": "packages/twenty-server/src/engine/core-modules/permavent-delegated-api/permavent-delegated-api.module.ts",
@@ -2027,7 +2267,9 @@
       "target_path_exists": false,
       "base_blob_sha": null,
       "target_blob_sha": null,
-      "disposition": "CUSTOM_NEW_PATH"
+      "disposition": "CUSTOM_NEW_PATH",
+      "local_git_upstream_overlap_status": null,
+      "stage2_merge_handling": "PORT_CUSTOM_SOURCE"
     },
     {
       "path": "packages/twenty-server/src/engine/core-modules/permavent-delegated-api/services/__tests__/permavent-delegated-context.service.spec.ts",
@@ -2044,7 +2286,9 @@
       "target_path_exists": false,
       "base_blob_sha": null,
       "target_blob_sha": null,
-      "disposition": "CUSTOM_NEW_PATH"
+      "disposition": "CUSTOM_NEW_PATH",
+      "local_git_upstream_overlap_status": null,
+      "stage2_merge_handling": "PORT_CUSTOM_SOURCE"
     },
     {
       "path": "packages/twenty-server/src/engine/core-modules/permavent-delegated-api/services/permavent-delegated-context.service.ts",
@@ -2060,7 +2304,9 @@
       "target_path_exists": false,
       "base_blob_sha": null,
       "target_blob_sha": null,
-      "disposition": "CUSTOM_NEW_PATH"
+      "disposition": "CUSTOM_NEW_PATH",
+      "local_git_upstream_overlap_status": null,
+      "stage2_merge_handling": "PORT_CUSTOM_SOURCE"
     },
     {
       "path": "packages/twenty-server/src/engine/core-modules/permavent-sales-scope/__tests__/permavent-sales-scope.service.spec.ts",
@@ -2077,7 +2323,9 @@
       "target_path_exists": false,
       "base_blob_sha": null,
       "target_blob_sha": null,
-      "disposition": "CUSTOM_NEW_PATH"
+      "disposition": "CUSTOM_NEW_PATH",
+      "local_git_upstream_overlap_status": null,
+      "stage2_merge_handling": "PORT_CUSTOM_SOURCE"
     },
     {
       "path": "packages/twenty-server/src/engine/core-modules/permavent-sales-scope/assignments/__tests__/permavent-sales-rep-assignment.service.spec.ts",
@@ -2093,7 +2341,9 @@
       "target_path_exists": false,
       "base_blob_sha": null,
       "target_blob_sha": null,
-      "disposition": "CUSTOM_NEW_PATH"
+      "disposition": "CUSTOM_NEW_PATH",
+      "local_git_upstream_overlap_status": null,
+      "stage2_merge_handling": "PORT_CUSTOM_SOURCE"
     },
     {
       "path": "packages/twenty-server/src/engine/core-modules/permavent-sales-scope/assignments/normalise-permavent-sales-rep-code.util.ts",
@@ -2109,7 +2359,9 @@
       "target_path_exists": false,
       "base_blob_sha": null,
       "target_blob_sha": null,
-      "disposition": "CUSTOM_NEW_PATH"
+      "disposition": "CUSTOM_NEW_PATH",
+      "local_git_upstream_overlap_status": null,
+      "stage2_merge_handling": "PORT_CUSTOM_SOURCE"
     },
     {
       "path": "packages/twenty-server/src/engine/core-modules/permavent-sales-scope/assignments/permavent-sales-rep-assignment.service.ts",
@@ -2126,7 +2378,9 @@
       "target_path_exists": false,
       "base_blob_sha": null,
       "target_blob_sha": null,
-      "disposition": "CUSTOM_NEW_PATH"
+      "disposition": "CUSTOM_NEW_PATH",
+      "local_git_upstream_overlap_status": null,
+      "stage2_merge_handling": "PORT_CUSTOM_SOURCE"
     },
     {
       "path": "packages/twenty-server/src/engine/core-modules/permavent-sales-scope/constants/permavent-role-universal-identifiers.constant.ts",
@@ -2142,7 +2396,9 @@
       "target_path_exists": false,
       "base_blob_sha": null,
       "target_blob_sha": null,
-      "disposition": "CUSTOM_NEW_PATH"
+      "disposition": "CUSTOM_NEW_PATH",
+      "local_git_upstream_overlap_status": null,
+      "stage2_merge_handling": "PORT_CUSTOM_SOURCE"
     },
     {
       "path": "packages/twenty-server/src/engine/core-modules/permavent-sales-scope/context/__tests__/permavent-sales-scope-context.factory.spec.ts",
@@ -2158,7 +2414,9 @@
       "target_path_exists": false,
       "base_blob_sha": null,
       "target_blob_sha": null,
-      "disposition": "CUSTOM_NEW_PATH"
+      "disposition": "CUSTOM_NEW_PATH",
+      "local_git_upstream_overlap_status": null,
+      "stage2_merge_handling": "PORT_CUSTOM_SOURCE"
     },
     {
       "path": "packages/twenty-server/src/engine/core-modules/permavent-sales-scope/context/permavent-sales-scope-context.factory.ts",
@@ -2176,7 +2434,9 @@
       "target_path_exists": false,
       "base_blob_sha": null,
       "target_blob_sha": null,
-      "disposition": "CUSTOM_NEW_PATH"
+      "disposition": "CUSTOM_NEW_PATH",
+      "local_git_upstream_overlap_status": null,
+      "stage2_merge_handling": "PORT_CUSTOM_SOURCE"
     },
     {
       "path": "packages/twenty-server/src/engine/core-modules/permavent-sales-scope/context/permavent-sales-scope-context.type.ts",
@@ -2193,7 +2453,9 @@
       "target_path_exists": false,
       "base_blob_sha": null,
       "target_blob_sha": null,
-      "disposition": "CUSTOM_NEW_PATH"
+      "disposition": "CUSTOM_NEW_PATH",
+      "local_git_upstream_overlap_status": null,
+      "stage2_merge_handling": "PORT_CUSTOM_SOURCE"
     },
     {
       "path": "packages/twenty-server/src/engine/core-modules/permavent-sales-scope/focus/__tests__/permavent-company-focus-filter.service.spec.ts",
@@ -2209,7 +2471,9 @@
       "target_path_exists": false,
       "base_blob_sha": null,
       "target_blob_sha": null,
-      "disposition": "CUSTOM_NEW_PATH"
+      "disposition": "CUSTOM_NEW_PATH",
+      "local_git_upstream_overlap_status": null,
+      "stage2_merge_handling": "PORT_CUSTOM_SOURCE"
     },
     {
       "path": "packages/twenty-server/src/engine/core-modules/permavent-sales-scope/focus/permavent-company-focus-filter.service.ts",
@@ -2225,7 +2489,9 @@
       "target_path_exists": false,
       "base_blob_sha": null,
       "target_blob_sha": null,
-      "disposition": "CUSTOM_NEW_PATH"
+      "disposition": "CUSTOM_NEW_PATH",
+      "local_git_upstream_overlap_status": null,
+      "stage2_merge_handling": "PORT_CUSTOM_SOURCE"
     },
     {
       "path": "packages/twenty-server/src/engine/core-modules/permavent-sales-scope/permavent-sales-scope.module.ts",
@@ -2242,7 +2508,9 @@
       "target_path_exists": false,
       "base_blob_sha": null,
       "target_blob_sha": null,
-      "disposition": "CUSTOM_NEW_PATH"
+      "disposition": "CUSTOM_NEW_PATH",
+      "local_git_upstream_overlap_status": null,
+      "stage2_merge_handling": "PORT_CUSTOM_SOURCE"
     },
     {
       "path": "packages/twenty-server/src/engine/core-modules/permavent-sales-scope/permavent-sales-scope.service.ts",
@@ -2258,7 +2526,9 @@
       "target_path_exists": false,
       "base_blob_sha": null,
       "target_blob_sha": null,
-      "disposition": "CUSTOM_NEW_PATH"
+      "disposition": "CUSTOM_NEW_PATH",
+      "local_git_upstream_overlap_status": null,
+      "stage2_merge_handling": "PORT_CUSTOM_SOURCE"
     },
     {
       "path": "packages/twenty-server/src/engine/core-modules/permavent-user-audit/__tests__/permavent-user-audit.resolver.spec.ts",
@@ -2274,7 +2544,9 @@
       "target_path_exists": false,
       "base_blob_sha": null,
       "target_blob_sha": null,
-      "disposition": "CUSTOM_NEW_PATH"
+      "disposition": "CUSTOM_NEW_PATH",
+      "local_git_upstream_overlap_status": null,
+      "stage2_merge_handling": "PORT_CUSTOM_SOURCE"
     },
     {
       "path": "packages/twenty-server/src/engine/core-modules/permavent-user-audit/__tests__/permavent-user-audit.service.spec.ts",
@@ -2290,7 +2562,9 @@
       "target_path_exists": false,
       "base_blob_sha": null,
       "target_blob_sha": null,
-      "disposition": "CUSTOM_NEW_PATH"
+      "disposition": "CUSTOM_NEW_PATH",
+      "local_git_upstream_overlap_status": null,
+      "stage2_merge_handling": "PORT_CUSTOM_SOURCE"
     },
     {
       "path": "packages/twenty-server/src/engine/core-modules/permavent-user-audit/constants/permavent-user-audit-cleanup-cron-pattern.constant.ts",
@@ -2306,7 +2580,9 @@
       "target_path_exists": false,
       "base_blob_sha": null,
       "target_blob_sha": null,
-      "disposition": "CUSTOM_NEW_PATH"
+      "disposition": "CUSTOM_NEW_PATH",
+      "local_git_upstream_overlap_status": null,
+      "stage2_merge_handling": "PORT_CUSTOM_SOURCE"
     },
     {
       "path": "packages/twenty-server/src/engine/core-modules/permavent-user-audit/cron/permavent-user-audit-cleanup.cron.command.ts",
@@ -2322,7 +2598,9 @@
       "target_path_exists": false,
       "base_blob_sha": null,
       "target_blob_sha": null,
-      "disposition": "CUSTOM_NEW_PATH"
+      "disposition": "CUSTOM_NEW_PATH",
+      "local_git_upstream_overlap_status": null,
+      "stage2_merge_handling": "PORT_CUSTOM_SOURCE"
     },
     {
       "path": "packages/twenty-server/src/engine/core-modules/permavent-user-audit/cron/permavent-user-audit-cleanup.cron.job.ts",
@@ -2338,7 +2616,9 @@
       "target_path_exists": false,
       "base_blob_sha": null,
       "target_blob_sha": null,
-      "disposition": "CUSTOM_NEW_PATH"
+      "disposition": "CUSTOM_NEW_PATH",
+      "local_git_upstream_overlap_status": null,
+      "stage2_merge_handling": "PORT_CUSTOM_SOURCE"
     },
     {
       "path": "packages/twenty-server/src/engine/core-modules/permavent-user-audit/permavent-user-audit-entry.entity.ts",
@@ -2354,7 +2634,9 @@
       "target_path_exists": false,
       "base_blob_sha": null,
       "target_blob_sha": null,
-      "disposition": "CUSTOM_NEW_PATH"
+      "disposition": "CUSTOM_NEW_PATH",
+      "local_git_upstream_overlap_status": null,
+      "stage2_merge_handling": "PORT_CUSTOM_SOURCE"
     },
     {
       "path": "packages/twenty-server/src/engine/core-modules/permavent-user-audit/permavent-user-audit.job.ts",
@@ -2370,7 +2652,9 @@
       "target_path_exists": false,
       "base_blob_sha": null,
       "target_blob_sha": null,
-      "disposition": "CUSTOM_NEW_PATH"
+      "disposition": "CUSTOM_NEW_PATH",
+      "local_git_upstream_overlap_status": null,
+      "stage2_merge_handling": "PORT_CUSTOM_SOURCE"
     },
     {
       "path": "packages/twenty-server/src/engine/core-modules/permavent-user-audit/permavent-user-audit.module.ts",
@@ -2386,7 +2670,9 @@
       "target_path_exists": false,
       "base_blob_sha": null,
       "target_blob_sha": null,
-      "disposition": "CUSTOM_NEW_PATH"
+      "disposition": "CUSTOM_NEW_PATH",
+      "local_git_upstream_overlap_status": null,
+      "stage2_merge_handling": "PORT_CUSTOM_SOURCE"
     },
     {
       "path": "packages/twenty-server/src/engine/core-modules/permavent-user-audit/permavent-user-audit.resolver.ts",
@@ -2402,7 +2688,9 @@
       "target_path_exists": false,
       "base_blob_sha": null,
       "target_blob_sha": null,
-      "disposition": "CUSTOM_NEW_PATH"
+      "disposition": "CUSTOM_NEW_PATH",
+      "local_git_upstream_overlap_status": null,
+      "stage2_merge_handling": "PORT_CUSTOM_SOURCE"
     },
     {
       "path": "packages/twenty-server/src/engine/core-modules/permavent-user-audit/permavent-user-audit.service.ts",
@@ -2418,7 +2706,9 @@
       "target_path_exists": false,
       "base_blob_sha": null,
       "target_blob_sha": null,
-      "disposition": "CUSTOM_NEW_PATH"
+      "disposition": "CUSTOM_NEW_PATH",
+      "local_git_upstream_overlap_status": null,
+      "stage2_merge_handling": "PORT_CUSTOM_SOURCE"
     },
     {
       "path": "packages/twenty-server/src/engine/core-modules/record-crud/services/common-api-context-builder.service.ts",
@@ -2434,7 +2724,9 @@
       "target_path_exists": true,
       "base_blob_sha": "48b72e21f21734170c98c6e769e15ef5e9b9db37",
       "target_blob_sha": "f36c53e05d55262a120c9cc3de20743b717a0490",
-      "disposition": "UPSTREAM_CHANGED_REBASE_MANUALLY"
+      "disposition": "UPSTREAM_CHANGED_REBASE_MANUALLY",
+      "local_git_upstream_overlap_status": "M",
+      "stage2_merge_handling": "MANUAL_REBASE"
     },
     {
       "path": "packages/twenty-server/src/engine/core-modules/tool-provider/tools/get-tool-catalog.tool.ts",
@@ -2450,7 +2742,9 @@
       "target_path_exists": true,
       "base_blob_sha": "6b13af2ef881bcbf4c35e4877572ad4c72890816",
       "target_blob_sha": "79c7239f3d7e5e9f8b71d698da1a20515f23dcf6",
-      "disposition": "UPSTREAM_CHANGED_REBASE_MANUALLY"
+      "disposition": "UPSTREAM_CHANGED_REBASE_MANUALLY",
+      "local_git_upstream_overlap_status": "M",
+      "stage2_merge_handling": "MANUAL_REBASE"
     },
     {
       "path": "packages/twenty-server/src/engine/core-modules/tool/tools/code-interpreter-tool/__tests__/code-interpreter-tool.spec.ts",
@@ -2466,7 +2760,9 @@
       "target_path_exists": false,
       "base_blob_sha": null,
       "target_blob_sha": null,
-      "disposition": "CUSTOM_NEW_PATH"
+      "disposition": "CUSTOM_NEW_PATH",
+      "local_git_upstream_overlap_status": null,
+      "stage2_merge_handling": "PORT_CUSTOM_SOURCE"
     },
     {
       "path": "packages/twenty-server/src/engine/core-modules/tool/tools/code-interpreter-tool/code-interpreter-tool.ts",
@@ -2482,7 +2778,9 @@
       "target_path_exists": true,
       "base_blob_sha": "3a1e7bb431e245643c1c90389f01ebba937d835e",
       "target_blob_sha": "ad2d427b91281ae276a700b6b1e99b69cc25558b",
-      "disposition": "UPSTREAM_CHANGED_REBASE_MANUALLY"
+      "disposition": "UPSTREAM_CHANGED_REBASE_MANUALLY",
+      "local_git_upstream_overlap_status": "M",
+      "stage2_merge_handling": "MANUAL_REBASE"
     },
     {
       "path": "packages/twenty-server/src/engine/core-modules/tool/tools/code-interpreter-tool/twenty-mcp-helper.const.ts",
@@ -2498,7 +2796,9 @@
       "target_path_exists": true,
       "base_blob_sha": "f0ed866de3548a5c916d957dad788be8fbc17da2",
       "target_blob_sha": "e53429bb4efe8c1056d702661d25e04b83ef67dc",
-      "disposition": "UPSTREAM_CHANGED_REBASE_MANUALLY"
+      "disposition": "UPSTREAM_CHANGED_REBASE_MANUALLY",
+      "local_git_upstream_overlap_status": "M",
+      "stage2_merge_handling": "MANUAL_REBASE"
     },
     {
       "path": "packages/twenty-server/src/engine/core-modules/twenty-config/config-variables.ts",
@@ -2517,7 +2817,9 @@
       "target_path_exists": true,
       "base_blob_sha": "3da500f3bd3a16b980a4a88926ee7cefc1383e05",
       "target_blob_sha": "878725c888d52369802a8565c8f469cb91c3f32e",
-      "disposition": "UPSTREAM_CHANGED_REBASE_MANUALLY"
+      "disposition": "UPSTREAM_CHANGED_REBASE_MANUALLY",
+      "local_git_upstream_overlap_status": "M",
+      "stage2_merge_handling": "MANUAL_REBASE"
     },
     {
       "path": "packages/twenty-server/src/engine/core-modules/workspace-invitation/services/workspace-invitation.service.ts",
@@ -2534,7 +2836,9 @@
       "target_path_exists": true,
       "base_blob_sha": "0dffbe8fa0ec5f4912798f29ed84f163d51f4c02",
       "target_blob_sha": "bd0ada76e7528bc8b00b5b8b51055a20b54a3933",
-      "disposition": "UPSTREAM_CHANGED_REBASE_MANUALLY"
+      "disposition": "UPSTREAM_CHANGED_REBASE_MANUALLY",
+      "local_git_upstream_overlap_status": "M",
+      "stage2_merge_handling": "MANUAL_REBASE"
     },
     {
       "path": "packages/twenty-server/src/engine/guards/jwt-auth.guard.ts",
@@ -2550,7 +2854,9 @@
       "target_path_exists": true,
       "base_blob_sha": "a5aaadf0a8fd07003c2104ecefcdff42c812e828",
       "target_blob_sha": "a5aaadf0a8fd07003c2104ecefcdff42c812e828",
-      "disposition": "UNCHANGED_UPSTREAM_PATH"
+      "disposition": "UNCHANGED_UPSTREAM_PATH",
+      "local_git_upstream_overlap_status": null,
+      "stage2_merge_handling": "REAPPLY_TARGET_TEST"
     },
     {
       "path": "packages/twenty-server/src/engine/metadata-modules/page-layout/dtos/inputs/update-page-layout-with-tabs.input.ts",
@@ -2566,7 +2872,9 @@
       "target_path_exists": true,
       "base_blob_sha": "d96045c370b5995f5746651306fc67e038ac0819",
       "target_blob_sha": "6ce9ef168b46bac30cad13ad2541193888acb274",
-      "disposition": "UPSTREAM_CHANGED_REBASE_MANUALLY"
+      "disposition": "UPSTREAM_CHANGED_REBASE_MANUALLY",
+      "local_git_upstream_overlap_status": "M",
+      "stage2_merge_handling": "MANUAL_REBASE"
     },
     {
       "path": "packages/twenty-server/src/engine/metadata-modules/page-layout/services/page-layout-update.service.ts",
@@ -2582,7 +2890,9 @@
       "target_path_exists": true,
       "base_blob_sha": "35d6eecad487dbb57840d4ffdc2cce328e6e2715",
       "target_blob_sha": "c750f530483b4c09b7ec9b68d277167419d6deaa",
-      "disposition": "UPSTREAM_CHANGED_REBASE_MANUALLY"
+      "disposition": "UPSTREAM_CHANGED_REBASE_MANUALLY",
+      "local_git_upstream_overlap_status": "M",
+      "stage2_merge_handling": "MANUAL_REBASE"
     },
     {
       "path": "packages/twenty-server/src/engine/metadata-modules/page-layout/utils/__tests__/resolve-permavent-record-opening-tab-update.util.spec.ts",
@@ -2598,7 +2908,9 @@
       "target_path_exists": false,
       "base_blob_sha": null,
       "target_blob_sha": null,
-      "disposition": "CUSTOM_NEW_PATH"
+      "disposition": "CUSTOM_NEW_PATH",
+      "local_git_upstream_overlap_status": null,
+      "stage2_merge_handling": "PORT_CUSTOM_SOURCE"
     },
     {
       "path": "packages/twenty-server/src/engine/metadata-modules/page-layout/utils/resolve-permavent-record-opening-tab-update.util.ts",
@@ -2614,7 +2926,9 @@
       "target_path_exists": false,
       "base_blob_sha": null,
       "target_blob_sha": null,
-      "disposition": "CUSTOM_NEW_PATH"
+      "disposition": "CUSTOM_NEW_PATH",
+      "local_git_upstream_overlap_status": null,
+      "stage2_merge_handling": "PORT_CUSTOM_SOURCE"
     },
     {
       "path": "packages/twenty-server/src/engine/middlewares/middleware.module.ts",
@@ -2630,7 +2944,9 @@
       "target_path_exists": true,
       "base_blob_sha": "06236d069ea2d4a79b397554b8c97e3b807acabe",
       "target_blob_sha": "84803a3debca966bfcf7293e242d590ecb0d70c8",
-      "disposition": "UPSTREAM_CHANGED_REBASE_MANUALLY"
+      "disposition": "UPSTREAM_CHANGED_REBASE_MANUALLY",
+      "local_git_upstream_overlap_status": "M",
+      "stage2_merge_handling": "MANUAL_REBASE"
     },
     {
       "path": "packages/twenty-server/src/engine/middlewares/middleware.service.ts",
@@ -2646,7 +2962,9 @@
       "target_path_exists": true,
       "base_blob_sha": "5b4977d8866b04be9be62019d91487d1d62b5f38",
       "target_blob_sha": "1cf7b4c91c3a853c655b2d50298923f5f4774f89",
-      "disposition": "UPSTREAM_CHANGED_REBASE_MANUALLY"
+      "disposition": "UPSTREAM_CHANGED_REBASE_MANUALLY",
+      "local_git_upstream_overlap_status": "M",
+      "stage2_merge_handling": "MANUAL_REBASE"
     },
     {
       "path": "packages/twenty-server/src/engine/twenty-orm/utils/__tests__/resolve-role-ids-from-auth-context.util.spec.ts",
@@ -2662,7 +2980,9 @@
       "target_path_exists": true,
       "base_blob_sha": "9b79a08ce889d2fd83bbd46fcd3a520a9ed3af2e",
       "target_blob_sha": "9b79a08ce889d2fd83bbd46fcd3a520a9ed3af2e",
-      "disposition": "UNCHANGED_UPSTREAM_PATH"
+      "disposition": "UNCHANGED_UPSTREAM_PATH",
+      "local_git_upstream_overlap_status": null,
+      "stage2_merge_handling": "REAPPLY_TARGET_TEST"
     },
     {
       "path": "packages/twenty-server/src/engine/twenty-orm/utils/resolve-objects-permissions-from-auth-context.util.ts",
@@ -2678,7 +2998,9 @@
       "target_path_exists": false,
       "base_blob_sha": null,
       "target_blob_sha": null,
-      "disposition": "CUSTOM_NEW_PATH"
+      "disposition": "CUSTOM_NEW_PATH",
+      "local_git_upstream_overlap_status": null,
+      "stage2_merge_handling": "PORT_CUSTOM_SOURCE"
     },
     {
       "path": "packages/twenty-server/src/engine/twenty-orm/utils/resolve-role-ids-from-auth-context.util.ts",
@@ -2694,7 +3016,9 @@
       "target_path_exists": true,
       "base_blob_sha": "4853ffe1e2bf581e7c0cc02fcd37acc99fc83ffb",
       "target_blob_sha": "39057d80b463360609b89e256fb85a8640ede849",
-      "disposition": "UPSTREAM_CHANGED_REBASE_MANUALLY"
+      "disposition": "UPSTREAM_CHANGED_REBASE_MANUALLY",
+      "local_git_upstream_overlap_status": "M",
+      "stage2_merge_handling": "MANUAL_REBASE"
     },
     {
       "path": "packages/twenty-server/src/engine/utils/bind-data-to-request-object.util.ts",
@@ -2710,7 +3034,9 @@
       "target_path_exists": true,
       "base_blob_sha": "242aa8a99bef968b127ebd2b9a55eb629004c911",
       "target_blob_sha": "597130d8dfba19d177118f1fe031ffa9fee700bd",
-      "disposition": "UPSTREAM_CHANGED_REBASE_MANUALLY"
+      "disposition": "UPSTREAM_CHANGED_REBASE_MANUALLY",
+      "local_git_upstream_overlap_status": "M",
+      "stage2_merge_handling": "MANUAL_REBASE"
     },
     {
       "path": "packages/twenty-server/src/engine/workspace-manager/workspace-cleaner/services/cleaner.workspace-service.ts",
@@ -2726,7 +3052,9 @@
       "target_path_exists": true,
       "base_blob_sha": "4fc5babff3b998d9adf2e5e3b4f7946ed7aed5a8",
       "target_blob_sha": "8261bec3f5f539f4a7fbbe426688d56f4212d377",
-      "disposition": "UPSTREAM_CHANGED_REBASE_MANUALLY"
+      "disposition": "UPSTREAM_CHANGED_REBASE_MANUALLY",
+      "local_git_upstream_overlap_status": "M",
+      "stage2_merge_handling": "MANUAL_REBASE"
     },
     {
       "path": "packages/twenty-server/src/engine/workspace-manager/workspace-migration/utils/__tests__/compute-ordered-migration-actions.util.spec.ts",
@@ -2742,7 +3070,9 @@
       "target_path_exists": true,
       "base_blob_sha": null,
       "target_blob_sha": "d803f44373ccd0b49fb3aba3e2a2ef2a7bf1bb2e",
-      "disposition": "ADDED_PATH_COLLISION"
+      "disposition": "ADDED_PATH_COLLISION",
+      "local_git_upstream_overlap_status": "A",
+      "stage2_merge_handling": "ADD_ADD_COLLISION_MERGE_TESTS"
     },
     {
       "path": "packages/twenty-server/src/engine/workspace-manager/workspace-migration/utils/compute-ordered-migration-actions.util.ts",
@@ -2758,7 +3088,9 @@
       "target_path_exists": true,
       "base_blob_sha": "f51e38fbd740fcb655b04c6eb51e98ef95d98cf2",
       "target_blob_sha": "573566f98b574cee6df908aaa2bccc487ee4cfe6",
-      "disposition": "UPSTREAM_CHANGED_REBASE_MANUALLY"
+      "disposition": "UPSTREAM_CHANGED_REBASE_MANUALLY",
+      "local_git_upstream_overlap_status": "M",
+      "stage2_merge_handling": "MANUAL_REBASE"
     },
     {
       "path": "packages/twenty-server/src/engine/workspace-manager/workspace-migration/workspace-migration-runner/action-handlers/page-layout/services/__tests__/update-page-layout-action-handler.service.spec.ts",
@@ -2774,7 +3106,9 @@
       "target_path_exists": false,
       "base_blob_sha": null,
       "target_blob_sha": null,
-      "disposition": "CUSTOM_NEW_PATH"
+      "disposition": "CUSTOM_NEW_PATH",
+      "local_git_upstream_overlap_status": null,
+      "stage2_merge_handling": "PORT_CUSTOM_SOURCE"
     },
     {
       "path": "packages/twenty-server/src/engine/workspace-manager/workspace-migration/workspace-migration-runner/action-handlers/page-layout/services/update-page-layout-action-handler.service.ts",
@@ -2790,7 +3124,9 @@
       "target_path_exists": true,
       "base_blob_sha": "7bb5b1e41d2d4d3941465f72ab834e6856dfe330",
       "target_blob_sha": "e9e8ba8b10fd3840ca40360150279ad2b86b1fc0",
-      "disposition": "UPSTREAM_CHANGED_REBASE_MANUALLY"
+      "disposition": "UPSTREAM_CHANGED_REBASE_MANUALLY",
+      "local_git_upstream_overlap_status": "M",
+      "stage2_merge_handling": "MANUAL_REBASE"
     },
     {
       "path": "packages/twenty-server/src/modules/modules.module.ts",
@@ -2806,7 +3142,9 @@
       "target_path_exists": true,
       "base_blob_sha": "4c766548d03dc67c2f3f55711967758ad8e4ee58",
       "target_blob_sha": "71ca79d00acfaf35b804879e40ac9d4fa3e80bb4",
-      "disposition": "UPSTREAM_CHANGED_REBASE_MANUALLY"
+      "disposition": "UPSTREAM_CHANGED_REBASE_MANUALLY",
+      "local_git_upstream_overlap_status": "M",
+      "stage2_merge_handling": "MANUAL_REBASE"
     },
     {
       "path": "packages/twenty-server/src/modules/permavent-weekly-sales-report/controllers/permavent-weekly-sales-report.controller.ts",
@@ -2822,7 +3160,9 @@
       "target_path_exists": false,
       "base_blob_sha": null,
       "target_blob_sha": null,
-      "disposition": "CUSTOM_NEW_PATH"
+      "disposition": "CUSTOM_NEW_PATH",
+      "local_git_upstream_overlap_status": null,
+      "stage2_merge_handling": "PORT_CUSTOM_SOURCE"
     },
     {
       "path": "packages/twenty-server/src/modules/permavent-weekly-sales-report/dtos/permavent-weekly-sales-report-source-request.dto.ts",
@@ -2838,7 +3178,9 @@
       "target_path_exists": false,
       "base_blob_sha": null,
       "target_blob_sha": null,
-      "disposition": "CUSTOM_NEW_PATH"
+      "disposition": "CUSTOM_NEW_PATH",
+      "local_git_upstream_overlap_status": null,
+      "stage2_merge_handling": "PORT_CUSTOM_SOURCE"
     },
     {
       "path": "packages/twenty-server/src/modules/permavent-weekly-sales-report/permavent-weekly-sales-report.module.ts",
@@ -2854,7 +3196,9 @@
       "target_path_exists": false,
       "base_blob_sha": null,
       "target_blob_sha": null,
-      "disposition": "CUSTOM_NEW_PATH"
+      "disposition": "CUSTOM_NEW_PATH",
+      "local_git_upstream_overlap_status": null,
+      "stage2_merge_handling": "PORT_CUSTOM_SOURCE"
     },
     {
       "path": "packages/twenty-server/src/modules/permavent-weekly-sales-report/services/__tests__/permavent-weekly-sales-report-source.service.spec.ts",
@@ -2870,7 +3214,9 @@
       "target_path_exists": false,
       "base_blob_sha": null,
       "target_blob_sha": null,
-      "disposition": "CUSTOM_NEW_PATH"
+      "disposition": "CUSTOM_NEW_PATH",
+      "local_git_upstream_overlap_status": null,
+      "stage2_merge_handling": "PORT_CUSTOM_SOURCE"
     },
     {
       "path": "packages/twenty-server/src/modules/permavent-weekly-sales-report/services/permavent-weekly-sales-report-source.service.ts",
@@ -2886,7 +3232,9 @@
       "target_path_exists": false,
       "base_blob_sha": null,
       "target_blob_sha": null,
-      "disposition": "CUSTOM_NEW_PATH"
+      "disposition": "CUSTOM_NEW_PATH",
+      "local_git_upstream_overlap_status": null,
+      "stage2_merge_handling": "PORT_CUSTOM_SOURCE"
     },
     {
       "path": "packages/twenty-server/src/modules/permavent-weekly-sales-report/types/permavent-weekly-sales-report-source.type.ts",
@@ -2902,7 +3250,9 @@
       "target_path_exists": false,
       "base_blob_sha": null,
       "target_blob_sha": null,
-      "disposition": "CUSTOM_NEW_PATH"
+      "disposition": "CUSTOM_NEW_PATH",
+      "local_git_upstream_overlap_status": null,
+      "stage2_merge_handling": "PORT_CUSTOM_SOURCE"
     },
     {
       "path": "packages/twenty-server/src/modules/permavent-weekly-sales-report/utils/__tests__/get-permavent-london-week-window.util.spec.ts",
@@ -2918,7 +3268,9 @@
       "target_path_exists": false,
       "base_blob_sha": null,
       "target_blob_sha": null,
-      "disposition": "CUSTOM_NEW_PATH"
+      "disposition": "CUSTOM_NEW_PATH",
+      "local_git_upstream_overlap_status": null,
+      "stage2_merge_handling": "PORT_CUSTOM_SOURCE"
     },
     {
       "path": "packages/twenty-server/src/modules/permavent-weekly-sales-report/utils/get-permavent-london-week-window.util.ts",
@@ -2934,7 +3286,9 @@
       "target_path_exists": false,
       "base_blob_sha": null,
       "target_blob_sha": null,
-      "disposition": "CUSTOM_NEW_PATH"
+      "disposition": "CUSTOM_NEW_PATH",
+      "local_git_upstream_overlap_status": null,
+      "stage2_merge_handling": "PORT_CUSTOM_SOURCE"
     },
     {
       "path": "packages/twenty-shared/src/types/FeatureFlagKey.ts",
@@ -2951,7 +3305,9 @@
       "target_path_exists": true,
       "base_blob_sha": "69c32998f857fac86e9a50d5dcb9746e9e80385e",
       "target_blob_sha": "55b4e5c3e208c6be7abc933f0a05597ffc5ca6c8",
-      "disposition": "UPSTREAM_CHANGED_REBASE_MANUALLY"
+      "disposition": "UPSTREAM_CHANGED_REBASE_MANUALLY",
+      "local_git_upstream_overlap_status": "M",
+      "stage2_merge_handling": "MANUAL_REBASE"
     },
     {
       "path": "packages/twenty-shared/src/types/LogicFunctionEvent.ts",
@@ -2967,7 +3323,9 @@
       "target_path_exists": true,
       "base_blob_sha": "7fc87b823ed56ddb614ae7a377105a0ce88a8695",
       "target_blob_sha": "7fc87b823ed56ddb614ae7a377105a0ce88a8695",
-      "disposition": "UNCHANGED_UPSTREAM_PATH"
+      "disposition": "UNCHANGED_UPSTREAM_PATH",
+      "local_git_upstream_overlap_status": null,
+      "stage2_merge_handling": "REAPPLY_TARGET_TEST"
     },
     {
       "path": "packages/twenty-shared/src/types/PermaventLogicFunctionActorContext.ts",
@@ -2983,7 +3341,9 @@
       "target_path_exists": false,
       "base_blob_sha": null,
       "target_blob_sha": null,
-      "disposition": "CUSTOM_NEW_PATH"
+      "disposition": "CUSTOM_NEW_PATH",
+      "local_git_upstream_overlap_status": null,
+      "stage2_merge_handling": "PORT_CUSTOM_SOURCE"
     },
     {
       "path": "packages/twenty-shared/src/types/PermaventSalesScope.ts",
@@ -2999,7 +3359,9 @@
       "target_path_exists": false,
       "base_blob_sha": null,
       "target_blob_sha": null,
-      "disposition": "CUSTOM_NEW_PATH"
+      "disposition": "CUSTOM_NEW_PATH",
+      "local_git_upstream_overlap_status": null,
+      "stage2_merge_handling": "PORT_CUSTOM_SOURCE"
     },
     {
       "path": "packages/twenty-shared/src/types/index.ts",
@@ -3015,7 +3377,9 @@
       "target_path_exists": true,
       "base_blob_sha": "0f274af80fc7e47af08e081fd14a83ebe923fc8c",
       "target_blob_sha": "1e3dafe43cc3ed92423c14ee163748791441980d",
-      "disposition": "UPSTREAM_CHANGED_REBASE_MANUALLY"
+      "disposition": "UPSTREAM_CHANGED_REBASE_MANUALLY",
+      "local_git_upstream_overlap_status": "M",
+      "stage2_merge_handling": "MANUAL_REBASE"
     },
     {
       "path": "packages/twenty-ui/vite.config.ts",
@@ -3031,7 +3395,9 @@
       "target_path_exists": true,
       "base_blob_sha": "eb5ac37c4294ec8a7c45d86eab0cfcab15d3a933",
       "target_blob_sha": "8a26f2e1872224876bf228c86c4ede6b8f3f5e4d",
-      "disposition": "UPSTREAM_CHANGED_REBASE_MANUALLY"
+      "disposition": "UPSTREAM_CHANGED_REBASE_MANUALLY",
+      "local_git_upstream_overlap_status": "M",
+      "stage2_merge_handling": "MANUAL_REBASE"
     },
     {
       "path": "scripts/permavent/build-production-image.sh",
@@ -3047,7 +3413,9 @@
       "target_path_exists": false,
       "base_blob_sha": null,
       "target_blob_sha": null,
-      "disposition": "CUSTOM_NEW_PATH"
+      "disposition": "CUSTOM_NEW_PATH",
+      "local_git_upstream_overlap_status": null,
+      "stage2_merge_handling": "PORT_CUSTOM_SOURCE"
     },
     {
       "path": "scripts/permavent/check-boundaries.sh",
@@ -3063,7 +3431,9 @@
       "target_path_exists": false,
       "base_blob_sha": null,
       "target_blob_sha": null,
-      "disposition": "CUSTOM_NEW_PATH"
+      "disposition": "CUSTOM_NEW_PATH",
+      "local_git_upstream_overlap_status": null,
+      "stage2_merge_handling": "PORT_CUSTOM_SOURCE"
     },
     {
       "path": "scripts/permavent/docs/company-branch-opening-tab.md",
@@ -3079,7 +3449,9 @@
       "target_path_exists": false,
       "base_blob_sha": null,
       "target_blob_sha": null,
-      "disposition": "CUSTOM_NEW_PATH"
+      "disposition": "CUSTOM_NEW_PATH",
+      "local_git_upstream_overlap_status": null,
+      "stage2_merge_handling": "PORT_CUSTOM_SOURCE"
     },
     {
       "path": "scripts/permavent/lib/common.sh",
@@ -3095,7 +3467,9 @@
       "target_path_exists": false,
       "base_blob_sha": null,
       "target_blob_sha": null,
-      "disposition": "CUSTOM_NEW_PATH"
+      "disposition": "CUSTOM_NEW_PATH",
+      "local_git_upstream_overlap_status": null,
+      "stage2_merge_handling": "PORT_CUSTOM_SOURCE"
     },
     {
       "path": "scripts/permavent/preflight.sh",
@@ -3111,7 +3485,9 @@
       "target_path_exists": false,
       "base_blob_sha": null,
       "target_blob_sha": null,
-      "disposition": "CUSTOM_NEW_PATH"
+      "disposition": "CUSTOM_NEW_PATH",
+      "local_git_upstream_overlap_status": null,
+      "stage2_merge_handling": "PORT_CUSTOM_SOURCE"
     },
     {
       "path": "scripts/permavent/run-server-tests.sh",
@@ -3127,7 +3503,9 @@
       "target_path_exists": false,
       "base_blob_sha": null,
       "target_blob_sha": null,
-      "disposition": "CUSTOM_NEW_PATH"
+      "disposition": "CUSTOM_NEW_PATH",
+      "local_git_upstream_overlap_status": null,
+      "stage2_merge_handling": "PORT_CUSTOM_SOURCE"
     },
     {
       "path": "scripts/permavent/server/twenty-backup-test",
@@ -3143,7 +3521,9 @@
       "target_path_exists": false,
       "base_blob_sha": null,
       "target_blob_sha": null,
-      "disposition": "CUSTOM_NEW_PATH"
+      "disposition": "CUSTOM_NEW_PATH",
+      "local_git_upstream_overlap_status": null,
+      "stage2_merge_handling": "PORT_CUSTOM_SOURCE"
     },
     {
       "path": "scripts/permavent/server/twenty-deploy-live-image",
@@ -3159,7 +3539,9 @@
       "target_path_exists": false,
       "base_blob_sha": null,
       "target_blob_sha": null,
-      "disposition": "CUSTOM_NEW_PATH"
+      "disposition": "CUSTOM_NEW_PATH",
+      "local_git_upstream_overlap_status": null,
+      "stage2_merge_handling": "PORT_CUSTOM_SOURCE"
     },
     {
       "path": "scripts/permavent/server/twenty-deploy-test-image",
@@ -3175,7 +3557,9 @@
       "target_path_exists": false,
       "base_blob_sha": null,
       "target_blob_sha": null,
-      "disposition": "CUSTOM_NEW_PATH"
+      "disposition": "CUSTOM_NEW_PATH",
+      "local_git_upstream_overlap_status": null,
+      "stage2_merge_handling": "PORT_CUSTOM_SOURCE"
     },
     {
       "path": "scripts/permavent/server/twenty-promote-test-to-live",
@@ -3191,7 +3575,9 @@
       "target_path_exists": false,
       "base_blob_sha": null,
       "target_blob_sha": null,
-      "disposition": "CUSTOM_NEW_PATH"
+      "disposition": "CUSTOM_NEW_PATH",
+      "local_git_upstream_overlap_status": null,
+      "stage2_merge_handling": "PORT_CUSTOM_SOURCE"
     },
     {
       "path": "scripts/permavent/server/twenty-refresh-test-from-live",
@@ -3207,7 +3593,9 @@
       "target_path_exists": false,
       "base_blob_sha": null,
       "target_blob_sha": null,
-      "disposition": "CUSTOM_NEW_PATH"
+      "disposition": "CUSTOM_NEW_PATH",
+      "local_git_upstream_overlap_status": null,
+      "stage2_merge_handling": "PORT_CUSTOM_SOURCE"
     },
     {
       "path": "scripts/permavent/server/twenty-repair-test-v2-18-upgrade-order",
@@ -3223,7 +3611,9 @@
       "target_path_exists": false,
       "base_blob_sha": null,
       "target_blob_sha": null,
-      "disposition": "CUSTOM_NEW_PATH"
+      "disposition": "CUSTOM_NEW_PATH",
+      "local_git_upstream_overlap_status": null,
+      "stage2_merge_handling": "PORT_CUSTOM_SOURCE"
     },
     {
       "path": "scripts/permavent/server/twenty-repair-v2-18-upgrade-order.sql",
@@ -3239,7 +3629,9 @@
       "target_path_exists": false,
       "base_blob_sha": null,
       "target_blob_sha": null,
-      "disposition": "CUSTOM_NEW_PATH"
+      "disposition": "CUSTOM_NEW_PATH",
+      "local_git_upstream_overlap_status": null,
+      "stage2_merge_handling": "PORT_CUSTOM_SOURCE"
     },
     {
       "path": "scripts/permavent/verify-changes.sh",
@@ -3255,7 +3647,9 @@
       "target_path_exists": false,
       "base_blob_sha": null,
       "target_blob_sha": null,
-      "disposition": "CUSTOM_NEW_PATH"
+      "disposition": "CUSTOM_NEW_PATH",
+      "local_git_upstream_overlap_status": null,
+      "stage2_merge_handling": "PORT_CUSTOM_SOURCE"
     },
     {
       "path": "scripts/permavent/verify-production-image.sh",
@@ -3271,7 +3665,65 @@
       "target_path_exists": false,
       "base_blob_sha": null,
       "target_blob_sha": null,
-      "disposition": "CUSTOM_NEW_PATH"
+      "disposition": "CUSTOM_NEW_PATH",
+      "local_git_upstream_overlap_status": null,
+      "stage2_merge_handling": "PORT_CUSTOM_SOURCE"
     }
-  ]
+  ],
+  "local_git_audit": {
+    "source": "Owner supplied twenty-stage1-audit-20261012.zip (2026-10-12), scripts from previous chat, parsed by assistant",
+    "verified_refs": {
+      "base": "b1c895c44bfa36537c4ab0be10b171c876e05336",
+      "fork": "7546570ec82fcd7d1a3b7d7599c161d11c044424",
+      "target": "9070979232c4f37165108a2eb5a4042e0cfdc3d6",
+      "origin_main_at_capture": "7546570ec82fcd7d1a3b7d7599c161d11c044424",
+      "merge_base": "315697a079506621110a1e9ae65293c80b5df38e"
+    },
+    "worktree_clean": true,
+    "upstream_divergence": {
+      "behind": 3,
+      "ahead": 1847
+    },
+    "upstream_name_status_records": 23861,
+    "upstream_renames_git_detected": 3389,
+    "upstream_deleted_paths": 2208,
+    "upstream_modified_paths": 7702,
+    "upstream_added_paths": 10562,
+    "upstream_tree_paths": 37388,
+    "custom_name_status_records": 198,
+    "upstream_paths_without_rename_detection": 27250,
+    "overlap_candidates": 65,
+    "overlap_statuses": {
+      "M": 61,
+      "D": 2,
+      "A": 2
+    },
+    "correction": "Owner's conflict-candidates.txt was EMPTY, but set intersection of the 198 Permavent path list and 27,250 upstream path list gives 65 (61 M + 2 D + 2 A). Likely locale mismatch: source lists sorted with LC_ALL=C, comm invoked without LC_ALL=C. This does NOT mean 65 text conflicts or 65 rejected patches.",
+    "old_tag_only_commits": [
+      {
+        "sha": "b1c895c44bfa36537c4ab0be10b171c876e05336",
+        "title": "Rebuild timelineActivity searchVector column when dropped at pg level"
+      },
+      {
+        "sha": "8a70fa278a0659c6250548df7294b4598beed7f3",
+        "title": "Fix timeline activity search vector deletion + support ts_vector creation through create field actions handler"
+      },
+      {
+        "sha": "ddf58fe31af0e663ee8894fcf050e83395d387a6",
+        "title": "perf(server): hold an ORM field-metadata projection on the record query path"
+      }
+    ],
+    "old_tag_only_path_stats": {
+      "modified": 40,
+      "added": 6,
+      "total": 46
+    },
+    "code_spot_checks": {
+      "timelineActivityBackfill": "Target carries the same 309-line backfill command and registration as 2.35; difference detected in full text is a single path change for UniversalUpdateFieldAction import.",
+      "ormFlatFieldMetadata": "Target has OrmFlatFieldMetadata type and cache provider; cache projection invalidation uses withDerivedFieldMetadataMaps helper; old global-workspace-orm.manager.ts removed, target workspace-orm.manager.ts uses projected field maps.",
+      "pending": "Functional execution, schema restore, searchVector behaviour and permissions negative tests not yet performed."
+    },
+    "no_source_port": true,
+    "no_build_or_runtime_tests": true
+  }
 }
