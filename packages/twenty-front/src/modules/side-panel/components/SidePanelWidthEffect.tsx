@@ -6,15 +6,17 @@ import {
 } from '@/side-panel/states/sidePanelWidthState';
 import { useAtomStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomStateValue';
 
-export const SidePanelWidthEffect = () => {
+export const SidePanelWidthEffect = ({ sidePanelWidth: widthOverride }: { sidePanelWidth?: number } = {}) => {
   const sidePanelWidth = useAtomStateValue(sidePanelWidthState);
+
+  const activeWidth = widthOverride ?? sidePanelWidth;
 
   useEffect(() => {
     document.documentElement.style.setProperty(
       SIDE_PANEL_WIDTH_VAR,
-      `${sidePanelWidth}px`,
+      `${activeWidth}px`,
     );
-  }, [sidePanelWidth]);
+  }, [activeWidth]);
 
   return null;
 };

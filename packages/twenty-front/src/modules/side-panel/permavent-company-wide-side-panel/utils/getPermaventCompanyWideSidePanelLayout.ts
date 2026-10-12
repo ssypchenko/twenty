@@ -1,5 +1,11 @@
 import { PERMAVENT_COMPANY_WIDE_SIDE_PANEL } from '@/side-panel/permavent-company-wide-side-panel/constants/PermaventCompanyWideSidePanel';
-import { type ResizablePanelConstraints } from '@/ui/layout/resizable-panel/types/ResizablePanelConstraints';
+// The old ResizablePanelConstraints type was removed upstream in 2.46.
+// The new ResizeHandle accepts min/max directly.
+type ResizablePanelConstraints = {
+  min: number;
+  max: number;
+  default: number;
+};
 
 type PermaventCompanyWideSidePanelLayout = {
   constraints: ResizablePanelConstraints;

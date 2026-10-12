@@ -6,6 +6,10 @@ import { SIDE_PANEL_CLICK_OUTSIDE_ID } from '@/side-panel/constants/SidePanelCli
 import { SIDE_PANEL_CONSTRAINTS } from '@/side-panel/constants/SidePanelConstraints';
 import { useSidePanelCloseAnimationCompleteCleanup } from '@/side-panel/hooks/useSidePanelCloseAnimationCompleteCleanup';
 import { useSidePanelMenu } from '@/side-panel/hooks/useSidePanelMenu';
+import { useIsPermaventCompanyWideSidePanel } from '@/side-panel/permavent-company-wide-side-panel/hooks/useIsPermaventCompanyWideSidePanel';
+import { useParentElementWidth } from '@/side-panel/permavent-company-wide-side-panel/hooks/useParentElementWidth';
+import { permaventCompanyWideSidePanelWidthState } from '@/side-panel/permavent-company-wide-side-panel/states/permaventCompanyWideSidePanelWidthState';
+import { getPermaventCompanyWideSidePanelLayout } from '@/side-panel/permavent-company-wide-side-panel/utils/getPermaventCompanyWideSidePanelLayout';
 import { isSidePanelClosingState } from '@/side-panel/states/isSidePanelClosingState';
 import { isSidePanelOpenedState } from '@/side-panel/states/isSidePanelOpenedState';
 import {
@@ -79,6 +83,9 @@ export const SidePanelForDesktop = () => {
   const store = useStore();
   const isSidePanelOpened = useAtomStateValue(isSidePanelOpenedState);
   const [sidePanelWidth, setSidePanelWidth] = useAtomState(sidePanelWidthState);
+  const [widePanelWidth, setWidePanelWidth] =
+    useAtomState(permaventCompanyWideSidePanelWidthState);
+  const isPermaventWidePanel = useIsPermaventCompanyWideSidePanel();
   const { closeSidePanelMenu } = useSidePanelMenu();
   const { sidePanelCloseAnimationCompleteCleanup } =
     useSidePanelCloseAnimationCompleteCleanup();
@@ -89,6 +96,17 @@ export const SidePanelForDesktop = () => {
   );
   const [isResizing, setIsResizing] = useState(false);
   const [liveWidth, setLiveWidth] = useState<number | null>(null);
+  const [sidePanelWrapperElement, setSidePanelWrapperElement] =
+    useState<HTMLDivElement | null>(null);
+  const availableWidth = useParentElementWidth(sidePanelWrapperElement);
+  const widePanelLayout = isPermaventWidePanel
+    ? getPermaventCompanyWideSidePanelLayout({
+        availableWidth,
+        persistedWidth: widePanelWidth,
+      })
+    : null;
+  const activeConstraints = widePanelLayout?.constraints ?? SIDE_PANEL_CONSTRAINTS;
+  const activeWidth = widePanelLayout?.width ?? sidePanelWidth;
   const [shouldRenderContent, setShouldRenderContent] =
     useState(isSidePanelOpened);
   const [isShrinkingFromFullWidth, setIsShrinkingFromFullWidth] =
@@ -142,12 +160,16 @@ export const SidePanelForDesktop = () => {
 
   const handleWidthChange = useCallback(
     (width: number) => {
-      setSidePanelWidth(width);
+      if (widePanelLayout !== null) {
+        setWidePanelWidth(width);
+      } else {
+        setSidePanelWidth(width);
+      }
       setLiveWidth(null);
       setIsResizing(false);
       setIsResizablePanelDragging(false);
     },
-    [setSidePanelWidth, setIsResizablePanelDragging],
+    [setSidePanelWidth, setWidePanelWidth, widePanelLayout, setIsResizablePanelDragging],
   );
 
   const handleWidthPreview = (width: number) => {
@@ -178,16 +200,16 @@ export const SidePanelForDesktop = () => {
 
   return (
     <>
-      <SidePanelWidthEffect />
+      <SidePanelWidthEffect sidePanelWidth={activeWidth} />
       <SidePanelAskAiHandoffEffect
         onContinueChatFromFullWidth={handleContinueChatFromFullWidth}
       />
       {isSidePanelOpened && (
         <ResizeHandle
           edge="left"
-          min={SIDE_PANEL_CONSTRAINTS.min}
-          max={SIDE_PANEL_CONSTRAINTS.max}
-          value={liveWidth ?? sidePanelWidth}
+          min={activeConstraints.min}
+          max={activeConstraints.max}
+          value={liveWidth ?? activeWidth}
           onValueChange={handleWidthPreview}
           onValueCommitted={handleWidthChange}
           onActivate={handleCollapse}
@@ -200,6 +222,7 @@ export const SidePanelForDesktop = () => {
       )}
 
       <StyledSidePanelWrapper
+        ref={setSidePanelWrapperElement}
         isOpen={isSidePanelOpened}
         isResizing={isResizing}
         onTransitionEnd={handleTransitionEnd}
