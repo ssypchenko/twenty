@@ -106,4 +106,99 @@ describe('PermaventInternalDriver', () => {
       driver.execute('print("safe")', undefined, { sessionId: 'thread' }),
     ).rejects.toThrow('Internal code interpreter runner request failed');
   });
+  it('isolates persistent Python sessions when actorKey changes', async () => {
+    fetchMock.mockImplementation((_url: string, options: RequestInit) => {
+      if (options.method === 'DELETE') {
+        return Promise.resolve(new Response('{}', { status: 200 }));
+      }
+
+      return Promise.resolve(
+        new Response(
+          JSON.stringify({
+            stdout: 'ok',
+            stderr: '',
+            exitCode: 0,
+            files: [],
+          }),
+          { status: 200 },
+        ),
+      );
+    });
+    const driver = new PermaventInternalDriver({
+      runnerUrl: 'http://runner:8080',
+      authToken: 'safe-test-token',
+      executionTimeoutMs: 120_000,
+      requestTimeoutMs: 130_000,
+    });
+    const context = { sessionId: 'workspace:thread' };
+
+    await driver.execute('print(1)', undefined, {
+      ...context,
+      actorKey: 'member-A:application-1',
+    });
+    await driver.execute('print(2)', undefined, {
+      ...context,
+      actorKey: 'member-A:application-1',
+    });
+    await driver.execute('print(3)', undefined, {
+      ...context,
+      actorKey: 'member-B:application-2',
+    });
+
+    const executeUrls = fetchMock.mock.calls
+      .filter(([, init]) => init.method === 'POST')
+      .map(([url]) => url as string);
+    const deleteUrls = fetchMock.mock.calls
+      .filter(([, init]) => init.method === 'DELETE')
+      .map(([url]) => url as string);
+
+    expect(executeUrls).toHaveLength(3);
+    expect(executeUrls[0]).toEqual(executeUrls[1]);
+    expect(executeUrls[2]).not.toEqual(executeUrls[0]);
+    expect(deleteUrls).toEqual([
+      executeUrls[0].replace('/execute', ''),
+    ]);
+
+    await driver.releaseSession(context.sessionId);
+    const finalDeletedUrl = fetchMock.mock.calls.at(-1)?.[0] as string;
+    expect(finalDeletedUrl).toEqual(executeUrls[2].replace('/execute', ''));
+  });
+
+  it('fails closed when switching actors cannot release the old session', async () => {
+    fetchMock.mockImplementation((_url: string, options: RequestInit) => {
+      if (options.method === 'DELETE') {
+        return Promise.resolve(new Response('{}', { status: 503 }));
+      }
+
+      return Promise.resolve(
+        new Response(
+          JSON.stringify({ stdout: '', stderr: '', exitCode: 0, files: [] }),
+          { status: 200 },
+        ),
+      );
+    });
+    const driver = new PermaventInternalDriver({
+      runnerUrl: 'http://runner:8080',
+      authToken: 'safe-test-token',
+      executionTimeoutMs: 120_000,
+      requestTimeoutMs: 130_000,
+    });
+
+    await driver.execute('print(1)', undefined, {
+      sessionId: 'thread',
+      actorKey: 'actor-a',
+    });
+
+    await expect(
+      driver.execute('print(2)', undefined, {
+        sessionId: 'thread',
+        actorKey: 'actor-b',
+      }),
+    ).rejects.toThrow('Internal code interpreter runner request failed');
+
+    expect(
+      fetchMock.mock.calls.filter(([, init]) => init.method === 'POST'),
+    ).toHaveLength(1);
+  });
+
 });

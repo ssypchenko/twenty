@@ -66,6 +66,7 @@ const isRunnerExecutionResult = (
 
 export class PermaventInternalDriver implements CodeInterpreterDriver {
   private readonly baseUrl: string;
+  private readonly opaqueSessionById = new Map<string, string>();
 
   constructor(private readonly options: PermaventInternalDriverOptions) {
     this.baseUrl = options.runnerUrl.replace(/\/+$/, '');
@@ -77,10 +78,13 @@ export class PermaventInternalDriver implements CodeInterpreterDriver {
     context?: ExecutionContext,
     callbacks?: StreamCallbacks,
   ): Promise<CodeExecutionResult> {
-    const sessionId = this.toOpaqueSessionId(
-      context?.sessionId ?? `ephemeral:${randomUUID()}`,
-    );
     const isEphemeral = context?.sessionId === undefined;
+    const sessionId = isEphemeral
+      ? this.toOpaqueSessionId(`ephemeral:${randomUUID()}`)
+      : await this.getOrCreateOpaqueSessionId(
+          context.sessionId!,
+          context.actorKey,
+        );
 
     try {
       const response = await this.request(`/v1/sessions/${sessionId}/execute`, {
@@ -132,7 +136,11 @@ export class PermaventInternalDriver implements CodeInterpreterDriver {
   }
 
   async releaseSession(sessionId: string): Promise<void> {
-    await this.releaseOpaqueSession(this.toOpaqueSessionId(sessionId));
+    const opaqueSessionId =
+      this.opaqueSessionById.get(sessionId) ?? this.toOpaqueSessionId(sessionId);
+
+    await this.releaseOpaqueSession(opaqueSessionId);
+    this.opaqueSessionById.delete(sessionId);
   }
 
   async sweepExpiredSessions(): Promise<number> {
@@ -190,6 +198,28 @@ export class PermaventInternalDriver implements CodeInterpreterDriver {
         callback(line);
       }
     }
+  }
+
+  private async getOrCreateOpaqueSessionId(
+    sessionId: string,
+    actorKey?: string,
+  ): Promise<string> {
+    // The runner must never reuse a persistent Python kernel for a different
+    // user/application, even when the same conversation/thread id is reused.
+    const nextSessionId = this.toOpaqueSessionId(
+      actorKey === undefined
+        ? sessionId
+        : JSON.stringify([sessionId, actorKey]),
+    );
+    const previousSessionId = this.opaqueSessionById.get(sessionId);
+
+    if (previousSessionId !== undefined && previousSessionId !== nextSessionId) {
+      await this.releaseOpaqueSession(previousSessionId);
+    }
+
+    this.opaqueSessionById.set(sessionId, nextSessionId);
+
+    return nextSessionId;
   }
 
   private toOpaqueSessionId(sessionId: string): string {
