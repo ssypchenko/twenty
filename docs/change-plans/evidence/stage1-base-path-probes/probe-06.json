@@ -1,0 +1,51 @@
+{
+  "base": "b1c895c44bfa36537c4ab0be10b171c876e05336",
+  "batch": 6,
+  "files": [
+    {
+      "path": "packages/twenty-server/src/engine/utils/bind-data-to-request-object.util.ts",
+      "exists": true,
+      "blob_sha": "242aa8a99bef968b127ebd2b9a55eb629004c911"
+    },
+    {
+      "path": "packages/twenty-server/src/engine/workspace-manager/workspace-cleaner/services/cleaner.workspace-service.ts",
+      "exists": true,
+      "blob_sha": "4fc5babff3b998d9adf2e5e3b4f7946ed7aed5a8"
+    },
+    {
+      "path": "packages/twenty-server/src/engine/workspace-manager/workspace-migration/utils/compute-ordered-migration-actions.util.ts",
+      "exists": true,
+      "blob_sha": "f51e38fbd740fcb655b04c6eb51e98ef95d98cf2"
+    },
+    {
+      "path": "packages/twenty-server/src/engine/workspace-manager/workspace-migration/workspace-migration-runner/action-handlers/page-layout/services/update-page-layout-action-handler.service.ts",
+      "exists": true,
+      "blob_sha": "7bb5b1e41d2d4d3941465f72ab834e6856dfe330"
+    },
+    {
+      "path": "packages/twenty-server/src/modules/modules.module.ts",
+      "exists": true,
+      "blob_sha": "4c766548d03dc67c2f3f55711967758ad8e4ee58"
+    },
+    {
+      "path": "packages/twenty-shared/src/types/FeatureFlagKey.ts",
+      "exists": true,
+      "blob_sha": "69c32998f857fac86e9a50d5dcb9746e9e80385e"
+    },
+    {
+      "path": "packages/twenty-shared/src/types/LogicFunctionEvent.ts",
+      "exists": true,
+      "blob_sha": "7fc87b823ed56ddb614ae7a377105a0ce88a8695"
+    },
+    {
+      "path": "packages/twenty-shared/src/types/index.ts",
+      "exists": true,
+      "blob_sha": "0f274af80fc7e47af08e081fd14a83ebe923fc8c"
+    },
+    {
+      "path": "packages/twenty-ui/vite.config.ts",
+      "exists": true,
+      "blob_sha": "eb5ac37c4294ec8a7c45d86eab0cfcab15d3a933"
+    }
+  ]
+}
