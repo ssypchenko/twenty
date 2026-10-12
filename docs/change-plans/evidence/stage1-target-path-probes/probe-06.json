@@ -1,0 +1,104 @@
+{
+  "target": "twenty/v2.46.0",
+  "batch": 6,
+  "range": [
+    90,
+    108
+  ],
+  "files": [
+    {
+      "path": "packages/twenty-server/src/engine/core-modules/actor/services/actor-from-auth-context.service.ts",
+      "exists": true,
+      "blob_sha": "1300e77390c5acfb141bf06ae8c2e9b4a2303311"
+    },
+    {
+      "path": "packages/twenty-server/src/engine/core-modules/approved-access-domain/services/approved-access-domain.service.ts",
+      "exists": true,
+      "blob_sha": "e75815099f86cad7060f54ff29d1dd317462b4ab"
+    },
+    {
+      "path": "packages/twenty-server/src/engine/core-modules/approved-access-domain/services/approved-access-domain.spec.ts",
+      "exists": true,
+      "blob_sha": "ac5afea7d4d2173b17daa61f692aee683c38bb4b"
+    },
+    {
+      "path": "packages/twenty-server/src/engine/core-modules/auth/guards/is-delegated-api-key-auth-context.guard.ts",
+      "exists": false,
+      "error_type": "404",
+      "error": null
+    },
+    {
+      "path": "packages/twenty-server/src/engine/core-modules/auth/middlewares/workspace-auth-context.middleware.ts",
+      "exists": true,
+      "blob_sha": "0f6b17efa8528d23f846e33e9ff25d372d9b24c9"
+    },
+    {
+      "path": "packages/twenty-server/src/engine/core-modules/auth/services/reset-password.service.ts",
+      "exists": true,
+      "blob_sha": "76cfc49d23bdbc7ad54b9f38fabef7c7076becbb"
+    },
+    {
+      "path": "packages/twenty-server/src/engine/core-modules/auth/strategies/jwt.auth.strategy.ts",
+      "exists": true,
+      "blob_sha": "891d327fd7148a0a464f38211c27610d6e8b012c"
+    },
+    {
+      "path": "packages/twenty-server/src/engine/core-modules/auth/token/services/access-token.service.ts",
+      "exists": true,
+      "blob_sha": "446ea91ed7d223748818a3c8358a816c26bd060c"
+    },
+    {
+      "path": "packages/twenty-server/src/engine/core-modules/auth/types/delegated-api-key-actor.type.ts",
+      "exists": false,
+      "error_type": "404",
+      "error": null
+    },
+    {
+      "path": "packages/twenty-server/src/engine/core-modules/auth/types/jwt-payload.type.ts",
+      "exists": true,
+      "blob_sha": "5aa4752915fba02d3bd6e2b154a13021feeeb98d"
+    },
+    {
+      "path": "packages/twenty-server/src/engine/core-modules/auth/types/jwt-token-type.enum.ts",
+      "exists": true,
+      "blob_sha": "7b5ba9886f9f8a44fc8cd08dcba776d0798bf18c"
+    },
+    {
+      "path": "packages/twenty-server/src/engine/core-modules/auth/types/mcp-access-token-jwt-payload.type.ts",
+      "exists": false,
+      "error_type": "404",
+      "error": null
+    },
+    {
+      "path": "packages/twenty-server/src/engine/core-modules/auth/types/mcp-tool-access.type.ts",
+      "exists": false,
+      "error_type": "404",
+      "error": null
+    },
+    {
+      "path": "packages/twenty-server/src/engine/core-modules/auth/types/raw-auth-context.type.ts",
+      "exists": true,
+      "blob_sha": "89cc4a3e7b8e7d7d4ee3a5730e4a352d28c98114"
+    },
+    {
+      "path": "packages/twenty-server/src/engine/core-modules/auth/types/workspace-auth-context.type.ts",
+      "exists": true,
+      "blob_sha": "2080f3af35a1770c9e3c5cd43a724abdf58309c8"
+    },
+    {
+      "path": "packages/twenty-server/src/engine/core-modules/auth/utils/build-api-key-auth-context.util.ts",
+      "exists": true,
+      "blob_sha": "ae3cef5d4a0b8a9b9d6c767e27e57b9a31fc03f2"
+    },
+    {
+      "path": "packages/twenty-server/src/engine/core-modules/code-interpreter/code-interpreter-driver.factory.ts",
+      "exists": true,
+      "blob_sha": "b4ccb4ffae85770db4ce0c4a23519812cc06a31a"
+    },
+    {
+      "path": "packages/twenty-server/src/engine/core-modules/code-interpreter/code-interpreter.interface.ts",
+      "exists": true,
+      "blob_sha": "fd48480d0a3066ea087a58c7e7aeb75cdaefa82a"
+    }
+  ]
+}
