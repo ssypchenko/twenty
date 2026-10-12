@@ -14,6 +14,7 @@ import { sortTabsByPosition } from '@/page-layout/utils/sortTabsByPosition';
 import { useSidePanelMenu } from '@/side-panel/hooks/useSidePanelMenu';
 import { RegularTabSettingsContent } from '@/side-panel/pages/page-layout/components/RegularTabSettingsContent';
 import { SingleWidgetTabSettingsContent } from '@/side-panel/pages/page-layout/components/SingleWidgetTabSettingsContent';
+import { usePermaventOpeningTabSettings } from '@/side-panel/permavent-company-wide-side-panel/hooks/usePermaventOpeningTabSettings';
 import { activeTabIdComponentState } from '@/ui/layout/tab-list/states/activeTabIdComponentState';
 import { useAtomComponentState } from '@/ui/utilities/state/jotai/hooks/useAtomComponentState';
 import { useAtomComponentStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomComponentStateValue';
@@ -75,6 +76,11 @@ export const SidePanelPageLayoutTabSettingsContent = ({
   const { resetPageLayoutTabToDefault } =
     useResetPageLayoutTabToDefault(pageLayoutId);
 
+  const openingTabSettings = usePermaventOpeningTabSettings(
+    pageLayoutId,
+    pageLayoutTabSettingsOpenTabId,
+  );
+
   if (!isDefined(pageLayoutTabSettingsOpenTabId)) {
     return null;
   }
@@ -128,6 +134,7 @@ export const SidePanelPageLayoutTabSettingsContent = ({
   if (isSingleWidgetTab) {
     return (
       <SingleWidgetTabSettingsContent
+        openingTabSettings={openingTabSettings}
         pageLayoutId={pageLayoutId}
         singleWidget={activeWidgets.at(0)!}
         canSetAsPinned={canSetAsPinned}
@@ -148,6 +155,7 @@ export const SidePanelPageLayoutTabSettingsContent = ({
 
   return (
     <RegularTabSettingsContent
+      openingTabSettings={openingTabSettings}
       canSetAsPinned={canSetAsPinned}
       canUnpin={canUnpin}
       canMoveLeft={canMoveLeft}

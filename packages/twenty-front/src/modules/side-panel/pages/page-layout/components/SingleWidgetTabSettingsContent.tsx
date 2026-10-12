@@ -8,6 +8,11 @@ import { SingleWidgetTabVisibilityDropdownContent } from '@/side-panel/pages/pag
 import { TAB_SETTINGS_SELECTABLE_ITEM_IDS } from '@/side-panel/pages/page-layout/constants/settings/TabSettingsSelectableItemIds';
 import { useTranslatedVisibilityLabel } from '@/side-panel/pages/page-layout/hooks/useTranslatedVisibilityLabel';
 import { getTabSettingsPlacementItems } from '@/side-panel/pages/page-layout/utils/getTabSettingsPlacementItems';
+import {
+  PERMAVENT_OPENING_TAB_SETTINGS_ITEM_ID,
+  PermaventOpeningTabSettingsItem,
+  type PermaventOpeningTabSettings,
+} from '@/side-panel/permavent-company-wide-side-panel/components/PermaventOpeningTabSettingsItem';
 import { LegacyDropdownContent } from '@/ui/layout/dropdown/components/LegacyDropdownContent';
 import { ConfirmationDialog } from '@/ui/layout/dialog/components/ConfirmationDialog';
 import { useDialog } from '@/ui/layout/dialog/hooks/useDialog';
@@ -23,6 +28,7 @@ const RESET_TAB_TO_DEFAULT_MENU_ITEM_ID =
   'reset-single-widget-tab-to-default-menu-item';
 
 type SingleWidgetTabSettingsContentProps = {
+  openingTabSettings?: PermaventOpeningTabSettings;
   pageLayoutId: string;
   singleWidget: PageLayoutWidget;
   canSetAsPinned: boolean;
@@ -40,6 +46,7 @@ type SingleWidgetTabSettingsContentProps = {
 };
 
 export const SingleWidgetTabSettingsContent = ({
+  openingTabSettings,
   pageLayoutId,
   singleWidget,
   canSetAsPinned,
@@ -81,6 +88,7 @@ export const SingleWidgetTabSettingsContent = ({
   });
 
   const selectableItemIds = [
+    ...(openingTabSettings ? [PERMAVENT_OPENING_TAB_SETTINGS_ITEM_ID] : []),
     ...placementItems.map((item) => item.id),
     TAB_SETTINGS_SELECTABLE_ITEM_IDS.VISIBILITY_RESTRICTION,
     TAB_SETTINGS_SELECTABLE_ITEM_IDS.RESET_TO_DEFAULT,
@@ -91,6 +99,11 @@ export const SingleWidgetTabSettingsContent = ({
     <>
       <SidePanelList selectableItemIds={selectableItemIds}>
         <TabSettingsPlacementSection items={placementItems} />
+        {openingTabSettings && (
+          <SidePanelGroup heading={t`Settings`}>
+            <PermaventOpeningTabSettingsItem {...openingTabSettings} />
+          </SidePanelGroup>
+        )}
         <SidePanelGroup heading={t`Manage`}>
           <SelectableListItem
             itemId={TAB_SETTINGS_SELECTABLE_ITEM_IDS.VISIBILITY_RESTRICTION}
