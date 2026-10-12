@@ -131,6 +131,7 @@ export class CleanerWorkspaceService {
       userName: `${workspaceMember.name.firstName} ${workspaceMember.name.lastName}`,
       workspaceDisplayName: `${workspaceDisplayName}`,
       link: billingSettingsUrl,
+      serverUrl: this.twentyConfigService.get('SERVER_URL'),
       locale: workspaceMember.locale,
     };
     const emailTemplate = WarnSuspendedWorkspaceEmail(emailData);
@@ -207,6 +208,7 @@ export class CleanerWorkspaceService {
       daysSinceInactive: daysSinceInactive,
       userName: `${workspaceMember.name.firstName} ${workspaceMember.name.lastName}`,
       workspaceDisplayName,
+      serverUrl: this.twentyConfigService.get('SERVER_URL'),
       locale: workspaceMember.locale,
     };
     const emailTemplate = CleanSuspendedWorkspaceEmail(emailData);
