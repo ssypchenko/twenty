@@ -1,0 +1,110 @@
+{
+  "target": "twenty/v2.46.0",
+  "batch": 10,
+  "range": [
+    162,
+    180
+  ],
+  "files": [
+    {
+      "path": "packages/twenty-server/src/engine/utils/bind-data-to-request-object.util.ts",
+      "exists": true,
+      "blob_sha": "597130d8dfba19d177118f1fe031ffa9fee700bd"
+    },
+    {
+      "path": "packages/twenty-server/src/engine/workspace-manager/workspace-cleaner/services/cleaner.workspace-service.ts",
+      "exists": true,
+      "blob_sha": "8261bec3f5f539f4a7fbbe426688d56f4212d377"
+    },
+    {
+      "path": "packages/twenty-server/src/engine/workspace-manager/workspace-migration/utils/__tests__/compute-ordered-migration-actions.util.spec.ts",
+      "exists": true,
+      "blob_sha": "d803f44373ccd0b49fb3aba3e2a2ef2a7bf1bb2e"
+    },
+    {
+      "path": "packages/twenty-server/src/engine/workspace-manager/workspace-migration/utils/compute-ordered-migration-actions.util.ts",
+      "exists": true,
+      "blob_sha": "573566f98b574cee6df908aaa2bccc487ee4cfe6"
+    },
+    {
+      "path": "packages/twenty-server/src/engine/workspace-manager/workspace-migration/workspace-migration-runner/action-handlers/page-layout/services/__tests__/update-page-layout-action-handler.service.spec.ts",
+      "exists": false,
+      "error_type": "404",
+      "error": null
+    },
+    {
+      "path": "packages/twenty-server/src/engine/workspace-manager/workspace-migration/workspace-migration-runner/action-handlers/page-layout/services/update-page-layout-action-handler.service.ts",
+      "exists": true,
+      "blob_sha": "e9e8ba8b10fd3840ca40360150279ad2b86b1fc0"
+    },
+    {
+      "path": "packages/twenty-server/src/modules/modules.module.ts",
+      "exists": true,
+      "blob_sha": "71ca79d00acfaf35b804879e40ac9d4fa3e80bb4"
+    },
+    {
+      "path": "packages/twenty-server/src/modules/permavent-weekly-sales-report/controllers/permavent-weekly-sales-report.controller.ts",
+      "exists": false,
+      "error_type": "404",
+      "error": null
+    },
+    {
+      "path": "packages/twenty-server/src/modules/permavent-weekly-sales-report/dtos/permavent-weekly-sales-report-source-request.dto.ts",
+      "exists": false,
+      "error_type": "404",
+      "error": null
+    },
+    {
+      "path": "packages/twenty-server/src/modules/permavent-weekly-sales-report/permavent-weekly-sales-report.module.ts",
+      "exists": false,
+      "error_type": "404",
+      "error": null
+    },
+    {
+      "path": "packages/twenty-server/src/modules/permavent-weekly-sales-report/services/__tests__/permavent-weekly-sales-report-source.service.spec.ts",
+      "exists": false,
+      "error_type": "404",
+      "error": null
+    },
+    {
+      "path": "packages/twenty-server/src/modules/permavent-weekly-sales-report/services/permavent-weekly-sales-report-source.service.ts",
+      "exists": false,
+      "error_type": "404",
+      "error": null
+    },
+    {
+      "path": "packages/twenty-server/src/modules/permavent-weekly-sales-report/types/permavent-weekly-sales-report-source.type.ts",
+      "exists": false,
+      "error_type": "404",
+      "error": null
+    },
+    {
+      "path": "packages/twenty-server/src/modules/permavent-weekly-sales-report/utils/__tests__/get-permavent-london-week-window.util.spec.ts",
+      "exists": false,
+      "error_type": "404",
+      "error": null
+    },
+    {
+      "path": "packages/twenty-server/src/modules/permavent-weekly-sales-report/utils/get-permavent-london-week-window.util.ts",
+      "exists": false,
+      "error_type": "404",
+      "error": null
+    },
+    {
+      "path": "packages/twenty-shared/src/types/FeatureFlagKey.ts",
+      "exists": true,
+      "blob_sha": "55b4e5c3e208c6be7abc933f0a05597ffc5ca6c8"
+    },
+    {
+      "path": "packages/twenty-shared/src/types/LogicFunctionEvent.ts",
+      "exists": true,
+      "blob_sha": "7fc87b823ed56ddb614ae7a377105a0ce88a8695"
+    },
+    {
+      "path": "packages/twenty-shared/src/types/PermaventLogicFunctionActorContext.ts",
+      "exists": false,
+      "error_type": "404",
+      "error": null
+    }
+  ]
+}
