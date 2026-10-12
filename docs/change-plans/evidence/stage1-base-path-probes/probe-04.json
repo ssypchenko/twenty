@@ -1,0 +1,96 @@
+{
+  "base": "b1c895c44bfa36537c4ab0be10b171c876e05336",
+  "batch": 4,
+  "files": [
+    {
+      "path": "packages/twenty-server/src/engine/core-modules/actor/services/actor-from-auth-context.service.ts",
+      "exists": true,
+      "blob_sha": "86890e04cc109f6e8683606c0aea221e04f92522"
+    },
+    {
+      "path": "packages/twenty-server/src/engine/core-modules/approved-access-domain/services/approved-access-domain.service.ts",
+      "exists": true,
+      "blob_sha": "fd80a80ccacdfcc2963e11fb798fee642b361215"
+    },
+    {
+      "path": "packages/twenty-server/src/engine/core-modules/approved-access-domain/services/approved-access-domain.spec.ts",
+      "exists": true,
+      "blob_sha": "17e3c19f9c8dfb864aa4a7aa61cc0b9b629d79c9"
+    },
+    {
+      "path": "packages/twenty-server/src/engine/core-modules/auth/middlewares/workspace-auth-context.middleware.ts",
+      "exists": true,
+      "blob_sha": "0f6b17efa8528d23f846e33e9ff25d372d9b24c9"
+    },
+    {
+      "path": "packages/twenty-server/src/engine/core-modules/auth/services/reset-password.service.ts",
+      "exists": true,
+      "blob_sha": "76cfc49d23bdbc7ad54b9f38fabef7c7076becbb"
+    },
+    {
+      "path": "packages/twenty-server/src/engine/core-modules/auth/strategies/jwt.auth.strategy.ts",
+      "exists": true,
+      "blob_sha": "479539696f7f00c8dcb4fa9028111a21d393cab2"
+    },
+    {
+      "path": "packages/twenty-server/src/engine/core-modules/auth/token/services/access-token.service.ts",
+      "exists": true,
+      "blob_sha": "3fd457d78ca992e71319503150b3839f1d33f1a8"
+    },
+    {
+      "path": "packages/twenty-server/src/engine/core-modules/auth/types/jwt-payload.type.ts",
+      "exists": true,
+      "blob_sha": "5aa4752915fba02d3bd6e2b154a13021feeeb98d"
+    },
+    {
+      "path": "packages/twenty-server/src/engine/core-modules/auth/types/jwt-token-type.enum.ts",
+      "exists": true,
+      "blob_sha": "7b5ba9886f9f8a44fc8cd08dcba776d0798bf18c"
+    },
+    {
+      "path": "packages/twenty-server/src/engine/core-modules/auth/types/raw-auth-context.type.ts",
+      "exists": true,
+      "blob_sha": "0f31e1e6bc826806c74d07e64f9d308812d9e140"
+    },
+    {
+      "path": "packages/twenty-server/src/engine/core-modules/auth/types/workspace-auth-context.type.ts",
+      "exists": true,
+      "blob_sha": "81e5cbacd7b2794c654983c2d64d362153b8383c"
+    },
+    {
+      "path": "packages/twenty-server/src/engine/core-modules/auth/utils/build-api-key-auth-context.util.ts",
+      "exists": true,
+      "blob_sha": "ae3cef5d4a0b8a9b9d6c767e27e57b9a31fc03f2"
+    },
+    {
+      "path": "packages/twenty-server/src/engine/core-modules/code-interpreter/code-interpreter-driver.factory.ts",
+      "exists": true,
+      "blob_sha": "b4ccb4ffae85770db4ce0c4a23519812cc06a31a"
+    },
+    {
+      "path": "packages/twenty-server/src/engine/core-modules/code-interpreter/code-interpreter.interface.ts",
+      "exists": true,
+      "blob_sha": "fd48480d0a3066ea087a58c7e7aeb75cdaefa82a"
+    },
+    {
+      "path": "packages/twenty-server/src/engine/core-modules/core-engine.module.ts",
+      "exists": true,
+      "blob_sha": "723455b9e9232bfd2e7591b388d38e7249fd0240"
+    },
+    {
+      "path": "packages/twenty-server/src/engine/core-modules/email-verification/services/email-verification.service.ts",
+      "exists": true,
+      "blob_sha": "81ed73fbcf2b9b5e72ddaa98338df802771a5196"
+    },
+    {
+      "path": "packages/twenty-server/src/engine/core-modules/email/__tests__/email-templates-rendering.spec.ts",
+      "exists": true,
+      "blob_sha": "081c6fbb2e397b120bb59878fb38ebf308f56118"
+    },
+    {
+      "path": "packages/twenty-server/src/engine/core-modules/feature-flag/constants/public-feature-flag.const.ts",
+      "exists": true,
+      "blob_sha": "2aea4336bee5b549897ee8fdbb378c9932a1a84c"
+    }
+  ]
+}
