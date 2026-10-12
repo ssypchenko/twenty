@@ -19,6 +19,9 @@ import { getTabListInstanceIdFromPageLayoutAndRecord } from '@/page-layout/utils
 import { shouldEnableTabEditingFeatures } from '@/page-layout/utils/shouldEnableTabEditingFeatures';
 import { shouldPrerenderPageLayoutTab } from '@/page-layout/utils/shouldPrerenderPageLayoutTab';
 import { sortTabsByPosition } from '@/page-layout/utils/sortTabsByPosition';
+import { PERMAVENT_COMPANY_WIDE_SIDE_PANEL_FEATURE_FLAG } from '@/side-panel/permavent-company-wide-side-panel/constants/PermaventCompanyWideSidePanelFeatureFlag';
+import { getPermaventRecordOpeningTabId } from '@/side-panel/permavent-company-wide-side-panel/utils/getPermaventRecordOpeningTabId';
+import { useIsFeatureEnabled } from '@/workspace/hooks/useIsFeatureEnabled';
 import { useLayoutRenderingContext } from '@/ui/layout/contexts/LayoutRenderingContext';
 import { useWorkspaceSurfaceScopedComponentInstanceId } from '@/ui/layout/hooks/useWorkspaceSurfaceScopedComponentInstanceId';
 import { useWorkspaceSurface } from '@/ui/layout/hooks/useWorkspaceSurface';
@@ -136,6 +139,9 @@ const StyledScrollWrapperContainer = styled.div`
 export const PageLayoutTabsRenderer = () => {
   const workspaceSurface = useWorkspaceSurface();
   const { currentPageLayout } = useCurrentPageLayoutOrThrow();
+  const isPermaventWidePanelEnabled = useIsFeatureEnabled(
+    PERMAVENT_COMPANY_WIDE_SIDE_PANEL_FEATURE_FLAG,
+  );
 
   const { layoutType, targetRecordIdentifier, isRecordIdentifierBarHidden } =
     useLayoutRenderingContext();
@@ -260,10 +266,14 @@ export const PageLayoutTabsRenderer = () => {
                 isInEditMode={isPageLayoutInEditMode}
                 tabs={sortedTabs}
                 componentInstanceId={tabListInstanceId}
-                defaultTabToFocusOnMobileAndSidePanelId={
-                  currentPageLayout.defaultTabToFocusOnMobileAndSidePanelId ??
-                  undefined
-                }
+                defaultTabToFocusOnMobileAndSidePanelId={getPermaventRecordOpeningTabId({
+                  tabs: sortedTabs,
+                  configuredTabId:
+                    currentPageLayout.defaultTabToFocusOnMobileAndSidePanelId,
+                  objectNameSingular:
+                    targetRecordIdentifier?.targetObjectNameSingular,
+                  isFeatureEnabled: isPermaventWidePanelEnabled,
+                })}
               />
               {!shouldRenderRecordIdentifierBar && tabList}
 
