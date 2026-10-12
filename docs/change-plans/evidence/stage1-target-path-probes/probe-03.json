@@ -1,0 +1,109 @@
+{
+  "target": "twenty/v2.46.0",
+  "batch": 3,
+  "range": [
+    36,
+    54
+  ],
+  "files": [
+    {
+      "path": "packages/twenty-front/src/modules/page-layout/utils/convertPageLayoutDraftToUpdateInput.ts",
+      "exists": true,
+      "blob_sha": "f0624c0424753f79f4be3ffee36053f35b586976"
+    },
+    {
+      "path": "packages/twenty-front/src/modules/page-layout/utils/createDefaultActivityWidget.ts",
+      "exists": false,
+      "error_type": "404",
+      "error": null
+    },
+    {
+      "path": "packages/twenty-front/src/modules/page-layout/widgets/notes/components/NoteWidget.tsx",
+      "exists": true,
+      "blob_sha": "4c9e9dcaf494b7dd4f757ef0573e15787c76c24a"
+    },
+    {
+      "path": "packages/twenty-front/src/modules/page-layout/widgets/tasks/components/TaskWidget.tsx",
+      "exists": true,
+      "blob_sha": "ee65097e4aa1e17bb54c4195a214df2e70e605dd"
+    },
+    {
+      "path": "packages/twenty-front/src/modules/page-layout/widgets/utils/__tests__/isCompactActivityWidgetLayout.test.ts",
+      "exists": false,
+      "error_type": "404",
+      "error": null
+    },
+    {
+      "path": "packages/twenty-front/src/modules/page-layout/widgets/utils/isCompactActivityWidgetLayout.ts",
+      "exists": false,
+      "error_type": "404",
+      "error": null
+    },
+    {
+      "path": "packages/twenty-front/src/modules/settings/security/components/SettingsUserActivityLog.tsx",
+      "exists": false,
+      "error_type": "404",
+      "error": null
+    },
+    {
+      "path": "packages/twenty-front/src/modules/settings/security/graphql/queries/getPermaventUserAuditEntries.ts",
+      "exists": false,
+      "error_type": "404",
+      "error": null
+    },
+    {
+      "path": "packages/twenty-front/src/modules/side-panel/components/SidePanelForDesktop.tsx",
+      "exists": true,
+      "blob_sha": "641aa74dbc0ea633c4eb4ad07538d60b83a5c206"
+    },
+    {
+      "path": "packages/twenty-front/src/modules/side-panel/components/SidePanelWidthEffect.tsx",
+      "exists": true,
+      "blob_sha": "e5585df8c510d7ed89943b5dbefeb73af43f5df3"
+    },
+    {
+      "path": "packages/twenty-front/src/modules/side-panel/pages/page-layout/components/RegularTabSettingsContent.tsx",
+      "exists": true,
+      "blob_sha": "286d3b03db32bc811745b49f66574888dae2cf42"
+    },
+    {
+      "path": "packages/twenty-front/src/modules/side-panel/pages/page-layout/components/SidePanelPageLayoutRecordPageWidgetTypeSelect.tsx",
+      "exists": true,
+      "blob_sha": "8a9ad7588a3c6438d76f829038c2c3f7c9ab5c49"
+    },
+    {
+      "path": "packages/twenty-front/src/modules/side-panel/pages/page-layout/components/SidePanelPageLayoutTabSettingsContent.tsx",
+      "exists": true,
+      "blob_sha": "8e1111f48dd66260202fab03f26fe93341a388a5"
+    },
+    {
+      "path": "packages/twenty-front/src/modules/side-panel/pages/page-layout/components/SingleWidgetTabSettingsContent.tsx",
+      "exists": true,
+      "blob_sha": "deae5509b0e96d8cacc44f996b654f1e480449ae"
+    },
+    {
+      "path": "packages/twenty-front/src/modules/side-panel/permavent-company-wide-side-panel/components/PermaventOpeningTabSettingsItem.tsx",
+      "exists": false,
+      "error_type": "404",
+      "error": null
+    },
+    {
+      "path": "packages/twenty-front/src/modules/side-panel/permavent-company-wide-side-panel/constants/PermaventCompanyWideSidePanel.ts",
+      "exists": false,
+      "error_type": "404",
+      "error": null
+    },
+    {
+      "path": "packages/twenty-front/src/modules/side-panel/permavent-company-wide-side-panel/constants/PermaventCompanyWideSidePanelFeatureFlag.ts",
+      "exists": false,
+      "error_type": "404",
+      "error": null
+    },
+    {
+      "path": "packages/twenty-front/src/modules/side-panel/permavent-company-wide-side-panel/hooks/__tests__/useIsPermaventCompanyWideSidePanel.test.tsx",
+      "exists": false,
+      "error_type": "404",
+      "error": null
+    }
+  ]
+}
