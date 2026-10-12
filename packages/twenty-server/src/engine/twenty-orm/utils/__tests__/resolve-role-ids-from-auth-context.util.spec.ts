@@ -81,6 +81,49 @@ describe('resolveRoleIdsFromAuthContext', () => {
     ).toEqual([API_KEY_ROLE_ID]);
   });
 
+
+  const buildDelegatedContext = ({
+    keyId = API_KEY_ID,
+    actorRoleId = USER_ROLE_ID,
+    actorUserWorkspaceId = USER_WORKSPACE_ID,
+  }: {
+    keyId?: string;
+    actorRoleId?: string;
+    actorUserWorkspaceId?: string;
+  } = {}): WorkspaceAuthContext =>
+    ({
+      type: 'apiKey',
+      workspace: { id: 'workspace-1' },
+      apiKey: { id: keyId },
+      delegatedActor: {
+        userWorkspaceId: actorUserWorkspaceId,
+        roleId: actorRoleId,
+      },
+    }) as unknown as WorkspaceAuthContext;
+
+  it('restricts a delegated API key to the intersection of its role and the actor role', () => {
+    expect(resolve(buildDelegatedContext())).toEqual([
+      API_KEY_ROLE_ID,
+      USER_ROLE_ID,
+    ]);
+  });
+
+  it('rejects a delegated actor with an unexpected cached role', () => {
+    expect(
+      resolve(buildDelegatedContext({ actorRoleId: APPLICATION_ROLE_ID })),
+    ).toEqual([]);
+  });
+
+  it('rejects a delegated actor missing a current workspace role', () => {
+    expect(
+      resolve(buildDelegatedContext({ actorUserWorkspaceId: 'unknown' })),
+    ).toEqual([]);
+  });
+
+  it('rejects a delegated actor with an unknown API key role', () => {
+    expect(resolve(buildDelegatedContext({ keyId: 'unknown-key' }))).toEqual([]);
+  });
+
   it('should resolve the application role for an application-only request', () => {
     expect(
       resolve({
