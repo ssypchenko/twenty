@@ -12,6 +12,8 @@ import { WorkspaceActivationStatus } from 'twenty-shared/workspace';
 import { AuthException } from 'src/engine/core-modules/auth/auth.exception';
 import { isUsageRefusedError } from 'src/engine/core-modules/billing/utils/is-usage-refused-error.util';
 import { AccessTokenService } from 'src/engine/core-modules/auth/token/services/access-token.service';
+import { buildUserAuthContext } from 'src/engine/core-modules/auth/utils/build-user-auth-context.util';
+import { PermaventSalesScopeService } from 'src/engine/core-modules/permavent-sales-scope/permavent-sales-scope.service';
 import { type RawAuthContext } from 'src/engine/core-modules/auth/types/raw-auth-context.type';
 import { WorkspaceDomainsService } from 'src/engine/core-modules/domain/workspace-domains/services/workspace-domains.service';
 import { type WorkspaceEntity } from 'src/engine/core-modules/workspace/workspace.entity';
@@ -55,6 +57,7 @@ export class RouteTriggerService {
   constructor(
     private readonly accessTokenService: AccessTokenService,
     private readonly logicFunctionTriggerService: LogicFunctionTriggerService,
+    private readonly permaventSalesScopeService: PermaventSalesScopeService,
     private readonly workspaceDomainsService: WorkspaceDomainsService,
     private readonly twentyConfigService: TwentyConfigService,
     @InjectWorkspaceScopedRepository(LogicFunctionEntity)
@@ -284,6 +287,8 @@ export class RouteTriggerService {
 
     let userWorkspaceId: string | null = null;
     let userId: string | null = null;
+    let permaventSalesScope = null;
+    let permaventActorContext = null;
 
     if (httpRouteSettings?.isAuthRequired) {
       const routeAuthenticationContext =
@@ -306,6 +311,30 @@ export class RouteTriggerService {
 
       userWorkspaceId = routeAuthenticationContext.userWorkspaceId ?? null;
       userId = routeAuthenticationContext.user?.id ?? null;
+
+      // Only a validated authenticated user may receive an ERP identity/scope.
+      // Public endpoints or API keys without a resolved user receive no delegation.
+      if (
+        isDefined(routeAuthenticationContext.userWorkspaceId) &&
+        isDefined(routeAuthenticationContext.user) &&
+        isDefined(routeAuthenticationContext.workspaceMemberId) &&
+        isDefined(routeAuthenticationContext.workspaceMember)
+      ) {
+        const userAuthContext = buildUserAuthContext({
+          workspace: routeAuthenticationContext.workspace,
+          userWorkspaceId: routeAuthenticationContext.userWorkspaceId,
+          user: routeAuthenticationContext.user,
+          workspaceMemberId: routeAuthenticationContext.workspaceMemberId,
+          workspaceMember: routeAuthenticationContext.workspaceMember,
+        });
+
+        [permaventSalesScope, permaventActorContext] = await Promise.all([
+          this.permaventSalesScopeService.resolveErpSalesScope(userAuthContext),
+          this.permaventSalesScopeService.resolveLogicFunctionActorContext(
+            userAuthContext,
+          ),
+        ]);
+      }
     }
 
     let outcome;
@@ -320,6 +349,8 @@ export class RouteTriggerService {
         forwardAllHeaders: isPublicDomain,
         userId,
         userWorkspaceId,
+        permaventSalesScope,
+        permaventActorContext,
       });
     } catch (error) {
       if (
