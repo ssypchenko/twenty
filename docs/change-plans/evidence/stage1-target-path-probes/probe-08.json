@@ -1,0 +1,118 @@
+{
+  "target": "twenty/v2.46.0",
+  "batch": 8,
+  "range": [
+    126,
+    144
+  ],
+  "files": [
+    {
+      "path": "packages/twenty-server/src/engine/core-modules/permavent-sales-scope/assignments/permavent-sales-rep-assignment.service.ts",
+      "exists": false,
+      "error_type": "404",
+      "error": null
+    },
+    {
+      "path": "packages/twenty-server/src/engine/core-modules/permavent-sales-scope/constants/permavent-role-universal-identifiers.constant.ts",
+      "exists": false,
+      "error_type": "404",
+      "error": null
+    },
+    {
+      "path": "packages/twenty-server/src/engine/core-modules/permavent-sales-scope/context/__tests__/permavent-sales-scope-context.factory.spec.ts",
+      "exists": false,
+      "error_type": "404",
+      "error": null
+    },
+    {
+      "path": "packages/twenty-server/src/engine/core-modules/permavent-sales-scope/context/permavent-sales-scope-context.factory.ts",
+      "exists": false,
+      "error_type": "404",
+      "error": null
+    },
+    {
+      "path": "packages/twenty-server/src/engine/core-modules/permavent-sales-scope/context/permavent-sales-scope-context.type.ts",
+      "exists": false,
+      "error_type": "404",
+      "error": null
+    },
+    {
+      "path": "packages/twenty-server/src/engine/core-modules/permavent-sales-scope/focus/__tests__/permavent-company-focus-filter.service.spec.ts",
+      "exists": false,
+      "error_type": "404",
+      "error": null
+    },
+    {
+      "path": "packages/twenty-server/src/engine/core-modules/permavent-sales-scope/focus/permavent-company-focus-filter.service.ts",
+      "exists": false,
+      "error_type": "404",
+      "error": null
+    },
+    {
+      "path": "packages/twenty-server/src/engine/core-modules/permavent-sales-scope/permavent-sales-scope.module.ts",
+      "exists": false,
+      "error_type": "404",
+      "error": null
+    },
+    {
+      "path": "packages/twenty-server/src/engine/core-modules/permavent-sales-scope/permavent-sales-scope.service.ts",
+      "exists": false,
+      "error_type": "404",
+      "error": null
+    },
+    {
+      "path": "packages/twenty-server/src/engine/core-modules/permavent-user-audit/__tests__/permavent-user-audit.resolver.spec.ts",
+      "exists": false,
+      "error_type": "404",
+      "error": null
+    },
+    {
+      "path": "packages/twenty-server/src/engine/core-modules/permavent-user-audit/__tests__/permavent-user-audit.service.spec.ts",
+      "exists": false,
+      "error_type": "404",
+      "error": null
+    },
+    {
+      "path": "packages/twenty-server/src/engine/core-modules/permavent-user-audit/constants/permavent-user-audit-cleanup-cron-pattern.constant.ts",
+      "exists": false,
+      "error_type": "404",
+      "error": null
+    },
+    {
+      "path": "packages/twenty-server/src/engine/core-modules/permavent-user-audit/cron/permavent-user-audit-cleanup.cron.command.ts",
+      "exists": false,
+      "error_type": "404",
+      "error": null
+    },
+    {
+      "path": "packages/twenty-server/src/engine/core-modules/permavent-user-audit/cron/permavent-user-audit-cleanup.cron.job.ts",
+      "exists": false,
+      "error_type": "404",
+      "error": null
+    },
+    {
+      "path": "packages/twenty-server/src/engine/core-modules/permavent-user-audit/permavent-user-audit-entry.entity.ts",
+      "exists": false,
+      "error_type": "404",
+      "error": null
+    },
+    {
+      "path": "packages/twenty-server/src/engine/core-modules/permavent-user-audit/permavent-user-audit.job.ts",
+      "exists": false,
+      "error_type": "404",
+      "error": null
+    },
+    {
+      "path": "packages/twenty-server/src/engine/core-modules/permavent-user-audit/permavent-user-audit.module.ts",
+      "exists": false,
+      "error_type": "404",
+      "error": null
+    },
+    {
+      "path": "packages/twenty-server/src/engine/core-modules/permavent-user-audit/permavent-user-audit.resolver.ts",
+      "exists": false,
+      "error_type": "404",
+      "error": null
+    }
+  ]
+}
