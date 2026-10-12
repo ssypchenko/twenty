@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 
 import { ApplicationModule } from 'src/engine/core-modules/application/application.module';
+import { FeatureFlagModule } from 'src/engine/core-modules/feature-flag/feature-flag.module';
 import { ApplicationTranslationCatalogModule } from 'src/engine/metadata-modules/application-translation-catalog/application-translation-catalog.module';
 import { WorkspaceManyOrAllFlatEntityMapsCacheModule } from 'src/engine/metadata-modules/flat-entity/services/workspace-many-or-all-flat-entity-maps-cache.module';
 import { PageLayoutController } from 'src/engine/metadata-modules/page-layout/controllers/page-layout.controller';
@@ -21,6 +22,7 @@ import { DashboardSyncModule } from 'src/modules/dashboard-sync/dashboard-sync.m
     WorkspaceManyOrAllFlatEntityMapsCacheModule,
     ApplicationTranslationCatalogModule,
     ApplicationModule,
+    FeatureFlagModule,
     DashboardSyncModule,
     ViewModule,
   ],
