@@ -51,11 +51,21 @@ const buildWidgetPosition = (
 
 export const convertPageLayoutDraftToUpdateInput = (
   pageLayoutDraft: DraftPageLayout,
+  { includeOpeningTab = false }: { includeOpeningTab?: boolean } = {},
 ): UpdatePageLayoutWithTabsInput => {
+  const openingTabId = pageLayoutDraft.defaultTabToFocusOnMobileAndSidePanelId;
+
   return {
     name: pageLayoutDraft.name,
     type: pageLayoutDraft.type,
     objectMetadataId: pageLayoutDraft.objectMetadataId ?? null,
+    ...(includeOpeningTab && {
+      defaultTabToFocusOnMobileAndSidePanelId: pageLayoutDraft.tabs.some(
+        (tab) => tab.id === openingTabId && tab.isActive,
+      )
+        ? openingTabId
+        : null,
+    }),
     isFirstTabPinned: pageLayoutDraft.isFirstTabPinned,
     tabs: pageLayoutDraft.tabs
       .filter((tab) => tab.isActive)

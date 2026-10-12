@@ -1,8 +1,7 @@
-import { CoreObjectNameSingular } from 'twenty-shared/types';
+import { CoreObjectNameSingular, PageLayoutType } from 'twenty-shared/types';
 
 import { type FlatPageLayoutTab } from 'src/engine/metadata-modules/flat-page-layout-tab/types/flat-page-layout-tab.type';
 import { type FlatPageLayout } from 'src/engine/metadata-modules/flat-page-layout/types/flat-page-layout.type';
-import { PageLayoutType } from 'src/engine/metadata-modules/page-layout/enums/page-layout-type.enum';
 import {
   PageLayoutException,
   PageLayoutExceptionCode,
