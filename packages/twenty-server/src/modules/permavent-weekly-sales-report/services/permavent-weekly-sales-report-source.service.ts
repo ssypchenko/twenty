@@ -9,7 +9,7 @@ import { type WorkspaceAuthContext } from 'src/engine/core-modules/auth/types/wo
 import { PermaventSalesScopeContextFactory } from 'src/engine/core-modules/permavent-sales-scope/context/permavent-sales-scope-context.factory';
 import { TwentyConfigService } from 'src/engine/core-modules/twenty-config/twenty-config.service';
 import { WorkspaceDataSourceService } from 'src/engine/twenty-orm/datasource/workspace-data-source.service';
-import { GlobalWorkspaceOrmManager } from 'src/engine/twenty-orm/global-workspace-orm.manager';
+import { WorkspaceOrmManager } from 'src/engine/twenty-orm/workspace-orm.manager';
 import { getWorkspaceSchemaName } from 'src/engine/workspace-datasource/utils/get-workspace-schema-name.util';
 import { type PermaventWeeklySalesReportSource } from 'src/modules/permavent-weekly-sales-report/types/permavent-weekly-sales-report-source.type';
 import { getPermaventLondonWeekWindow } from 'src/modules/permavent-weekly-sales-report/utils/get-permavent-london-week-window.util';
@@ -38,7 +38,7 @@ export class PermaventWeeklySalesReportSourceService {
   constructor(
     private readonly twentyConfigService: TwentyConfigService,
     private readonly salesScopeContextFactory: PermaventSalesScopeContextFactory,
-    private readonly globalWorkspaceOrmManager: GlobalWorkspaceOrmManager,
+    private readonly workspaceOrmManager: WorkspaceOrmManager,
     private readonly workspaceDataSourceService: WorkspaceDataSourceService,
   ) {}
 
@@ -73,7 +73,7 @@ export class PermaventWeeklySalesReportSourceService {
 
     const window = getPermaventLondonWeekWindow(generatedAt);
     const schemaName = getWorkspaceSchemaName(salesScopeContext.workspaceId);
-    const rows = await this.globalWorkspaceOrmManager.executeInWorkspaceContext(
+    const rows = await this.workspaceOrmManager.executeInWorkspaceContext(
       async () => {
         return await this.workspaceDataSourceService
           .getDataSource({ useReplica: true })
