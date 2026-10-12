@@ -14,6 +14,7 @@ import { ExceptionHandlerService } from 'src/engine/core-modules/exception-handl
 import { ErrorCode } from 'src/engine/core-modules/graphql/utils/graphql-errors.util';
 import { JwtWrapperService } from 'src/engine/core-modules/jwt/services/jwt-wrapper.service';
 import { UserSessionCookieService } from 'src/engine/core-modules/user-session/services/user-session-cookie.service';
+import { PermaventDelegatedContextService } from 'src/engine/core-modules/permavent-delegated-api/services/permavent-delegated-context.service';
 import { type FlatWorkspace } from 'src/engine/core-modules/workspace/types/flat-workspace.type';
 import { WorkspaceManyOrAllFlatEntityMapsCacheService } from 'src/engine/metadata-modules/flat-entity/services/workspace-many-or-all-flat-entity-maps-cache.service';
 import { INTERNAL_SERVER_ERROR } from 'src/engine/middlewares/constants/default-error-message.constant';
@@ -43,6 +44,7 @@ export class MiddlewareService {
     private readonly exceptionHandlerService: ExceptionHandlerService,
     private readonly jwtWrapperService: JwtWrapperService,
     private readonly userSessionCookieService: UserSessionCookieService,
+    private readonly permaventDelegatedContextService: PermaventDelegatedContextService,
   ) {}
 
   public isTokenPresent(request: Request): boolean {
@@ -116,7 +118,10 @@ export class MiddlewareService {
   }
 
   public async hydrateRestRequest(request: Request) {
-    const data = await this.accessTokenService.validateTokenByRequest(request);
+    const data = await this.permaventDelegatedContextService.resolveForRequest({
+      authContext: await this.accessTokenService.validateTokenByRequest(request),
+      headers: request.headers,
+    });
     const metadataVersion = data.workspace
       ? await this.getOrSeedMetadataVersion(data.workspace)
       : undefined;
@@ -154,6 +159,11 @@ export class MiddlewareService {
 
   public async hydrateGraphqlRequest(request: Request) {
     if (!this.isTokenPresent(request)) {
+      // A caller must not supply a delegated actor without authenticating.
+      await this.permaventDelegatedContextService.resolveForRequest({
+        authContext: {},
+        headers: request.headers,
+      });
       request.locale = getRequestLocaleFromHeader(request);
 
       return;
@@ -170,6 +180,10 @@ export class MiddlewareService {
       throw error;
     }
 
+    data = await this.permaventDelegatedContextService.resolveForRequest({
+      authContext: data,
+      headers: request.headers,
+    });
     const metadataVersion = data.workspace
       ? await this.getOrSeedMetadataVersion(data.workspace)
       : undefined;
