@@ -1,0 +1,104 @@
+{
+  "target": "twenty/v2.46.0",
+  "batch": 5,
+  "range": [
+    72,
+    90
+  ],
+  "files": [
+    {
+      "path": "packages/twenty-server/@types/express.d.ts",
+      "exists": true,
+      "blob_sha": "d03132f22d9617a1c7005d743a849f658e336795"
+    },
+    {
+      "path": "packages/twenty-server/src/database/commands/cron-register-all.command.ts",
+      "exists": true,
+      "blob_sha": "e88cdd7fd077c97b7c58afdcf6245d1f2d041547"
+    },
+    {
+      "path": "packages/twenty-server/src/database/commands/database-command.module.ts",
+      "exists": true,
+      "blob_sha": "bb34d62f875c8a7d10e2920ff5a3075f4ceafc04"
+    },
+    {
+      "path": "packages/twenty-server/src/database/commands/upgrade-version-command/2-30/2-30-instance-command-fast-1786230000000-create-permavent-user-audit-entry.ts",
+      "exists": false,
+      "error_type": "404",
+      "error": null
+    },
+    {
+      "path": "packages/twenty-server/src/database/commands/upgrade-version-command/instance-commands.constant.ts",
+      "exists": true,
+      "blob_sha": "c53476f2f495c76fd0f15c23c1548e340b747bcd"
+    },
+    {
+      "path": "packages/twenty-server/src/engine/api/common/common-query-runners/common-base-query-runner.service.ts",
+      "exists": true,
+      "blob_sha": "32f75fec59d897151ba9f065b2422e0ee6d93379"
+    },
+    {
+      "path": "packages/twenty-server/src/engine/api/common/core-common-api.module.ts",
+      "exists": true,
+      "blob_sha": "652dac83f5146dc9ddd5bb5174c1f385e781c93d"
+    },
+    {
+      "path": "packages/twenty-server/src/engine/api/graphql/workspace-query-runner/listeners/__tests__/entity-events-to-db.listener.spec.ts",
+      "exists": true,
+      "blob_sha": "364b8aab9fd26f4780bb54a816e5f67d1796b041"
+    },
+    {
+      "path": "packages/twenty-server/src/engine/api/graphql/workspace-query-runner/listeners/entity-events-to-db.listener.ts",
+      "exists": true,
+      "blob_sha": "680f37b5e045dff83d9a64cc594021856d41e1c5"
+    },
+    {
+      "path": "packages/twenty-server/src/engine/api/graphql/workspace-query-runner/workspace-query-runner.module.ts",
+      "exists": true,
+      "blob_sha": "bb6b033f9dbf8751394b7c0c8d2471e56057697e"
+    },
+    {
+      "path": "packages/twenty-server/src/engine/api/mcp/controllers/mcp-core.controller.ts",
+      "exists": true,
+      "blob_sha": "f8d1df71d08cb449eb5cd25ad2602fea3383aeb5"
+    },
+    {
+      "path": "packages/twenty-server/src/engine/api/mcp/guards/__tests__/mcp-auth.guard.spec.ts",
+      "exists": true,
+      "blob_sha": "80d893cb4a0915025b43a8043ed6919f7d940d9c"
+    },
+    {
+      "path": "packages/twenty-server/src/engine/api/mcp/guards/mcp-auth.guard.ts",
+      "exists": true,
+      "blob_sha": "8df66a919f5ff3a4cd41f74a2a1330b8fc6d5b88"
+    },
+    {
+      "path": "packages/twenty-server/src/engine/api/mcp/services/__tests__/mcp-protocol.service.spec.ts",
+      "exists": false,
+      "error_type": "404",
+      "error": null
+    },
+    {
+      "path": "packages/twenty-server/src/engine/api/mcp/services/mcp-protocol.service.ts",
+      "exists": true,
+      "blob_sha": "f3e69185bfee8e0c6cf2bfa046ed398ccd144d0a"
+    },
+    {
+      "path": "packages/twenty-server/src/engine/api/mcp/utils/__tests__/is-mcp-read-only-catalog-tool.util.spec.ts",
+      "exists": false,
+      "error_type": "404",
+      "error": null
+    },
+    {
+      "path": "packages/twenty-server/src/engine/api/mcp/utils/is-mcp-read-only-catalog-tool.util.ts",
+      "exists": false,
+      "error_type": "404",
+      "error": null
+    },
+    {
+      "path": "packages/twenty-server/src/engine/api/rest/core/handlers/rest-api-base.handler.ts",
+      "exists": true,
+      "blob_sha": "61617a1d64e55558c1b6a4092876faed41b985eb"
+    }
+  ]
+}
