@@ -505,16 +505,6 @@ msgctxt "commandMenuItem.shortLabel"
 msgid "Accounts"
 msgstr "帳戶"
 
-#. js-lingui-id: j0DfGR
-#: src/engine/core-modules/auth/services/reset-password.service.ts
-msgid "Action Needed to Reset Password"
-msgstr "需要採取行動以重設密碼"
-
-#. js-lingui-id: 8Q5bRY
-#: src/engine/core-modules/auth/services/reset-password.service.ts
-msgid "Action Needed to Set Password"
-msgstr "需要採取行動以設定密碼"
-
 #. js-lingui-id: X2aLVJ
 #: src/engine/workspace-manager/twenty-standard-application/constants/standard-command-menu-item.constant.ts
 msgctxt "commandMenuItem.shortLabel"
@@ -5612,11 +5602,6 @@ msgctxt "objectMetadata.description"
 msgid "Join table linking message channel message associations to message folders"
 msgstr "將訊息通道訊息關聯連結至訊息資料夾的聯結表"
 
-#. js-lingui-id: PviVyk
-#: src/engine/core-modules/workspace-invitation/services/workspace-invitation.service.ts
-msgid "Join your team on Twenty"
-msgstr "加入您的團隊，使用 Twenty"
-
 #. js-lingui-id: +KEn4d
 #: src/engine/workspace-manager/twenty-standard-application/utils/field-metadata/compute-call-recording-standard-flat-field-metadata.util.ts
 msgctxt "fieldMetadata.label"
@@ -7824,6 +7809,11 @@ msgstr "請檢查您的連接設置。確保伺服器主機、端口和密碼正
 msgid "Please choose an end date and time after the start date and time."
 msgstr "請選擇開始日期和時間之後的結束日期和時間。"
 
+#. js-lingui-id: bLI0xp
+#: src/engine/core-modules/email-verification/services/email-verification.service.ts
+msgid "Please confirm your email"
+msgstr ""
+
 #. js-lingui-id: mqzu5F
 #: src/engine/core-modules/email-verification/services/email-verification.service.ts
 msgid "Please confirm your updated email"
@@ -8312,6 +8302,11 @@ msgstr "已請求"
 #: src/engine/core-modules/file/file.exception.ts
 msgid "Requested file range cannot be served."
 msgstr "無法提供所要求的檔案範圍。"
+
+#. js-lingui-id: slOprG
+#: src/engine/core-modules/auth/services/reset-password.service.ts
+msgid "Reset your password"
+msgstr ""
 
 #. js-lingui-id: MU8Slt
 #: src/engine/core-modules/server-route-trigger/exceptions/server-route-trigger.exception.ts
@@ -9011,6 +9006,11 @@ msgstr "此使用者或工作區未啟用伺服器層級的模擬功能。"
 #: src/engine/core-modules/impersonation/constants/impersonation-denial-by-reason.constant.ts
 msgid "Set up two-factor authentication before impersonating users in another workspace."
 msgstr "在模擬其他工作區的使用者之前，請先設定兩步驟驗證。"
+
+#. js-lingui-id: jwdcD0
+#: src/engine/core-modules/auth/services/reset-password.service.ts
+msgid "Set your password"
+msgstr ""
 
 #. js-lingui-id: vGWuPM
 #: src/engine/workspace-manager/twenty-standard-application/constants/standard-command-menu-item.constant.ts
@@ -11785,11 +11785,6 @@ msgstr "找不到 Webhook。"
 msgid "Wednesday"
 msgstr "星期三"
 
-#. js-lingui-id: TVkCrJ
-#: src/engine/core-modules/email-verification/services/email-verification.service.ts
-msgid "Welcome to Twenty: Please Confirm Your Email"
-msgstr "歡迎來到 Twenty：請確認您的電子郵件"
-
 #. js-lingui-id: ofdfh5
 #: src/engine/workspace-manager/twenty-standard-application/utils/field-metadata/compute-message-campaign-standard-flat-field-metadata.util.ts
 msgctxt "fieldMetadata.description"
@@ -12582,6 +12577,11 @@ msgstr "您無權創建工作區層次的視圖。"
 #: src/engine/metadata-modules/view/exceptions/view.exception.ts
 msgid "You don't have permission to modify this view."
 msgstr "您無權修改此視圖。"
+
+#. js-lingui-id: qziYeW
+#: src/engine/core-modules/workspace-invitation/services/workspace-invitation.service.ts
+msgid "You have been invited to join Permavent CRM"
+msgstr ""
 
 #. js-lingui-id: hMX1AE
 #: src/engine/core-modules/billing/billing.exception.ts

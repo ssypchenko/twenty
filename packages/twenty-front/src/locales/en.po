@@ -200,6 +200,12 @@ msgstr "{0, plural, one {# workspace failed or behind} other {# workspaces faile
 msgid "{0, plural, one {You do not have permission to access the {fieldsList} field} other {You do not have permission to access the {fieldsList} fields}}"
 msgstr "{0, plural, one {You do not have permission to access the {fieldsList} field} other {You do not have permission to access the {fieldsList} fields}}"
 
+#. js-lingui-id: 94Cyqb
+#. placeholder {0}: entry.changedFields.length
+#: src/modules/settings/security/components/SettingsUserActivityLog.tsx
+msgid "{0} changed field(s)"
+msgstr "{0} changed field(s)"
+
 #. js-lingui-id: dNIJYp
 #. placeholder {0}: formatNumber(nextCreditsByPeriod, { decimals: 2, })
 #: src/modules/settings/billing/components/SettingsBillingSubscriptionInfo.tsx
@@ -1043,6 +1049,8 @@ msgid "action"
 msgstr "action"
 
 #. js-lingui-id: bwRvnp
+#: src/modules/settings/security/components/SettingsUserActivityLog.tsx
+#: src/modules/settings/security/components/SettingsUserActivityLog.tsx
 #: src/modules/side-panel/components/SidePanelWorkflowStepInfo.tsx
 #: src/modules/side-panel/components/SidePanelWorkflowStepInfo.tsx
 #: src/modules/workflow/workflow-steps/workflow-actions/utils/getActionHeaderTypeOrThrow.ts
@@ -1711,6 +1719,11 @@ msgstr "Advanced Encryption"
 msgid "Advanced filter"
 msgstr "Advanced filter"
 
+#. js-lingui-id: c0acMS
+#: src/modules/settings/security/components/SettingsUserActivityLog.tsx
+msgid "Advanced filters"
+msgstr "Advanced filters"
+
 #. js-lingui-id: x4BdSX
 #: src/modules/workflow/workflow-steps/workflow-actions/components/WorkflowEditActionEmailBase.tsx
 msgid "Advanced options"
@@ -1967,6 +1980,11 @@ msgstr "All"
 msgid "All ({relationRecordsCount})"
 msgstr "All ({relationRecordsCount})"
 
+#. js-lingui-id: cF7bEt
+#: src/modules/settings/security/components/SettingsUserActivityLog.tsx
+msgid "All actions"
+msgstr "All actions"
+
 #. js-lingui-id: Hn61nE
 #: src/modules/settings/roles/role-permissions/permission-flags/components/SettingsRolePermissionsToolSection.tsx
 msgid "All Actions Access"
@@ -2058,6 +2076,11 @@ msgstr "All objects are already in the sidebar"
 msgid "All reasons"
 msgstr "All reasons"
 
+#. js-lingui-id: +biFDt
+#: src/modules/settings/security/components/SettingsUserActivityLog.tsx
+msgid "All record types"
+msgstr "All record types"
+
 #. js-lingui-id: Hm90t3
 #: src/modules/settings/roles/components/SettingsRolesList.tsx
 msgid "All roles"
@@ -2092,6 +2115,11 @@ msgstr "All the standard objects"
 #: src/modules/settings/unsubscribers/components/filter-dropdown/SettingsUnsubscribersFilterDropdown.tsx
 msgid "All topics"
 msgstr "All topics"
+
+#. js-lingui-id: UBpkWM
+#: src/modules/settings/security/components/SettingsUserActivityLog.tsx
+msgid "All users"
+msgstr "All users"
 
 #. js-lingui-id: XLzFVD
 #: src/modules/settings/roles/role-assignment/constants/RoleTargetConfig.ts
@@ -3814,6 +3842,11 @@ msgstr "Change to Yearly?"
 msgid "Change visibility?"
 msgstr "Change visibility?"
 
+#. js-lingui-id: a5zD9f
+#: src/modules/settings/security/components/SettingsUserActivityLog.tsx
+msgid "Changes"
+msgstr "Changes"
+
 #. js-lingui-id: rnTfap
 #: src/pages/settings/applications/SettingsApplicationConnectionDetail.tsx
 msgid "Changing visibility requires reconnecting this OAuth connection. You will be redirected to authorize it again."
@@ -4975,6 +5008,11 @@ msgstr "Copy output"
 #: src/pages/settings/profile/SettingsTwoFactorAuthenticationMethod.tsx
 msgid "Copy paste the code below"
 msgstr "Copy paste the code below"
+
+#. js-lingui-id: P3Fn/2
+#: src/modules/settings/security/components/SettingsUserActivityLog.tsx
+msgid "Copy record ID"
+msgstr "Copy record ID"
 
 #. js-lingui-id: S+Jl8l
 #: src/modules/auth/sign-in-up/components/internal/SignInUpTwoFactorAuthenticationProvision.tsx
@@ -6200,6 +6238,11 @@ msgstr "Default model for lightweight tasks"
 #: src/modules/settings/admin-panel/ai/components/SettingsAdminAI.tsx
 msgid "Default Models"
 msgstr "Default Models"
+
+#. js-lingui-id: 5DszoD
+#: src/modules/side-panel/permavent-company-wide-side-panel/components/PermaventOpeningTabSettingsItem.tsx
+msgid "Default opening tab"
+msgstr "Default opening tab"
 
 #. js-lingui-id: 4HDpKr
 #: src/modules/side-panel/pages/page-layout/components/dropdown-content/ChartColorPaletteOption.tsx
@@ -9298,6 +9341,11 @@ msgstr "From"
 msgid "from {startDay} to {endDay}"
 msgstr "from {startDay} to {endDay}"
 
+#. js-lingui-id: j+NcOD
+#: src/modules/settings/security/components/SettingsUserActivityLog.tsx
+msgid "From date & time"
+msgstr "From date & time"
+
 #. js-lingui-id: zaEHSY
 #: src/modules/metadata-error-handler/hooks/useMetadataErrorHandler.ts
 #: src/pages/settings/applications/SettingsApplicationDetails.tsx
@@ -11637,6 +11685,7 @@ msgstr "Load balanced"
 
 #. js-lingui-id: yQ2kGp
 #: src/modules/object-record/record-table/record-table-section/components/RecordTableRecordGroupSectionLoadMore.tsx
+#: src/modules/settings/security/components/SettingsUserActivityLog.tsx
 msgid "Load more"
 msgstr "Load more"
 
@@ -11718,6 +11767,11 @@ msgstr "Loading skills..."
 #: src/modules/page-layout/widgets/email-thread/components/EmailThreadWidget.tsx
 msgid "Loading thread"
 msgstr "Loading thread"
+
+#. js-lingui-id: U2+k4h
+#: src/modules/settings/security/components/SettingsUserActivityLog.tsx
+msgid "Loading user activity…"
+msgstr "Loading user activity…"
 
 #. js-lingui-id: Z3FXyt
 #: src/modules/activities/timeline-activities/rows/calendar/components/EventCardCalendarEvent.tsx
@@ -12865,6 +12919,8 @@ msgid "New Model"
 msgstr "New Model"
 
 #. js-lingui-id: zPPcuu
+#: src/modules/activities/notes/components/NotesCard.tsx
+#: src/modules/activities/notes/components/NotesCard.tsx
 #: src/modules/activities/notes/components/NotesCardContent.tsx
 msgid "New note"
 msgstr "New note"
@@ -12914,6 +12970,8 @@ msgid "New Tab"
 msgstr "New Tab"
 
 #. js-lingui-id: wl18ST
+#: src/modules/activities/tasks/components/CompactTasksCard.tsx
+#: src/modules/activities/tasks/components/CompactTasksCard.tsx
 #: src/modules/activities/tasks/components/TaskGroupsContent.tsx
 msgid "New task"
 msgstr "New task"
@@ -13027,6 +13085,11 @@ msgstr "No active subscription."
 #: src/modules/activities/timeline-activities/components/EventList.tsx
 msgid "No activity matches the selected types."
 msgstr "No activity matches the selected types."
+
+#. js-lingui-id: clZ/Uc
+#: src/modules/settings/security/components/SettingsUserActivityLog.tsx
+msgid "No activity matches these filters."
+msgstr "No activity matches these filters."
 
 #. js-lingui-id: aXFOuf
 #: src/modules/activities/timeline-activities/components/TimelineCard.tsx
@@ -13448,6 +13511,7 @@ msgid "No models available. Please configure AI models in your workspace setting
 msgstr "No models available. Please configure AI models in your workspace settings."
 
 #. js-lingui-id: 9VrTfZ
+#: src/modules/activities/notes/components/NotesCard.tsx
 #: src/modules/activities/notes/components/NotesCardContent.tsx
 msgid "No notes"
 msgstr "No notes"
@@ -13456,6 +13520,11 @@ msgstr "No notes"
 #: src/modules/navigation-menu-item/edit/side-panel/components/SidePanelNewSidebarItemViewObjectPickerSubView.tsx
 msgid "No objects with views found"
 msgstr "No objects with views found"
+
+#. js-lingui-id: AxwWFX
+#: src/modules/activities/tasks/components/CompactTasksCard.tsx
+msgid "No open tasks"
+msgstr "No open tasks"
 
 #. js-lingui-id: daCzI1
 #: src/modules/ui/field/input/components/MultiSelectInput.tsx
@@ -13901,6 +13970,13 @@ msgstr "Not shared by {notSharedByFullName}"
 msgid "Not synced"
 msgstr "Not synced"
 
+#. js-lingui-id: 1DBGsz
+#: src/modules/side-panel/pages/page-layout/components/SidePanelPageLayoutRecordPageWidgetTypeSelect.tsx
+#: src/modules/side-panel/pages/page-layout/components/SidePanelPageLayoutRecordPageWidgetTypeSelect.tsx
+#: src/modules/side-panel/pages/page-layout/components/SidePanelPageLayoutRecordPageWidgetTypeSelect.tsx
+msgid "Notes"
+msgstr "Notes"
+
 #. js-lingui-id: VngD1z
 #: src/pages/settings/applications/SettingsApplicationDetails.tsx
 msgid "Nothing to configure for this application"
@@ -14305,6 +14381,7 @@ msgid "Only you will be able to see your emails and events"
 msgstr "Only you will be able to see your emails and events"
 
 #. js-lingui-id: 1TNIig
+#: src/modules/activities/tasks/components/CompactTasksCard.tsx
 #: src/modules/settings/data-model/objects/forms/components/SettingsDataModelObjectAboutForm.tsx
 #: src/modules/settings/mcp-and-apis/utils/buildMcpSetupCategories.tsx
 #: src/pages/settings/members/tabs/SettingsWorkspaceMembersTeamTab.tsx
@@ -14755,6 +14832,11 @@ msgstr "Past due"
 msgid "Paste a link to a hosted image"
 msgstr "Paste a link to a hosted image"
 
+#. js-lingui-id: LI5VHY
+#: src/modules/settings/security/components/SettingsUserActivityLog.tsx
+msgid "Paste a record ID"
+msgstr "Paste a record ID"
+
 #. js-lingui-id: cpStVq
 #: src/modules/auth/sign-in-up/components/internal/SignInUpTwoFactorAuthenticationVerification.tsx
 msgid "Paste the code below"
@@ -14853,6 +14935,7 @@ msgstr "Perform administrative actions or permanently delete this user"
 
 #. js-lingui-id: NtQvjo
 #: src/modules/settings/event-logs/components/EventLogFilters.tsx
+#: src/modules/settings/security/components/SettingsUserActivityLog.tsx
 msgid "Period"
 msgstr "Period"
 
@@ -15665,6 +15748,7 @@ msgstr "record"
 #: src/modules/navigation-menu-item/edit/side-panel/components/SidePanelNewSidebarItemMainMenu.tsx
 #: src/modules/settings/applications/hooks/useComputeApplicationContentForLayoutAndLogic.ts
 #: src/modules/settings/applications/hooks/useComputeApplicationContentForLayoutAndLogic.ts
+#: src/modules/settings/security/components/SettingsUserActivityLog.tsx
 #: src/modules/side-panel/pages/page-layout/components/dropdown-content/ChartGroupByFieldSelectionTargetObjectFieldsView.tsx
 #: src/modules/workflow/workflow-steps/workflow-actions/components/WorkflowEditActionDeleteRecord.tsx
 #: src/modules/workflow/workflow-steps/workflow-actions/components/WorkflowEditActionUpdateRecord.tsx
@@ -15690,8 +15774,14 @@ msgstr "Record filter rule options"
 #. js-lingui-id: xSAYIn
 #: src/modules/settings/event-logs/components/EventLogFilters.tsx
 #: src/modules/settings/event-logs/utils/getColumnsForEventLogTable.tsx
+#: src/modules/settings/security/components/SettingsUserActivityLog.tsx
 msgid "Record ID"
 msgstr "Record ID"
+
+#. js-lingui-id: wgtpP8
+#: src/modules/settings/security/components/SettingsUserActivityLog.tsx
+msgid "Record ID copied"
+msgstr "Record ID copied"
 
 #. js-lingui-id: mj1fkT
 #: src/modules/settings/data-model/objects/forms/components/SettingsDataModelObjectIdentifiersForm.tsx
@@ -15714,6 +15804,11 @@ msgstr "Record page"
 #: src/modules/side-panel/pages/page-layout/utils/getPageLayoutPageTitle.ts
 msgid "Record Table Settings"
 msgstr "Record Table Settings"
+
+#. js-lingui-id: CV/ZuS
+#: src/modules/settings/security/components/SettingsUserActivityLog.tsx
+msgid "Record type"
+msgstr "Record type"
 
 #. js-lingui-id: kvxD0C
 #: src/modules/workflow/workflow-trigger/components/WorkflowEditTriggerDatabaseEventForm.tsx
@@ -17716,6 +17811,11 @@ msgstr "Show more"
 msgid "Show only rows with errors"
 msgstr "Show only rows with errors"
 
+#. js-lingui-id: oGr8jy
+#: src/modules/settings/security/components/SettingsUserActivityLog.tsx
+msgid "Show only this record"
+msgstr "Show only this record"
+
 #. js-lingui-id: P1iyUf
 #: src/pages/settings/applications/tabs/SettingsApplicationTimelineActivityTypeSettingsTab.tsx
 msgid "Show this activity type in record timelines"
@@ -17741,6 +17841,11 @@ msgstr "Side panel"
 #: src/modules/keyboard-shortcut-menu/components/KeyboardShortcutMenuOpenContent.tsx
 msgid "Side Panel"
 msgstr "Side Panel"
+
+#. js-lingui-id: tGntu5
+#: src/modules/side-panel/permavent-company-wide-side-panel/components/PermaventOpeningTabSettingsItem.tsx
+msgid "Side panel and mobile"
+msgstr "Side panel and mobile"
 
 #. js-lingui-id: 9k9PMD
 #: src/modules/settings/layout/components/SettingsLayoutItemsStats.tsx
@@ -18709,6 +18814,13 @@ msgstr "Task title"
 msgid "Task Title"
 msgstr "Task Title"
 
+#. js-lingui-id: GtycJ/
+#: src/modules/side-panel/pages/page-layout/components/SidePanelPageLayoutRecordPageWidgetTypeSelect.tsx
+#: src/modules/side-panel/pages/page-layout/components/SidePanelPageLayoutRecordPageWidgetTypeSelect.tsx
+#: src/modules/side-panel/pages/page-layout/components/SidePanelPageLayoutRecordPageWidgetTypeSelect.tsx
+msgid "Tasks"
+msgstr "Tasks"
+
 #. js-lingui-id: KM6m8p
 #: src/pages/settings/members/SettingsWorkspaceMembers.tsx
 msgid "Team"
@@ -19569,6 +19681,11 @@ msgstr "Title"
 msgid "To"
 msgstr "To"
 
+#. js-lingui-id: 62WutH
+#: src/modules/settings/security/components/SettingsUserActivityLog.tsx
+msgid "To date & time"
+msgstr "To date & time"
+
 #. js-lingui-id: ecUA8p
 #: src/modules/ai/utils/groupThreadsByDate.ts
 #: src/modules/localization/utils/formatDateISOStringToRelativeDate.ts
@@ -20078,6 +20195,11 @@ msgstr "Unable to delete member right now"
 msgid "Unable to load application details. Please try again later."
 msgstr "Unable to load application details. Please try again later."
 
+#. js-lingui-id: KhlUjj
+#: src/modules/settings/security/components/SettingsUserActivityLog.tsx
+msgid "Unable to load user activity."
+msgstr "Unable to load user activity."
+
 #. js-lingui-id: l+ALBd
 #: src/modules/client-config/components/ClientConfigProvider.tsx
 msgid "Unable to Reach Back-end"
@@ -20239,6 +20361,11 @@ msgstr "Unknown speaker"
 #: src/modules/settings/unsubscribers/components/SettingsUnsubscribersList.tsx
 msgid "Unknown topic"
 msgstr "Unknown topic"
+
+#. js-lingui-id: 63niL6
+#: src/modules/settings/security/components/SettingsUserActivityLog.tsx
+msgid "Unknown user"
+msgstr "Unknown user"
 
 #. js-lingui-id: m/o1+r
 #: src/modules/settings/admin-panel/health-status/components/SettingsAdminWorkspacesByHealthAccordion.tsx
@@ -20791,6 +20918,11 @@ msgstr "Usage Events"
 msgid "Usage period"
 msgstr "Usage period"
 
+#. js-lingui-id: 2PVIAZ
+#: src/modules/side-panel/permavent-company-wide-side-panel/components/PermaventOpeningTabSettingsItem.tsx
+msgid "Use as opening tab"
+msgstr "Use as opening tab"
+
 #. js-lingui-id: 6kLyt5
 #: src/modules/auth/sign-in-up/components/internal/SignInUpTwoFactorAuthenticationProvision.tsx
 msgid "Use authenticator apps and browser extensions like 1Password, Authy, Microsoft Authenticator to generate one-time passwords"
@@ -20867,6 +20999,8 @@ msgstr "Useful for pivot/junction tables"
 #: src/modules/settings/admin-panel/chats/components/SettingsAdminChatsTable.tsx
 #: src/modules/settings/event-logs/utils/getColumnsForEventLogTable.tsx
 #: src/modules/settings/hooks/useSettingsNavigationItems.tsx
+#: src/modules/settings/security/components/SettingsUserActivityLog.tsx
+#: src/modules/settings/security/components/SettingsUserActivityLog.tsx
 #: src/pages/settings/accounts/SettingsAccounts.tsx
 #: src/pages/settings/accounts/SettingsAccountsCalendars.tsx
 #: src/pages/settings/accounts/SettingsAccountsConfigurationStepCalendar.tsx
@@ -20880,6 +21014,11 @@ msgstr "Useful for pivot/junction tables"
 #: src/pages/settings/profile/SettingsTwoFactorAuthenticationMethod.tsx
 msgid "User"
 msgstr "User"
+
+#. js-lingui-id: NTCspk
+#: src/pages/settings/general/SettingsGeneral.tsx
+msgid "User activity log"
+msgstr "User activity log"
 
 #. js-lingui-id: zw/lpB
 #: src/pages/settings/ai/SettingsAiPrompts.tsx
@@ -21600,6 +21739,11 @@ msgstr "What's installed and being used in your workspace"
 #: src/pages/settings/communications/SettingsWorkspaceCommunications.tsx
 msgid "Whatsapp"
 msgstr "Whatsapp"
+
+#. js-lingui-id: 1ZF9KQ
+#: src/modules/settings/security/components/SettingsUserActivityLog.tsx
+msgid "When"
+msgstr "When"
 
 #. js-lingui-id: m7GziZ
 #: src/modules/ai/components/suggested-prompts/default-suggested-prompts.ts

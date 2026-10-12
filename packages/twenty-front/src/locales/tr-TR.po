@@ -205,6 +205,12 @@ msgstr ""
 msgid "{0, plural, one {You do not have permission to access the {fieldsList} field} other {You do not have permission to access the {fieldsList} fields}}"
 msgstr "{0, plural, one {{fieldsList} alanına erişim izniniz yok} other {{fieldsList} alanlarına erişim izniniz yok}}"
 
+#. js-lingui-id: 94Cyqb
+#. placeholder {0}: entry.changedFields.length
+#: src/modules/settings/security/components/SettingsUserActivityLog.tsx
+msgid "{0} changed field(s)"
+msgstr ""
+
 #. js-lingui-id: dNIJYp
 #. placeholder {0}: formatNumber(nextCreditsByPeriod, { decimals: 2, })
 #: src/modules/settings/billing/components/SettingsBillingSubscriptionInfo.tsx
@@ -1048,6 +1054,8 @@ msgid "action"
 msgstr "eylem"
 
 #. js-lingui-id: bwRvnp
+#: src/modules/settings/security/components/SettingsUserActivityLog.tsx
+#: src/modules/settings/security/components/SettingsUserActivityLog.tsx
 #: src/modules/side-panel/components/SidePanelWorkflowStepInfo.tsx
 #: src/modules/side-panel/components/SidePanelWorkflowStepInfo.tsx
 #: src/modules/workflow/workflow-steps/workflow-actions/utils/getActionHeaderTypeOrThrow.ts
@@ -1716,6 +1724,11 @@ msgstr "Gelişmiş Şifreleme"
 msgid "Advanced filter"
 msgstr "Gelişmiş filtre"
 
+#. js-lingui-id: c0acMS
+#: src/modules/settings/security/components/SettingsUserActivityLog.tsx
+msgid "Advanced filters"
+msgstr ""
+
 #. js-lingui-id: x4BdSX
 #: src/modules/workflow/workflow-steps/workflow-actions/components/WorkflowEditActionEmailBase.tsx
 msgid "Advanced options"
@@ -1972,6 +1985,11 @@ msgstr "Tüm"
 msgid "All ({relationRecordsCount})"
 msgstr "Tüm ({relationRecordsCount})"
 
+#. js-lingui-id: cF7bEt
+#: src/modules/settings/security/components/SettingsUserActivityLog.tsx
+msgid "All actions"
+msgstr ""
+
 #. js-lingui-id: Hn61nE
 #: src/modules/settings/roles/role-permissions/permission-flags/components/SettingsRolePermissionsToolSection.tsx
 msgid "All Actions Access"
@@ -2063,6 +2081,11 @@ msgstr "Tüm nesneler zaten kenar çubuğunda"
 msgid "All reasons"
 msgstr "Tüm nedenler"
 
+#. js-lingui-id: +biFDt
+#: src/modules/settings/security/components/SettingsUserActivityLog.tsx
+msgid "All record types"
+msgstr ""
+
 #. js-lingui-id: Hm90t3
 #: src/modules/settings/roles/components/SettingsRolesList.tsx
 msgid "All roles"
@@ -2097,6 +2120,11 @@ msgstr "Tüm standart nesneler"
 #: src/modules/settings/unsubscribers/components/filter-dropdown/SettingsUnsubscribersFilterDropdown.tsx
 msgid "All topics"
 msgstr "Tüm konular"
+
+#. js-lingui-id: UBpkWM
+#: src/modules/settings/security/components/SettingsUserActivityLog.tsx
+msgid "All users"
+msgstr ""
 
 #. js-lingui-id: XLzFVD
 #: src/modules/settings/roles/role-assignment/constants/RoleTargetConfig.ts
@@ -3819,6 +3847,11 @@ msgstr "Yıllığa değiştirilsin mi?"
 msgid "Change visibility?"
 msgstr "Görünürlüğü değiştirilsin mi?"
 
+#. js-lingui-id: a5zD9f
+#: src/modules/settings/security/components/SettingsUserActivityLog.tsx
+msgid "Changes"
+msgstr ""
+
 #. js-lingui-id: rnTfap
 #: src/pages/settings/applications/SettingsApplicationConnectionDetail.tsx
 msgid "Changing visibility requires reconnecting this OAuth connection. You will be redirected to authorize it again."
@@ -4980,6 +5013,11 @@ msgstr "Çıktıyı kopyala"
 #: src/pages/settings/profile/SettingsTwoFactorAuthenticationMethod.tsx
 msgid "Copy paste the code below"
 msgstr "Aşağıdaki kodu yapıştırın"
+
+#. js-lingui-id: P3Fn/2
+#: src/modules/settings/security/components/SettingsUserActivityLog.tsx
+msgid "Copy record ID"
+msgstr ""
 
 #. js-lingui-id: S+Jl8l
 #: src/modules/auth/sign-in-up/components/internal/SignInUpTwoFactorAuthenticationProvision.tsx
@@ -6205,6 +6243,11 @@ msgstr "Hafif görevler için varsayılan model"
 #: src/modules/settings/admin-panel/ai/components/SettingsAdminAI.tsx
 msgid "Default Models"
 msgstr "Varsayılan Modeller"
+
+#. js-lingui-id: 5DszoD
+#: src/modules/side-panel/permavent-company-wide-side-panel/components/PermaventOpeningTabSettingsItem.tsx
+msgid "Default opening tab"
+msgstr ""
 
 #. js-lingui-id: 4HDpKr
 #: src/modules/side-panel/pages/page-layout/components/dropdown-content/ChartColorPaletteOption.tsx
@@ -9303,6 +9346,11 @@ msgstr "Kimden"
 msgid "from {startDay} to {endDay}"
 msgstr "{startDay} ve {endDay} arasında"
 
+#. js-lingui-id: j+NcOD
+#: src/modules/settings/security/components/SettingsUserActivityLog.tsx
+msgid "From date & time"
+msgstr ""
+
 #. js-lingui-id: zaEHSY
 #: src/modules/metadata-error-handler/hooks/useMetadataErrorHandler.ts
 #: src/pages/settings/applications/SettingsApplicationDetails.tsx
@@ -11642,6 +11690,7 @@ msgstr "Yük dengeli"
 
 #. js-lingui-id: yQ2kGp
 #: src/modules/object-record/record-table/record-table-section/components/RecordTableRecordGroupSectionLoadMore.tsx
+#: src/modules/settings/security/components/SettingsUserActivityLog.tsx
 msgid "Load more"
 msgstr "Daha fazla yükle"
 
@@ -11723,6 +11772,11 @@ msgstr "Beceriler yükleniyor..."
 #: src/modules/page-layout/widgets/email-thread/components/EmailThreadWidget.tsx
 msgid "Loading thread"
 msgstr "Dizi yükleniyor"
+
+#. js-lingui-id: U2+k4h
+#: src/modules/settings/security/components/SettingsUserActivityLog.tsx
+msgid "Loading user activity…"
+msgstr ""
 
 #. js-lingui-id: Z3FXyt
 #: src/modules/activities/timeline-activities/rows/calendar/components/EventCardCalendarEvent.tsx
@@ -12870,6 +12924,8 @@ msgid "New Model"
 msgstr "Yeni Model"
 
 #. js-lingui-id: zPPcuu
+#: src/modules/activities/notes/components/NotesCard.tsx
+#: src/modules/activities/notes/components/NotesCard.tsx
 #: src/modules/activities/notes/components/NotesCardContent.tsx
 msgid "New note"
 msgstr "Yeni not"
@@ -12919,6 +12975,8 @@ msgid "New Tab"
 msgstr "Yeni sekme"
 
 #. js-lingui-id: wl18ST
+#: src/modules/activities/tasks/components/CompactTasksCard.tsx
+#: src/modules/activities/tasks/components/CompactTasksCard.tsx
 #: src/modules/activities/tasks/components/TaskGroupsContent.tsx
 msgid "New task"
 msgstr "Yeni görev"
@@ -13032,6 +13090,11 @@ msgstr "Aktif abonelik yok."
 #: src/modules/activities/timeline-activities/components/EventList.tsx
 msgid "No activity matches the selected types."
 msgstr "Hiçbir etkinlik seçilen türlerle eşleşmiyor."
+
+#. js-lingui-id: clZ/Uc
+#: src/modules/settings/security/components/SettingsUserActivityLog.tsx
+msgid "No activity matches these filters."
+msgstr ""
 
 #. js-lingui-id: aXFOuf
 #: src/modules/activities/timeline-activities/components/TimelineCard.tsx
@@ -13453,6 +13516,7 @@ msgid "No models available. Please configure AI models in your workspace setting
 msgstr "Model yok. Lütfen iş yeri ayarlarında AI modellerini yapılandırın."
 
 #. js-lingui-id: 9VrTfZ
+#: src/modules/activities/notes/components/NotesCard.tsx
 #: src/modules/activities/notes/components/NotesCardContent.tsx
 msgid "No notes"
 msgstr "Not yok"
@@ -13461,6 +13525,11 @@ msgstr "Not yok"
 #: src/modules/navigation-menu-item/edit/side-panel/components/SidePanelNewSidebarItemViewObjectPickerSubView.tsx
 msgid "No objects with views found"
 msgstr "Görünümü olan nesne bulunamadı"
+
+#. js-lingui-id: AxwWFX
+#: src/modules/activities/tasks/components/CompactTasksCard.tsx
+msgid "No open tasks"
+msgstr ""
 
 #. js-lingui-id: daCzI1
 #: src/modules/ui/field/input/components/MultiSelectInput.tsx
@@ -13906,6 +13975,13 @@ msgstr "{notSharedByFullName} tarafından paylaşılmadı"
 msgid "Not synced"
 msgstr "Senkronize edilmedi"
 
+#. js-lingui-id: 1DBGsz
+#: src/modules/side-panel/pages/page-layout/components/SidePanelPageLayoutRecordPageWidgetTypeSelect.tsx
+#: src/modules/side-panel/pages/page-layout/components/SidePanelPageLayoutRecordPageWidgetTypeSelect.tsx
+#: src/modules/side-panel/pages/page-layout/components/SidePanelPageLayoutRecordPageWidgetTypeSelect.tsx
+msgid "Notes"
+msgstr ""
+
 #. js-lingui-id: VngD1z
 #: src/pages/settings/applications/SettingsApplicationDetails.tsx
 msgid "Nothing to configure for this application"
@@ -14310,6 +14386,7 @@ msgid "Only you will be able to see your emails and events"
 msgstr "Yalnızca siz e-postalarınızı ve etkinliklerinizi görebileceksiniz"
 
 #. js-lingui-id: 1TNIig
+#: src/modules/activities/tasks/components/CompactTasksCard.tsx
 #: src/modules/settings/data-model/objects/forms/components/SettingsDataModelObjectAboutForm.tsx
 #: src/modules/settings/mcp-and-apis/utils/buildMcpSetupCategories.tsx
 #: src/pages/settings/members/tabs/SettingsWorkspaceMembersTeamTab.tsx
@@ -14760,6 +14837,11 @@ msgstr "Vadesi geçmiş"
 msgid "Paste a link to a hosted image"
 msgstr "Barındırılan bir görselin bağlantısını yapıştırın"
 
+#. js-lingui-id: LI5VHY
+#: src/modules/settings/security/components/SettingsUserActivityLog.tsx
+msgid "Paste a record ID"
+msgstr ""
+
 #. js-lingui-id: cpStVq
 #: src/modules/auth/sign-in-up/components/internal/SignInUpTwoFactorAuthenticationVerification.tsx
 msgid "Paste the code below"
@@ -14858,6 +14940,7 @@ msgstr ""
 
 #. js-lingui-id: NtQvjo
 #: src/modules/settings/event-logs/components/EventLogFilters.tsx
+#: src/modules/settings/security/components/SettingsUserActivityLog.tsx
 msgid "Period"
 msgstr "Dönem"
 
@@ -15670,6 +15753,7 @@ msgstr "kayıt"
 #: src/modules/navigation-menu-item/edit/side-panel/components/SidePanelNewSidebarItemMainMenu.tsx
 #: src/modules/settings/applications/hooks/useComputeApplicationContentForLayoutAndLogic.ts
 #: src/modules/settings/applications/hooks/useComputeApplicationContentForLayoutAndLogic.ts
+#: src/modules/settings/security/components/SettingsUserActivityLog.tsx
 #: src/modules/side-panel/pages/page-layout/components/dropdown-content/ChartGroupByFieldSelectionTargetObjectFieldsView.tsx
 #: src/modules/workflow/workflow-steps/workflow-actions/components/WorkflowEditActionDeleteRecord.tsx
 #: src/modules/workflow/workflow-steps/workflow-actions/components/WorkflowEditActionUpdateRecord.tsx
@@ -15695,8 +15779,14 @@ msgstr "Kayıt filtre kuralı seçenekleri"
 #. js-lingui-id: xSAYIn
 #: src/modules/settings/event-logs/components/EventLogFilters.tsx
 #: src/modules/settings/event-logs/utils/getColumnsForEventLogTable.tsx
+#: src/modules/settings/security/components/SettingsUserActivityLog.tsx
 msgid "Record ID"
 msgstr "Kayıt Kimliği"
+
+#. js-lingui-id: wgtpP8
+#: src/modules/settings/security/components/SettingsUserActivityLog.tsx
+msgid "Record ID copied"
+msgstr ""
 
 #. js-lingui-id: mj1fkT
 #: src/modules/settings/data-model/objects/forms/components/SettingsDataModelObjectIdentifiersForm.tsx
@@ -15719,6 +15809,11 @@ msgstr "Kayıt sayfası"
 #: src/modules/side-panel/pages/page-layout/utils/getPageLayoutPageTitle.ts
 msgid "Record Table Settings"
 msgstr "Kayıt Tablosu Ayarları"
+
+#. js-lingui-id: CV/ZuS
+#: src/modules/settings/security/components/SettingsUserActivityLog.tsx
+msgid "Record type"
+msgstr ""
 
 #. js-lingui-id: kvxD0C
 #: src/modules/workflow/workflow-trigger/components/WorkflowEditTriggerDatabaseEventForm.tsx
@@ -17721,6 +17816,11 @@ msgstr "Daha fazla göster"
 msgid "Show only rows with errors"
 msgstr "Sadece hatalı satırları göster"
 
+#. js-lingui-id: oGr8jy
+#: src/modules/settings/security/components/SettingsUserActivityLog.tsx
+msgid "Show only this record"
+msgstr ""
+
 #. js-lingui-id: P1iyUf
 #: src/pages/settings/applications/tabs/SettingsApplicationTimelineActivityTypeSettingsTab.tsx
 msgid "Show this activity type in record timelines"
@@ -17746,6 +17846,11 @@ msgstr "Yan Panel"
 #: src/modules/keyboard-shortcut-menu/components/KeyboardShortcutMenuOpenContent.tsx
 msgid "Side Panel"
 msgstr "Yan Panel"
+
+#. js-lingui-id: tGntu5
+#: src/modules/side-panel/permavent-company-wide-side-panel/components/PermaventOpeningTabSettingsItem.tsx
+msgid "Side panel and mobile"
+msgstr ""
 
 #. js-lingui-id: 9k9PMD
 #: src/modules/settings/layout/components/SettingsLayoutItemsStats.tsx
@@ -18714,6 +18819,13 @@ msgstr "Görev başlığı"
 msgid "Task Title"
 msgstr "Görev Başlığı"
 
+#. js-lingui-id: GtycJ/
+#: src/modules/side-panel/pages/page-layout/components/SidePanelPageLayoutRecordPageWidgetTypeSelect.tsx
+#: src/modules/side-panel/pages/page-layout/components/SidePanelPageLayoutRecordPageWidgetTypeSelect.tsx
+#: src/modules/side-panel/pages/page-layout/components/SidePanelPageLayoutRecordPageWidgetTypeSelect.tsx
+msgid "Tasks"
+msgstr ""
+
 #. js-lingui-id: KM6m8p
 #: src/pages/settings/members/SettingsWorkspaceMembers.tsx
 msgid "Team"
@@ -19572,6 +19684,11 @@ msgstr "Başlık"
 msgid "To"
 msgstr "Kime"
 
+#. js-lingui-id: 62WutH
+#: src/modules/settings/security/components/SettingsUserActivityLog.tsx
+msgid "To date & time"
+msgstr ""
+
 #. js-lingui-id: ecUA8p
 #: src/modules/ai/utils/groupThreadsByDate.ts
 #: src/modules/localization/utils/formatDateISOStringToRelativeDate.ts
@@ -20081,6 +20198,11 @@ msgstr ""
 msgid "Unable to load application details. Please try again later."
 msgstr "Uygulama ayrıntıları yüklenemedi. Lütfen daha sonra tekrar deneyin."
 
+#. js-lingui-id: KhlUjj
+#: src/modules/settings/security/components/SettingsUserActivityLog.tsx
+msgid "Unable to load user activity."
+msgstr ""
+
 #. js-lingui-id: l+ALBd
 #: src/modules/client-config/components/ClientConfigProvider.tsx
 msgid "Unable to Reach Back-end"
@@ -20242,6 +20364,11 @@ msgstr "Bilinmeyen konuşmacı"
 #: src/modules/settings/unsubscribers/components/SettingsUnsubscribersList.tsx
 msgid "Unknown topic"
 msgstr "Bilinmeyen konu"
+
+#. js-lingui-id: 63niL6
+#: src/modules/settings/security/components/SettingsUserActivityLog.tsx
+msgid "Unknown user"
+msgstr ""
 
 #. js-lingui-id: m/o1+r
 #: src/modules/settings/admin-panel/health-status/components/SettingsAdminWorkspacesByHealthAccordion.tsx
@@ -20794,6 +20921,11 @@ msgstr "Kullanım Olayları"
 msgid "Usage period"
 msgstr "Kullanım dönemi"
 
+#. js-lingui-id: 2PVIAZ
+#: src/modules/side-panel/permavent-company-wide-side-panel/components/PermaventOpeningTabSettingsItem.tsx
+msgid "Use as opening tab"
+msgstr ""
+
 #. js-lingui-id: 6kLyt5
 #: src/modules/auth/sign-in-up/components/internal/SignInUpTwoFactorAuthenticationProvision.tsx
 msgid "Use authenticator apps and browser extensions like 1Password, Authy, Microsoft Authenticator to generate one-time passwords"
@@ -20870,6 +21002,8 @@ msgstr "Pivot/bağlantı tabloları için kullanışlıdır"
 #: src/modules/settings/admin-panel/chats/components/SettingsAdminChatsTable.tsx
 #: src/modules/settings/event-logs/utils/getColumnsForEventLogTable.tsx
 #: src/modules/settings/hooks/useSettingsNavigationItems.tsx
+#: src/modules/settings/security/components/SettingsUserActivityLog.tsx
+#: src/modules/settings/security/components/SettingsUserActivityLog.tsx
 #: src/pages/settings/accounts/SettingsAccounts.tsx
 #: src/pages/settings/accounts/SettingsAccountsCalendars.tsx
 #: src/pages/settings/accounts/SettingsAccountsConfigurationStepCalendar.tsx
@@ -20883,6 +21017,11 @@ msgstr "Pivot/bağlantı tabloları için kullanışlıdır"
 #: src/pages/settings/profile/SettingsTwoFactorAuthenticationMethod.tsx
 msgid "User"
 msgstr "Kullanıcı"
+
+#. js-lingui-id: NTCspk
+#: src/pages/settings/general/SettingsGeneral.tsx
+msgid "User activity log"
+msgstr ""
 
 #. js-lingui-id: zw/lpB
 #: src/pages/settings/ai/SettingsAiPrompts.tsx
@@ -21603,6 +21742,11 @@ msgstr "Çalışma alanınızda nelerin yüklü olduğunu ve kullanıldığını
 #: src/pages/settings/communications/SettingsWorkspaceCommunications.tsx
 msgid "Whatsapp"
 msgstr "WhatsApp"
+
+#. js-lingui-id: 1ZF9KQ
+#: src/modules/settings/security/components/SettingsUserActivityLog.tsx
+msgid "When"
+msgstr ""
 
 #. js-lingui-id: m7GziZ
 #: src/modules/ai/components/suggested-prompts/default-suggested-prompts.ts

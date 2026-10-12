@@ -500,16 +500,6 @@ msgctxt "commandMenuItem.shortLabel"
 msgid "Accounts"
 msgstr "Accounts"
 
-#. js-lingui-id: j0DfGR
-#: src/engine/core-modules/auth/services/reset-password.service.ts
-msgid "Action Needed to Reset Password"
-msgstr "Action Needed to Reset Password"
-
-#. js-lingui-id: 8Q5bRY
-#: src/engine/core-modules/auth/services/reset-password.service.ts
-msgid "Action Needed to Set Password"
-msgstr "Action Needed to Set Password"
-
 #. js-lingui-id: X2aLVJ
 #: src/engine/workspace-manager/twenty-standard-application/constants/standard-command-menu-item.constant.ts
 msgctxt "commandMenuItem.shortLabel"
@@ -5607,11 +5597,6 @@ msgctxt "objectMetadata.description"
 msgid "Join table linking message channel message associations to message folders"
 msgstr "Join table linking message channel message associations to message folders"
 
-#. js-lingui-id: PviVyk
-#: src/engine/core-modules/workspace-invitation/services/workspace-invitation.service.ts
-msgid "Join your team on Twenty"
-msgstr "Join your team on Twenty"
-
 #. js-lingui-id: +KEn4d
 #: src/engine/workspace-manager/twenty-standard-application/utils/field-metadata/compute-call-recording-standard-flat-field-metadata.util.ts
 msgctxt "fieldMetadata.label"
@@ -7819,6 +7804,11 @@ msgstr "Please check your connection settings. Make sure the server host, port, 
 msgid "Please choose an end date and time after the start date and time."
 msgstr "Please choose an end date and time after the start date and time."
 
+#. js-lingui-id: bLI0xp
+#: src/engine/core-modules/email-verification/services/email-verification.service.ts
+msgid "Please confirm your email"
+msgstr "Please confirm your email"
+
 #. js-lingui-id: mqzu5F
 #: src/engine/core-modules/email-verification/services/email-verification.service.ts
 msgid "Please confirm your updated email"
@@ -8307,6 +8297,11 @@ msgstr "Requested"
 #: src/engine/core-modules/file/file.exception.ts
 msgid "Requested file range cannot be served."
 msgstr "Requested file range cannot be served."
+
+#. js-lingui-id: slOprG
+#: src/engine/core-modules/auth/services/reset-password.service.ts
+msgid "Reset your password"
+msgstr "Reset your password"
 
 #. js-lingui-id: MU8Slt
 #: src/engine/core-modules/server-route-trigger/exceptions/server-route-trigger.exception.ts
@@ -9006,6 +9001,11 @@ msgstr "Server-level impersonation is not enabled for this user or workspace."
 #: src/engine/core-modules/impersonation/constants/impersonation-denial-by-reason.constant.ts
 msgid "Set up two-factor authentication before impersonating users in another workspace."
 msgstr "Set up two-factor authentication before impersonating users in another workspace."
+
+#. js-lingui-id: jwdcD0
+#: src/engine/core-modules/auth/services/reset-password.service.ts
+msgid "Set your password"
+msgstr "Set your password"
 
 #. js-lingui-id: vGWuPM
 #: src/engine/workspace-manager/twenty-standard-application/constants/standard-command-menu-item.constant.ts
@@ -11780,11 +11780,6 @@ msgstr "Webhook not found."
 msgid "Wednesday"
 msgstr "Wednesday"
 
-#. js-lingui-id: TVkCrJ
-#: src/engine/core-modules/email-verification/services/email-verification.service.ts
-msgid "Welcome to Twenty: Please Confirm Your Email"
-msgstr "Welcome to Twenty: Please Confirm Your Email"
-
 #. js-lingui-id: ofdfh5
 #: src/engine/workspace-manager/twenty-standard-application/utils/field-metadata/compute-message-campaign-standard-flat-field-metadata.util.ts
 msgctxt "fieldMetadata.description"
@@ -12577,6 +12572,11 @@ msgstr "You don't have permission to create workspace-level views."
 #: src/engine/metadata-modules/view/exceptions/view.exception.ts
 msgid "You don't have permission to modify this view."
 msgstr "You don't have permission to modify this view."
+
+#. js-lingui-id: qziYeW
+#: src/engine/core-modules/workspace-invitation/services/workspace-invitation.service.ts
+msgid "You have been invited to join Permavent CRM"
+msgstr "You have been invited to join Permavent CRM"
 
 #. js-lingui-id: hMX1AE
 #: src/engine/core-modules/billing/billing.exception.ts

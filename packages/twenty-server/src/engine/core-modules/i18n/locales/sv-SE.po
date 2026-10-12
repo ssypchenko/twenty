@@ -505,16 +505,6 @@ msgctxt "commandMenuItem.shortLabel"
 msgid "Accounts"
 msgstr "Konton"
 
-#. js-lingui-id: j0DfGR
-#: src/engine/core-modules/auth/services/reset-password.service.ts
-msgid "Action Needed to Reset Password"
-msgstr "Åtgärd Krävs för att Återställa Lösenord"
-
-#. js-lingui-id: 8Q5bRY
-#: src/engine/core-modules/auth/services/reset-password.service.ts
-msgid "Action Needed to Set Password"
-msgstr "Åtgärd Krävs för att Ställa in Lösenord"
-
 #. js-lingui-id: X2aLVJ
 #: src/engine/workspace-manager/twenty-standard-application/constants/standard-command-menu-item.constant.ts
 msgctxt "commandMenuItem.shortLabel"
@@ -5612,11 +5602,6 @@ msgctxt "objectMetadata.description"
 msgid "Join table linking message channel message associations to message folders"
 msgstr "Kopplingstabell som länkar meddelandekanalens meddelandeassociationer till meddelandemappar"
 
-#. js-lingui-id: PviVyk
-#: src/engine/core-modules/workspace-invitation/services/workspace-invitation.service.ts
-msgid "Join your team on Twenty"
-msgstr "Gå med i ditt team på Twenty"
-
 #. js-lingui-id: +KEn4d
 #: src/engine/workspace-manager/twenty-standard-application/utils/field-metadata/compute-call-recording-standard-flat-field-metadata.util.ts
 msgctxt "fieldMetadata.label"
@@ -7826,6 +7811,11 @@ msgstr "Kontrollera dina anslutningsinställningar. Se till att servervärd, por
 msgid "Please choose an end date and time after the start date and time."
 msgstr "Välj ett slutdatum och en sluttid som infaller efter startdatum och starttid."
 
+#. js-lingui-id: bLI0xp
+#: src/engine/core-modules/email-verification/services/email-verification.service.ts
+msgid "Please confirm your email"
+msgstr ""
+
 #. js-lingui-id: mqzu5F
 #: src/engine/core-modules/email-verification/services/email-verification.service.ts
 msgid "Please confirm your updated email"
@@ -8314,6 +8304,11 @@ msgstr "Begärd"
 #: src/engine/core-modules/file/file.exception.ts
 msgid "Requested file range cannot be served."
 msgstr "Det begärda filintervallet kan inte tillhandahållas."
+
+#. js-lingui-id: slOprG
+#: src/engine/core-modules/auth/services/reset-password.service.ts
+msgid "Reset your password"
+msgstr ""
 
 #. js-lingui-id: MU8Slt
 #: src/engine/core-modules/server-route-trigger/exceptions/server-route-trigger.exception.ts
@@ -9015,6 +9010,11 @@ msgstr "Agerande som annan användare på servernivå är inte aktiverat för de
 #: src/engine/core-modules/impersonation/constants/impersonation-denial-by-reason.constant.ts
 msgid "Set up two-factor authentication before impersonating users in another workspace."
 msgstr "Ställ in tvåfaktorsautentisering innan du agerar som användare i en annan arbetsyta."
+
+#. js-lingui-id: jwdcD0
+#: src/engine/core-modules/auth/services/reset-password.service.ts
+msgid "Set your password"
+msgstr ""
 
 #. js-lingui-id: vGWuPM
 #: src/engine/workspace-manager/twenty-standard-application/constants/standard-command-menu-item.constant.ts
@@ -11791,11 +11791,6 @@ msgstr "Webhook hittades inte."
 msgid "Wednesday"
 msgstr "Onsdag"
 
-#. js-lingui-id: TVkCrJ
-#: src/engine/core-modules/email-verification/services/email-verification.service.ts
-msgid "Welcome to Twenty: Please Confirm Your Email"
-msgstr "Välkommen till Twenty: Bekräfta din e-post"
-
 #. js-lingui-id: ofdfh5
 #: src/engine/workspace-manager/twenty-standard-application/utils/field-metadata/compute-message-campaign-standard-flat-field-metadata.util.ts
 msgctxt "fieldMetadata.description"
@@ -12588,6 +12583,11 @@ msgstr "Du har inte behörighet att skapa vyer på arbetsytenivå."
 #: src/engine/metadata-modules/view/exceptions/view.exception.ts
 msgid "You don't have permission to modify this view."
 msgstr "Du har inte behörighet att ändra denna vy."
+
+#. js-lingui-id: qziYeW
+#: src/engine/core-modules/workspace-invitation/services/workspace-invitation.service.ts
+msgid "You have been invited to join Permavent CRM"
+msgstr ""
 
 #. js-lingui-id: hMX1AE
 #: src/engine/core-modules/billing/billing.exception.ts

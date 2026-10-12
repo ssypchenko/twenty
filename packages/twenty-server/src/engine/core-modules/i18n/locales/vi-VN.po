@@ -505,16 +505,6 @@ msgctxt "commandMenuItem.shortLabel"
 msgid "Accounts"
 msgstr "Tài khoản"
 
-#. js-lingui-id: j0DfGR
-#: src/engine/core-modules/auth/services/reset-password.service.ts
-msgid "Action Needed to Reset Password"
-msgstr "Cần hành động để đặt lại mật khẩu"
-
-#. js-lingui-id: 8Q5bRY
-#: src/engine/core-modules/auth/services/reset-password.service.ts
-msgid "Action Needed to Set Password"
-msgstr "Cần hành động để đặt mật khẩu"
-
 #. js-lingui-id: X2aLVJ
 #: src/engine/workspace-manager/twenty-standard-application/constants/standard-command-menu-item.constant.ts
 msgctxt "commandMenuItem.shortLabel"
@@ -5612,11 +5602,6 @@ msgctxt "objectMetadata.description"
 msgid "Join table linking message channel message associations to message folders"
 msgstr "Bảng nối liên kết các liên kết tin nhắn của kênh với các thư mục tin nhắn"
 
-#. js-lingui-id: PviVyk
-#: src/engine/core-modules/workspace-invitation/services/workspace-invitation.service.ts
-msgid "Join your team on Twenty"
-msgstr "Tham gia vào đội ngũ của bạn trên Twenty"
-
 #. js-lingui-id: +KEn4d
 #: src/engine/workspace-manager/twenty-standard-application/utils/field-metadata/compute-call-recording-standard-flat-field-metadata.util.ts
 msgctxt "fieldMetadata.label"
@@ -7824,6 +7809,11 @@ msgstr "Vui lòng kiểm tra cài đặt kết nối của bạn. Đảm bảo r
 msgid "Please choose an end date and time after the start date and time."
 msgstr "Vui lòng chọn ngày và giờ kết thúc sau ngày và giờ bắt đầu."
 
+#. js-lingui-id: bLI0xp
+#: src/engine/core-modules/email-verification/services/email-verification.service.ts
+msgid "Please confirm your email"
+msgstr ""
+
 #. js-lingui-id: mqzu5F
 #: src/engine/core-modules/email-verification/services/email-verification.service.ts
 msgid "Please confirm your updated email"
@@ -8312,6 +8302,11 @@ msgstr "Đã được yêu cầu"
 #: src/engine/core-modules/file/file.exception.ts
 msgid "Requested file range cannot be served."
 msgstr "Không thể cung cấp phạm vi tệp được yêu cầu."
+
+#. js-lingui-id: slOprG
+#: src/engine/core-modules/auth/services/reset-password.service.ts
+msgid "Reset your password"
+msgstr ""
 
 #. js-lingui-id: MU8Slt
 #: src/engine/core-modules/server-route-trigger/exceptions/server-route-trigger.exception.ts
@@ -9011,6 +9006,11 @@ msgstr "Mạo danh ở cấp máy chủ chưa được bật cho người dùng 
 #: src/engine/core-modules/impersonation/constants/impersonation-denial-by-reason.constant.ts
 msgid "Set up two-factor authentication before impersonating users in another workspace."
 msgstr "Thiết lập xác thực hai yếu tố trước khi mạo danh người dùng trong không gian làm việc khác."
+
+#. js-lingui-id: jwdcD0
+#: src/engine/core-modules/auth/services/reset-password.service.ts
+msgid "Set your password"
+msgstr ""
 
 #. js-lingui-id: vGWuPM
 #: src/engine/workspace-manager/twenty-standard-application/constants/standard-command-menu-item.constant.ts
@@ -11785,11 +11785,6 @@ msgstr "Không tìm thấy webhook."
 msgid "Wednesday"
 msgstr "Thứ Tư"
 
-#. js-lingui-id: TVkCrJ
-#: src/engine/core-modules/email-verification/services/email-verification.service.ts
-msgid "Welcome to Twenty: Please Confirm Your Email"
-msgstr "Chào mừng đến với Twenty: Vui lòng xác nhận email của bạn"
-
 #. js-lingui-id: ofdfh5
 #: src/engine/workspace-manager/twenty-standard-application/utils/field-metadata/compute-message-campaign-standard-flat-field-metadata.util.ts
 msgctxt "fieldMetadata.description"
@@ -12582,6 +12577,11 @@ msgstr "Bạn không có quyền tạo các chế độ xem cấp không gian l�
 #: src/engine/metadata-modules/view/exceptions/view.exception.ts
 msgid "You don't have permission to modify this view."
 msgstr "Bạn không có quyền sửa đổi chế độ xem này."
+
+#. js-lingui-id: qziYeW
+#: src/engine/core-modules/workspace-invitation/services/workspace-invitation.service.ts
+msgid "You have been invited to join Permavent CRM"
+msgstr ""
 
 #. js-lingui-id: hMX1AE
 #: src/engine/core-modules/billing/billing.exception.ts
