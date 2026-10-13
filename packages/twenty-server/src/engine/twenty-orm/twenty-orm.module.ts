@@ -18,6 +18,6 @@ import { WorkspaceCacheModule } from 'src/engine/workspace-cache/workspace-cache
     WorkspaceCacheModule,
   ],
   providers: [WorkspaceOrmManager, WorkspaceDataSourceService],
-  exports: [WorkspaceOrmManager],
+  exports: [WorkspaceOrmManager, WorkspaceDataSourceService],
 })
 export class TwentyOrmModule {}
