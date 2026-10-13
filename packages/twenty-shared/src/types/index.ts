@@ -256,6 +256,8 @@ export type { RatioAggregateConfig } from './page-layout/RatioAggregateConfig';
 export { WidgetType } from './page-layout/WidgetType';
 export type { PartialFieldMetadataItem } from './PartialFieldMetadataItem';
 export type { PartialFieldMetadataItemOption } from './PartialFieldMetadataOption';
+export type { PermaventLogicFunctionActorContext } from './PermaventLogicFunctionActorContext';
+export type { PermaventSalesScope } from './PermaventSalesScope';
 export type { QueryCursorDirection } from './QueryCursorDirection';
 export { RecordFilterGroupLogicalOperator } from './RecordFilterGroupLogicalOperator';
 export type { RecordFilterValueDependencies } from './RecordFilterValueDependencies';
@@ -352,6 +354,3 @@ export { ViewVisibility } from './ViewVisibility';
 export { WebhookSubscriptionChannelType } from './WebhookSubscriptionChannelType';
 export { WebhookSubscriptionStatus } from './WebhookSubscriptionStatus';
 export { WorkflowVisibility } from './WorkflowVisibility';
-
-export type { PermaventSalesScope } from './PermaventSalesScope';
-export type { PermaventLogicFunctionActorContext } from './PermaventLogicFunctionActorContext';
