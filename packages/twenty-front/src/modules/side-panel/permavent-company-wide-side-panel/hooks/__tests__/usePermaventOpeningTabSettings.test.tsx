@@ -47,6 +47,7 @@ const draft: DraftPageLayout = {
   type: PageLayoutType.RECORD_PAGE,
   objectMetadataId: 'object-1',
   defaultTabToFocusOnMobileAndSidePanelId: null,
+  isFirstTabPinned: false,
   tabs: [
     {
       ...baseTab,
