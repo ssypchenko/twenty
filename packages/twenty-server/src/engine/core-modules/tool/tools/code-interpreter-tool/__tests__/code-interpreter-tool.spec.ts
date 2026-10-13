@@ -43,8 +43,8 @@ const createTool = (driverType: CodeInterpreterDriverType) => {
   return { codeInterpreterService, jwtWrapperService, tool };
 };
 
-describe('CodeInterpreterTool MCP access', () => {
-  it('signs an MCP-only token for the internal sandbox driver', async () => {
+describe('CodeInterpreterTool native MCP access', () => {
+  it('signs a standard user token for the internal sandbox driver', async () => {
     const { codeInterpreterService, jwtWrapperService, tool } = createTool(
       CodeInterpreterDriverType.PERMAVENT_INTERNAL,
     );
@@ -60,7 +60,7 @@ describe('CodeInterpreterTool MCP access', () => {
 
     expect(jwtWrapperService.signAsyncOrThrow).toHaveBeenCalledWith(
       expect.objectContaining({
-        type: JwtTokenTypeEnum.MCP_ACCESS,
+        type: JwtTokenTypeEnum.ACCESS,
       }),
       { expiresIn: '5m' },
     );
@@ -91,9 +91,9 @@ describe('CodeInterpreterTool MCP access', () => {
     );
   });
 
-  it('keeps mutation helpers out of the injected Python API', () => {
-    expect(TWENTY_MCP_HELPER).not.toContain('bulk_upsert');
-    expect(TWENTY_MCP_HELPER).toContain('_READ_ONLY_CATALOG_PREFIXES');
-    expect(TWENTY_MCP_HELPER).toContain('raise PermissionError');
+  it('uses the native MCP catalogue and keeps permissions server-side', () => {
+    expect(TWENTY_MCP_HELPER).toContain('execute_tool');
+    expect(TWENTY_MCP_HELPER).toContain('create_one_person');
+    expect(TWENTY_MCP_HELPER).toContain('bulk_upsert');
   });
 });
