@@ -1,5 +1,5 @@
 import { PermaventSalesRepAssignmentService } from 'src/engine/core-modules/permavent-sales-scope/assignments/permavent-sales-rep-assignment.service';
-import { type GlobalWorkspaceOrmManager } from 'src/engine/twenty-orm/global-workspace-orm.manager';
+import { type WorkspaceOrmManager } from 'src/engine/twenty-orm/workspace-orm.manager';
 
 describe('PermaventSalesRepAssignmentService', () => {
   const queryBuilder = {
@@ -19,7 +19,7 @@ describe('PermaventSalesRepAssignmentService', () => {
   const service = new PermaventSalesRepAssignmentService({
     getRepository,
     executeInWorkspaceContext,
-  } as unknown as GlobalWorkspaceOrmManager);
+  } as unknown as WorkspaceOrmManager);
 
   beforeEach(() => {
     jest.clearAllMocks();
