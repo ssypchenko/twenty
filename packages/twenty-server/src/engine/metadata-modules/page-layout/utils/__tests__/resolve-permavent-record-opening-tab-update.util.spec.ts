@@ -1,4 +1,4 @@
-import { PageLayoutType } from 'src/engine/metadata-modules/page-layout/enums/page-layout-type.enum';
+import { PageLayoutType } from 'twenty-shared/types';
 import { PageLayoutException } from 'src/engine/metadata-modules/page-layout/exceptions/page-layout.exception';
 import { resolvePermaventRecordOpeningTabUpdate } from 'src/engine/metadata-modules/page-layout/utils/resolve-permavent-record-opening-tab-update.util';
 
