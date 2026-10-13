@@ -83,6 +83,60 @@ export class ConfigVariables {
 
   @ConfigVariablesMetadata({
     group: ConfigVariablesGroup.ADVANCED_SETTINGS,
+    description:
+      'Expand the Permavent My Companies view marker for active Sales Rep assignments',
+    isEnvOnly: true,
+    isHiddenInAdminPanel: true,
+    type: ConfigVariableType.BOOLEAN,
+  })
+  @IsOptional()
+  PERMAVENT_MY_COMPANIES_FOCUS_ENABLED = false;
+
+  @ConfigVariablesMetadata({
+    group: ConfigVariablesGroup.ADVANCED_SETTINGS,
+    description: 'Enable trusted delegated user context for approved API keys',
+    isEnvOnly: true,
+    isHiddenInAdminPanel: true,
+    type: ConfigVariableType.BOOLEAN,
+  })
+  @IsOptional()
+  PERMAVENT_DELEGATED_API_CONTEXT_ENABLED = false;
+
+  @ConfigVariablesMetadata({
+    group: ConfigVariablesGroup.ADVANCED_SETTINGS,
+    description:
+      'Comma-separated non-secret API key IDs approved for delegated user context',
+    isEnvOnly: true,
+    isHiddenInAdminPanel: true,
+    type: ConfigVariableType.STRING,
+  })
+  @IsOptional()
+  PERMAVENT_DELEGATED_API_KEY_IDS = '';
+
+  @ConfigVariablesMetadata({
+    group: ConfigVariablesGroup.ADVANCED_SETTINGS,
+    description: 'Enable the Permavent authenticated user activity audit log',
+    isEnvOnly: true,
+    isHiddenInAdminPanel: true,
+    type: ConfigVariableType.BOOLEAN,
+  })
+  @IsOptional()
+  PERMAVENT_USER_AUDIT_ENABLED = false;
+
+  @ConfigVariablesMetadata({
+    group: ConfigVariablesGroup.ADVANCED_SETTINGS,
+    description:
+      'Number of days to retain Permavent user activity audit entries',
+    isEnvOnly: true,
+    isHiddenInAdminPanel: true,
+    type: ConfigVariableType.NUMBER,
+  })
+  @IsOptional()
+  @CastToPositiveNumber()
+  PERMAVENT_USER_AUDIT_RETENTION_DAYS = 365;
+
+  @ConfigVariablesMetadata({
+    group: ConfigVariablesGroup.ADVANCED_SETTINGS,
     description: 'Enable Permavent Weekly Sales Report logic functions',
     isEnvOnly: true,
     isHiddenInAdminPanel: true,
