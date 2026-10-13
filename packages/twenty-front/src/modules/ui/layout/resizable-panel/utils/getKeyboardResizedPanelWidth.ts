@@ -1,5 +1,6 @@
-import { type ResizablePanelConstraints } from '@/ui/layout/resizable-panel/types/ResizablePanelConstraints';
-import { type ResizablePanelSide } from '@/ui/layout/resizable-panel/types/ResizablePanelSide';
+// The keyboard resize helper only needs the bounds and the panel's side.
+type ResizablePanelConstraints = { min: number; max: number };
+type ResizablePanelSide = 'left' | 'right';
 
 const RESIZE_STEP = 16;
 const LARGE_RESIZE_STEP = 48;
