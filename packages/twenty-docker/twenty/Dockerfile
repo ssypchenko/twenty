@@ -70,14 +70,11 @@ COPY ./packages/twenty-sdk /app/packages/twenty-sdk
 COPY ./packages/twenty-client-sdk /app/packages/twenty-client-sdk
 RUN npx nx run twenty-front:lingui:extract && \
     npx nx run twenty-front:lingui:compile
-# To skip the memory-intensive frontend build, pre-build on the host:
-#   npx nx build twenty-front
-# The check below will use packages/twenty-front/build/ if it already exists.
-RUN if [ -d /app/packages/twenty-front/build ]; then \
-      echo "Using pre-built frontend from host"; \
-    else \
-      NODE_OPTIONS="--max-old-space-size=8192" npx nx build twenty-front; \
-    fi
+# Never consume a prebuilt frontend from the host: its GraphQL queries
+# may target an earlier Twenty version while the backend source is current.
+# Rebuild unconditionally to bind the bundled UI to this source revision.
+RUN rm -rf /app/packages/twenty-front/build && \
+    NODE_OPTIONS="--max-old-space-size=8192" npx nx build twenty-front --skip-nx-cache
 
 
 # ===========================================================================
