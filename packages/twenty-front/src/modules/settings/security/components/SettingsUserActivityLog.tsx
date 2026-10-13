@@ -11,8 +11,8 @@ import { styled } from '@linaria/react';
 import { useLingui } from '@lingui/react/macro';
 import { useState } from 'react';
 import { IconBox, IconCopy, IconHistory, IconUser } from 'twenty-ui/icon';
-import { Button, type SelectOption } from 'twenty-ui/input';
-import { Card } from 'twenty-ui/surfaces';
+import { Button, type SelectOption } from 'twenty-ui/primitives/input';
+import { Card } from 'twenty-ui/primitives/surfaces';
 import { themeCssVariables } from 'twenty-ui/theme';
 import { useCopyToClipboard } from '~/hooks/useCopyToClipboard';
 
@@ -357,7 +357,7 @@ export const SettingsUserActivityLog = () => {
         </StyledAdvancedContent>
       </StyledAdvancedFilters>
 
-      <Card rounded>
+      <Card.Root rounded>
         {error ? (
           <p>{t`Unable to load user activity.`}</p>
         ) : loading && !data ? (
@@ -427,10 +427,10 @@ export const SettingsUserActivityLog = () => {
                         {entry.recordId && (
                           <StyledRecordDetails>
                             <Button
-                              Icon={IconCopy}
-                              size="small"
-                              variant="tertiary"
-                              ariaLabel={t`Copy record ID`}
+                              startIcon={<IconCopy />}
+                              size="sm"
+                              variant="ghost"
+                              aria-label={t`Copy record ID`}
                               onClick={() =>
                                 copyToClipboard(
                                   entry.recordId as string,
@@ -440,8 +440,8 @@ export const SettingsUserActivityLog = () => {
                             />
                             <Button
                               title={t`Show only this record`}
-                              size="small"
-                              variant="tertiary"
+                              size="sm"
+                              variant="ghost"
                               onClick={() =>
                                 setFilters((current) => ({
                                   ...current,
@@ -484,7 +484,7 @@ export const SettingsUserActivityLog = () => {
             </StyledTable>
           </StyledTableContainer>
         )}
-      </Card>
+      </Card.Root>
       {connection?.hasNextPage && connection.endCursor && (
         <StyledLoadMore>
           <Button
