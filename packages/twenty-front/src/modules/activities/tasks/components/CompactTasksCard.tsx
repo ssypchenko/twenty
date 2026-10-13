@@ -66,7 +66,7 @@ export const CompactTasksCard = () => {
           {canCreateActivity && (
             <Button
               startIcon={<IconPlus />}
-              size="small"
+              size="sm"
                             variant="outline"
               onClick={createActivity}>{t`New task`}</Button>
           )}
@@ -80,7 +80,7 @@ export const CompactTasksCard = () => {
             {canCreateActivity && (
               <Button
                 startIcon={<IconPlus />}
-                size="small"
+                size="sm"
                                 variant="outline"
                 onClick={createActivity}>{t`New task`}</Button>
             )}
