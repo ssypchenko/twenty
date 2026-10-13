@@ -1,6 +1,8 @@
 import { type Note } from '@/activities/types/Note';
 import { getActivityPreview } from '@/activities/utils/getActivityPreview';
 import { useNumberFormat } from '@/localization/hooks/useNumberFormat';
+import { dateLocaleState } from '@/localization/states/dateLocaleState';
+import { formatDateISOStringToDateTime } from '@/localization/utils/formatDateISOStringToDateTime';
 import { useOpenRecordInSidePanel } from '@/side-panel/hooks/useOpenRecordInSidePanel';
 import { useAtomStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomStateValue';
 import { UserContext } from '@/users/contexts/UserContext';
@@ -8,8 +10,6 @@ import { styled } from '@linaria/react';
 import { type ReactElement, useContext } from 'react';
 import { CoreObjectNameSingular } from 'twenty-shared/types';
 import { themeCssVariables } from 'twenty-ui/theme';
-import { dateLocaleState } from '~/localization/states/dateLocaleState';
-import { formatDateTimeString } from '~/utils/string/formatDateTimeString';
 
 const StyledHeader = styled.div`
   align-items: center;
@@ -102,8 +102,8 @@ export const CompactNoteList = ({
             }
           >
             <StyledDate>
-              {formatDateTimeString({
-                value: note.createdAt,
+              {formatDateISOStringToDateTime({
+                date: note.createdAt,
                 timeZone,
                 dateFormat,
                 timeFormat,
