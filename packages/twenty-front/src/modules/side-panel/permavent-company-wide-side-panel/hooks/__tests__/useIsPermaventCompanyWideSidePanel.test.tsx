@@ -1,22 +1,42 @@
 import { renderHook } from '@testing-library/react';
 import { createStore, Provider as JotaiProvider } from 'jotai';
 import { type ReactNode } from 'react';
-import { SidePanelPages } from 'twenty-shared/types';
+import { AppPath, SidePanelPages } from 'twenty-shared/types';
+import { getAppPath } from 'twenty-shared/utils';
+import { IconDotsVertical } from 'twenty-ui/icon';
 
 import { MAIN_CONTEXT_STORE_INSTANCE_ID } from '@/context-store/constants/MainContextStoreInstanceId';
 import { contextStoreCurrentObjectMetadataItemIdComponentState } from '@/context-store/states/contextStoreCurrentObjectMetadataItemIdComponentState';
 import { useIsPermaventCompanyWideSidePanel } from '@/side-panel/permavent-company-wide-side-panel/hooks/useIsPermaventCompanyWideSidePanel';
-import { sidePanelPageInfoState } from '@/side-panel/states/sidePanelPageInfoState';
-import { sidePanelPageState } from '@/side-panel/states/sidePanelPageState';
+import { sidePanelNavigationStackState } from '@/side-panel/states/sidePanelNavigationStackState';
 
 const COMPANY_METADATA_ID = 'company-metadata-id';
 const SIDE_PANEL_INSTANCE_ID = 'side-panel-record-instance';
+
+const recordPath = getAppPath(AppPath.RecordShowPage, {
+  objectNameSingular: 'company',
+  objectRecordId: 'company-record-id',
+});
+
+const routedRecordPage = (pageId: string, pathname = recordPath) => ({
+  page: SidePanelPages.RoutedPage as const,
+  pageId,
+  pageTitle: 'Company',
+  pageIcon: IconDotsVertical,
+  routedLocation: {
+    pathname,
+    search: '',
+    hash: '',
+    state: null,
+    key: 'routed-company-record',
+  },
+});
 
 jest.mock('@/object-metadata/hooks/useObjectMetadataItems', () => ({
   useObjectMetadataItems: () => ({
     objectMetadataItems: [
       {
-        id: 'company-metadata-id',
+        id: COMPANY_METADATA_ID,
         nameSingular: 'company',
       },
     ],
@@ -33,13 +53,10 @@ const createWrapper = (store: ReturnType<typeof createStore>) =>
   };
 
 describe('useIsPermaventCompanyWideSidePanel', () => {
-  it('falls back to the main context while the side panel instance is unavailable', () => {
+  it('falls back to main context when a routed panel has no instance id', () => {
     const store = createStore();
 
-    store.set(sidePanelPageState.atom, SidePanelPages.ViewRecord);
-    store.set(sidePanelPageInfoState.atom, {
-      instanceId: '',
-    });
+    store.set(sidePanelNavigationStackState.atom, [routedRecordPage('')]);
     store.set(
       contextStoreCurrentObjectMetadataItemIdComponentState.atomFamily({
         instanceId: MAIN_CONTEXT_STORE_INSTANCE_ID,
@@ -54,13 +71,12 @@ describe('useIsPermaventCompanyWideSidePanel', () => {
     expect(result.current).toBe(true);
   });
 
-  it('uses the active side panel context when its instance is available', () => {
+  it('uses the active routed record page context', () => {
     const store = createStore();
 
-    store.set(sidePanelPageState.atom, SidePanelPages.ViewRecord);
-    store.set(sidePanelPageInfoState.atom, {
-      instanceId: SIDE_PANEL_INSTANCE_ID,
-    });
+    store.set(sidePanelNavigationStackState.atom, [
+      routedRecordPage(SIDE_PANEL_INSTANCE_ID),
+    ]);
     store.set(
       contextStoreCurrentObjectMetadataItemIdComponentState.atomFamily({
         instanceId: SIDE_PANEL_INSTANCE_ID,
@@ -73,5 +89,25 @@ describe('useIsPermaventCompanyWideSidePanel', () => {
     });
 
     expect(result.current).toBe(true);
+  });
+
+  it('does not widen an unrelated routed page', () => {
+    const store = createStore();
+
+    store.set(sidePanelNavigationStackState.atom, [
+      routedRecordPage(SIDE_PANEL_INSTANCE_ID, '/settings'),
+    ]);
+    store.set(
+      contextStoreCurrentObjectMetadataItemIdComponentState.atomFamily({
+        instanceId: SIDE_PANEL_INSTANCE_ID,
+      }),
+      COMPANY_METADATA_ID,
+    );
+
+    const { result } = renderHook(() => useIsPermaventCompanyWideSidePanel(), {
+      wrapper: createWrapper(store),
+    });
+
+    expect(result.current).toBe(false);
   });
 });
