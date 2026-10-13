@@ -67,7 +67,7 @@ export const NotesCard = ({ isCompact = false }: NotesCardProps) => {
             {canCreateActivity && (
               <Button
                 startIcon={<IconPlus />}
-                size="small"
+                size="sm"
                                 variant="outline"
                 onClick={createActivity}>{t`New note`}</Button>
             )}
@@ -81,7 +81,7 @@ export const NotesCard = ({ isCompact = false }: NotesCardProps) => {
                 canCreateActivity && (
                   <Button
                     startIcon={<IconPlus />}
-                    size="small"
+                    size="sm"
                                         variant="outline"
                     onClick={createActivity}>{t`New note`}</Button>
                 )
