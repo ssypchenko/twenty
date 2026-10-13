@@ -9,7 +9,7 @@ import { type PermaventSalesScopeContextFactory } from 'src/engine/core-modules/
 import { type PermaventSalesScopeContext } from 'src/engine/core-modules/permavent-sales-scope/context/permavent-sales-scope-context.type';
 import { type TwentyConfigService } from 'src/engine/core-modules/twenty-config/twenty-config.service';
 import { type WorkspaceDataSourceService } from 'src/engine/twenty-orm/datasource/workspace-data-source.service';
-import { type GlobalWorkspaceOrmManager } from 'src/engine/twenty-orm/global-workspace-orm.manager';
+import { type WorkspaceOrmManager } from 'src/engine/twenty-orm/workspace-orm.manager';
 import { PermaventWeeklySalesReportSourceService } from 'src/modules/permavent-weekly-sales-report/services/permavent-weekly-sales-report-source.service';
 
 describe('PermaventWeeklySalesReportSourceService', () => {
@@ -40,7 +40,7 @@ describe('PermaventWeeklySalesReportSourceService', () => {
     } as unknown as PermaventSalesScopeContextFactory,
     {
       executeInWorkspaceContext,
-    } as unknown as GlobalWorkspaceOrmManager,
+    } as unknown as WorkspaceOrmManager,
     { getDataSource } as unknown as WorkspaceDataSourceService,
   );
 
