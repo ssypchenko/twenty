@@ -12,7 +12,7 @@ import GraphQLJSON from 'graphql-type-json';
 
 import { PermaventUserAuditResolver } from 'src/engine/core-modules/permavent-user-audit/permavent-user-audit.resolver';
 import { NoPermissionGuard } from 'src/engine/guards/no-permission.guard';
-import { WorkspaceAuthGuard } from 'src/engine/guards/workspace-auth.guard';
+import { AuthPrincipalGuard } from 'src/engine/guards/auth-principal.guard';
 
 @ObjectType()
 class CanonicalJsonScalarTestDTO {
@@ -21,7 +21,20 @@ class CanonicalJsonScalarTestDTO {
 }
 
 @Resolver()
-@UseGuards(WorkspaceAuthGuard, NoPermissionGuard)
+@UseGuards(
+  AuthPrincipalGuard({
+    userSession: {
+      standard: true,
+      impersonated: false,
+      playground: false,
+      workspaceAgnostic: false,
+    },
+    apiKey: false,
+    oauthClient: false,
+    application: false,
+  }),
+  NoPermissionGuard,
+)
 class CanonicalJsonScalarTestResolver {
   @Query(() => CanonicalJsonScalarTestDTO)
   canonicalJsonScalarTest(): CanonicalJsonScalarTestDTO {
