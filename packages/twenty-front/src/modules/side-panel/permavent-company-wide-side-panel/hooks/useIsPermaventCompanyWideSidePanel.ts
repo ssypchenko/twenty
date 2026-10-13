@@ -2,8 +2,8 @@ import { MAIN_CONTEXT_STORE_INSTANCE_ID } from '@/context-store/constants/MainCo
 import { contextStoreCurrentObjectMetadataItemIdComponentState } from '@/context-store/states/contextStoreCurrentObjectMetadataItemIdComponentState';
 import { useObjectMetadataItems } from '@/object-metadata/hooks/useObjectMetadataItems';
 import { PERMAVENT_COMPANY_WIDE_SIDE_PANEL_FEATURE_FLAG } from '@/side-panel/permavent-company-wide-side-panel/constants/PermaventCompanyWideSidePanelFeatureFlag';
-import { sidePanelPageState } from '@/side-panel/states/sidePanelPageState';
-import { sidePanelPageInfoState } from '@/side-panel/states/sidePanelPageInfoState';
+import { getRecordShowParamsFromPath } from '@/side-panel/routing/utils/getRecordShowParamsFromPath';
+import { sidePanelNavigationStackState } from '@/side-panel/states/sidePanelNavigationStackState';
 import { isPermaventWideSidePanelObject } from '@/side-panel/permavent-company-wide-side-panel/utils/isPermaventWideSidePanelObject';
 import { useAtomComponentStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomComponentStateValue';
 import { useAtomStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomStateValue';
@@ -14,10 +14,17 @@ export const useIsPermaventCompanyWideSidePanel = () => {
   const isFeatureEnabled = useIsFeatureEnabled(
     PERMAVENT_COMPANY_WIDE_SIDE_PANEL_FEATURE_FLAG,
   );
-  const sidePanelPage = useAtomStateValue(sidePanelPageState);
-  const sidePanelPageInfo = useAtomStateValue(sidePanelPageInfoState);
+  const currentNavigationItem = useAtomStateValue(
+    sidePanelNavigationStackState,
+  ).at(-1);
+  const recordShowParams =
+    currentNavigationItem?.page === SidePanelPages.RoutedPage
+      ? getRecordShowParamsFromPath(
+          currentNavigationItem.routedLocation.pathname,
+        )
+      : null;
   const contextStoreInstanceId =
-    sidePanelPageInfo.instanceId || MAIN_CONTEXT_STORE_INSTANCE_ID;
+    currentNavigationItem?.pageId || MAIN_CONTEXT_STORE_INSTANCE_ID;
   const contextStoreCurrentObjectMetadataItemId = useAtomComponentStateValue(
     contextStoreCurrentObjectMetadataItemIdComponentState,
     contextStoreInstanceId,
@@ -31,7 +38,9 @@ export const useIsPermaventCompanyWideSidePanel = () => {
 
   return (
     isFeatureEnabled &&
-    sidePanelPage === SidePanelPages.ViewRecord &&
-    isPermaventWideSidePanelObject(currentObjectMetadataItem?.nameSingular)
+    recordShowParams !== null &&
+    isPermaventWideSidePanelObject(recordShowParams.objectNameSingular) &&
+    recordShowParams.objectNameSingular ===
+      currentObjectMetadataItem?.nameSingular
   );
 };
