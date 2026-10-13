@@ -6,7 +6,7 @@ import { PermaventUserAuditEntryEntity } from 'src/engine/core-modules/permavent
 import { PermaventUserAuditService } from 'src/engine/core-modules/permavent-user-audit/permavent-user-audit.service';
 import { type TwentyConfigService } from 'src/engine/core-modules/twenty-config/twenty-config.service';
 import { type FieldMetadataEntity } from 'src/engine/metadata-modules/field-metadata/field-metadata.entity';
-import { type GlobalWorkspaceOrmManager } from 'src/engine/twenty-orm/global-workspace-orm.manager';
+import { type WorkspaceOrmManager } from 'src/engine/twenty-orm/workspace-orm.manager';
 import { type WorkspaceEventBatch } from 'src/engine/workspace-event-emitter/types/workspace-event-batch.type';
 
 const createBatch = (
@@ -49,7 +49,7 @@ describe('PermaventUserAuditService', () => {
   const globalWorkspaceOrmManager = {
     executeInWorkspaceContext: jest.fn(async (callback) => callback()),
     getRepository: jest.fn().mockResolvedValue(workspaceMemberRepository),
-  } as unknown as GlobalWorkspaceOrmManager;
+  } as unknown as WorkspaceOrmManager;
   const config = {
     get: jest.fn((key: string) =>
       key === 'PERMAVENT_USER_AUDIT_ENABLED' ? true : 365,
