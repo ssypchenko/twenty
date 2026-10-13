@@ -301,7 +301,7 @@
       "dependsOn": ["^build"],
       "options": {
         "cwd": "{projectRoot}",
-        "command": "lingui extract --overwrite --clean"
+        "command": "lingui extract --overwrite --clean --workers 1"
       }
     },
     "lingui:compile": {
@@ -309,7 +309,7 @@
       "dependsOn": ["^build"],
       "options": {
         "cwd": "{projectRoot}",
-        "command": "lingui compile --typescript"
+        "command": "lingui compile --typescript --workers 1"
       }
     }
   }
