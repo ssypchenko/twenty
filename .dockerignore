@@ -3,3 +3,6 @@
 **/node_modules
 .nx/cache
 packages/twenty-server/.env
+
+# Generated frontend assets belong to one exact revision; always build in Docker.
+packages/twenty-front/build
