@@ -160,7 +160,7 @@ describe('PermaventInternalDriver', () => {
     ]);
 
     await driver.releaseSession(context.sessionId);
-    const finalDeletedUrl = fetchMock.mock.calls.at(-1)?.[0] as string;
+    const finalDeletedUrl = fetchMock.mock.calls[fetchMock.mock.calls.length - 1]?.[0] as string;
     expect(finalDeletedUrl).toEqual(executeUrls[2].replace('/execute', ''));
   });
 
