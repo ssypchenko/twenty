@@ -394,7 +394,7 @@ export class WorkspaceInvitationService {
           plainText: true,
         });
 
-        const joinTeamMsg = msg`You have been invited to join ${workspace.displayName}`;
+        const joinTeamMsg = msg`You have been invited to join ${workspace.displayName ?? 'your workspace'}`;
         const i18n = this.i18nService.getI18nInstance(sender.locale);
         const subject = i18n._(joinTeamMsg);
 
