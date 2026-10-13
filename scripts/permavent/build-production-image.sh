@@ -131,7 +131,7 @@ if [[ "$PERMAVENT_DRY_RUN" == "true" ]]; then
 fi
 
 printf 'Build completed. Verifying the image before publication...\n'
-"${SCRIPT_DIR}/verify-production-image.sh" \
+bash "${SCRIPT_DIR}/verify-production-image.sh" \
   --image "$image_tag" \
   --upstream-version "$upstream_version"
 printf 'BUILD AND VERIFY: PASS\n'
